@@ -1455,8 +1455,12 @@ export function montarRastreio({ requisitos = '', especificacao = '', tasks = nu
     ])).sort();
     const doSnArtifact = cobrem.flatMap((x) => x.tasks.map((t) => (t.snArtifact ? limparNowId(t.snArtifact.nowId) : null)));
     const nowIds = unicos([...todasAsChaves.filter((c) => chaveDoRf(c, rf)), ...doSnArtifact]).sort();
-    const atf = cobrem.map((x) => x.s.id).filter((id) => recibos.has(id)).map((id) => {
-      const r = recibos.get(id);
+    // O recibo leva o ID da US (`US-<x>`, o mesmo do relatório da auditoria-de-us que o delivery-gate
+    // lê); a spec-tasks v5.4 numera a story como `STORY-<x>`. Os dois nomes valem para a mesma story.
+    const reciboDe = (id) => (recibos.has(id) ? id
+      : (/^STORY-/.test(id) && recibos.has(`US-${id.slice(6)}`) ? `US-${id.slice(6)}` : null));
+    const atf = cobrem.map((x) => x.s.id).filter((id) => reciboDe(id)).map((id) => {
+      const r = recibos.get(reciboDe(id));
       return { story: id, status: r.status == null ? null : String(r.status), commit: r.commit || null, horario: r.horario || null, verde: reciboVerde(r) };
     });
     const temStory = cobrem.length > 0;

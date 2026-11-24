@@ -1743,6 +1743,15 @@ test('rastreio: recibo vermelho não sobe para N3; RF citado só no backlog entr
   assert.equal(montarRastreio({ especificacao: 'RF-MOD-F1-001', tasks: null }).fonteDoUniverso, 'especificacao-funcional');
 });
 
+test('rastreio: story STORY-<x> aceita o recibo US-<x> (ID da US no relatório e no delivery-gate)', () => {
+  const backlog = { stories: [{ id: 'STORY-MOD-F2-002', sourceRefs: [{ itemId: 'RF-MOD-F2-002' }], tasks: [] }] };
+  const recibos = new Map([['US-MOD-F2-002', { status: 'success', commit: 'abc' }]]);
+  const r = montarRastreio({ requisitos: '### RF-MOD-F2-002\n', tasks: backlog, recibos });
+  const l = r.linhas.find((x) => x.rf === 'RF-MOD-F2-002');
+  assert.equal(l.nivel, 'N3');
+  assert.equal(l.atf[0].story, 'STORY-MOD-F2-002');
+});
+
 test('rastreio: leitores do keys.ts, do Now.ID e das stories aninhadas', () => {
   const k = lerChavesDoKeys(KEYS);
   assert.equal(k.get('acl_caso_read').apagada, false);
