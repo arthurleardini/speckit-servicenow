@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lerEnvelope, RE_PASSO_UI, testesDoArquivo } from './atf.mjs';
+import { lerEnvelope, RE_PASSO_UI, temPassoUi, testesDoArquivo } from './atf.mjs';
 
 test('testesDoArquivo resolve o sys_id do Test() pelo keys.ts e ignora chave deletada', () => {
   const fonte = `
@@ -43,4 +43,10 @@ test('RE_PASSO_UI detecta passo que precisa do Client Test Runner', () => {
   assert.ok(RE_PASSO_UI.test('atf.form.openNewForm({'));
   assert.ok(RE_PASSO_UI.test('atf.list.recordPresentInList({'));
   assert.ok(!RE_PASSO_UI.test('atf.server.recordInsert({'));
+});
+
+test('temPassoUi olha só o Test() da chave (runner aberto só para teste de form)', () => {
+  const fonte = "Test({ $id: Now.ID['a'] }, (atf) => { atf.server.log({}) })\nTest({ $id: Now.ID['b'] }, (atf) => { atf.form.openNewForm({}) })";
+  assert.equal(temPassoUi(fonte, 'a'), false);
+  assert.equal(temPassoUi(fonte, 'b'), true);
 });

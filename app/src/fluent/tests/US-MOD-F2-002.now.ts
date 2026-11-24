@@ -396,10 +396,9 @@ export const t_f2002_gravacao_neg = Test({
         return c.insert();
     }
     describe('Gravação da versão', function() {
-        it('aceita a primeira versão em rascunho', function() {
+        // Um só "it": o Jasmine roda os "it" em ordem aleatória, e o segundo depende do primeiro.
+        it('aceita a primeira versão em rascunho e recusa a repetida e a que nasce publicada', function() {
             expect(!!nova(1, 'rascunho')).toBe(true);
-        });
-        it('recusa versão repetida e versão que nasce publicada', function() {
             expect(!!nova(1, 'rascunho')).toBe(false);
             var pub = new GlideRecord('x_2326104_cob_criterio');
             pub.initialize();

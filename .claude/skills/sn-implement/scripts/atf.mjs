@@ -45,6 +45,14 @@ export function testesDoArquivo(fonte, keysTxt) {
   });
 }
 
+/** Diz se o Test() da chave tem passo de UI: o trecho vai da chave até o próximo `Test(`. */
+export function temPassoUi(fonte, chave) {
+  const ini = fonte.indexOf(`Now.ID['${chave}']`) >= 0 ? fonte.indexOf(`Now.ID['${chave}']`) : fonte.indexOf(`Now.ID["${chave}"]`);
+  if (ini < 0) return RE_PASSO_UI.test(fonte);
+  const prox = fonte.indexOf('Test(', ini);
+  return RE_PASSO_UI.test(fonte.slice(ini, prox < 0 ? undefined : prox));
+}
+
 /** Lê status e id de resultado do envelope JSON do `now-sdk cicd ... -o json`. */
 // Formato observado (SDK 4.14.3): { ok, result: {status_label: 'Pending', ...}, progress: { successful,
 // statusMessage, links.results.id }, interpretedResult: { successful, summary: { resultId,
@@ -98,6 +106,7 @@ export async function executar(args) {
   const execucoes = [];
   let precisaRunner = !args['sem-runner'];
   let testes = [];
+  let fonteStory = '';
   if (alvo.tipo === 'story') {
     const arq = join(APP, 'src', 'fluent', 'tests', `${alvo.nome}.now.ts`);
     if (!existsSync(arq)) throw new Error(`arquivo de teste ausente: ${arq}`);
@@ -108,15 +117,24 @@ export async function executar(args) {
     const sem = testes.filter((t) => !t.sysId).map((t) => t.chave);
     if (sem.length) throw new Error(`teste sem sys_id no keys.ts (rodar npm run reinstall antes): ${sem.join(', ')}`);
     precisaRunner = !args['sem-runner'] && (Boolean(args['com-runner']) || RE_PASSO_UI.test(fonte));
+    fonteStory = fonte;
   }
 
   let nav = null;
-  if (precisaRunner) nav = await abrirRunner();
+  let usouRunner = false;
+  // Story: um runner novo por teste. O runner agendado que fica minutos ocioso enquanto os testes de
+  // servidor rodam deixa o primeiro teste de form pendurado até o timeout de 600 s (Deliver, 2026-11-24).
+  if (precisaRunner && alvo.tipo !== 'story') { nav = await abrirRunner(); usouRunner = true; }
   try {
     if (alvo.tipo === 'story') {
       for (const t of testes) {
-        console.log(`atf: rodando ${t.chave} (${t.sysId})`);
-        execucoes.push({ chave: t.chave, sys_id: t.sysId, ...rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
+        if (precisaRunner && (args['com-runner'] || temPassoUi(fonteStory, t.chave))) { nav = await abrirRunner(); usouRunner = true; }
+        try {
+          console.log(`atf: rodando ${t.chave} (${t.sysId})`);
+          execucoes.push({ chave: t.chave, sys_id: t.sysId, ...rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
+        } finally {
+          if (nav) { await nav.close(); nav = null; }
+        }
       }
     } else if (alvo.tipo === 'suite') {
       const [s] = await buscar('sys_atf_test_suite', `name=${alvo.nome}`, 'sys_id,name', 2);
@@ -141,7 +159,7 @@ export async function executar(args) {
     status: passou ? 'success' : 'failure',
     horario: new Date().toISOString(),
     commit: commitAtual(),
-    runner: Boolean(nav),
+    runner: usouRunner,
     testes: execucoes.map(({ envelope, ...resto }) => { void envelope; return resto; }),
   };
   const dir = resolve(RAIZ, args['recibo-dir'] ?? 'outputs/spec/auditorias/atf');
