@@ -54,6 +54,22 @@
 
 ## Histórico de tasks
 
+### US-MOD-F2-005 — score como critério com fallback «sem score» (TASK-MOD-F2-005-01..02)
+**Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 2 tasks)
+
+**Implementado:**
+- `src/server/qualificacao/SegmentacaoScore.server.js` + `script-includes/segmentacao-fallback-sem-score.now.ts`
+- `business-rules/segmentacao.now.ts` — classificar linha sem segmento (before insert); marcar contribuinte e total do ciclo (after)
+
+**Testes:**
+- Cenários: 7 | Verdes: 7 (4 testes ATF de servidor) | Vermelhos: 0 | Não cobertos: 0
+- Por categoria: HAPPY_PATH 3/3 · BUSINESS_RULE_VIOLATION 2/2 · AUTHORIZATION 1/1 · EDGE_CASE 1/1 · INVALID_INPUT n/a · EXTERNAL_SERVICE_FAILURE n/a (falha do SIM-01 fica na STORY-MOD-F3-001)
+- Arquivo: `src/fluent/tests/US-MOD-F2-005.now.ts`
+
+**Decisões:**
+- Score válido = número de 0 a 100 em `contribuinte.score`; a leitura do SIM-01 (`ScoreUfmt`) fica para a STORY-MOD-F3-001 (GAP-124).
+- `DEPENDENCY_PENDING`: STORY-MOD-F2-003 (gerar prévia) e STORY-MOD-F3-001 abertas; a regra roda na inclusão da linha da carteira segmentada, venha de onde vier.
+
 ### US-MOD-F2-004 — sorteio do grupo de controle por ciclo (TASK-MOD-F2-004-01..02, SEC-010)
 **Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 3 tasks)
 

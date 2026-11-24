@@ -69238,7 +69238,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Script include do fallback «sem score» na segmentação",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Script include do fallback «sem score» na segmentação. Entrega o comportamento do requisito RF-MOD-F2-005 (Score como critério com fallback) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "script_include",
@@ -69763,7 +69763,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Business rule que marca o contribuinte segmentado sem score",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Business rule que marca o contribuinte segmentado sem score. Entrega o comportamento do requisito RF-MOD-F2-005 (Score como critério com fallback) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "business_rule",

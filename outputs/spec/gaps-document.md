@@ -335,6 +335,152 @@ As mensagens das regras estão em texto fixo, sem `gs.getMessage`.
 **Opções identificadas:**
 1. Mensagens traduzíveis por `gs.getMessage`.
 
+### GAP-124 — Score lido do contribuinte, não da última ingestão válida do SIM-01 (CONF-001)
+
+**Área:** MOD-F2, MOD-F3
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-01, STORY-MOD-F3-001
+
+**Descrição:**
+`SegmentacaoScore` usa `contribuinte.score`; a arquitetura pede ler a última linha válida de `score_sim` por um Script Include `ScoreUfmt` (auditoria US-MOD-F2-005).
+
+**Opções identificadas:**
+1. Ler pelo `ScoreUfmt` quando a STORY-MOD-F3-001 entregar a ingestão.
+2. Manter o campo do contribuinte no piloto.
+
+### GAP-125 — Débito não aberto entra no valor e no atraso (BUG-001)
+
+**Área:** MOD-F2
+**Impacto:** Média
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-005-01
+
+**Descrição:**
+A soma do valor e o maior atraso consideram todos os débitos do contribuinte, inclusive regularizados.
+
+**Opções identificadas:**
+1. Filtrar débitos em aberto.
+2. Definir com o PO quais status contam.
+
+### GAP-126 — Exclusão de contumaz não aplicada na classificação (CONF-002)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** STORY-MOD-F2-003
+
+**Descrição:**
+A regra determinística não considera «Excluir contumazes» da versão.
+
+**Opções identificadas:**
+1. Regra determinística num ponto só, na STORY-MOD-F2-003 (gerar prévia).
+
+### GAP-127 — US-MOD-F2-005 sem teste ATF de form (TEST-001)
+
+**Área:** MOD-F2, TEL-010
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-01, TASK-MOD-F2-005-02
+
+**Descrição:**
+A regra é de servidor e está provada por ATF de servidor; não há passo de form na TEL-010 nem isenção `atf-form` registrada.
+
+**Opções identificadas:**
+1. Teste de form na TEL-010 (coluna «Sem score»).
+2. Registrar a isenção de ATF de form da story.
+
+### GAP-128 — «Sem score» do contribuinte só é marcado, nunca desmarcado (BUG-002)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-02
+
+**Descrição:**
+A regra marca o contribuinte quando a linha fica sem score e não desmarca quando o score volta.
+
+**Opções identificadas:**
+1. Marcar e desmarcar pela linha mais recente.
+
+### GAP-129 — Threshold vazio vale 0 com «Usar score» (BUG-003)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-005-01
+
+**Descrição:**
+Com «Usar score» marcado e threshold vazio, todo score válido passa.
+
+**Opções identificadas:**
+1. Exigir threshold 0–100 quando «Usar score» está marcado.
+
+### GAP-130 — Total «Sem score» do ciclo regravado durante a publicação (BUG-004)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-02
+
+**Descrição:**
+A regra `after` roda em toda gravação de linha sem score, inclusive na marcação do controle.
+
+**Opções identificadas:**
+1. Condição `sem_score` mudou na regra `after`.
+
+### GAP-131 — Consultas por linha na classificação (PERF-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-01
+
+**Descrição:**
+Versão, ciclo e débitos são lidos a cada linha inserida.
+
+**Opções identificadas:**
+1. Carregar versão e ciclo uma vez na prévia e somar o total no fim.
+
+### GAP-132 — Linha sem versão do critério fica sem segmento e sem aviso (OBS-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-01
+
+**Descrição:**
+Quando nem a linha nem o ciclo têm versão, a linha fica sem segmento.
+
+**Opções identificadas:**
+1. `gs.warn` com o sys_id ou recusar a inclusão.
+
+### GAP-133 — Seed com score fora de 0–100 (CONF-003)
+
+**Área:** Seed
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** —
+
+**Descrição:**
+O gerador do seed grava scores fora da faixa, que a regra trata como «sem score».
+
+**Opções identificadas:**
+1. Faixa 0–100 no gerador do seed.
+
+### GAP-134 — Bordas do score sem teste (TEST-002)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-005-01
+
+**Descrição:**
+Score igual ao threshold, threshold vazio, débito não aberto, alteração e exclusão de linha.
+
+**Opções identificadas:**
+1. Acrescentar os testes de borda.
+
 ---
 
 ## Respostas
@@ -472,6 +618,72 @@ As mensagens das regras estão em texto fixo, sem `gs.getMessage`.
 **Impacto na task:** _(a preencher)_
 
 ### GAP-123
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-124
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-125
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-126
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-127
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-128
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-129
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-130
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-131
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-132
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-133
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-134
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_
