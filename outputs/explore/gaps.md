@@ -11,6 +11,7 @@
 | Versão | Data | Mudança |
 |---|---|---|
 | 0.1 | 2026-11-24 | versão inicial |
+| 0.2 | 2026-11-24 | Plan: GAP-013 atualizado (reports instalados na instância) |
 
 ## Questões abertas
 
@@ -28,7 +29,7 @@
 | GAP-010 | Capacidade máxima por atendente não definida (risco F5). O v0 distribui só por vínculo e balanceamento, sem teto. Afeta RF-501 | ⏳ Aguardando | médio | Coordenação de Cobrança (CPRF) |
 | GAP-011 | Fonte do pipeline em tempo real (CCF/Oracle) a confirmar (risco F6). O v0 calcula os reports sobre as tabelas do app. Afeta RF-601 | ⏳ Aguardando | médio | TI SEFAZ-MT |
 | GAP-012 | Dossiê consolidado em tela única (F5): a Core UI clássica entrega o dossiê como form do caso (TEL-024) com seções e related lists; débitos, parcelamentos e comunicações entram por relacionamento sobre o `contribuinte` do caso. Não há layout livre de tela única. Afeta RF-503, RF-504, RF-303 | 🟡 Parcialmente | médio | FDE + Coordenação de Cobrança |
-| GAP-013 | Painel de KPIs (F6): a Core UI clássica entrega reports simples (TEL-026, 027, 028, 031) e a list de efeito incremental (TEL-029), não um painel único com metas sobrepostas. Se o report não instalar pelo app (item 9 do design), os reports viram list com group-by. Afeta RF-601, RF-602, RF-604, RF-606 | 🟡 Parcialmente | médio | FDE + Coordenação de Cobrança |
+| GAP-013 | Painel de KPIs (F6): a Core UI clássica entrega reports simples (TEL-026, 027, 028, 031) e a list de efeito incremental (TEL-029), não um painel único com metas sobrepostas. Os 7 reports (TEL-011, 016, 022, 026, 027, 028, 031) instalaram pelo app e foram fotografados (`screens-manifest.json`, 2026-11-24); a alternativa de list com group-by não é necessária. Fica em aberto só o painel único com metas sobrepostas. Afeta RF-601, RF-602, RF-604, RF-606 | 🟡 Parcialmente | médio | FDE + Coordenação de Cobrança |
 | GAP-014 | Premissas do plano (7 temas: banco de horas, ritos, ambientes, dados e integrações, homologação, treinamento e OA, mudanças de escopo) e horas técnicas estão "[preencher]" no plano | ⏳ Aguardando | baixo | EloGroup + SEFAZ-MT |
 | GAP-015 | Cronograma da transição MPI → Big Data (P2.2) não detalhado no plano. O v0 trata `mpi_bigdata` como uma origem única. Afeta RF-106 | ⏳ Aguardando | médio | TI SEFAZ-MT |
 | GAP-016 | Fonte e formato das sinalizações coercitivas de outras coordenadorias (CCF/SNE/SUCOM). O v0 preenche `sinal_coercitivo` pelo seed. Afeta RF-504 | ⏳ Aguardando | médio | Coordenação de Cobrança + TI SEFAZ-MT |

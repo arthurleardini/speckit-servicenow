@@ -1,0 +1,65 @@
+---
+description: "Estratégia de testes do app ServiceNow Cobrança MT: ATF (Automated Test Framework) escrito em Fluent Test(), servidor por now-sdk cicd test run, form pelo Client Test Runner com Playwright, recibo por story, suíte cob-regressao, positivo e negativo por regra. Triggers: escrever ou alterar Test(), rodar npm run atf, validar story, cobrir regra de negócio ou ACL."
+globs: "app/src/fluent/tests/**,app/src/server/**"
+alwaysApply: false
+---
+
+# Estratégia de Testes — Cobrança MT (`x_2326104_cob`)
+
+## Por que esta rule existe
+
+A demo prova cada RF do fio condutor com um teste verde na instância (nível N3 da matriz de rastreio). Teste que só roda como admin, que usa sys_id fixo ou que não tem caso negativo dá verde sem provar a regra.
+
+## Camadas
+
+| Camada | Ferramenta | O que cobre | Onde roda |
+|--------|-----------|-------------|-----------|
+| Build | `now-sdk build --frozenKeys` (dentro do `npm run reinstall`) | tipos, `$id` únicos, metadados válidos | local |
+| ATF servidor | `Test()` com steps `atf.server` (`recordInsert`, `recordUpdate`, `recordValidation`, `runServerSideScript` com Jasmine 3.1) | Business Rule, Script Include, ACL (impersonando o papel), cálculo | instância, por `now-sdk cicd test run` |
+| ATF form | `Test()` com steps `atf.form` (`formUI: 'standard_ui'`) | UI Policy, UI Action, campo somente leitura, mensagem na tela | instância, pelo Client Test Runner aberto num navegador Playwright |
+| Captura | `sn-capture --story` | print da tela como o papel vê | instância |
+| Regressão | suíte `TestSuite()` "cob-regressao" em `app/src/fluent/tests/suite.now.ts` | todos os testes do app | ao fim de cada `npm run reinstall` |
+
+- Preferir step de UI (`atf.form`) quando a regra é visível na tela; `atf.server` para dado e back-end (RN-SN-112).
+- Se o teste de form não executar sem navegador (desfecho do item 9 do design), a story registra a **isenção de ATF de form** em `outputs/spec/auditorias/_isencoes/<STORY>-atf-form.md`; o teste de servidor continua obrigatório.
+
+## Regras de escrita
+
+- Toda lógica custom (BR, UI Policy, UI Action, ACL, transição de estado) tem caso **positivo e negativo** (RN-SN-110).
+- `recordInsert` e `recordUpdate` são caminhos separados, cada um com `recordValidation` (RN-SN-110).
+- Tabela só com comportamento padrão recebe um único teste CRUD (RN-SN-111).
+- Campos obrigatórios preenchidos no `recordInsert`; referência vem de step anterior ou lookup, nunca sys_id fixo; role por referência `Role`, não por nome (RN-SN-113).
+- ACL testada com usuário demo da role (`impersonate`), nunca com admin nem `enforceSecurity: false` (RN-SN-83).
+- `$id` único por step (RN-SN-06): `Now.ID['<STORY>_test_<n>']`.
+- Descrição do teste cita a regra, a tabela/campo e como valida, em 1 a 2 frases (RN-SN-115).
+- Regra mudou → teste muda no lugar; regra removida → `Now.del('sys_atf_test', …)` e o `.now.ts` sai (RN-SN-114).
+- Dados do teste vêm dos `acceptanceScenarios[].testData` da task e são fictícios; o teste cria o que precisa e não depende da ordem do seed.
+
+## Cobertura mínima por story
+
+| Tipo de story | ATF servidor | ATF form | G3 com LLM |
+|---------------|--------------|----------|------------|
+| fio condutor (label `fio-condutor`) | obrigatório, positivo + negativo por RN | conforme item 9 (ou isenção registrada) | sim |
+| gerada (tabela, form, list, menu, role, seed) | 1 teste CRUD por tabela + 1 de leitura negada por role | conforme item 9 | isenção registrada |
+| outra feita à mão | positivo + negativo por RN | conforme item 9 | isenção registrada |
+
+Casos obrigatórios do fio condutor:
+
+| RN | Positivo | Negativo |
+|----|----------|----------|
+| RN-NOVO-F2-001 | criar nova versão a partir da publicada gera `versao + 1` em rascunho ligada à anterior | alterar campo de versão publicada é recusado com mensagem |
+| RN-NOVO-F2-002 | ciclo publicado mantém a versão após publicar versão nova | trocar o critério de ciclo publicado é recusado |
+| RN-NOVO-F2-005 / F2-006 | 100 elegíveis → 10 em "controle", com semente gravada; mesma semente gera o mesmo grupo | criar comunicação ou caso para contribuinte em controle é recusado |
+| RN-NOVO-F3-002 | contribuinte sem score válido entra pelos critérios determinísticos e fica `sem_score = true` | contribuinte com score abaixo do threshold, com critério usando score, não entra na qualificada |
+| RN-NOVO-F5-007 | atendente demo vê os próprios casos na lista e no form | atendente demo não abre caso de outro atendente (lista sem a linha, form negado) |
+
+## Execução e recibo
+
+- Rodar só pelo `npm run atf -- --story <ID>`; ele chama `now-sdk cicd test run -o json` (ou consulta `sys_atf_result`) e grava o recibo `outputs/spec/auditorias/atf/<STORY>.json` com `sys_id`, horário, status e commit.
+- Recibo verde é a única evidência aceita pelo `delivery-gate` e pela matriz de rastreio. Sem recibo, a story não é declarada testada.
+- O teste roda depois de `npm run reinstall` com o commit atual; recibo de commit antigo não vale.
+
+## O que não é teste
+
+- Print (`sn-capture`) mostra a tela; não prova regra.
+- Testes de execução manual do `test-plan.md` são roteiro de homologação do cliente, não item de backlog.

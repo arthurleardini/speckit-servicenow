@@ -1,0 +1,3036 @@
+{
+  "scope": "x_2326104_cob",
+  "generatedBy": "spec-data-model (final, Plan)",
+  "generatedAt": "2026-11-24T00:00:00Z",
+  "basedOn": "outputs/spec/data-model.previa.json",
+  "modules": [
+    {
+      "id": "MOD-F1",
+      "label": "Ingestão e Carteira Consolidada",
+      "tables": [
+        "x_2326104_cob_contribuinte",
+        "x_2326104_cob_debito",
+        "x_2326104_cob_parcelamento",
+        "x_2326104_cob_sincronizacao",
+        "x_2326104_cob_rejeicao",
+        "x_2326104_cob_debito_stg"
+      ]
+    },
+    {
+      "id": "MOD-F2",
+      "label": "Qualificação e Parametrização da Carteira",
+      "tables": [
+        "x_2326104_cob_criterio",
+        "x_2326104_cob_ciclo",
+        "x_2326104_cob_segmentacao"
+      ]
+    },
+    {
+      "id": "MOD-F3",
+      "label": "Scoring de Liquidez",
+      "tables": [
+        "x_2326104_cob_score_sim"
+      ]
+    },
+    {
+      "id": "MOD-F4",
+      "label": "Réguas de Cobrança Multicanal",
+      "tables": [
+        "x_2326104_cob_regua",
+        "x_2326104_cob_regua_etapa",
+        "x_2326104_cob_comunicacao",
+        "x_2326104_cob_envio_sim",
+        "x_2326104_cob_canal_sim",
+        "x_2326104_cob_consentimento",
+        "x_2326104_cob_regularizacao"
+      ]
+    },
+    {
+      "id": "MOD-F5",
+      "label": "Cobrança Qualificada",
+      "tables": [
+        "x_2326104_cob_caso",
+        "x_2326104_cob_interacao"
+      ]
+    },
+    {
+      "id": "MOD-F6",
+      "label": "Monitoramento, KPIs e Grupo de Controle",
+      "tables": [
+        "x_2326104_cob_meta"
+      ]
+    },
+    {
+      "id": "MOD-T",
+      "label": "Transversais",
+      "tables": [
+        "x_2326104_cob_exportacao"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "name": "x_2326104_cob_contribuinte",
+      "label": "Contribuinte",
+      "description": "Guarda o contribuinte fictício e serve de visão única: identificação, atendente vinculado (a carteira), segmento, score e valor em aberto.",
+      "journal": true,
+      "audit": true,
+      "pessoa": true,
+      "rf": [
+        "RF-MOD-F1-002",
+        "RF-MOD-F1-005",
+        "RF-MOD-F2-005",
+        "RF-MOD-F5-007",
+        "RF-MOD-T-002",
+        "RF-MOD-T-003"
+      ],
+      "rn": [
+        "RN-NOVO-F1-001",
+        "RN-NOVO-F3-002",
+        "RN-NOVO-F5-001",
+        "RN-NOVO-F5-007",
+        "RN-NOVO-T-002"
+      ],
+      "columns": [
+        {
+          "name": "nome",
+          "label": "Nome",
+          "type": "string",
+          "maxLength": 120,
+          "mandatory": true
+        },
+        {
+          "name": "tipo_pessoa",
+          "label": "Tipo de pessoa",
+          "type": "choice",
+          "choices": {
+            "pf": {
+              "label": "Pessoa física",
+              "sequence": 10
+            },
+            "pj": {
+              "label": "Pessoa jurídica",
+              "sequence": 20
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "cpf",
+          "label": "CPF",
+          "type": "string",
+          "maxLength": 14,
+          "format": "cpf"
+        },
+        {
+          "name": "cnpj",
+          "label": "CNPJ",
+          "type": "string",
+          "maxLength": 18,
+          "format": "cnpj"
+        },
+        {
+          "name": "email",
+          "label": "E-mail",
+          "type": "string",
+          "maxLength": 100
+        },
+        {
+          "name": "telefone",
+          "label": "Telefone",
+          "type": "string",
+          "maxLength": 20
+        },
+        {
+          "name": "municipio",
+          "label": "Município",
+          "type": "string",
+          "maxLength": 80
+        },
+        {
+          "name": "atendente",
+          "label": "Atendente vinculado",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "segmento",
+          "label": "Segmento",
+          "type": "choice",
+          "choices": {
+            "nao_avaliado": {
+              "label": "Não avaliado",
+              "sequence": 10
+            },
+            "massificada": {
+              "label": "Massificada",
+              "sequence": 20
+            },
+            "qualificada": {
+              "label": "Qualificada",
+              "sequence": 30
+            },
+            "controle": {
+              "label": "Grupo de controle",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "score",
+          "label": "Score de liquidez",
+          "type": "decimal"
+        },
+        {
+          "name": "sem_score",
+          "label": "Sem score",
+          "type": "boolean"
+        },
+        {
+          "name": "valor_em_aberto",
+          "label": "Valor em aberto",
+          "type": "currency"
+        },
+        {
+          "name": "situacao",
+          "label": "Situação",
+          "type": "choice",
+          "choices": {
+            "em_cobranca": {
+              "label": "Em cobrança",
+              "sequence": 10
+            },
+            "parcelado": {
+              "label": "Em parcelamento",
+              "sequence": 20
+            },
+            "regularizado": {
+              "label": "Regularizado",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "ficticio",
+          "label": "Fictício",
+          "type": "boolean",
+          "mandatory": true
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_debito",
+      "label": "Débito",
+      "description": "Guarda cada débito consolidado, com a fonte de origem, o tributo, o valor, o atraso e a marca de sobreposição entre fontes.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-002",
+        "RF-MOD-F1-003",
+        "RF-MOD-F1-006",
+        "RF-MOD-F5-003",
+        "RF-MOD-T-002"
+      ],
+      "rn": [
+        "RN-NOVO-F1-001",
+        "RN-NOVO-F1-002",
+        "RN-NOVO-F1-003",
+        "RN-NOVO-F5-007"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "origem",
+          "label": "Origem",
+          "type": "choice",
+          "choices": {
+            "ccf": {
+              "label": "CCF",
+              "sequence": 10
+            },
+            "mpi_bigdata": {
+              "label": "MPI/Big Data",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 50
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 10
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "valor",
+          "label": "Valor",
+          "type": "currency"
+        },
+        {
+          "name": "vencimento",
+          "label": "Vencimento",
+          "type": "glide_date"
+        },
+        {
+          "name": "dias_atraso",
+          "label": "Dias de atraso",
+          "type": "integer"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "aberto": {
+              "label": "Aberto",
+              "sequence": 10
+            },
+            "parcelado": {
+              "label": "Parcelado",
+              "sequence": 20
+            },
+            "regularizado": {
+              "label": "Regularizado",
+              "sequence": 30
+            },
+            "cancelado": {
+              "label": "Cancelado",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "id_fonte",
+          "label": "ID na fonte",
+          "type": "string",
+          "maxLength": 40
+        },
+        {
+          "name": "sobreposto",
+          "label": "Sobreposto entre fontes",
+          "type": "boolean"
+        },
+        {
+          "name": "atualizado_em",
+          "label": "Atualizado em",
+          "type": "glide_date_time"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_parcelamento",
+      "label": "Parcelamento",
+      "description": "Guarda os parcelamentos do contribuinte e o alerta de risco quando há parcela em atraso.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F1-003",
+        "RF-MOD-F1-004",
+        "RF-MOD-F5-003"
+      ],
+      "rn": [
+        "RN-NOVO-F1-002",
+        "RN-NOVO-F1-007",
+        "RN-NOVO-F5-007"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 10
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "valor_total",
+          "label": "Valor total",
+          "type": "currency"
+        },
+        {
+          "name": "parcelas_total",
+          "label": "Parcelas",
+          "type": "integer"
+        },
+        {
+          "name": "parcelas_atraso",
+          "label": "Parcelas em atraso",
+          "type": "integer"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "em_dia": {
+              "label": "Em dia",
+              "sequence": 10
+            },
+            "em_risco": {
+              "label": "Em risco",
+              "sequence": 20
+            },
+            "rompido": {
+              "label": "Rompido",
+              "sequence": 30
+            },
+            "quitado": {
+              "label": "Quitado",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "alerta_risco",
+          "label": "Alerta de risco",
+          "type": "boolean"
+        },
+        {
+          "name": "atualizado_em",
+          "label": "Atualizado em",
+          "type": "glide_date_time"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_sincronizacao",
+      "label": "Execução de sincronização",
+      "description": "Guarda cada execução de consolidação por fonte: início, fim, status, volume e rejeitados.",
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-006",
+        "RF-MOD-F1-007"
+      ],
+      "rn": [
+        "RN-NOVO-F1-005",
+        "RN-NOVO-F1-006"
+      ],
+      "columns": [
+        {
+          "name": "fonte",
+          "label": "Fonte",
+          "type": "choice",
+          "choices": {
+            "ccf": {
+              "label": "CCF",
+              "sequence": 10
+            },
+            "mpi_bigdata": {
+              "label": "MPI/Big Data",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 50
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "inicio",
+          "label": "Início",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "fim",
+          "label": "Fim",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "sucesso": {
+              "label": "Sucesso",
+              "sequence": 10
+            },
+            "parcial": {
+              "label": "Parcial",
+              "sequence": 20
+            },
+            "falha": {
+              "label": "Falha",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "volume",
+          "label": "Volume",
+          "type": "integer"
+        },
+        {
+          "name": "rejeitados",
+          "label": "Rejeitados",
+          "type": "integer"
+        },
+        {
+          "name": "mensagem",
+          "label": "Mensagem",
+          "type": "string",
+          "maxLength": 255
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_rejeicao",
+      "label": "Rejeição de registro",
+      "description": "Guarda cada linha de fonte recusada na consolidação, com o motivo.",
+      "rf": [
+        "RF-MOD-F1-002",
+        "RF-MOD-F1-007"
+      ],
+      "rn": [
+        "RN-NOVO-F1-004"
+      ],
+      "columns": [
+        {
+          "name": "sincronizacao",
+          "label": "Sincronização",
+          "type": "reference",
+          "reference": "x_2326104_cob_sincronizacao"
+        },
+        {
+          "name": "fonte",
+          "label": "Fonte",
+          "type": "choice",
+          "choices": {
+            "ccf": {
+              "label": "CCF",
+              "sequence": 10
+            },
+            "mpi_bigdata": {
+              "label": "MPI/Big Data",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 50
+            }
+          }
+        },
+        {
+          "name": "id_registro",
+          "label": "ID do registro na fonte",
+          "type": "string",
+          "maxLength": 40
+        },
+        {
+          "name": "motivo",
+          "label": "Motivo",
+          "type": "choice",
+          "choices": {
+            "documento_invalido": {
+              "label": "Documento inválido",
+              "sequence": 10
+            },
+            "sem_vinculo": {
+              "label": "Sem vínculo",
+              "sequence": 20
+            },
+            "duplicado": {
+              "label": "Duplicado",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "detalhe",
+          "label": "Detalhe",
+          "type": "string",
+          "maxLength": 255
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_debito_stg",
+      "label": "Staging de fontes (Simulado)",
+      "description": "Área de entrada simulada (SIM-03): linhas como chegariam das 5 fontes de débito, com documento fictício e interruptor de falha.",
+      "pessoa": true,
+      "simulation": true,
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-002",
+        "RF-MOD-F1-006"
+      ],
+      "rn": [
+        "RN-NOVO-F1-001",
+        "RN-NOVO-F1-004",
+        "RN-NOVO-F1-005",
+        "RN-NOVO-T-002"
+      ],
+      "columns": [
+        {
+          "name": "origem",
+          "label": "Origem",
+          "type": "choice",
+          "choices": {
+            "ccf": {
+              "label": "CCF",
+              "sequence": 10
+            },
+            "mpi_bigdata": {
+              "label": "MPI/Big Data",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 50
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "tipo_pessoa",
+          "label": "Tipo de pessoa",
+          "type": "choice",
+          "choices": {
+            "pf": {
+              "label": "Pessoa física",
+              "sequence": 10
+            },
+            "pj": {
+              "label": "Pessoa jurídica",
+              "sequence": 20
+            }
+          }
+        },
+        {
+          "name": "cpf",
+          "label": "CPF",
+          "type": "string",
+          "maxLength": 14,
+          "format": "cpf"
+        },
+        {
+          "name": "cnpj",
+          "label": "CNPJ",
+          "type": "string",
+          "maxLength": 18,
+          "format": "cnpj"
+        },
+        {
+          "name": "nome",
+          "label": "Nome",
+          "type": "string",
+          "maxLength": 120
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 10
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "valor",
+          "label": "Valor",
+          "type": "currency"
+        },
+        {
+          "name": "vencimento",
+          "label": "Vencimento",
+          "type": "glide_date"
+        },
+        {
+          "name": "id_fonte",
+          "label": "ID na fonte",
+          "type": "string",
+          "maxLength": 40
+        },
+        {
+          "name": "processado",
+          "label": "Processado",
+          "type": "boolean"
+        },
+        {
+          "name": "falha_simulada",
+          "label": "Falha simulada",
+          "type": "boolean"
+        },
+        {
+          "name": "ficticio",
+          "label": "Fictício",
+          "type": "boolean",
+          "mandatory": true
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_criterio",
+      "label": "Critério de qualificação",
+      "description": "Guarda cada versão do critério de qualificação. A versão publicada não muda; mudar cria nova versão com o mesmo código e número seguinte (fio condutor 1).",
+      "journal": true,
+      "audit": true,
+      "rf": [
+        "RF-MOD-F2-001",
+        "RF-MOD-F2-002",
+        "RF-MOD-F2-005",
+        "RF-MOD-F3-002"
+      ],
+      "rn": [
+        "RN-NOVO-F2-001",
+        "RN-NOVO-F2-003",
+        "RN-NOVO-F2-004",
+        "RN-NOVO-F2-006",
+        "RN-NOVO-F3-001"
+      ],
+      "columns": [
+        {
+          "name": "nome",
+          "label": "Nome",
+          "type": "string",
+          "maxLength": 100,
+          "mandatory": true
+        },
+        {
+          "name": "codigo",
+          "label": "Código do critério",
+          "type": "string",
+          "maxLength": 40
+        },
+        {
+          "name": "versao",
+          "label": "Versão",
+          "type": "integer"
+        },
+        {
+          "name": "estado",
+          "label": "Estado",
+          "type": "choice",
+          "choices": {
+            "rascunho": {
+              "label": "Rascunho",
+              "sequence": 10
+            },
+            "publicada": {
+              "label": "Publicada",
+              "sequence": 20
+            },
+            "substituida": {
+              "label": "Substituída",
+              "sequence": 30
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "todos": {
+              "label": "Todos",
+              "sequence": 10
+            },
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 20
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 30
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 40
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 50
+            }
+          }
+        },
+        {
+          "name": "valor_minimo",
+          "label": "Valor mínimo",
+          "type": "currency"
+        },
+        {
+          "name": "atraso_minimo_dias",
+          "label": "Atraso mínimo (dias)",
+          "type": "integer"
+        },
+        {
+          "name": "instrumento",
+          "label": "Instrumento",
+          "type": "string",
+          "maxLength": 80
+        },
+        {
+          "name": "excluir_contumaz",
+          "label": "Excluir contumazes",
+          "type": "boolean"
+        },
+        {
+          "name": "usar_score",
+          "label": "Usar score de liquidez",
+          "type": "boolean"
+        },
+        {
+          "name": "threshold_score",
+          "label": "Threshold do score",
+          "type": "decimal"
+        },
+        {
+          "name": "pct_grupo_controle",
+          "label": "Grupo de controle (%)",
+          "type": "decimal"
+        },
+        {
+          "name": "desempate",
+          "label": "Desempate",
+          "type": "choice",
+          "choices": {
+            "maior_debito_mais_antigo": {
+              "label": "Maior débito, depois o mais antigo",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "name": "versao_anterior",
+          "label": "Versão anterior",
+          "type": "reference",
+          "reference": "x_2326104_cob_criterio"
+        },
+        {
+          "name": "motivo_alteracao",
+          "label": "Motivo da nova versão",
+          "type": "string",
+          "maxLength": 255
+        },
+        {
+          "name": "publicada_em",
+          "label": "Publicada em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "publicada_por",
+          "label": "Publicada por",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_ciclo",
+      "label": "Ciclo de qualificação",
+      "description": "Guarda o ciclo mensal de qualificação: a versão do critério aplicada, a semente do sorteio do grupo de controle, os totais por segmento e o efeito incremental (fio condutor 2).",
+      "journal": true,
+      "audit": true,
+      "rf": [
+        "RF-MOD-F2-003",
+        "RF-MOD-F2-004",
+        "RF-MOD-F2-006",
+        "RF-MOD-F6-004"
+      ],
+      "rn": [
+        "RN-NOVO-F1-006",
+        "RN-NOVO-F2-002",
+        "RN-NOVO-F2-005",
+        "RN-NOVO-F2-006",
+        "RN-NOVO-F6-001"
+      ],
+      "columns": [
+        {
+          "name": "nome",
+          "label": "Nome",
+          "type": "string",
+          "maxLength": 60,
+          "mandatory": true
+        },
+        {
+          "name": "referencia",
+          "label": "Mês de referência",
+          "type": "glide_date"
+        },
+        {
+          "name": "criterio",
+          "label": "Critério aplicado",
+          "type": "reference",
+          "reference": "x_2326104_cob_criterio"
+        },
+        {
+          "name": "estado",
+          "label": "Estado",
+          "type": "choice",
+          "choices": {
+            "previa": {
+              "label": "Prévia",
+              "sequence": 10
+            },
+            "publicado": {
+              "label": "Publicado",
+              "sequence": 20
+            },
+            "encerrado": {
+              "label": "Encerrado",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "qtd_elegiveis",
+          "label": "Elegíveis",
+          "type": "integer"
+        },
+        {
+          "name": "semente_sorteio",
+          "label": "Semente do sorteio",
+          "type": "integer"
+        },
+        {
+          "name": "qtd_massificada",
+          "label": "Massificada",
+          "type": "integer"
+        },
+        {
+          "name": "qtd_qualificada",
+          "label": "Qualificada",
+          "type": "integer"
+        },
+        {
+          "name": "qtd_controle",
+          "label": "Grupo de controle",
+          "type": "integer"
+        },
+        {
+          "name": "qtd_sem_score",
+          "label": "Sem score",
+          "type": "integer"
+        },
+        {
+          "name": "taxa_cobrada",
+          "label": "Taxa da carteira cobrada (%)",
+          "type": "decimal"
+        },
+        {
+          "name": "taxa_controle",
+          "label": "Taxa do grupo de controle (%)",
+          "type": "decimal"
+        },
+        {
+          "name": "efeito_incremental",
+          "label": "Efeito incremental (p.p.)",
+          "type": "decimal"
+        },
+        {
+          "name": "publicado_em",
+          "label": "Publicado em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "publicado_por",
+          "label": "Publicado por",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_segmentacao",
+      "label": "Carteira segmentada",
+      "description": "Guarda a posição de cada contribuinte num ciclo: segmento (massificada, qualificada ou controle), score usado, marca «sem score» e estágio do funil (fios condutores 2 e 3).",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F2-003",
+        "RF-MOD-F2-004",
+        "RF-MOD-F2-005",
+        "RF-MOD-F6-001",
+        "RF-MOD-T-002"
+      ],
+      "rn": [
+        "RN-NOVO-F2-003",
+        "RN-NOVO-F2-004",
+        "RN-NOVO-F2-005",
+        "RN-NOVO-F3-002",
+        "RN-NOVO-F6-002"
+      ],
+      "columns": [
+        {
+          "name": "ciclo",
+          "label": "Ciclo",
+          "type": "reference",
+          "reference": "x_2326104_cob_ciclo",
+          "mandatory": true
+        },
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "criterio",
+          "label": "Versão do critério",
+          "type": "reference",
+          "reference": "x_2326104_cob_criterio"
+        },
+        {
+          "name": "segmento",
+          "label": "Segmento",
+          "type": "choice",
+          "choices": {
+            "massificada": {
+              "label": "Massificada",
+              "sequence": 10
+            },
+            "qualificada": {
+              "label": "Qualificada",
+              "sequence": 20
+            },
+            "controle": {
+              "label": "Grupo de controle",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "valor_em_aberto",
+          "label": "Valor em aberto",
+          "type": "currency"
+        },
+        {
+          "name": "score_usado",
+          "label": "Score usado",
+          "type": "decimal"
+        },
+        {
+          "name": "sem_score",
+          "label": "Sem score",
+          "type": "boolean"
+        },
+        {
+          "name": "estagio_funil",
+          "label": "Estágio do funil",
+          "type": "choice",
+          "choices": {
+            "identificado": {
+              "label": "Identificado",
+              "sequence": 10
+            },
+            "notificado": {
+              "label": "Notificado",
+              "sequence": 20
+            },
+            "regularizado": {
+              "label": "Regularizado",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "motivo",
+          "label": "Motivo",
+          "type": "string",
+          "maxLength": 255
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_score_sim",
+      "label": "Score de liquidez (Simulado)",
+      "description": "Score de liquidez simulado (SIM-01): um score por contribuinte e tributo, com versão do modelo e status; status diferente de «válido» leva ao fallback.",
+      "simulation": true,
+      "rf": [
+        "RF-MOD-F3-001",
+        "RF-MOD-F3-002",
+        "RF-MOD-F3-004",
+        "RF-MOD-F3-005",
+        "RF-MOD-F3-006"
+      ],
+      "rn": [
+        "RN-NOVO-F3-001",
+        "RN-NOVO-F3-002",
+        "RN-NOVO-F3-003"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 10
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "score",
+          "label": "Score",
+          "type": "decimal"
+        },
+        {
+          "name": "versao_modelo",
+          "label": "Versão do modelo",
+          "type": "string",
+          "maxLength": 20
+        },
+        {
+          "name": "ingerido_em",
+          "label": "Ingerido em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "valido": {
+              "label": "Válido",
+              "sequence": 10
+            },
+            "invalido": {
+              "label": "Inválido",
+              "sequence": 20
+            },
+            "sem_score": {
+              "label": "Sem score",
+              "sequence": 30
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_regua",
+      "label": "Régua de cobrança",
+      "description": "Guarda a régua de cobrança de uma carteira, ativa ou não, com janela de atribuição e ordem de fallback de canal.",
+      "journal": true,
+      "audit": true,
+      "rf": [
+        "RF-MOD-F4-001",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-009"
+      ],
+      "rn": [
+        "RN-NOVO-F4-001",
+        "RN-NOVO-F4-004",
+        "RN-NOVO-F4-007"
+      ],
+      "columns": [
+        {
+          "name": "nome",
+          "label": "Nome",
+          "type": "string",
+          "maxLength": 100,
+          "mandatory": true
+        },
+        {
+          "name": "carteira",
+          "label": "Carteira",
+          "type": "choice",
+          "choices": {
+            "parcelamentos": {
+              "label": "Parcelamentos",
+              "sequence": 10
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 20
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 30
+            },
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 40
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 50
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "ativa",
+          "label": "Ativa",
+          "type": "boolean"
+        },
+        {
+          "name": "janela_atribuicao_dias",
+          "label": "Janela de atribuição (dias)",
+          "type": "integer"
+        },
+        {
+          "name": "ordem_fallback",
+          "label": "Ordem de fallback de canal",
+          "type": "string",
+          "maxLength": 60
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_regua_etapa",
+      "label": "Etapa da régua",
+      "description": "Guarda cada etapa da régua: ordem, prazo em dias, canal, texto e ação quando não há resposta.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F4-001",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-009"
+      ],
+      "rn": [
+        "RN-NOVO-F4-001",
+        "RN-NOVO-F4-008"
+      ],
+      "columns": [
+        {
+          "name": "regua",
+          "label": "Régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua",
+          "mandatory": true
+        },
+        {
+          "name": "ordem",
+          "label": "Ordem",
+          "type": "integer"
+        },
+        {
+          "name": "offset_dias",
+          "label": "Offset (dias)",
+          "type": "integer"
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "template",
+          "label": "Template",
+          "type": "string",
+          "maxLength": 1000
+        },
+        {
+          "name": "acao_sem_resposta",
+          "label": "Ação sem resposta",
+          "type": "choice",
+          "choices": {
+            "renotificar": {
+              "label": "Renotificar",
+              "sequence": 10
+            },
+            "intensificar": {
+              "label": "Intensificar",
+              "sequence": 20
+            },
+            "encaminhar_qualificada": {
+              "label": "Encaminhar à qualificada",
+              "sequence": 30
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_comunicacao",
+      "label": "Comunicação",
+      "description": "Guarda cada comunicação disparada por etapa de régua, com canal, status de entrega, tentativas e o ciclo em que foi disparada.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F4-002",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-005",
+        "RF-MOD-F4-006",
+        "RF-MOD-F4-008"
+      ],
+      "rn": [
+        "RN-NOVO-F1-002",
+        "RN-NOVO-F2-005",
+        "RN-NOVO-F4-002",
+        "RN-NOVO-F4-003",
+        "RN-NOVO-F4-004",
+        "RN-NOVO-F4-005",
+        "RN-NOVO-F5-007"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "regua",
+          "label": "Régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua"
+        },
+        {
+          "name": "etapa",
+          "label": "Etapa",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua_etapa"
+        },
+        {
+          "name": "ciclo",
+          "label": "Ciclo",
+          "type": "reference",
+          "reference": "x_2326104_cob_ciclo"
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "agendada": {
+              "label": "Agendada",
+              "sequence": 10
+            },
+            "enviada": {
+              "label": "Enviada",
+              "sequence": 20
+            },
+            "entregue": {
+              "label": "Entregue",
+              "sequence": 30
+            },
+            "falha": {
+              "label": "Falha",
+              "sequence": 40
+            },
+            "pulada": {
+              "label": "Pulada",
+              "sequence": 50
+            },
+            "encerrada": {
+              "label": "Encerrada",
+              "sequence": 60
+            }
+          }
+        },
+        {
+          "name": "motivo",
+          "label": "Motivo",
+          "type": "string",
+          "maxLength": 255
+        },
+        {
+          "name": "enviada_em",
+          "label": "Enviada em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "tentativas",
+          "label": "Tentativas",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_envio_sim",
+      "label": "Retorno de envio (Simulado)",
+      "description": "Retorno de envio simulado (SIM-02): uma linha por tentativa de envio, com o status devolvido pelo canal.",
+      "simulation": true,
+      "rf": [
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-006"
+      ],
+      "rn": [
+        "RN-NOVO-F4-004",
+        "RN-NOVO-F4-005"
+      ],
+      "columns": [
+        {
+          "name": "comunicacao",
+          "label": "Comunicação",
+          "type": "reference",
+          "reference": "x_2326104_cob_comunicacao",
+          "mandatory": true
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "status_retorno",
+          "label": "Status de retorno",
+          "type": "choice",
+          "choices": {
+            "entregue": {
+              "label": "Entregue",
+              "sequence": 10
+            },
+            "falha": {
+              "label": "Falha",
+              "sequence": 20
+            },
+            "recusado_sem_optin": {
+              "label": "Recusado sem opt-in",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "codigo_retorno",
+          "label": "Código de retorno",
+          "type": "string",
+          "maxLength": 20
+        },
+        {
+          "name": "recebido_em",
+          "label": "Recebido em",
+          "type": "glide_date_time"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_canal_sim",
+      "label": "Canal de envio (Simulado)",
+      "description": "Canal simulado (SIM-02): um registro por canal, com contratação, exigência de opt-in e interruptor de falha.",
+      "simulation": true,
+      "rf": [
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-005"
+      ],
+      "rn": [
+        "RN-NOVO-F4-003",
+        "RN-NOVO-F4-004"
+      ],
+      "columns": [
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "contratado",
+          "label": "Contratado",
+          "type": "boolean"
+        },
+        {
+          "name": "forcar_falha",
+          "label": "Forçar falha",
+          "type": "boolean"
+        },
+        {
+          "name": "exige_opt_in",
+          "label": "Exige opt-in",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_consentimento",
+      "label": "Consentimento por canal",
+      "description": "Guarda cada opt-in ou opt-out do contribuinte por canal, com data e origem do registro.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F4-005"
+      ],
+      "rn": [
+        "RN-NOVO-F4-003"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "situacao",
+          "label": "Situação",
+          "type": "choice",
+          "choices": {
+            "opt_in": {
+              "label": "Opt-in",
+              "sequence": 10
+            },
+            "opt_out": {
+              "label": "Opt-out",
+              "sequence": 20
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "registrado_em",
+          "label": "Registrado em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "origem",
+          "label": "Origem do registro",
+          "type": "string",
+          "maxLength": 80
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_regularizacao",
+      "label": "Regularização",
+      "description": "Guarda cada regularização com a origem (espontânea ou resposta à cobrança), o canal, o instrumento, a marca de grupo de controle e o atendente.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F4-007",
+        "RF-MOD-F5-006",
+        "RF-MOD-F6-002",
+        "RF-MOD-F6-003",
+        "RF-MOD-F6-005",
+        "RF-MOD-F6-006",
+        "RF-MOD-T-004"
+      ],
+      "rn": [
+        "RN-NOVO-F4-006",
+        "RN-NOVO-F4-007",
+        "RN-NOVO-F5-006",
+        "RN-NOVO-F5-007",
+        "RN-NOVO-F6-001"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "debito",
+          "label": "Débito",
+          "type": "reference",
+          "reference": "x_2326104_cob_debito"
+        },
+        {
+          "name": "ciclo",
+          "label": "Ciclo",
+          "type": "reference",
+          "reference": "x_2326104_cob_ciclo"
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 10
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 20
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 30
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "valor",
+          "label": "Valor regularizado",
+          "type": "currency"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "glide_date"
+        },
+        {
+          "name": "origem",
+          "label": "Origem",
+          "type": "choice",
+          "choices": {
+            "espontanea": {
+              "label": "Espontânea",
+              "sequence": 10
+            },
+            "resposta_cobranca": {
+              "label": "Resposta à cobrança",
+              "sequence": 20
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "email": {
+              "label": "E-mail",
+              "sequence": 10
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 20
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 30
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 40
+            },
+            "atendimento": {
+              "label": "Atendimento",
+              "sequence": 50
+            },
+            "nenhum": {
+              "label": "Nenhum",
+              "sequence": 60
+            }
+          }
+        },
+        {
+          "name": "instrumento",
+          "label": "Instrumento",
+          "type": "choice",
+          "choices": {
+            "regua": {
+              "label": "Régua",
+              "sequence": 10
+            },
+            "qualificada": {
+              "label": "Cobrança qualificada",
+              "sequence": 20
+            },
+            "nenhum": {
+              "label": "Nenhum",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "grupo_controle",
+          "label": "Grupo de controle",
+          "type": "boolean"
+        },
+        {
+          "name": "comunicacao",
+          "label": "Comunicação",
+          "type": "reference",
+          "reference": "x_2326104_cob_comunicacao"
+        },
+        {
+          "name": "caso",
+          "label": "Caso",
+          "type": "reference",
+          "reference": "x_2326104_cob_caso"
+        },
+        {
+          "name": "atendente",
+          "label": "Atendente",
+          "type": "reference",
+          "reference": "sys_user"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_caso",
+      "label": "Caso de cobrança qualificada",
+      "description": "Guarda o caso da cobrança qualificada e é o dossiê: atendente responsável (a carteira), prioridade, score, sinalização coercitiva e encerramento (fios condutores 4 e 5).",
+      "journal": true,
+      "audit": true,
+      "rf": [
+        "RF-MOD-F5-001",
+        "RF-MOD-F5-002",
+        "RF-MOD-F5-003",
+        "RF-MOD-F5-004",
+        "RF-MOD-F5-006",
+        "RF-MOD-F5-007",
+        "RF-MOD-F3-003"
+      ],
+      "rn": [
+        "RN-NOVO-F5-001",
+        "RN-NOVO-F5-002",
+        "RN-NOVO-F5-003",
+        "RN-NOVO-F5-004",
+        "RN-NOVO-F5-006",
+        "RN-NOVO-F5-007",
+        "RN-NOVO-F3-002"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "atendente",
+          "label": "Atendente",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "ciclo",
+          "label": "Ciclo",
+          "type": "reference",
+          "reference": "x_2326104_cob_ciclo"
+        },
+        {
+          "name": "estagio",
+          "label": "Estágio",
+          "type": "choice",
+          "choices": {
+            "em_selecao": {
+              "label": "Em seleção",
+              "sequence": 10
+            },
+            "selecionado": {
+              "label": "Caso selecionado",
+              "sequence": 20
+            },
+            "dossie_gerado": {
+              "label": "Dossiê gerado",
+              "sequence": 30
+            },
+            "conducao": {
+              "label": "Condução",
+              "sequence": 40
+            },
+            "encerrado": {
+              "label": "Encerrado",
+              "sequence": 50
+            }
+          }
+        },
+        {
+          "name": "prioridade",
+          "label": "Prioridade",
+          "type": "integer"
+        },
+        {
+          "name": "score",
+          "label": "Score de liquidez",
+          "type": "decimal"
+        },
+        {
+          "name": "sem_score",
+          "label": "Sem score",
+          "type": "boolean"
+        },
+        {
+          "name": "valor_em_aberto",
+          "label": "Valor em aberto",
+          "type": "currency"
+        },
+        {
+          "name": "sinal_coercitivo",
+          "label": "Sinalização coercitiva ativa",
+          "type": "boolean"
+        },
+        {
+          "name": "sinal_coercitivo_desc",
+          "label": "Sinalização coercitiva (descrição)",
+          "type": "string",
+          "maxLength": 255
+        },
+        {
+          "name": "motivo_encerramento",
+          "label": "Motivo de encerramento",
+          "type": "choice",
+          "choices": {
+            "regularizado": {
+              "label": "Regularizado",
+              "sequence": 10
+            },
+            "esgotado": {
+              "label": "Esgotado",
+              "sequence": 20
+            },
+            "outro": {
+              "label": "Outro",
+              "sequence": 30
+            }
+          }
+        },
+        {
+          "name": "encerrado_em",
+          "label": "Encerrado em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_interacao",
+      "label": "Interação",
+      "description": "Guarda cada interação do atendente no caso: tipo, resultado, descrição e quando ocorreu.",
+      "journal": true,
+      "audit": true,
+      "rf": [
+        "RF-MOD-F5-005",
+        "RF-MOD-F5-007"
+      ],
+      "rn": [
+        "RN-NOVO-F5-005",
+        "RN-NOVO-F5-007"
+      ],
+      "columns": [
+        {
+          "name": "caso",
+          "label": "Caso",
+          "type": "reference",
+          "reference": "x_2326104_cob_caso",
+          "mandatory": true
+        },
+        {
+          "name": "atendente",
+          "label": "Atendente",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "tipo",
+          "label": "Tipo",
+          "type": "choice",
+          "choices": {
+            "telefone": {
+              "label": "Telefone",
+              "sequence": 10
+            },
+            "email": {
+              "label": "E-mail",
+              "sequence": 20
+            },
+            "presencial": {
+              "label": "Presencial",
+              "sequence": 30
+            },
+            "dte": {
+              "label": "DT-e",
+              "sequence": 40
+            }
+          }
+        },
+        {
+          "name": "resultado",
+          "label": "Resultado",
+          "type": "choice",
+          "choices": {
+            "contato_efetivo": {
+              "label": "Contato efetivo",
+              "sequence": 10
+            },
+            "sem_contato": {
+              "label": "Sem contato",
+              "sequence": 20
+            },
+            "promessa_pagamento": {
+              "label": "Promessa de pagamento",
+              "sequence": 30
+            },
+            "recusa": {
+              "label": "Recusa",
+              "sequence": 40
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "descricao",
+          "label": "Descrição",
+          "type": "string",
+          "maxLength": 4000
+        },
+        {
+          "name": "ocorrida_em",
+          "label": "Ocorrida em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "comentarios",
+          "label": "Comentários",
+          "type": "journal_input"
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_meta",
+      "label": "Meta de KPI",
+      "description": "Guarda as metas formais de KPI por indicador, tributo, canal e período (valores fictícios, GAP-019).",
+      "audit": true,
+      "rf": [
+        "RF-MOD-F6-002",
+        "RF-MOD-F6-005"
+      ],
+      "rn": [
+        "RN-NOVO-F6-001"
+      ],
+      "columns": [
+        {
+          "name": "indicador",
+          "label": "Indicador",
+          "type": "choice",
+          "choices": {
+            "taxa_regularizacao": {
+              "label": "Taxa de regularização",
+              "sequence": 10
+            },
+            "valor_recuperado": {
+              "label": "Valor recuperado",
+              "sequence": 20
+            },
+            "tempo_medio": {
+              "label": "Tempo médio até regularizar",
+              "sequence": 30
+            }
+          },
+          "mandatory": true
+        },
+        {
+          "name": "tributo",
+          "label": "Tributo",
+          "type": "choice",
+          "choices": {
+            "todos": {
+              "label": "Todos",
+              "sequence": 10
+            },
+            "icms_normal": {
+              "label": "ICMS Normal",
+              "sequence": 20
+            },
+            "icms_st": {
+              "label": "ICMS ST",
+              "sequence": 30
+            },
+            "ipva": {
+              "label": "IPVA",
+              "sequence": 40
+            },
+            "itcd": {
+              "label": "ITCD",
+              "sequence": 50
+            }
+          }
+        },
+        {
+          "name": "canal",
+          "label": "Canal",
+          "type": "choice",
+          "choices": {
+            "todos": {
+              "label": "Todos",
+              "sequence": 10
+            },
+            "email": {
+              "label": "E-mail",
+              "sequence": 20
+            },
+            "sms": {
+              "label": "SMS",
+              "sequence": 30
+            },
+            "sne": {
+              "label": "SNE",
+              "sequence": 40
+            },
+            "whatsapp": {
+              "label": "WhatsApp",
+              "sequence": 50
+            },
+            "atendimento": {
+              "label": "Atendimento",
+              "sequence": 60
+            }
+          }
+        },
+        {
+          "name": "periodo",
+          "label": "Período",
+          "type": "glide_date"
+        },
+        {
+          "name": "valor_meta",
+          "label": "Valor da meta",
+          "type": "decimal",
+          "mandatory": true
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_exportacao",
+      "label": "Exportação",
+      "description": "Trilha de exportação: quem exportou, de qual tabela, em qual formato, com qual filtro e quantos registros.",
+      "audit": true,
+      "rf": [
+        "RF-MOD-T-001",
+        "RF-MOD-F6-007"
+      ],
+      "rn": [
+        "RN-NOVO-T-001",
+        "RN-NOVO-F5-007"
+      ],
+      "columns": [
+        {
+          "name": "usuario",
+          "label": "Usuário",
+          "type": "reference",
+          "reference": "sys_user"
+        },
+        {
+          "name": "tabela",
+          "label": "Tabela",
+          "type": "string",
+          "maxLength": 80
+        },
+        {
+          "name": "formato",
+          "label": "Formato",
+          "type": "choice",
+          "choices": {
+            "csv": {
+              "label": "CSV",
+              "sequence": 10
+            },
+            "pdf": {
+              "label": "PDF",
+              "sequence": 20
+            }
+          }
+        },
+        {
+          "name": "filtro",
+          "label": "Filtro aplicado",
+          "type": "string",
+          "maxLength": 1000
+        },
+        {
+          "name": "registros",
+          "label": "Registros",
+          "type": "integer"
+        },
+        {
+          "name": "exportado_em",
+          "label": "Exportado em",
+          "type": "glide_date_time"
+        }
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "id": "TEL-001",
+      "title": "Integrações e sincronização",
+      "table": "x_2326104_cob_sincronizacao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F1",
+      "fields": [
+        "fonte",
+        "inicio",
+        "fim",
+        "status",
+        "volume",
+        "rejeitados",
+        "mensagem"
+      ],
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-006",
+        "RF-MOD-F1-007"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-002",
+      "title": "Log de rejeições",
+      "table": "x_2326104_cob_rejeicao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F1",
+      "fields": [
+        "sincronizacao",
+        "fonte",
+        "id_registro",
+        "motivo",
+        "detalhe"
+      ],
+      "rf": [
+        "RF-MOD-F1-002"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-003",
+      "title": "Carteira consolidada",
+      "table": "x_2326104_cob_debito",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F1",
+      "fields": [
+        "contribuinte",
+        "origem",
+        "tributo",
+        "valor",
+        "vencimento",
+        "dias_atraso",
+        "status",
+        "sobreposto",
+        "atualizado_em"
+      ],
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-002",
+        "RF-MOD-F1-003",
+        "RF-MOD-T-002"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-004",
+      "title": "Visão única do contribuinte",
+      "table": "x_2326104_cob_contribuinte",
+      "type": "form",
+      "view": "visao_unica",
+      "role": "atendente",
+      "module": "MOD-F1",
+      "fields": [
+        "nome",
+        "tipo_pessoa",
+        "cpf",
+        "cnpj",
+        "municipio",
+        "email",
+        "telefone",
+        "atendente",
+        "segmento",
+        "score",
+        "sem_score",
+        "valor_em_aberto",
+        "situacao",
+        "ficticio",
+        "comentarios"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_debito.contribuinte",
+        "x_2326104_cob_parcelamento.contribuinte",
+        "x_2326104_cob_comunicacao.contribuinte",
+        "x_2326104_cob_consentimento.contribuinte",
+        "x_2326104_cob_regularizacao.contribuinte"
+      ],
+      "rf": [
+        "RF-MOD-F1-005",
+        "RF-MOD-T-003"
+      ],
+      "demoRecord": "TEL-004_registro_demo: contribuinte PJ fictício com débitos em CCF e SNE (sobreposição)"
+    },
+    {
+      "id": "TEL-005",
+      "title": "Parcelamentos em risco",
+      "table": "x_2326104_cob_parcelamento",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F1",
+      "fields": [
+        "contribuinte",
+        "tributo",
+        "valor_total",
+        "parcelas_total",
+        "parcelas_atraso",
+        "status",
+        "alerta_risco"
+      ],
+      "rf": [
+        "RF-MOD-F1-004"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-006",
+      "title": "Staging de fontes (Simulado)",
+      "table": "x_2326104_cob_debito_stg",
+      "type": "list",
+      "view": "default",
+      "role": "admin",
+      "module": "MOD-F1",
+      "fields": [
+        "origem",
+        "tipo_pessoa",
+        "cpf",
+        "cnpj",
+        "nome",
+        "tributo",
+        "valor",
+        "processado",
+        "falha_simulada",
+        "ficticio"
+      ],
+      "rf": [
+        "RF-MOD-F1-001",
+        "RF-MOD-F1-002"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-007",
+      "title": "Critérios de qualificação",
+      "table": "x_2326104_cob_criterio",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F2",
+      "fields": [
+        "nome",
+        "codigo",
+        "versao",
+        "estado",
+        "tributo",
+        "valor_minimo",
+        "atraso_minimo_dias",
+        "publicada_em"
+      ],
+      "rf": [
+        "RF-MOD-F2-001",
+        "RF-MOD-F2-002"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-008",
+      "title": "Versão do critério de qualificação",
+      "table": "x_2326104_cob_criterio",
+      "type": "form",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F2",
+      "fields": [
+        "nome",
+        "codigo",
+        "versao",
+        "estado",
+        "tributo",
+        "valor_minimo",
+        "atraso_minimo_dias",
+        "instrumento",
+        "excluir_contumaz",
+        "usar_score",
+        "threshold_score",
+        "pct_grupo_controle",
+        "desempate",
+        "versao_anterior",
+        "motivo_alteracao",
+        "publicada_em",
+        "publicada_por",
+        "comentarios"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_criterio.versao_anterior",
+        "x_2326104_cob_ciclo.criterio"
+      ],
+      "rf": [
+        "RF-MOD-F2-001",
+        "RF-MOD-F2-002",
+        "RF-MOD-F2-005"
+      ],
+      "demoRecord": "TEL-008_registro_demo: critério ICMS, valor ≥ R$ 500 mil, atraso ≥ 90 dias, versão 2 publicada"
+    },
+    {
+      "id": "TEL-009",
+      "title": "Ciclo de qualificação (prévia)",
+      "table": "x_2326104_cob_ciclo",
+      "type": "form",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F2",
+      "fields": [
+        "nome",
+        "referencia",
+        "criterio",
+        "estado",
+        "qtd_elegiveis",
+        "semente_sorteio",
+        "qtd_massificada",
+        "qtd_qualificada",
+        "qtd_controle",
+        "qtd_sem_score",
+        "taxa_cobrada",
+        "taxa_controle",
+        "efeito_incremental",
+        "publicado_em",
+        "publicado_por",
+        "comentarios"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_segmentacao.ciclo"
+      ],
+      "rf": [
+        "RF-MOD-F2-003",
+        "RF-MOD-F2-004",
+        "RF-MOD-F2-006"
+      ],
+      "demoRecord": "TEL-009_registro_demo: ciclo 2027-01 em prévia com 10% de grupo de controle"
+    },
+    {
+      "id": "TEL-010",
+      "title": "Carteira segmentada",
+      "table": "x_2326104_cob_segmentacao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F2",
+      "fields": [
+        "ciclo",
+        "contribuinte",
+        "criterio",
+        "segmento",
+        "valor_em_aberto",
+        "score_usado",
+        "sem_score",
+        "motivo"
+      ],
+      "rf": [
+        "RF-MOD-F2-003",
+        "RF-MOD-F2-004",
+        "RF-MOD-F2-005",
+        "RF-MOD-T-002"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-011",
+      "title": "Painel do score de liquidez",
+      "table": "x_2326104_cob_score_sim",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F3",
+      "groupBy": "tributo",
+      "rf": [
+        "RF-MOD-F3-006"
+      ],
+      "demoRecord": "report: seed fictício por tributo e status"
+    },
+    {
+      "id": "TEL-012",
+      "title": "Scores ingeridos (Simulado)",
+      "table": "x_2326104_cob_score_sim",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F3",
+      "fields": [
+        "contribuinte",
+        "tributo",
+        "score",
+        "versao_modelo",
+        "ingerido_em",
+        "status"
+      ],
+      "rf": [
+        "RF-MOD-F3-001",
+        "RF-MOD-F3-002",
+        "RF-MOD-F3-004",
+        "RF-MOD-F3-005"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-013",
+      "title": "Réguas de cobrança",
+      "table": "x_2326104_cob_regua",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "nome",
+        "carteira",
+        "ativa",
+        "janela_atribuicao_dias",
+        "ordem_fallback"
+      ],
+      "rf": [
+        "RF-MOD-F4-001"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-014",
+      "title": "Editor de régua",
+      "table": "x_2326104_cob_regua",
+      "type": "form",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "nome",
+        "carteira",
+        "ativa",
+        "janela_atribuicao_dias",
+        "ordem_fallback",
+        "comentarios"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_regua_etapa.regua",
+        "x_2326104_cob_comunicacao.regua"
+      ],
+      "rf": [
+        "RF-MOD-F4-001",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-009"
+      ],
+      "demoRecord": "TEL-014_registro_demo: régua IPVA com 4 etapas (SNE, e-mail, SMS, encaminhar à qualificada)"
+    },
+    {
+      "id": "TEL-015",
+      "title": "Execução e status de disparo",
+      "table": "x_2326104_cob_comunicacao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "contribuinte",
+        "regua",
+        "etapa",
+        "ciclo",
+        "canal",
+        "status",
+        "motivo",
+        "enviada_em",
+        "tentativas"
+      ],
+      "rf": [
+        "RF-MOD-F4-002",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-006"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-016",
+      "title": "Efetividade da régua",
+      "table": "x_2326104_cob_comunicacao",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "groupBy": "canal",
+      "rf": [
+        "RF-MOD-F4-008"
+      ],
+      "demoRecord": "report: seed fictício por canal e status"
+    },
+    {
+      "id": "TEL-017",
+      "title": "Consentimentos por canal",
+      "table": "x_2326104_cob_consentimento",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "contribuinte",
+        "canal",
+        "situacao",
+        "registrado_em",
+        "origem"
+      ],
+      "rf": [
+        "RF-MOD-F4-005"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-018",
+      "title": "Canais de envio (Simulado)",
+      "table": "x_2326104_cob_canal_sim",
+      "type": "list",
+      "view": "default",
+      "role": "admin",
+      "module": "MOD-F4",
+      "fields": [
+        "canal",
+        "contratado",
+        "forcar_falha",
+        "exige_opt_in"
+      ],
+      "rf": [
+        "RF-MOD-F4-004",
+        "RF-MOD-F4-005"
+      ],
+      "demoRecord": "lista: 4 canais do seed"
+    },
+    {
+      "id": "TEL-019",
+      "title": "Retorno de envio (Simulado)",
+      "table": "x_2326104_cob_envio_sim",
+      "type": "list",
+      "view": "default",
+      "role": "admin",
+      "module": "MOD-F4",
+      "fields": [
+        "comunicacao",
+        "canal",
+        "status_retorno",
+        "codigo_retorno",
+        "recebido_em"
+      ],
+      "rf": [
+        "RF-MOD-F4-006"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-020",
+      "title": "Regularizações",
+      "table": "x_2326104_cob_regularizacao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "contribuinte",
+        "tributo",
+        "valor",
+        "data",
+        "origem",
+        "canal",
+        "instrumento",
+        "grupo_controle",
+        "atendente"
+      ],
+      "rf": [
+        "RF-MOD-F4-007",
+        "RF-MOD-F6-003",
+        "RF-MOD-T-004"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-021",
+      "title": "Distribuição da carteira qualificada",
+      "table": "x_2326104_cob_caso",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F5",
+      "fields": [
+        "contribuinte",
+        "atendente",
+        "ciclo",
+        "estagio",
+        "prioridade",
+        "score",
+        "sem_score",
+        "valor_em_aberto"
+      ],
+      "rf": [
+        "RF-MOD-F5-001"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-022",
+      "title": "Carga por atendente",
+      "table": "x_2326104_cob_caso",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F5",
+      "groupBy": "atendente",
+      "rf": [
+        "RF-MOD-F5-001"
+      ],
+      "demoRecord": "report: seed fictício por atendente"
+    },
+    {
+      "id": "TEL-023",
+      "title": "Minha fila",
+      "table": "x_2326104_cob_caso",
+      "type": "list",
+      "view": "minha_fila",
+      "role": "atendente",
+      "module": "MOD-F5",
+      "fields": [
+        "prioridade",
+        "contribuinte",
+        "estagio",
+        "score",
+        "sem_score",
+        "valor_em_aberto",
+        "sinal_coercitivo"
+      ],
+      "rf": [
+        "RF-MOD-F5-002",
+        "RF-MOD-F5-007"
+      ],
+      "demoRecord": "lista: casos do atendente demo"
+    },
+    {
+      "id": "TEL-024",
+      "title": "Dossiê do caso",
+      "table": "x_2326104_cob_caso",
+      "type": "form",
+      "view": "dossie",
+      "role": "atendente",
+      "module": "MOD-F5",
+      "fields": [
+        "contribuinte",
+        "atendente",
+        "ciclo",
+        "estagio",
+        "prioridade",
+        "score",
+        "sem_score",
+        "valor_em_aberto",
+        "sinal_coercitivo",
+        "sinal_coercitivo_desc",
+        "motivo_encerramento",
+        "encerrado_em",
+        "comentarios"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_debito.contribuinte (relacionamento por contribuinte)",
+        "x_2326104_cob_parcelamento.contribuinte (relacionamento por contribuinte)",
+        "x_2326104_cob_comunicacao.contribuinte (relacionamento por contribuinte)",
+        "x_2326104_cob_interacao.caso",
+        "x_2326104_cob_regularizacao.caso"
+      ],
+      "rf": [
+        "RF-MOD-F5-003",
+        "RF-MOD-F5-004",
+        "RF-MOD-F5-005",
+        "RF-MOD-F5-006",
+        "RF-MOD-F3-003"
+      ],
+      "demoRecord": "TEL-024_registro_demo: caso fictício em condução, com sinalização coercitiva e 3 interações"
+    },
+    {
+      "id": "TEL-025",
+      "title": "Registro de interação",
+      "table": "x_2326104_cob_interacao",
+      "type": "form",
+      "view": "default",
+      "role": "atendente",
+      "module": "MOD-F5",
+      "fields": [
+        "caso",
+        "atendente",
+        "tipo",
+        "resultado",
+        "descricao",
+        "ocorrida_em",
+        "comentarios"
+      ],
+      "rf": [
+        "RF-MOD-F5-005"
+      ],
+      "demoRecord": "TEL-025_registro_demo: interação \"promessa de pagamento\" do caso da TEL-024"
+    },
+    {
+      "id": "TEL-026",
+      "title": "Funil do crédito",
+      "table": "x_2326104_cob_segmentacao",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F6",
+      "groupBy": "estagio_funil",
+      "rf": [
+        "RF-MOD-F6-001",
+        "RF-MOD-F6-007"
+      ],
+      "demoRecord": "report: seed fictício por estágio do funil"
+    },
+    {
+      "id": "TEL-027",
+      "title": "Regularizações por tributo",
+      "table": "x_2326104_cob_regularizacao",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F6",
+      "groupBy": "tributo",
+      "rf": [
+        "RF-MOD-F6-002",
+        "RF-MOD-F6-005",
+        "RF-MOD-F6-007"
+      ],
+      "demoRecord": "report: seed fictício por tributo"
+    },
+    {
+      "id": "TEL-028",
+      "title": "Regularizações por origem e canal",
+      "table": "x_2326104_cob_regularizacao",
+      "type": "report",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F6",
+      "groupBy": "origem",
+      "rf": [
+        "RF-MOD-F6-003",
+        "RF-MOD-F6-007"
+      ],
+      "demoRecord": "report: seed fictício por origem"
+    },
+    {
+      "id": "TEL-029",
+      "title": "Efeito incremental por ciclo",
+      "table": "x_2326104_cob_ciclo",
+      "type": "list",
+      "view": "efeito_incremental",
+      "role": "coordenador",
+      "module": "MOD-F6",
+      "fields": [
+        "nome",
+        "referencia",
+        "qtd_qualificada",
+        "qtd_controle",
+        "taxa_cobrada",
+        "taxa_controle",
+        "efeito_incremental"
+      ],
+      "rf": [
+        "RF-MOD-F6-004"
+      ],
+      "demoRecord": "lista: 3 ciclos do seed"
+    },
+    {
+      "id": "TEL-030",
+      "title": "Metas de KPI",
+      "table": "x_2326104_cob_meta",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F6",
+      "fields": [
+        "indicador",
+        "tributo",
+        "canal",
+        "periodo",
+        "valor_meta"
+      ],
+      "rf": [
+        "RF-MOD-F6-002",
+        "RF-MOD-F6-005"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-031",
+      "title": "Meus indicadores",
+      "table": "x_2326104_cob_regularizacao",
+      "type": "report",
+      "view": "default",
+      "role": "atendente",
+      "module": "MOD-F6",
+      "groupBy": "canal",
+      "rf": [
+        "RF-MOD-F6-006"
+      ],
+      "demoRecord": "report: regularizações do atendente demo por canal"
+    },
+    {
+      "id": "TEL-032",
+      "title": "Contribuintes",
+      "table": "x_2326104_cob_contribuinte",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F1",
+      "fields": [
+        "nome",
+        "tipo_pessoa",
+        "cnpj",
+        "municipio",
+        "segmento",
+        "atendente",
+        "valor_em_aberto",
+        "situacao",
+        "ficticio"
+      ],
+      "rf": [
+        "RF-MOD-T-002",
+        "RF-MOD-T-003"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    },
+    {
+      "id": "TEL-033",
+      "title": "Trilha de exportação",
+      "table": "x_2326104_cob_exportacao",
+      "type": "list",
+      "view": "default",
+      "role": "admin",
+      "module": "MOD-T",
+      "fields": [
+        "usuario",
+        "tabela",
+        "formato",
+        "filtro",
+        "registros",
+        "exportado_em"
+      ],
+      "rf": [
+        "RF-MOD-T-001"
+      ],
+      "demoRecord": "lista: seed fictício (50)"
+    }
+  ],
+  "roles": [
+    "coordenador",
+    "atendente",
+    "admin"
+  ]
+}
