@@ -614,8 +614,12 @@ export const t_f2002_nome_neg = Test({
             c.setValue('estado', 'rascunho');
             expect(new CriterioVersao().motivoRecusaGravacao(c, null)).toBe('Nome é obrigatório');
             expect(!!c.insert()).toBe(false);
-            c.setValue('nome', 'ICMS alto valor (fictício)');
-            expect(!!c.insert()).toBe(true);
+            var d = new GlideRecord('x_2326104_cob_criterio');
+            d.initialize();
+            d.setValue('codigo', 'ATF-F2002-NOM');
+            d.setValue('estado', 'rascunho');
+            d.setValue('nome', 'ICMS alto valor (fictício)');
+            expect(!!d.insert()).toBe(true);
         });
     });
 })(outputs, steps, params, stepResult, assertEqual);
