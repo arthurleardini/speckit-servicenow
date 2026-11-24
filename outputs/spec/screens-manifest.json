@@ -11,7 +11,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_sincronizacao",
       "screenshot": "screens/TEL-001.png",
-      "capturedAt": "2026-11-24T15:54:54.965Z"
+      "capturedAt": "2026-11-24T16:36:31.121Z"
     },
     {
       "id": "TEL-002",
@@ -21,7 +21,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_rejeicao",
       "screenshot": "screens/TEL-002.png",
-      "capturedAt": "2026-11-24T15:54:57.209Z"
+      "capturedAt": "2026-11-24T16:36:33.519Z"
     },
     {
       "id": "TEL-003",
@@ -31,7 +31,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_debito",
       "screenshot": "screens/TEL-003.png",
-      "capturedAt": "2026-11-24T15:54:59.750Z"
+      "capturedAt": "2026-11-24T16:36:35.951Z"
     },
     {
       "id": "TEL-004",
@@ -41,7 +41,7 @@
       "role": "atendente",
       "table": "x_2326104_cob_contribuinte",
       "screenshot": "screens/TEL-004.png",
-      "capturedAt": "2026-11-24T15:55:06.578Z"
+      "capturedAt": "2026-11-24T16:36:40.177Z"
     },
     {
       "id": "TEL-005",
@@ -51,7 +51,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_parcelamento",
       "screenshot": "screens/TEL-005.png",
-      "capturedAt": "2026-11-24T15:55:09.176Z"
+      "capturedAt": "2026-11-24T16:36:43.091Z"
     },
     {
       "id": "TEL-006",
@@ -61,7 +61,7 @@
       "role": "admin",
       "table": "x_2326104_cob_debito_stg",
       "screenshot": "screens/TEL-006.png",
-      "capturedAt": "2026-11-24T15:55:11.893Z"
+      "capturedAt": "2026-11-24T16:36:45.756Z"
     },
     {
       "id": "TEL-007",
@@ -71,7 +71,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_criterio",
       "screenshot": "screens/TEL-007.png",
-      "capturedAt": "2026-11-24T15:55:14.405Z"
+      "capturedAt": "2026-11-24T16:36:48.150Z"
     },
     {
       "id": "TEL-008",
@@ -81,7 +81,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_criterio",
       "screenshot": "screens/TEL-008.png",
-      "capturedAt": "2026-11-24T15:55:17.208Z"
+      "capturedAt": "2026-11-24T16:36:51.063Z"
     },
     {
       "id": "TEL-009",
@@ -91,7 +91,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_ciclo",
       "screenshot": "screens/TEL-009.png",
-      "capturedAt": "2026-11-24T15:55:20.104Z"
+      "capturedAt": "2026-11-24T16:36:54.053Z"
     },
     {
       "id": "TEL-010",
@@ -101,7 +101,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_segmentacao",
       "screenshot": "screens/TEL-010.png",
-      "capturedAt": "2026-11-24T15:55:22.494Z"
+      "capturedAt": "2026-11-24T16:36:56.562Z"
     },
     {
       "id": "TEL-011",
@@ -111,7 +111,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_score_sim",
       "screenshot": "screens/TEL-011.png",
-      "capturedAt": "2026-11-24T15:55:28.577Z"
+      "capturedAt": "2026-11-24T16:37:05.252Z"
     },
     {
       "id": "TEL-012",
@@ -121,7 +121,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_score_sim",
       "screenshot": "screens/TEL-012.png",
-      "capturedAt": "2026-11-24T15:55:30.879Z"
+      "capturedAt": "2026-11-24T16:37:07.709Z"
     },
     {
       "id": "TEL-013",
@@ -131,7 +131,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_regua",
       "screenshot": "screens/TEL-013.png",
-      "capturedAt": "2026-11-24T15:55:33.043Z"
+      "capturedAt": "2026-11-24T16:37:09.938Z"
     },
     {
       "id": "TEL-014",
@@ -141,7 +141,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_regua",
       "screenshot": "screens/TEL-014.png",
-      "capturedAt": "2026-11-24T15:55:35.695Z"
+      "capturedAt": "2026-11-24T16:37:12.553Z"
     },
     {
       "id": "TEL-015",
@@ -151,7 +151,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_comunicacao",
       "screenshot": "screens/TEL-015.png",
-      "capturedAt": "2026-11-24T15:55:37.982Z"
+      "capturedAt": "2026-11-24T16:37:14.906Z"
     },
     {
       "id": "TEL-016",
@@ -161,7 +161,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_comunicacao",
       "screenshot": "screens/TEL-016.png",
-      "capturedAt": "2026-11-24T15:55:43.551Z"
+      "capturedAt": "2026-11-24T16:37:20.270Z"
     },
     {
       "id": "TEL-017",
@@ -171,7 +171,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_consentimento",
       "screenshot": "screens/TEL-017.png",
-      "capturedAt": "2026-11-24T15:55:45.748Z"
+      "capturedAt": "2026-11-24T16:37:22.660Z"
     },
     {
       "id": "TEL-018",
@@ -181,7 +181,7 @@
       "role": "admin",
       "table": "x_2326104_cob_canal_sim",
       "screenshot": "screens/TEL-018.png",
-      "capturedAt": "2026-11-24T15:55:48.083Z"
+      "capturedAt": "2026-11-24T16:37:25.148Z"
     },
     {
       "id": "TEL-019",
@@ -191,7 +191,7 @@
       "role": "admin",
       "table": "x_2326104_cob_envio_sim",
       "screenshot": "screens/TEL-019.png",
-      "capturedAt": "2026-11-24T15:55:50.338Z"
+      "capturedAt": "2026-11-24T16:37:27.446Z"
     },
     {
       "id": "TEL-020",
@@ -201,7 +201,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_regularizacao",
       "screenshot": "screens/TEL-020.png",
-      "capturedAt": "2026-11-24T15:55:52.811Z"
+      "capturedAt": "2026-11-24T16:37:30.028Z"
     },
     {
       "id": "TEL-021",
@@ -211,7 +211,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-021.png",
-      "capturedAt": "2026-11-24T15:55:55.119Z"
+      "capturedAt": "2026-11-24T16:37:32.657Z"
     },
     {
       "id": "TEL-022",
@@ -221,7 +221,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-022.png",
-      "capturedAt": "2026-11-24T15:55:59.851Z"
+      "capturedAt": "2026-11-24T16:37:37.377Z"
     },
     {
       "id": "TEL-023",
@@ -231,7 +231,7 @@
       "role": "atendente",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-023.png",
-      "capturedAt": "2026-11-24T15:56:02.896Z"
+      "capturedAt": "2026-11-24T16:37:39.780Z"
     },
     {
       "id": "TEL-024",
@@ -241,7 +241,7 @@
       "role": "atendente",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-024.png",
-      "capturedAt": "2026-11-24T15:56:05.975Z"
+      "capturedAt": "2026-11-24T16:37:42.722Z"
     },
     {
       "id": "TEL-025",
@@ -251,7 +251,7 @@
       "role": "atendente",
       "table": "x_2326104_cob_interacao",
       "screenshot": "screens/TEL-025.png",
-      "capturedAt": "2026-11-24T15:56:08.836Z"
+      "capturedAt": "2026-11-24T16:37:45.362Z"
     },
     {
       "id": "TEL-026",
@@ -261,7 +261,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_segmentacao",
       "screenshot": "screens/TEL-026.png",
-      "capturedAt": "2026-11-24T15:56:13.424Z"
+      "capturedAt": "2026-11-24T16:37:49.883Z"
     },
     {
       "id": "TEL-027",
@@ -271,7 +271,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_regularizacao",
       "screenshot": "screens/TEL-027.png",
-      "capturedAt": "2026-11-24T15:56:17.334Z"
+      "capturedAt": "2026-11-24T16:37:54.119Z"
     },
     {
       "id": "TEL-028",
@@ -281,7 +281,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_regularizacao",
       "screenshot": "screens/TEL-028.png",
-      "capturedAt": "2026-11-24T15:56:21.284Z"
+      "capturedAt": "2026-11-24T16:37:58.278Z"
     },
     {
       "id": "TEL-029",
@@ -291,7 +291,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_ciclo",
       "screenshot": "screens/TEL-029.png",
-      "capturedAt": "2026-11-24T15:56:23.741Z"
+      "capturedAt": "2026-11-24T16:38:00.708Z"
     },
     {
       "id": "TEL-030",
@@ -301,7 +301,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_meta",
       "screenshot": "screens/TEL-030.png",
-      "capturedAt": "2026-11-24T15:56:25.932Z"
+      "capturedAt": "2026-11-24T16:38:03.233Z"
     },
     {
       "id": "TEL-031",
@@ -311,7 +311,7 @@
       "role": "atendente",
       "table": "x_2326104_cob_regularizacao",
       "screenshot": "screens/TEL-031.png",
-      "capturedAt": "2026-11-24T15:56:30.288Z"
+      "capturedAt": "2026-11-24T16:38:07.780Z"
     },
     {
       "id": "TEL-032",
@@ -321,7 +321,7 @@
       "role": "coordenador",
       "table": "x_2326104_cob_contribuinte",
       "screenshot": "screens/TEL-032.png",
-      "capturedAt": "2026-11-24T15:56:32.903Z"
+      "capturedAt": "2026-11-24T16:38:10.258Z"
     },
     {
       "id": "TEL-033",
@@ -331,7 +331,7 @@
       "role": "admin",
       "table": "x_2326104_cob_exportacao",
       "screenshot": "screens/TEL-033.png",
-      "capturedAt": "2026-11-24T15:56:35.416Z"
+      "capturedAt": "2026-11-24T16:38:12.843Z"
     }
   ]
 }
