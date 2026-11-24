@@ -378,7 +378,7 @@ jasmine.getEnv().execute();`,
 export const t_f2002_gravacao_neg = Test({
     $id: Now.ID['US-MOD-F2-002_atf_codigo_versao_unico_negativo'],
     name: 'RF-MOD-F2-002 — versão nasce em rascunho e código + versão não se repetem',
-    description: 'Como coordenador, cria a versão 1 de um código em rascunho (gravada) e depois tenta gravar outra versão 1 do mesmo código e uma versão já «publicada»: a business rule recusa as duas e só a primeira existe (SEC-009, lados positivo e negativo).',
+    description: 'Como coordenador, cria a versão 1 de um código em rascunho (gravada) e depois tenta gravar outra versão 1 do mesmo código e, por script sem ACL, uma versão já «publicada»: a business rule recusa as duas e só a primeira existe (SEC-009, lados positivo e negativo).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_19'], firstName: 'ATF', lastName: 'Coordenador F2-002 unico', roles: [role_coordenador] })
@@ -401,7 +401,13 @@ export const t_f2002_gravacao_neg = Test({
         });
         it('recusa versão repetida e versão que nasce publicada', function() {
             expect(!!nova(1, 'rascunho')).toBe(false);
-            expect(!!nova(2, 'publicada')).toBe(false);
+            var pub = new GlideRecord('x_2326104_cob_criterio');
+            pub.initialize();
+            pub.setValue('nome', 'ICMS alto valor (fictício)');
+            pub.setValue('codigo', 'ATF-F2002-UNI');
+            pub.setValue('versao', 2);
+            pub.setValue('estado', 'publicada');
+            expect(!!pub.insert()).toBe(false);
             var agg = new GlideAggregate('x_2326104_cob_criterio');
             agg.addQuery('codigo', 'ATF-F2002-UNI');
             agg.addAggregate('COUNT');
@@ -426,7 +432,7 @@ export const t_f2002_ui_pos = Test({
         table: 'x_2326104_cob_criterio',
         fieldValues: { nome: 'ICMS alto valor (fictício)', codigo: 'ATF-F2002-UI1', versao: 1, estado: 'rascunho' },
     })
-    const publicada = atf.server.runServerSideScript({
+    atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-F2-002_test_22'],
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
     var c = new GlideRecord('x_2326104_cob_criterio');
@@ -442,10 +448,12 @@ export const t_f2002_ui_pos = Test({
     return !!outputs.record_id;
 })(outputs, steps, params, stepResult, assertEqual);`,
     })
+    // A versão publicada nasce sem a business rule (setWorkflow false); o id vem de uma consulta.
+    const publicada = atf.server.recordQuery({ $id: Now.ID['US-MOD-F2-002_test_34'], table: 'x_2326104_cob_criterio', fieldValues: 'codigo=ATF-F2002-UI2', assert: 'records_match_query' })
     atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_23'], firstName: 'ATF', lastName: 'Coordenador F2-002 UI', roles: [role_coordenador] })
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_24'], table: 'x_2326104_cob_criterio', recordId: rascunho.record_id })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_25'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')] })
-    atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_26'], table: 'x_2326104_cob_criterio', recordId: publicada.record_id })
+    atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_26'], table: 'x_2326104_cob_criterio', recordId: publicada.first_record })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_27'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')] })
     atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_28'], table: 'x_2326104_cob_criterio', readOnly: ['valor_minimo', 'atraso_minimo_dias'] })
 })
