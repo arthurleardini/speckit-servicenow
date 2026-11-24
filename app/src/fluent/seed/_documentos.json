@@ -1,0 +1,1420 @@
+{
+  "versao": 1,
+  "semente": 20261124,
+  "documentos": [
+    {
+      "valor": "786.251.478-52",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_001"
+    },
+    {
+      "valor": "46.077.745/0001-50",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_001"
+    },
+    {
+      "valor": "498.899.491-05",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_002"
+    },
+    {
+      "valor": "53.212.126/0001-96",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_002"
+    },
+    {
+      "valor": "130.183.919-18",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_003"
+    },
+    {
+      "valor": "08.757.812/0001-98",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_003"
+    },
+    {
+      "valor": "982.828.014-02",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_004"
+    },
+    {
+      "valor": "32.182.811/0001-47",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_004"
+    },
+    {
+      "valor": "280.567.729-36",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_005"
+    },
+    {
+      "valor": "18.839.592/0001-03",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_005"
+    },
+    {
+      "valor": "907.187.633-00",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_006"
+    },
+    {
+      "valor": "97.162.675/0001-79",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_006"
+    },
+    {
+      "valor": "668.224.981-09",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_007"
+    },
+    {
+      "valor": "75.933.924/0001-40",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_007"
+    },
+    {
+      "valor": "566.517.510-26",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_008"
+    },
+    {
+      "valor": "68.090.356/0001-05",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_008"
+    },
+    {
+      "valor": "133.762.649-02",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_009"
+    },
+    {
+      "valor": "06.570.430/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_009"
+    },
+    {
+      "valor": "154.764.768-06",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_010"
+    },
+    {
+      "valor": "50.896.300/0001-79",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_010"
+    },
+    {
+      "valor": "797.525.896-26",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_011"
+    },
+    {
+      "valor": "86.278.509/0001-16",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_011"
+    },
+    {
+      "valor": "062.152.552-97",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_012"
+    },
+    {
+      "valor": "28.743.780/0001-89",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_012"
+    },
+    {
+      "valor": "002.186.729-18",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_013"
+    },
+    {
+      "valor": "71.586.539/0001-12",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_013"
+    },
+    {
+      "valor": "868.739.959-67",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_014"
+    },
+    {
+      "valor": "44.896.630/0001-61",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_014"
+    },
+    {
+      "valor": "517.726.921-31",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_015"
+    },
+    {
+      "valor": "21.564.010/0001-20",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_015"
+    },
+    {
+      "valor": "527.912.216-54",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_016"
+    },
+    {
+      "valor": "56.152.647/0001-93",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_016"
+    },
+    {
+      "valor": "234.155.369-98",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_017"
+    },
+    {
+      "valor": "67.259.118/0001-00",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_017"
+    },
+    {
+      "valor": "617.029.122-21",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_018"
+    },
+    {
+      "valor": "48.037.234/0001-30",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_018"
+    },
+    {
+      "valor": "103.767.000-09",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_019"
+    },
+    {
+      "valor": "14.323.005/0001-60",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_019"
+    },
+    {
+      "valor": "396.890.012-05",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_020"
+    },
+    {
+      "valor": "85.820.131/0001-78",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_020"
+    },
+    {
+      "valor": "103.577.983-84",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_021"
+    },
+    {
+      "valor": "64.472.903/0001-58",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_021"
+    },
+    {
+      "valor": "420.591.378-88",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_022"
+    },
+    {
+      "valor": "43.878.359/0001-79",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_022"
+    },
+    {
+      "valor": "896.935.854-45",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_023"
+    },
+    {
+      "valor": "56.777.599/0001-29",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_023"
+    },
+    {
+      "valor": "728.088.863-14",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_024"
+    },
+    {
+      "valor": "34.486.456/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_024"
+    },
+    {
+      "valor": "634.515.636-14",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_025"
+    },
+    {
+      "valor": "14.248.006/0001-97",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_025"
+    },
+    {
+      "valor": "066.615.432-56",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_026"
+    },
+    {
+      "valor": "52.449.383/0001-83",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_026"
+    },
+    {
+      "valor": "020.873.454-65",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_027"
+    },
+    {
+      "valor": "09.432.228/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_027"
+    },
+    {
+      "valor": "904.595.161-40",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_028"
+    },
+    {
+      "valor": "22.463.132/0001-92",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_028"
+    },
+    {
+      "valor": "023.412.501-22",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_029"
+    },
+    {
+      "valor": "36.085.317/0001-15",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_029"
+    },
+    {
+      "valor": "466.626.592-90",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_030"
+    },
+    {
+      "valor": "97.291.951/0001-07",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_030"
+    },
+    {
+      "valor": "287.973.120-88",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_031"
+    },
+    {
+      "valor": "78.557.623/0001-57",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_031"
+    },
+    {
+      "valor": "315.765.856-54",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_032"
+    },
+    {
+      "valor": "87.501.370/0001-90",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_032"
+    },
+    {
+      "valor": "177.411.887-47",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_033"
+    },
+    {
+      "valor": "27.646.834/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_033"
+    },
+    {
+      "valor": "320.738.740-37",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_034"
+    },
+    {
+      "valor": "27.065.172/0001-08",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_034"
+    },
+    {
+      "valor": "664.327.282-31",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_035"
+    },
+    {
+      "valor": "08.219.390/0001-05",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_035"
+    },
+    {
+      "valor": "533.949.797-64",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_036"
+    },
+    {
+      "valor": "06.170.857/0001-36",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_036"
+    },
+    {
+      "valor": "764.364.117-04",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_037"
+    },
+    {
+      "valor": "44.263.801/0001-15",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_037"
+    },
+    {
+      "valor": "178.312.047-92",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_038"
+    },
+    {
+      "valor": "17.273.101/0001-39",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_038"
+    },
+    {
+      "valor": "484.254.340-09",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_039"
+    },
+    {
+      "valor": "62.949.790/0001-03",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_039"
+    },
+    {
+      "valor": "321.830.584-55",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_040"
+    },
+    {
+      "valor": "22.668.689/0001-60",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_040"
+    },
+    {
+      "valor": "885.360.775-06",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_041"
+    },
+    {
+      "valor": "84.029.137/0001-69",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_041"
+    },
+    {
+      "valor": "515.577.487-05",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_042"
+    },
+    {
+      "valor": "57.322.919/0001-19",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_042"
+    },
+    {
+      "valor": "157.220.817-10",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_043"
+    },
+    {
+      "valor": "04.142.883/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_043"
+    },
+    {
+      "valor": "512.246.772-26",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_044"
+    },
+    {
+      "valor": "95.701.149/0001-04",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_044"
+    },
+    {
+      "valor": "208.024.238-50",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_045"
+    },
+    {
+      "valor": "58.491.243/0001-50",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_045"
+    },
+    {
+      "valor": "534.984.778-38",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_046"
+    },
+    {
+      "valor": "33.806.567/0001-09",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_046"
+    },
+    {
+      "valor": "369.045.892-72",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_047"
+    },
+    {
+      "valor": "57.261.764/0001-58",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_047"
+    },
+    {
+      "valor": "058.540.950-17",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_048"
+    },
+    {
+      "valor": "07.554.613/0001-10",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_048"
+    },
+    {
+      "valor": "411.078.187-61",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_049"
+    },
+    {
+      "valor": "26.590.301/0001-06",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_049"
+    },
+    {
+      "valor": "951.127.153-91",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "seed_contribuinte_050"
+    },
+    {
+      "valor": "82.926.635/0001-89",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "seed_contribuinte_050"
+    },
+    {
+      "valor": "013.139.915-20",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cpf",
+      "id": "TEL-004_registro_demo"
+    },
+    {
+      "valor": "99.003.179/0001-06",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_contribuinte",
+      "coluna": "cnpj",
+      "id": "TEL-004_registro_demo"
+    },
+    {
+      "valor": "346.711.036-30",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_001"
+    },
+    {
+      "valor": "88.566.152/0001-05",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_001"
+    },
+    {
+      "valor": "812.579.564-26",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_002"
+    },
+    {
+      "valor": "25.906.505/0001-40",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_002"
+    },
+    {
+      "valor": "284.858.763-69",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_003"
+    },
+    {
+      "valor": "64.109.028/0001-44",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_003"
+    },
+    {
+      "valor": "150.208.720-08",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_004"
+    },
+    {
+      "valor": "72.551.761/0001-42",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_004"
+    },
+    {
+      "valor": "753.437.874-52",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_005"
+    },
+    {
+      "valor": "37.106.103/0001-40",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_005"
+    },
+    {
+      "valor": "376.413.557-30",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_006"
+    },
+    {
+      "valor": "25.670.140/0001-06",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_006"
+    },
+    {
+      "valor": "810.577.407-05",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_007"
+    },
+    {
+      "valor": "33.237.051/0001-90",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_007"
+    },
+    {
+      "valor": "533.043.319-30",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_008"
+    },
+    {
+      "valor": "78.107.886/0001-64",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_008"
+    },
+    {
+      "valor": "686.306.076-02",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_009"
+    },
+    {
+      "valor": "75.712.109/0001-50",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_009"
+    },
+    {
+      "valor": "384.308.356-87",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_010"
+    },
+    {
+      "valor": "08.993.602/0001-07",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_010"
+    },
+    {
+      "valor": "861.223.185-07",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_011"
+    },
+    {
+      "valor": "19.205.029/0001-38",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_011"
+    },
+    {
+      "valor": "653.391.756-00",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_012"
+    },
+    {
+      "valor": "85.520.609/0001-44",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_012"
+    },
+    {
+      "valor": "576.440.879-23",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_013"
+    },
+    {
+      "valor": "65.297.321/0001-45",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_013"
+    },
+    {
+      "valor": "952.829.346-80",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_014"
+    },
+    {
+      "valor": "72.710.998/0001-29",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_014"
+    },
+    {
+      "valor": "474.826.059-91",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_015"
+    },
+    {
+      "valor": "12.685.913/0001-78",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_015"
+    },
+    {
+      "valor": "769.477.278-63",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_016"
+    },
+    {
+      "valor": "18.931.795/0001-17",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_016"
+    },
+    {
+      "valor": "199.519.117-57",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_017"
+    },
+    {
+      "valor": "43.575.139/0001-76",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_017"
+    },
+    {
+      "valor": "571.891.333-13",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_018"
+    },
+    {
+      "valor": "31.497.240/0001-77",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_018"
+    },
+    {
+      "valor": "532.811.955-04",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_019"
+    },
+    {
+      "valor": "59.711.557/0001-83",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_019"
+    },
+    {
+      "valor": "002.828.169-17",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_020"
+    },
+    {
+      "valor": "48.483.902/0001-52",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_020"
+    },
+    {
+      "valor": "885.288.225-16",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_021"
+    },
+    {
+      "valor": "79.801.170/0001-25",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_021"
+    },
+    {
+      "valor": "813.522.519-90",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_022"
+    },
+    {
+      "valor": "51.043.250/0001-40",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_022"
+    },
+    {
+      "valor": "431.776.248-01",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_023"
+    },
+    {
+      "valor": "76.793.882/0001-51",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_023"
+    },
+    {
+      "valor": "104.894.205-83",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_024"
+    },
+    {
+      "valor": "31.559.966/0001-97",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_024"
+    },
+    {
+      "valor": "626.325.285-50",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_025"
+    },
+    {
+      "valor": "18.814.363/0001-26",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_025"
+    },
+    {
+      "valor": "427.137.975-19",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_026"
+    },
+    {
+      "valor": "64.116.522/0001-36",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_026"
+    },
+    {
+      "valor": "691.150.590-90",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_027"
+    },
+    {
+      "valor": "26.596.110/0001-51",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_027"
+    },
+    {
+      "valor": "857.242.945-08",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_028"
+    },
+    {
+      "valor": "71.683.794/0001-83",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_028"
+    },
+    {
+      "valor": "195.407.146-99",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_029"
+    },
+    {
+      "valor": "90.044.408/0001-58",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_029"
+    },
+    {
+      "valor": "198.843.810-11",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_030"
+    },
+    {
+      "valor": "15.403.393/0001-51",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_030"
+    },
+    {
+      "valor": "513.712.024-35",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_031"
+    },
+    {
+      "valor": "16.350.843/0001-58",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_031"
+    },
+    {
+      "valor": "397.300.241-03",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_032"
+    },
+    {
+      "valor": "55.519.120/0001-91",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_032"
+    },
+    {
+      "valor": "114.904.073-40",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_033"
+    },
+    {
+      "valor": "75.643.911/0001-36",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_033"
+    },
+    {
+      "valor": "250.937.918-65",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_034"
+    },
+    {
+      "valor": "26.698.898/0001-07",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_034"
+    },
+    {
+      "valor": "335.425.459-96",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_035"
+    },
+    {
+      "valor": "94.385.021/0001-16",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_035"
+    },
+    {
+      "valor": "892.479.239-30",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_036"
+    },
+    {
+      "valor": "39.742.823/0001-28",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_036"
+    },
+    {
+      "valor": "240.635.967-02",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_037"
+    },
+    {
+      "valor": "05.809.985/0001-14",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_037"
+    },
+    {
+      "valor": "897.838.590-72",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_038"
+    },
+    {
+      "valor": "12.471.372/0001-85",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_038"
+    },
+    {
+      "valor": "059.404.337-90",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_039"
+    },
+    {
+      "valor": "85.921.158/0001-57",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_039"
+    },
+    {
+      "valor": "051.085.802-31",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_040"
+    },
+    {
+      "valor": "22.551.275/0001-56",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_040"
+    },
+    {
+      "valor": "558.337.737-25",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_041"
+    },
+    {
+      "valor": "61.577.224/0001-55",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_041"
+    },
+    {
+      "valor": "806.366.523-60",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_042"
+    },
+    {
+      "valor": "02.689.688/0001-94",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_042"
+    },
+    {
+      "valor": "227.386.452-32",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_043"
+    },
+    {
+      "valor": "57.525.184/0001-20",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_043"
+    },
+    {
+      "valor": "918.874.518-03",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_044"
+    },
+    {
+      "valor": "33.342.128/0001-92",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_044"
+    },
+    {
+      "valor": "329.934.634-20",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_045"
+    },
+    {
+      "valor": "23.079.007/0001-46",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_045"
+    },
+    {
+      "valor": "711.335.409-29",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_046"
+    },
+    {
+      "valor": "27.580.892/0001-01",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_046"
+    },
+    {
+      "valor": "167.815.751-12",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_047"
+    },
+    {
+      "valor": "06.851.935/0001-68",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_047"
+    },
+    {
+      "valor": "458.910.750-32",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_048"
+    },
+    {
+      "valor": "36.959.266/0001-03",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_048"
+    },
+    {
+      "valor": "277.200.159-83",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_049"
+    },
+    {
+      "valor": "93.635.088/0001-07",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_049"
+    },
+    {
+      "valor": "499.856.459-52",
+      "tipo": "cpf",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cpf",
+      "id": "seed_debito_stg_050"
+    },
+    {
+      "valor": "66.084.338/0001-87",
+      "tipo": "cnpj",
+      "tabela": "x_2326104_cob_debito_stg",
+      "coluna": "cnpj",
+      "id": "seed_debito_stg_050"
+    }
+  ]
+}

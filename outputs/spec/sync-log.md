@@ -14,6 +14,11 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 6 | 2026-11-24 12:54 | now-sdk-install | dev493801 | x_2326104_cob | 902d0163b679c9c8a6bc0413cfe230a4226041e0 | ok; 1056 registros | — | sn-capture |
+| 5 | 2026-11-24 12:49 | now-sdk-install | dev493801 | x_2326104_cob | 902d0163b679c9c8a6bc0413cfe230a4226041e0 | ok; 1056 registros | — | sn-capture |
+| 4 | 2026-11-24 12:46 | now-sdk-install | dev493801 | x_2326104_cob | 902d0163b679c9c8a6bc0413cfe230a4226041e0 | falha-build; 0 registros | — | corrigir e rodar npm run reinstall |
+| 3 | 2026-11-24 12:42 | now-sdk-install | dev493801 | x_2326104_cob | 902d0163b679c9c8a6bc0413cfe230a4226041e0 | ok; 1056 registros | — | sn-capture |
+| 2 | 2026-11-24 12:39 | now-sdk-install | dev493801 | x_2326104_cob | 902d0163b679c9c8a6bc0413cfe230a4226041e0 | falha-install; 0 registros | — | corrigir e rodar npm run reinstall |
 | 1 | 2026-11-24 12:30 | explore | kickoff: legado=Não · ramo=SEFAZ-MT 2.6 Cobrança · ambiente=ServiceNow dev493801, app x_2326104_cob · inputs=inputs/plano-2.6-cobranca.md, inputs/de-para-ids.md, inputs/simulacoes.md, inputs/fio-condutor.md, inputs/premissas-ficticias.md | inputs/plano-2.6-cobranca.md | workspace.md, outputs/explore/hld-funcional.md, especificacao-funcional.md, especificacao-tecnica.md, modelo-de-dados.md, gaps.md, outputs/spec/data-model.previa.json | Integrações externas simuladas (SIM-01 a SIM-03); parâmetros em aberto viram premissa (P1–P5); dossiê F5 e KPIs F6 em form/report da Core UI (GAP-012, GAP-013) | arthurleardini | sn-scaffold → npm run reinstall → sn-capture |
 
 **Convenções de preenchimento:**

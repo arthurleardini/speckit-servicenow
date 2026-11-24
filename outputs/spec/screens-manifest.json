@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "generatedBy": "sn-scaffold",
+  "generatedAt": "2026-11-24T15:52:14.127Z",
+  "screens": [
+    {
+      "id": "TEL-001",
+      "title": "Integrações e sincronização",
+      "route": "/x_2326104_cob_sincronizacao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_sincronizacao",
+      "screenshot": "screens/TEL-001.png",
+      "capturedAt": "2026-11-24T15:54:54.965Z"
+    },
+    {
+      "id": "TEL-002",
+      "title": "Log de rejeições",
+      "route": "/x_2326104_cob_rejeicao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_rejeicao",
+      "screenshot": "screens/TEL-002.png",
+      "capturedAt": "2026-11-24T15:54:57.209Z"
+    },
+    {
+      "id": "TEL-003",
+      "title": "Carteira consolidada",
+      "route": "/x_2326104_cob_debito_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_debito",
+      "screenshot": "screens/TEL-003.png",
+      "capturedAt": "2026-11-24T15:54:59.750Z"
+    },
+    {
+      "id": "TEL-004",
+      "title": "Visão única do contribuinte",
+      "route": "/x_2326104_cob_contribuinte.do?sys_id=ad022df8dc8a447e8cd5eecf3b0f84d3",
+      "type": "form",
+      "role": "atendente",
+      "table": "x_2326104_cob_contribuinte",
+      "screenshot": "screens/TEL-004.png",
+      "capturedAt": "2026-11-24T15:55:06.578Z"
+    },
+    {
+      "id": "TEL-005",
+      "title": "Parcelamentos em risco",
+      "route": "/x_2326104_cob_parcelamento_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_parcelamento",
+      "screenshot": "screens/TEL-005.png",
+      "capturedAt": "2026-11-24T15:55:09.176Z"
+    },
+    {
+      "id": "TEL-006",
+      "title": "Staging de fontes (Simulado)",
+      "route": "/x_2326104_cob_debito_stg_list.do",
+      "type": "list",
+      "role": "admin",
+      "table": "x_2326104_cob_debito_stg",
+      "screenshot": "screens/TEL-006.png",
+      "capturedAt": "2026-11-24T15:55:11.893Z"
+    },
+    {
+      "id": "TEL-007",
+      "title": "Critérios de qualificação",
+      "route": "/x_2326104_cob_criterio_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_criterio",
+      "screenshot": "screens/TEL-007.png",
+      "capturedAt": "2026-11-24T15:55:14.405Z"
+    },
+    {
+      "id": "TEL-008",
+      "title": "Versão do critério de qualificação",
+      "route": "/x_2326104_cob_criterio.do?sys_id=d5fc10ccc165417891772b280ae1b4c2",
+      "type": "form",
+      "role": "coordenador",
+      "table": "x_2326104_cob_criterio",
+      "screenshot": "screens/TEL-008.png",
+      "capturedAt": "2026-11-24T15:55:17.208Z"
+    },
+    {
+      "id": "TEL-009",
+      "title": "Ciclo de qualificação (prévia)",
+      "route": "/x_2326104_cob_ciclo.do?sys_id=67fc0380efcd42fe9d3da42308b5384d",
+      "type": "form",
+      "role": "coordenador",
+      "table": "x_2326104_cob_ciclo",
+      "screenshot": "screens/TEL-009.png",
+      "capturedAt": "2026-11-24T15:55:20.104Z"
+    },
+    {
+      "id": "TEL-010",
+      "title": "Carteira segmentada",
+      "route": "/x_2326104_cob_segmentacao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_segmentacao",
+      "screenshot": "screens/TEL-010.png",
+      "capturedAt": "2026-11-24T15:55:22.494Z"
+    },
+    {
+      "id": "TEL-011",
+      "title": "Painel do score de liquidez",
+      "route": "/sys_report_template.do?jvar_report_id=2b9fb315939349ffb1dfb40c6cf6af59",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_score_sim",
+      "screenshot": "screens/TEL-011.png",
+      "capturedAt": "2026-11-24T15:55:28.577Z"
+    },
+    {
+      "id": "TEL-012",
+      "title": "Scores ingeridos (Simulado)",
+      "route": "/x_2326104_cob_score_sim_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_score_sim",
+      "screenshot": "screens/TEL-012.png",
+      "capturedAt": "2026-11-24T15:55:30.879Z"
+    },
+    {
+      "id": "TEL-013",
+      "title": "Réguas de cobrança",
+      "route": "/x_2326104_cob_regua_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regua",
+      "screenshot": "screens/TEL-013.png",
+      "capturedAt": "2026-11-24T15:55:33.043Z"
+    },
+    {
+      "id": "TEL-014",
+      "title": "Editor de régua",
+      "route": "/x_2326104_cob_regua.do?sys_id=9a4d959966c4468794d7daa6482851ff",
+      "type": "form",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regua",
+      "screenshot": "screens/TEL-014.png",
+      "capturedAt": "2026-11-24T15:55:35.695Z"
+    },
+    {
+      "id": "TEL-015",
+      "title": "Execução e status de disparo",
+      "route": "/x_2326104_cob_comunicacao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_comunicacao",
+      "screenshot": "screens/TEL-015.png",
+      "capturedAt": "2026-11-24T15:55:37.982Z"
+    },
+    {
+      "id": "TEL-016",
+      "title": "Efetividade da régua",
+      "route": "/sys_report_template.do?jvar_report_id=beadc90588a64760ac1c4ff10e3607e9",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_comunicacao",
+      "screenshot": "screens/TEL-016.png",
+      "capturedAt": "2026-11-24T15:55:43.551Z"
+    },
+    {
+      "id": "TEL-017",
+      "title": "Consentimentos por canal",
+      "route": "/x_2326104_cob_consentimento_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_consentimento",
+      "screenshot": "screens/TEL-017.png",
+      "capturedAt": "2026-11-24T15:55:45.748Z"
+    },
+    {
+      "id": "TEL-018",
+      "title": "Canais de envio (Simulado)",
+      "route": "/x_2326104_cob_canal_sim_list.do",
+      "type": "list",
+      "role": "admin",
+      "table": "x_2326104_cob_canal_sim",
+      "screenshot": "screens/TEL-018.png",
+      "capturedAt": "2026-11-24T15:55:48.083Z"
+    },
+    {
+      "id": "TEL-019",
+      "title": "Retorno de envio (Simulado)",
+      "route": "/x_2326104_cob_envio_sim_list.do",
+      "type": "list",
+      "role": "admin",
+      "table": "x_2326104_cob_envio_sim",
+      "screenshot": "screens/TEL-019.png",
+      "capturedAt": "2026-11-24T15:55:50.338Z"
+    },
+    {
+      "id": "TEL-020",
+      "title": "Regularizações",
+      "route": "/x_2326104_cob_regularizacao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regularizacao",
+      "screenshot": "screens/TEL-020.png",
+      "capturedAt": "2026-11-24T15:55:52.811Z"
+    },
+    {
+      "id": "TEL-021",
+      "title": "Distribuição da carteira qualificada",
+      "route": "/x_2326104_cob_caso_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_caso",
+      "screenshot": "screens/TEL-021.png",
+      "capturedAt": "2026-11-24T15:55:55.119Z"
+    },
+    {
+      "id": "TEL-022",
+      "title": "Carga por atendente",
+      "route": "/sys_report_template.do?jvar_report_id=ff58b093be4d42db947a1cfcc7ddd9df",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_caso",
+      "screenshot": "screens/TEL-022.png",
+      "capturedAt": "2026-11-24T15:55:59.851Z"
+    },
+    {
+      "id": "TEL-023",
+      "title": "Minha fila",
+      "route": "/x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023",
+      "type": "list",
+      "role": "atendente",
+      "table": "x_2326104_cob_caso",
+      "screenshot": "screens/TEL-023.png",
+      "capturedAt": "2026-11-24T15:56:02.896Z"
+    },
+    {
+      "id": "TEL-024",
+      "title": "Dossiê do caso",
+      "route": "/x_2326104_cob_caso.do?sys_id=541104d723384cd0bd1aaa40e178ae60",
+      "type": "form",
+      "role": "atendente",
+      "table": "x_2326104_cob_caso",
+      "screenshot": "screens/TEL-024.png",
+      "capturedAt": "2026-11-24T15:56:05.975Z"
+    },
+    {
+      "id": "TEL-025",
+      "title": "Registro de interação",
+      "route": "/x_2326104_cob_interacao.do?sys_id=385ad7c968ff4f8c93f0d9f1e64350e0",
+      "type": "form",
+      "role": "atendente",
+      "table": "x_2326104_cob_interacao",
+      "screenshot": "screens/TEL-025.png",
+      "capturedAt": "2026-11-24T15:56:08.836Z"
+    },
+    {
+      "id": "TEL-026",
+      "title": "Funil do crédito",
+      "route": "/sys_report_template.do?jvar_report_id=1a1426065dd943ab896d646f7625bb90",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_segmentacao",
+      "screenshot": "screens/TEL-026.png",
+      "capturedAt": "2026-11-24T15:56:13.424Z"
+    },
+    {
+      "id": "TEL-027",
+      "title": "Regularizações por tributo",
+      "route": "/sys_report_template.do?jvar_report_id=95113251015f4d14bc9811a61ca6b516",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regularizacao",
+      "screenshot": "screens/TEL-027.png",
+      "capturedAt": "2026-11-24T15:56:17.334Z"
+    },
+    {
+      "id": "TEL-028",
+      "title": "Regularizações por origem e canal",
+      "route": "/sys_report_template.do?jvar_report_id=49853964652145c68ac2fa5593df1070",
+      "type": "report",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regularizacao",
+      "screenshot": "screens/TEL-028.png",
+      "capturedAt": "2026-11-24T15:56:21.284Z"
+    },
+    {
+      "id": "TEL-029",
+      "title": "Efeito incremental por ciclo",
+      "route": "/x_2326104_cob_ciclo_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_ciclo",
+      "screenshot": "screens/TEL-029.png",
+      "capturedAt": "2026-11-24T15:56:23.741Z"
+    },
+    {
+      "id": "TEL-030",
+      "title": "Metas de KPI",
+      "route": "/x_2326104_cob_meta_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_meta",
+      "screenshot": "screens/TEL-030.png",
+      "capturedAt": "2026-11-24T15:56:25.932Z"
+    },
+    {
+      "id": "TEL-031",
+      "title": "Meus indicadores",
+      "route": "/sys_report_template.do?jvar_report_id=f40880cae4d8479b8758361ce063a033",
+      "type": "report",
+      "role": "atendente",
+      "table": "x_2326104_cob_regularizacao",
+      "screenshot": "screens/TEL-031.png",
+      "capturedAt": "2026-11-24T15:56:30.288Z"
+    },
+    {
+      "id": "TEL-032",
+      "title": "Contribuintes",
+      "route": "/x_2326104_cob_contribuinte_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_contribuinte",
+      "screenshot": "screens/TEL-032.png",
+      "capturedAt": "2026-11-24T15:56:32.903Z"
+    },
+    {
+      "id": "TEL-033",
+      "title": "Trilha de exportação",
+      "route": "/x_2326104_cob_exportacao_list.do",
+      "type": "list",
+      "role": "admin",
+      "table": "x_2326104_cob_exportacao",
+      "screenshot": "screens/TEL-033.png",
+      "capturedAt": "2026-11-24T15:56:35.416Z"
+    }
+  ]
+}

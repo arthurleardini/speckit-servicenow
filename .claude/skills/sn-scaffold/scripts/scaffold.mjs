@@ -148,7 +148,10 @@ export function gerarUi(norm) {
       linhas.push(`export const report_${ident(t.id)} = Record({`);
       linhas.push(`    $id: Now.ID[${js(`${t.id}_report`)}],`);
       linhas.push("    table: 'sys_report',");
-      linhas.push(`    data: { title: ${js(t.title)}, table: ${js(ent.name)}, type: 'bar', field: ${js(campo)}, aggregate: 'COUNT', is_published: true },`);
+      // Visibilidade: sem `user`/`roles` o report fica restrito ao dono e não abre para o papel da tela.
+      // `user: 'GLOBAL'` publica para todos, e `roles` (lista) limita aos papéis do app.
+      const papeis = norm.roles.map((r) => r.name);
+      linhas.push(`    data: { title: ${js(t.title)}, table: ${js(ent.name)}, type: 'bar', field: ${js(campo)}, aggregate: 'COUNT', is_published: true, user: 'GLOBAL', roles: ${js(papeis)} },`);
       linhas.push('})', '');
       arquivos[`${t.id}.now.ts`] = linhas.join('\n');
       continue;
