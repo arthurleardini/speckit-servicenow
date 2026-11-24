@@ -8,12 +8,14 @@ description: >
   ameaça, controles transversais (OWASP/STRIDE/CVSS/DREAD) e catálogo mestre SEC-### rastreado à
   spec. Não injeta nada em backlog: quem consome esse kernel para injetar SEC-NNN no tasks.json,
   mais adiante na cadeia, é a spec-security-review do kit. Lê a base de vetores em
-  .claude/references/seguranca/vetores.md (compartilhada com auditoria-de-us). Não modifica
+  .claude/references/seguranca/vetores.md (compartilhada com auditoria-de-us) e, no alvo
+  ServiceNow, os vetores da plataforma em references/vetores-servicenow.md (ACL ausente ou
+  permissiva, GlideRecord × GlideRecordSecure, client-callable, cross-scope, role elevada). Não modifica
   código. Fecha o loop com a auditoria-de-us, que verifica os SEC no fecho da US.
   Triggers: "plano de segurança", "revisão de segurança", "security review",
   "controles de segurança", "revisao-de-seguranca", "segurança preventiva", "shift-left".
-version: "2.2"
-updated: "2026-10-20"
+version: "2.3"
+updated: "2026-11-24"
 ---
 
 # revisao-de-seguranca — Segurança Preventiva (shift-left) do Harness
@@ -28,6 +30,13 @@ updated: "2026-10-20"
 Segurança **antes** do código. Modo único `plano-geral`: define a superfície e os controles do
 sistema todo (macro), num kernel único. A aterrissagem por US (micro) é trabalho de outra skill —
 ver "O que NÃO faz". Fonte única de vetores: [`.claude/references/seguranca/vetores.md`](../../references/seguranca/vetores.md).
+
+**Alvo ServiceNow.** A base compartilhada traz OWASP, STRIDE, CVSS, DREAD, o mapa operação × risco
+e os controles transversais, mas não tem vetor de plataforma. Os vetores do ServiceNow estão em
+[`./references/vetores-servicenow.md`](./references/vetores-servicenow.md) (`V-SN-01` a `V-SN-16`),
+que traduz a Camada G de `.claude/rules/harness/security.md` (RN-SN-135 a RN-SN-150) e diz como
+cada controle transversal da base se lê na plataforma. Os dois arquivos valem juntos: a base dá a
+régua de severidade, a referência da skill dá os vetores.
 
 ## Linguagem clara — como escrever o que o humano vai ler (OBRIGATÓRIO)
 
@@ -140,6 +149,10 @@ menores, LGPD reforçada) quando os documentos não o declaram.
 | `modelo-de-dados.md` (kernel do Explore) | Recomendado | `outputs/explore/` |
 | `gaps.md` — GAPs abertos que tocam segurança | Recomendado | `outputs/spec/` (vivo, da `spec-iterate`); sem ele, `outputs/explore/` (congelado) |
 | `.claude/references/seguranca/vetores.md` | Sim | repo |
+| `references/vetores-servicenow.md` (vetores da plataforma) | Sim | pasta desta skill |
+| `security.mdc` — roles, ACL e carteira do projeto | Recomendado | `outputs/spec/tech-rules/` |
+| `app/now.config.json` — escopo do app | Recomendado | repo |
+| `inputs/simulacoes.md` — integrações simuladas `SIM-` | Recomendado | repo |
 
 ### Passos
 - **PG-A — Carregar spec.** Ler as entradas acima. O `hld.md` é a fonte da arquitetura TO-BE: os
@@ -150,10 +163,20 @@ menores, LGPD reforçada) quando os documentos não o declaram.
 - **PG-B — Superfície de ameaça.** Mapear pontos de entrada, dados sensíveis/PII, fronteiras de
   confiança, integrações e modelo de auth, cruzando com IDs da spec (F/RN/módulo/entidade) e do
   HLD (container, `INT-NN`, ADR).
-- **PG-C — Controles transversais.** Para cada controle do catálogo transversal da referência,
-  marcar COBERTO / PARCIAL / AUSENTE frente ao que a spec declara.
+- **PG-C — Controles transversais e vetores da plataforma.** Para cada controle do catálogo
+  transversal da referência, marcar COBERTO / PARCIAL / AUSENTE frente ao que a spec declara,
+  usando a leitura ServiceNow de `references/vetores-servicenow.md`. Depois, avaliar cada vetor
+  `V-SN-01` a `V-SN-16` contra as tabelas do modelo de dados, as telas `TEL-`, as UI Actions, os
+  Script Includes previstos e as roles: ACL ausente ou permissiva por tabela e operação, ACL de
+  linha (dono do registro), `GlideRecord` × `GlideRecordSecure` em script chamado pelo usuário,
+  Script Include client-callable sem ACL, cross-scope sem `CrossScopePrivilege`, role elevada ou
+  `admin` da plataforma, segurança só em UI Policy ou Client Script, consulta cega em coluna
+  sensível, Table API aberta, seed sem dado fictício, credencial da instância e impersonate.
 - **PG-D — Catálogo SEC.** Cada gap vira um `SEC-###` com severidade (DREAD/CVSS da referência),
   OWASP/STRIDE, controle esperado e **rastreabilidade a ID da spec**. Numeração global `SEC-001…`.
+  No alvo ServiceNow, o controle esperado diz o mecanismo da plataforma (ACL de qual operação em
+  qual tabela, `GlideRecordSecure` em qual script, qual role), cita a RN-SN e o vetor `V-SN-nn` de
+  origem, e a rastreabilidade cita a tabela (`<escopo>_<sufixo>`), a `TEL-` e o container do HLD.
 - **PG-E — Recomendações de arquitetura** de segurança, priorizadas.
 - **PG-F — Mapa de aplicabilidade** (`SEC-###` × Feature/módulo). O `tasks.json` ainda não existe
   neste ponto da cadeia, então o mapa fica em granularidade de Feature/módulo — é isso que a
@@ -189,17 +212,20 @@ mesma consumidora que o `cadeia.mjs` trava: a `spec-security-review` não roda s
 | `SPEC_TECH_MISSING` | `especificacao-tecnica.md` ausente → parcial | WARNING |
 | `FUNC_SPEC_MISSING` | `especificacao-funcional.md` ausente → parcial | WARNING |
 | `HLD_MISSING` | `outputs/spec/hld.md` ausente → superfície sem a arquitetura TO-BE (projeto anterior à `spec-hld`) | WARNING |
+| `SN_VECTORS_COVERED` | Todo vetor `V-SN-01` a `V-SN-16` de `references/vetores-servicenow.md` avaliado no PG-C: gerou `SEC-###` ou tem a linha «não se aplica — <motivo>» no kernel | FATAL |
+| `SN_ACL_PER_TABLE` | Toda tabela do escopo no modelo de dados aparece em algum `SEC-###` de ACL (V-SN-01) ou no controle «RBAC / autorização» com as quatro operações | WARNING |
 
 FATAL impede concluir/gravar; WARNING não bloqueia (banner ⚠️ no topo da saída).
 
 ## Definição de pronto
+- [ ] Os 16 vetores da plataforma avaliados (gerou SEC ou «não se aplica» com motivo).
 - [ ] Superfície + controles transversais + catálogo SEC rastreado (spec, HLD e GAPs); kernel
   salvo em `outputs/spec/plano-de-seguranca.md` e registrado no `sync-log.md`.
 
 ## O que NÃO faz
 - Não modifica código nem cria testes — produz o kernel de segurança do sistema todo.
 - Não executa DAST/SAST nem pentest ativo — análise estática (a auditoria faz o teste de mesa).
-- Não injeta nada em backlog, ADO ou `tasks.json`, e não classifica operação alguma US a US. Isso
+- Não injeta nada em backlog, issues do GitHub ou `tasks.json`, e não classifica operação alguma US a US. Isso
   descontinuou neste harness — quem aterrissa `SEC-NNN` no `tasks.json`, story a story, é a
   `spec-security-review` do kit, consumindo o kernel que esta skill produz (ver
   `.claude/rules/harness/deliver.md`, seção "Segurança nesta fase").

@@ -1,113 +1,77 @@
 ---
-description: "{{CONVENTIONS_DESCRIPTION}}"
+description: "Convenções de nome, idioma e organização do app ServiceNow {{APP_NAME}} (escopo {{SCOPE}}, Fluent SDK {{SDK_VERSION}}). Triggers: criar ou alterar tabela, coluna, role, ACL, business rule, script include, UI Action, teste ATF, seed ou qualquer arquivo em app/src."
 alwaysApply: true
 ---
 
-# Convenções de Código — {{PROJECT_NAME}}
+# Convenções de Código — {{APP_NAME}} (`{{SCOPE}}`)
 
-> Fonte canônica de nomenclatura e formatação. Em conflito com outra rule → **esta prevalece para identificadores e idioma**.
+> Fonte canônica de nomenclatura e idioma do app. Em conflito com outra rule, esta prevalece para identificadores e idioma.
+> Referência: catálogo RN-SN (`referencias/32-servicenow-boas-praticas-oficiais.md`). As RN-SN citadas aqui valem como referência, não como gate.
 
----
+## Por que esta rule existe
+
+O app é gerado por script (`sn-scaffold`, `sn-seed`) e completado à mão por story. Se cada pessoa nomear de um jeito, o rastreio RF → `.now.ts` → registro na instância quebra, e o build recusa nomes fora do padrão da plataforma.
 
 ## Idioma
 
-**Código (identificadores, variáveis, funções, classes, arquivos, comentários, logs):** {{CODE_LANGUAGE}}
-
-**Interface com o usuário (labels, mensagens visíveis, validações, toasts, aria-labels):** {{UI_LANGUAGE}}
-
-**MUST NOT:** {{CODE_LANGUAGE_VIOLATION_EXAMPLE}}
-
----
+- **Identificadores de tabela, coluna, choice e role:** {{IDENTIFIER_LANGUAGE}}, sem acento, `snake_case` minúsculo ({{COLUMN_EXAMPLES}}).
+- **Identificadores de código TypeScript/JavaScript (funções, variáveis, classes de Script Include):** {{IDENTIFIER_LANGUAGE}} sem acento, lowerCamelCase para função e variável, UpperCamelCase para classe (RN-SN-10, RN-SN-11).
+- **Interface (label, mensagem, hint, texto de UI Action, descrição de teste ATF):** {{UI_LANGUAGE}} com acento.
+- **Proibido:** nome genérico que colide entre scripts (`gr`, `ga`, `i`, `tmp`) (RN-SN-11).
 
 ## Nomenclatura
 
+O escopo é lido de `app/now.config.json` (`scope`) e nunca digitado em outro lugar do código: o build e o `npm run reinstall` conferem o prefixo.
+
 | Artefato | Padrão | Exemplo |
 |----------|--------|---------|
-{{NAMING_TABLE}}
+| Escopo | `{{SCOPE}}` (lido de `app/now.config.json`) | — |
+| Tabela | `{{SCOPE}}_<sufixo>`, minúsculas/dígitos/`_`, termina em letra ou dígito, **máx. 30 caracteres** (RN-SN-03) | {{TABLE_EXAMPLE}} |
+| Tabela de integração simulada | sufixo `_sim` ou `_stg`; label termina em "(Simulado)" | {{SIM_TABLE_EXAMPLE}} |
+| Coluna em tabela do escopo | sem prefixo; nunca `sys_` nem `u_` (RN-SN-04) | {{COLUMN_EXAMPLE}} |
+| Coluna em tabela de outro escopo | `{{SCOPE}}_<nome>` (RN-SN-04) | só com ADR "configurar × customizar" no `hld.md` |
+| Role | `{{SCOPE}}.<papel>`; role da plataforma referenciada por nome (RN-SN-135) | {{ROLE_EXAMPLES}} |
+| `$id` de objeto Fluent | `Now.ID['<ID-da-spec>_<tipo>_<nome>']`, único por objeto e por step de teste; nunca omitir (RN-SN-06) | {{NOWID_EXAMPLE}} |
+| `$id` de objeto gerado | o que o `sn-scaffold`/`sn-seed` gravou (`<TEL>_registro_demo`, `acl_<tabela>_read`); não renomear | — |
+| Script Include | UpperCamelCase; `type`, variável e `name` Fluent iguais (RN-SN-70) | {{SCRIPT_INCLUDE_EXAMPLE}} |
+| Business Rule (`name`) | verbo + objeto, em {{UI_LANGUAGE}} | {{BR_NAME_EXAMPLE}} |
+| Teste ATF | `<STORY>` no arquivo; nome do teste começa pelo RF | {{TEST_NAME_EXAMPLE}} |
+| Choice (valor) | `snake_case` sem acento; label com acento | {{CHOICE_EXAMPLE}} |
+| Constante em script | `MAIUSCULAS_COM_UNDERSCORE` (RN-SN-10) | {{CONSTANT_EXAMPLE}} |
 
----
+Os tipos `<tipo>` do `$id`: `br` (business rule), `si` (script include), `acl`, `uia` (UI Action), `uip` (UI Policy), `flow`, `test`, `prop` (propriedade), `rel` (relacionamento).
 
-## Formatação
+## Onde cada arquivo mora
 
-**Ferramenta:** {{FORMATTER_TOOL}}
+| Conteúdo | Pasta | Regra |
+|----------|-------|-------|
+| Tabelas do domínio | `app/src/fluent/tables/` | gerado; muda pelo `data-model.json` + `sn-scaffold`, nunca à mão |
+| Tabelas `SIM-` | `app/src/fluent/simulations/` | gerado |
+| Form, List, View, report | `app/src/fluent/ui/` | gerado por `TEL-` |
+| Menu | `app/src/fluent/navigation/` | gerado |
+| Roles e ACL de leitura por role | `app/src/fluent/security/` | `roles.now.ts` e `acl-base.now.ts` gerados; ACL de linha em arquivo próprio escrito na story |
+| Seed fictício | `app/src/fluent/seed/` | gerado pelo `sn-seed`; `Record()` com `$meta: { installMethod: 'demo' }` (RN-SN-103, RN-SN-168) |
+| Business Rule, UI Action, UI Policy, Flow, propriedade | `app/src/fluent/<tipo-kebab>/<nome>.now.ts` (RN-SN-05) | escrito na story |
+| Script de servidor | `app/src/server/<area>/<Nome>.js`, importado no `.now.ts` (RN-SN-51) | escrito na story |
+| Teste ATF | `app/src/fluent/tests/<STORY>.now.ts`; suíte em `tests/suite.now.ts` | escrito na story |
+| `keys.ts` | `app/src/fluent/generated/keys.ts` | versionado; nunca editado à mão |
 
-**MUST:** `{{FORMATTER_COMMAND}}` antes de commitar — CI bloqueia em formato divergente.
+Arquivo marcado `// gerado por sn-scaffold` ou `sn-seed` não recebe edição manual: a próxima geração sobrescreve.
 
-{{FORMATTER_CONFIG}}
+## Formatação e estilo de script
 
----
+- Script Include em ES5 compatível com o motor da plataforma (`Class.create()`, sem `class` ES6, sem `async`) (RN-SN-70).
+- `if` sempre com chaves; JSDoc nas funções públicas; `JSON.stringify/parse` (RN-SN-75).
+- Sem `eval()`, sem `gs.sleep()` (RN-SN-30).
+- Log só com `gs.debug/info/warn/error`; `gs.log`, `gs.print` e `console.log` não existem ou são proibidos em escopo (RN-SN-12, RN-SN-84).
+- Nenhum sys_id, nome de usuário ou nome de grupo fixo no código: usar `$id`, `gs.getProperty` ou consulta (RN-SN-31).
 
-## Injeção de Dependência e Módulos
+## Mensagens ao usuário e acessibilidade
 
-{{DI_RULES}}
-
----
-
-{{#if SOLID}}
-## SOLID — Regras Obrigatórias
-
-**SRP — Single Responsibility:** cada classe/módulo tem uma única razão para mudar.
-**MUST NOT:** service com > {{MAX_SERVICE_LINES}} linhas que faz múltiplas coisas — decompor.
-
-**OCP — Open/Closed:** aberto para extensão, fechado para modificação.
-**MUST:** usar interfaces/abstrações em vez de `if/else` para variar comportamento.
-
-**LSP — Liskov Substitution:** subtipos são substituíveis pelos tipos base sem quebrar o comportamento.
-**MUST NOT:** override de método que muda a semântica do contrato da interface.
-
-**ISP — Interface Segregation:** interfaces pequenas e específicas, não interfaces gordas.
-**MUST NOT:** interface com métodos que alguns implementadores deixam vazios ou lançam `UnsupportedOperationException`.
-
-**DIP — Dependency Inversion:** depender de abstrações, nunca de implementações concretas.
-**MUST:** classes de alto nível recebem dependências via construtor como interfaces — não instanciam implementações.
-
-```{{LANGUAGE}}
-{{SOLID_DIP_EXAMPLE}}
-```
-{{/if}}
-
-{{#if CLEAN_CODE}}
-## Clean Code — Regras Obrigatórias
-
-**MUST:** nomes expressivos — o nome revela intenção sem precisar de comentário.
-**MUST NOT:** variáveis `temp`, `aux`, `data`, `obj`, `result` sem contexto.
-
-**MUST:** funções fazem uma coisa — se precisa de "e" para descrever o que faz, decompor.
-**MUST NOT:** função com > {{MAX_FUNCTION_LINES}} linhas sem justificativa.
-
-**MUST NOT:** comentário que explica *o que* o código faz — código deve ser auto-explicativo.
-**MUST:** comentário apenas para explicar *por que* uma decisão não-óbvia foi tomada.
-
-**MUST NOT:** código comentado sem issue linkado — usar `// TODO [PROJ-NNN]: ...` ou deletar.
-
-**MUST NOT:** números mágicos no código — extrair para constante nomeada.
-```{{LANGUAGE}}
-{{CLEAN_CODE_MAGIC_NUMBER_EXAMPLE}}
-```
-{{/if}}
-
----
-
-## Naming de Testes
-
-**MUST:** nome descreve: **contexto** + **condição** + **resultado esperado**.
-
-```{{LANGUAGE}}
-{{TEST_NAMING_CORRECT}}
-```
-
-```{{LANGUAGE}}
-// ❌ MUST NOT
-{{TEST_NAMING_WRONG}}
-```
-
----
-
-## Checklist de PR
-
-{{PR_CHECKLIST}}
-
----
+- Mensagem de erro de regra diz o que aconteceu e o que fazer: {{ERROR_MESSAGE_EXAMPLE}}.
+- `gs.addErrorMessage` só para regra de negócio, nunca para depuração (RN-SN-85).
+- Nenhuma mensagem mostra documento pessoal (CPF, CNPJ de pessoa física) completo; a mensagem cita o nome do registro.
+- Acessibilidade: {{A11Y_LEVEL}}. A Core UI clássica entrega o form e a list; o app cuida do rótulo em português claro, sem abreviação que o papel não usa (`.claude/rules/harness/servicenow-ui.md`).
 
 ## Anti-patterns
 

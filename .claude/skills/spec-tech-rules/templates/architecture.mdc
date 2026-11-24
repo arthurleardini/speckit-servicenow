@@ -1,78 +1,96 @@
 ---
-description: "{{ARCHITECTURE_DESCRIPTION}}"
-globs: "**/src/**"
+description: "Arquitetura do app ServiceNow {{APP_NAME}}: app escopado {{SCOPE}} na Core UI clássica, configurar antes de customizar, onde vai cada tipo de lógica (dicionário, ACL, Data Policy, UI Policy, Business Rule, Flow, Script Include), integrações simuladas SIM-. Triggers: decidir onde implementar uma regra, criar business rule, flow, script include, UI Action, tabela ou integração."
+globs: "app/src/**"
 alwaysApply: false
 ---
 
-# Arquitetura — {{PROJECT_NAME}}
+# Arquitetura — {{APP_NAME}} (`{{SCOPE}}`)
 
-> Decisões **obrigatórias**. Conflito com outra rule → **esta prevalece** até alteração explícita.
-> Ver **conventions.mdc** para idioma e nomenclatura.
+## Por que esta rule existe
 
----
+A plataforma oferece cinco lugares para pôr a mesma regra (dicionário, UI Policy, Data Policy, Business Rule, Flow). Pôr no lugar errado gera regra que só vale na tela, regra que não sobe em upgrade ou script que ninguém acha. Esta rule fixa a ordem de escolha.
 
-## Estilo Arquitetural
+## Estilo
 
-**{{ARCHITECTURE_STYLE}}** — {{ARCHITECTURE_RATIONALE}}
+- **Um app escopado**, `{{SCOPE}}` ("{{APP_NAME}}"), na instância `{{INSTANCE_ALIAS}}` (release {{INSTANCE_RELEASE}}). Escopo e `scopeId` lidos de `app/now.config.json`. Fonte de verdade no Git, em `app/` (RN-SN-164).
+- **Metadados em Fluent** (`@servicenow/sdk` {{SDK_VERSION}}, `@servicenow/glide` {{GLIDE_VERSION}}); nenhuma mudança feita direto na instância sem voltar para o `.now.ts`.
+- **Core UI clássica (UI16)**: Form, List, related list, formatter de activity, UI Action, UI Policy, report simples (`.claude/rules/harness/servicenow-ui.md`). Sem Workspace, Service Portal nem UI Builder.
+- **Tabela de outro escopo:** {{CROSS_SCOPE_STANCE}}
 
----
+## Módulos e tabelas
 
-## Padrão Interno — {{INTERNAL_PATTERN}}
-
-### Camadas e fluxo de dependência
-
-```
-{{LAYER_DIAGRAM}}
-```
-
-| Camada | Responsabilidade | Pode depender de |
-|--------|-----------------|------------------|
-{{LAYERS_TABLE}}
-
-**MUST:** Dependências fluem de fora para dentro — camada externa depende da interna, nunca o contrário.
-
-**MUST NOT:** `{{DOMAIN_LAYER}}` importar qualquer classe de `{{INFRA_LAYER}}` ou de frameworks externos.
-
-**MUST NOT:** `{{USECASE_LAYER}}` importar implementações concretas — apenas interfaces de porta.
-
----
-
-## Estrutura de Pastas
+Cada módulo de negócio (`modules.md`) é um grupo de tabelas e um módulo no menu "{{APP_NAME}}".
 
 ```
-{{FOLDER_STRUCTURE}}
+app/src/fluent/
+{{MODULES_TREE}}
+├── simulations/   tabelas SIM- (integrações simuladas)
+├── ui/            Form/List/report por TEL-
+├── navigation/    menu do app, um módulo por funcionalidade
+├── security/      roles, ACL de leitura por role, ACL de linha
+├── business-rule/ ui-action/ ui-policy/ flow/ property/   (escritos por story)
+├── tests/         Test() ATF por story + suite.now.ts ({{REGRESSION_SUITE}})
+└── seed/          Record() demo (fictício)
+app/src/server/    scripts importados pelos .now.ts, por área ({{SERVER_AREAS}})
 ```
 
----
+## Configurar antes de customizar
 
-## Exemplo correto
+Ordem obrigatória de escolha para cada regra. Só se desce um degrau quando o de cima não resolve, e o motivo vai no comentário do `.now.ts` (RN-SN-13). A decisão de alterar algo da plataforma (tabela, form ou script fora do escopo) é ADR "configurar × customizar" no `outputs/spec/hld.md`.
 
-```{{LANGUAGE}}
-{{CORRECT_EXAMPLE}}
-```
+| # | Mecanismo | Quando usar | Exemplo no projeto |
+|---|-----------|-------------|--------------------|
+| 1 | Dicionário da tabela (mandatory, default, choice, `readOnly`, referência com `referenceQual`) | restrição estática de campo | {{EXAMPLE_DICTIONARY}} |
+| 2 | ACL (`roles`, condição; script só para dono do registro) | quem lê/escreve | {{EXAMPLE_ACL}} |
+| 3 | Data Policy | obrigatório/somente leitura que vale também para import e API (RN-SN-173) | {{EXAMPLE_DATA_POLICY}} |
+| 4 | UI Policy | só experiência de tela (RN-SN-60, RN-SN-145) | {{EXAMPLE_UI_POLICY}} |
+| 5 | Business Rule | invariante no gravar, na mesma transação (RN-SN-151 exceções) | {{EXAMPLE_BUSINESS_RULE}} |
+| 6 | Flow (Workflow Studio) | processo novo, assíncrono, com etapas (RN-SN-53, RN-SN-151) | {{EXAMPLE_FLOW}} |
+| 7 | Script Include | lógica reutilizada por BR, Flow, UI Action ou ATF | {{EXAMPLE_SCRIPT_INCLUDE}} |
 
-## Anti-pattern
+## Onde vai a lógica de cada regra
 
-```{{LANGUAGE}}
-{{WRONG_EXAMPLE}}
-```
+Uma linha por regra de negócio que não é só dicionário (fio condutor primeiro).
 
----
+| Regra | Mecanismo | Peças |
+|-------|-----------|-------|
+{{LOGIC_PLACEMENT_TABLE}}
 
-## Comunicação entre Módulos
+## Business Rules
 
-{{INTER_MODULE_RULES}}
+- Decidir `when` antes do código; `before` muda o registro atual, `after` atualiza relacionados (RN-SN-40, RN-SN-41).
+- Nunca `current.update()` em Business Rule; `setWorkflow(false)` só com justificativa escrita (RN-SN-42, RN-SN-43).
+- Condição no `filterCondition`, não em guard clause; só as ações necessárias (RN-SN-46).
+- Regra pequena; lógica reutilizável vai para Script Include (RN-SN-49).
+- Script em módulo de `app/src/server/`, importado no `.now.ts` (RN-SN-51).
 
----
+## Script Includes
+
+- `Class.create()`, `accessibleFrom: 'package_private'`, `clientCallable: false` por padrão (RN-SN-70, RN-SN-72).
+- `clientCallable: true` só para GlideAjax real, estendendo `global.AbstractAjaxProcessor`, e com ACL própria (RN-SN-71, RN-SN-147).
+
+## Flow
+
+- Um propósito por flow; subflow para reaproveitar; até 25 ações (RN-SN-152, RN-SN-153).
+- Laço até 1.000 iterações; volume em lotes (RN-SN-154).
+- Record trigger em vez de wait condition (RN-SN-156); sem sys_id fixo (RN-SN-161).
+
+## Integrações simuladas (SIM-)
+
+{{SIMULATIONS_LIST}}
+
+- Nenhuma chamada sai da instância no piloto (`inputs/simulacoes.md`). Cada `SIM-` é uma tabela do app com seed, rótulo "Simulado" e interruptor de falha.
+- O código lê a tabela `SIM-` por um Script Include por integração. Trocar a simulação pela integração real muda só esse Script Include (camada anti-corrupção).
+- O interruptor de falha é lido pelo Script Include, nunca pelo chamador.
+- Integração real futura: um spoke por sistema, alias de conexão, erro tratado no Script Include (RN-SN-162).
+
+## Performance
+
+- Contar com `GlideAggregate`, não `getRowCount()` (RN-SN-20); `setLimit(1)` para existência (RN-SN-21).
+- Sem consulta dentro de laço (RN-SN-22); `addEncodedQuery` para consulta composta (RN-SN-23).
+- Valor nulo validado antes de entrar em query (RN-SN-24).
+{{PERFORMANCE_NOTES}}
 
 ## Anti-patterns
 
 {{ANTIPATTERNS_LIST}}
-
----
-
-## Referências
-
-- **conventions.mdc** — nomenclatura, idioma, formatação
-- **database.mdc** — entidades de persistência vs domínio
-- **test-strategy.mdc** — como testar cada camada

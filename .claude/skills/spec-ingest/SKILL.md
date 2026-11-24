@@ -133,7 +133,15 @@ Ao terminar, adicionar UMA linha: `| # | data | <skill> | <resultado-resumo> | <
 
 ## Política — protótipo de validação (não é legado, não é v1)
 
-Quando `inputs/` contiver **protótipo** (React, Figma, HTML mock, «BD de testes»):
+**Speckit ServiceNow:** o protótipo do kit é a **própria instância** (decisão A2 do design). Não há
+protótipo HTML: as telas `TEL-` da `outputs/explore/especificacao-funcional.md` viram `Form()`/`List()`
+pelo `sn-scaffold`, que grava `outputs/spec/screens-manifest.json` (rota da instância por `TEL-`), e o
+`sn-capture` fotografa cada tela na visão do papel em `outputs/spec/screens/<TEL>.png`. O padrão de
+tela é a `.claude/rules/harness/servicenow-ui.md` (Core UI clássica). Esses artefatos são **saída** do
+Explore, não insumo desta skill: a ingestão não os lê como fonte de fato.
+
+A política abaixo vale para protótipo **trazido pelo cliente** em `inputs/` (Figma, HTML mock, prints
+de outra ferramenta, «BD de testes»):
 
 | Verdade | Implicação para o agente |
 |---------|---------------------------|
@@ -210,7 +218,7 @@ Código de **protótipo de validação** → usar só para extrair regra de neg�
 
 ### Fontes visuais e de código (caminho design-first)
 
-Se os inputs incluírem protótipos, Figma, URLs ou código src/:
+Se os inputs incluírem protótipos do cliente, Figma, URLs, prints de instância ServiceNow existente ou código src/:
 
 | Tipo de fonte visual | Como extrair F-xxx |
 |---------------------|--------------------|-
@@ -218,6 +226,7 @@ Se os inputs incluírem protótipos, Figma, URLs ou código src/:
 | URL navegável | Cada rota visitada = F-xxx descrevendo o comportamento observado — âncora: "URL /rota, sessão YYYY-MM-DD" |
 | Código src/ | Cada componente com lógica de negócio (validação, condição, estado) = F-xxx — âncora: "src/Arquivo.tsx linha N" |
 | Screenshot | Cada elemento UI que implica regra de negócio = F-xxx — âncora: "screenshot-nome.png região X" |
+| Instância ServiceNow do cliente (print ou export de update set/XML) | Cada tabela, campo, role ou regra visível = F-xxx do **AS-IS** — âncora: "arquivo, tabela `<nome>`". Customização de tabela da plataforma (`incident`, `task`, `sys_user`) vira questão aberta de upgrade/skip para a `spec-iterate` |
 
 Fontes visuais produzem INF-xxx mais frequentemente que F-xxx (o que se vê é inferência sobre o que foi decidido). Marcar Confiança como "média" por padrão e listar fundamento visual.
 

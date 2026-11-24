@@ -56,6 +56,8 @@ EVID-01 — <serviço> · <origem> · <timestamp> · traceId=<id>
 Interpretação: …
 ```
 
+> Alvo ServiceNow: `EVID-NN — instância · syslog | sys_atf_result | flow context | session debug · <horário> · <sys_id>`; o recibo `outputs/spec/auditorias/atf/<STORY>.json` (status, commit) também é evidência.
+
 ### Causa-raiz
 
 <Afirmação causal citando EVID-NN + classificação justificada.>

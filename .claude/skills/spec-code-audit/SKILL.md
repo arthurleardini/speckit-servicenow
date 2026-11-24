@@ -189,6 +189,7 @@ dimensões consomem — ela **não substitui** a análise da IA, e a IA **não s
 | 2 | **gitleaks** (secrets — https://github.com/gitleaks/gitleaks) | `gitleaks detect --report-format json --report-path outputs/spec/audit-signals/secrets.json` | `secrets.json` | Segredos e credenciais no código e no histórico git |
 | 3 | **osv-scanner** (SCA — https://google.github.io/osv-scanner/) | `osv-scanner --format json -r . > outputs/spec/audit-signals/deps.json` | `deps.json` | Vulnerabilidades conhecidas nas dependências (base OSV) |
 | 4 | **motor determinístico do harness** (o mesmo do G3 da `sn-implement` e da `auditoria-de-us` — Decisão 69; sem instalar nada) | `node .claude/ferramentas/varrer-entrega.mjs --tudo --repo <pasta do código> --sem-externas --json > outputs/spec/audit-signals/harness.json` | `harness.json` | Segredo no código, dado pessoal em log, HTML cru, token no storage, SQL/shell montado em texto, erro engolido, I/O em laço — com `arquivo:linha` |
+| 5 | **lint ServiceNow** (RN-SN [AUTO] sobre o app Fluent; sem instalar nada) | `node .claude/skills/spec-code-audit/scripts/lint-sn.mjs --app app --json > outputs/spec/audit-signals/servicenow.json` | `servicenow.json` | Padrões da plataforma em `app/src/**` (`.now.ts` e `app/src/server/**`) — ver 0.4 |
 
 **`<pasta do código>`** é o «Diretório raiz» do Kickoff — no harness, a «Pasta local» do repositório
 de papel `codigo` no `workspace.md` (ex.: `codigo/`). Sem `--repo`, o motor varre a pasta corrente,
@@ -241,6 +242,40 @@ resultados obrigatoriamente:
 - A IA faz a **triagem** de cada finding bruto: é explorável neste contexto? é falso positivo? qual endpoint/entidade real do inventário (Passo A) é afetado?
 - A IA **prioriza** (cruzando com severidade, EPSS/KEV — ver I.2b) e **monta vetores de ataque** do Passo D a partir dos hits confirmados.
 - A IA **NÃO substitui a varredura**: um finding do scanner só pode ser descartado com justificativa explícita de não-explorabilidade; e a ausência de hits do scanner não dispensa a análise das categorias do Passo C.
+
+### 0.4 — Lint ServiceNow (RN-SN [AUTO])
+
+O app é Fluent (`app/src/fluent/**/*.now.ts`) com scripts de servidor em `app/src/server/**`. Os
+scanners genéricos não conhecem a plataforma; o `scripts/lint-sn.mjs` confere por texto as RN-SN
+marcadas [AUTO] no catálogo (`referencias/32-servicenow-boas-praticas-oficiais.md`, seção 2.12). O
+escopo é lido de `app/now.config.json` (`scope`) — nunca passado à mão. Exit 2 = sem `app/src` ou
+sem `now.config.json` (corrigir o `--app`; não registrar como varredura limpa).
+
+| Regra do lint | RN-SN | Severidade | O que acusa |
+|---------------|-------|------------|-------------|
+| `SN_GLIDE_EM_LACO` | 22 | MÉDIO | `new GlideRecord/GlideRecordSecure/GlideAggregate` dentro de `while (x.next())`, `for` ou `forEach` (N+1) |
+| `SN_GLIDERECORD_SEM_ACL` | 80, 147 | ALTO | `GlideRecord` em código chamado pelo usuário (`clientCallable: true`, `AbstractAjaxProcessor`, UI Action) sem `canRead/canWrite/canCreate/canDelete` — usar `GlideRecordSecure` |
+| `SN_LOG_PROIBIDO` | 12, 84 | MÉDIO | `console.log`, `gs.log`, `gs.print`, `alert` — em escopo, só `gs.debug/info/warn/error` |
+| `SN_ESCOPO_ALHEIO` | 148 | MÉDIO | prefixo `x_<nnn>_<app>` diferente do escopo do `now.config.json` sem `CrossScopePrivilege` |
+| `SN_ESCOPO_DIGITADO` | 05 | BAIXO | o nome do escopo digitado como literal solto no código |
+| `SN_SYSID_FIXO` | 31 | MÉDIO | literal de 32 hex (sys_id) no código |
+| `SN_CURRENT_UPDATE` | 42 | ALTO | `current.update()` em Business Rule |
+| `SN_SETWORKFLOW_FALSE` | 43 | BAIXO | `setWorkflow(false)` sem justificativa no comentário |
+| `SN_GETROWCOUNT` | 20 | MÉDIO | `getRowCount()` no lugar de `GlideAggregate` |
+| `SN_EVAL_SLEEP` | 30 | ALTO | `eval()` ou `gs.sleep()` |
+| `SN_CLIENT_CALLABLE_SEM_AJAX` | 71 | MÉDIO | `clientCallable: true` sem estender `global.AbstractAjaxProcessor` |
+| `SN_ACESSO_PUBLICO` | 72 | MÉDIO | `accessibleFrom: 'public'` ou `sandboxCallable: true` |
+| `SN_ACL_READ_COM_CONSULTA` | 142 | MÉDIO | GlideRecord/GlideAggregate no script de ACL de `read` |
+| `SN_SEED_SEM_DEMO` | 168 | ALTO | `Record()` em `seed/` sem `$meta: { installMethod: 'demo' }` |
+| `SN_NOME_GENERICO`, `SN_GETXMLWAIT`, `SN_GETREFERENCE`, `SN_ADDINFOMESSAGE_DEBUG` | 11, 62, 63, 84 | BAIXO/MÉDIO | nome `gr`/`ga`; GlideAjax síncrono; `g_form.getReference()`; `addInfoMessage` de depuração |
+
+Como as dimensões usam: `SN_GLIDERECORD_SEM_ACL`, `SN_ESCOPO_ALHEIO`, `SN_ACESSO_PUBLICO`,
+`SN_ACL_READ_COM_CONSULTA` e `SN_SYSID_FIXO` entram no Passo C (segurança, Camada G da
+`.claude/rules/harness/security.md`); `SN_GLIDE_EM_LACO`, `SN_GETROWCOUNT` e `SN_ACL_READ_COM_CONSULTA`
+no Passo E; `SN_CURRENT_UPDATE`, `SN_SEED_SEM_DEMO` e `SN_CLIENT_CALLABLE_SEM_AJAX` no Passo F;
+`SN_LOG_PROIBIDO` no Passo H. A triagem é a mesma de 0.3: achado só sai com justificativa de
+falso positivo. O que o lint não vê (ACL ausente numa tabela, role elevada, Flow com mais de 25
+ações) continua com a análise da IA sobre `app/src/fluent/security/` e o `data-model.json`.
 
 ---
 
@@ -794,6 +829,13 @@ Listar os arquivos de teste encontrados no Passo A.6, classificados:
 | E2E | | | |
 | Contrato | | | |
 | Carga | | | |
+| ATF (alvo ServiceNow) | `app/src/fluent/tests/<STORY>.now.ts` + `tests/suite.now.ts` | `Test()` Fluent (`atf.server`, `atf.form`) | |
+
+No alvo ServiceNow, a evidência de execução é o recibo `outputs/spec/auditorias/atf/<STORY>.json`
+(`status`, `commit`, horário), gravado pelo `npm run atf -- --story <ID>`. Recibo ausente, vermelho
+ou de commit anterior ao último de `app/src/fluent` = story sem teste executado. Conferir também se
+cada RN tem `Test()` positivo e negativo e se ACL é testada com o usuário demo da role
+(`impersonate`), nunca com admin nem `enforceSecurity: false` (RN-SN-83, RN-SN-110).
 
 ### G.2 — Cobertura por módulo real
 
@@ -869,6 +911,11 @@ Gate: ausência de qualquer tipo de teste obrigatório pelas rules → FAIL auto
 ### H.1 — Logging
 
 Verificar nos arquivos onde a biblioteca de logging real (encontrada em A.2) é usada:
+
+> **Alvo ServiceNow:** a "biblioteca" é o `gs.debug/info/warn/error` do escopo, que grava no
+> System Log (`syslog`) com a fonte do escopo; `console.log`, `gs.log` e `gs.print` são achado
+> (`SN_LOG_PROIBIDO`, 0.4). Sem CPF/CNPJ nem dado pessoal na mensagem; logar `sys_id` e ID da spec.
+> Propriedades de debug do app em `false` (RN-SN-102).
 
 | Verificação | Aplicável ao stack real? | Encontrado? | Arquivo:Linha |
 |-------------|--------------------------|------------|---------------|
@@ -1029,6 +1076,7 @@ Plano de Remediação (Seção 11 — I.3) e as 8 condições da Decisão de Dep
 | Código | Verificação | Severidade |
 |--------|-------------|------------|
 | `CODE_INVENTORY_COMPLETE` | Passo A executado com A.1–A.9 documentados antes de qualquer verificação | FATAL |
+| `SN_LINT_EXECUTED` | Com `app/now.config.json` presente: `outputs/spec/audit-signals/servicenow.json` gerado pelo `scripts/lint-sn.mjs` (0.4) e cada achado ALTO triado no relatório | WARNING |
 | `SCANNERS_EXECUTED` | Passo 0 executado: `sast.json`, `secrets.json`, `deps.json` em `outputs/spec/audit-signals/`; ferramentas ausentes registradas como `TOOL_UNAVAILABLE:<nome>` no sync-log e marcadas no relatório | WARNING |
 | `AUDIT_PLAN_PRODUCED` | Passo A' (plano de auditoria personalizado) produzido antes de B–H | FATAL |
 | `VECTORS_ADDRESSED` | Cada vetor obrigatório de D.2 foi rastreado com dados reais ou marcado N/A com justificativa do inventário | FATAL |

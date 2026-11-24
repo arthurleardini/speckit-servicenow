@@ -6,6 +6,10 @@
 > Execute cada caso de teste na ordem indicada dentro de cada épica.
 > Marque o resultado como ✅ Aprovado, ❌ Reprovado ou ⏭️ Pulado (com justificativa).
 > Em caso de reprovação, capture evidências (print de tela) e abra um chamado.
+>
+> **ID do caso:** `CT-MOD-F<n>-<nnn>` (transversal: `CT-MOD-T-<nnn>`) no alvo ServiceNow; o
+> legado `TC-NNN` continua aceito. Os exemplos abaixo usam `TC-NNN`. Cada caso de regra vira
+> `Test()` ATF positivo e negativo na `sn-implement`, executado com o usuário demo do papel.
 
 ---
 
@@ -17,9 +21,9 @@
 | Épicas cobertas | EPIC-001, EPIC-002 |
 | Total de casos de teste | [N] |
 | Responsável pelos testes | [A preencher] |
-| Ambiente alvo | Homologação |
+| Ambiente alvo | Homologação (instância ServiceNow, app escopado lido de `app/now.config.json`) |
 | Ambiente de integrações (sandbox/mock) | [Sandbox real / simulador — preencher conforme kickoff] |
-| Perfis de usuário cobertos | [Lista de perfis/papéis — preencher conforme kickoff] |
+| Perfis de usuário cobertos | [Roles do app `<escopo>.<papel>` e usuário demo de cada uma — preencher conforme kickoff] |
 | Data de execução | [A preencher] |
 | Versão testada | [A preencher] |
 

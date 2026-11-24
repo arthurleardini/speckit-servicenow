@@ -21,9 +21,11 @@ spec-iterate
     ↓
 spec-tech-rules  ◄ você está aqui
     ↓
+spec-hld → revisao-de-seguranca
+    ↓
 spec-data-model
     ↓
-spec-api-contracts
+spec-test-plan
     ↓
 spec-tasks
 ```
@@ -62,22 +64,25 @@ Antes de qualquer pergunta, lê os documentos de produto e extrai sinais que fun
 | Cliente governamental | `discovery-document.md` |
 
 Toda sugestão cita o documento e a seção que a embasa. Exemplo:
-> *"requirements.md §RNF-03 exige latência < 200ms → Redis distribuído obrigatório"*
+> *"business-rules.md §RN-F5-007 diz que o atendente só vê a própria carteira → ACL de linha em caso e contribuinte"*
 
-### Passos 1–2 — Kickoff interativo (10 blocos)
+### Passos 1–2 — Kickoff interativo (10 blocos, alvo ServiceNow)
+
+Vários itens já vêm decididos pelo repositório (escopo e nome em `app/now.config.json`, versões do SDK
+em `app/package.json`, instância no `.env.example`) e aparecem como informação, com a fonte.
 
 | Bloco | Decisões cobertas |
 |-------|------------------|
-| 1 — Linguagem e Runtime | Backend, versão, frontend |
-| 2 — Arquitetura | Estilo (monolito/microserviços), padrão interno (hexagonal/layered), SOLID/Clean Code, comunicação entre módulos |
-| 3 — Persistência | Banco, acesso a dados, migrações, cache, mensageria |
-| 4 — Convenções | Idioma do código, naming de banco, versionamento de API, formato de erro, paginação, tratamento de exceções |
-| 5 — Testes | Estratégia, cobertura, E2E (ferramenta + escopo UI/API), carga/performance |
-| 6 — Observabilidade | Nível (completo/mínimo/nenhum), stack/destino, formato de log, métricas de negócio |
-| 7 — Auth e Autorização | Autenticação, autorização (RBAC/ABAC), auditoria LGPD, rate limiting, idempotência |
-| 8 — Deploy e Build | Containerização, ambientes, branching, infraestrutura compartilhada |
-| 9 — Frontend | Stack (padrão empresa ou customizada), acessibilidade, i18n |
-| 10 — Integrações | APIs externas, autenticação por integração, circuit breaker, PII |
+| 1 — Linguagem e Runtime | Fluent + Glide (informação), idioma dos identificadores, Core UI clássica (informação) |
+| 2 — Arquitetura | Escopo do app, onde vai cada regra (configurar antes de customizar), tabela/script de outro escopo |
+| 3 — Persistência | Tabelas da plataforma, histórico (journal + audit), indicadores (report × gravado), volume do seed |
+| 4 — Convenções | Nomenclatura fixa (informação), formato de mensagem ao usuário |
+| 5 — Testes | Camadas ATF (informação), ATF de form (desfecho do teste de viabilidade), suíte de regressão |
+| 6 — Observabilidade | `gs.*` e system log (informação), propriedade de nível de log |
+| 7 — Auth e Autorização | Roles por papel, ACL de linha, LGPD (informação), cross-scope |
+| 8 — Deploy e Build | Instância (informação), ambientes, branching |
+| 9 — Frontend | Core UI clássica (informação), acessibilidade WCAG 2.2 AA (informação), i18n |
+| 10 — Integrações | Integrações simuladas `SIM-` de `inputs/simulacoes.md` |
 
 ### Passo 3 — Revisão consolidada
 
@@ -85,7 +90,7 @@ Apresenta resumo de todas as decisões para confirmação antes de gerar.
 
 ### Passo 4 — Geração dos arquivos
 
-Copia cada template de `templates/`, substitui todos os placeholders `{{...}}` com os valores reais, e salva em `outputs/spec/tech-rules/`.
+Copia cada template de `templates/`, substitui todos os placeholders `{{...}}` com os valores reais, e salva em `outputs/spec/tech-rules/`. Na `security.mdc`, só o bloco do projeto muda.
 
 ### Passos 5–6 — Sumário e sync-log
 
@@ -93,23 +98,17 @@ Gera `tech-rules-summary.md` com todas as decisões e justificativas, e registra
 
 ---
 
-## Arquivos gerados
+## Arquivos gerados (alvo ServiceNow)
 
 | Arquivo | `alwaysApply` | Quando gerar |
 |---------|--------------|--------------|
-| `security.mdc` | `true` | Sempre — regra universal da empresa |
+| `security.mdc` | `false` (`app/src/**`) | Sempre — parte fixa da plataforma + bloco do projeto |
 | `architecture.mdc` | `false` | Sempre |
 | `conventions.mdc` | `true` | Sempre |
-| `database.mdc` | `false` | Sempre |
 | `test-strategy.mdc` | `false` | Sempre |
-| `observability.mdc` | `false` | Sempre (versão simplificada se POC) |
-| `auth.mdc` | `false` | Se há autenticação |
 | `deploy-and-build.mdc` | `false` | Sempre |
-| `frontend.mdc` | `false` | Se há UI |
-| `messaging-and-queue.mdc` | `false` | Se há mensageria assíncrona |
-| `integrations.mdc` | `false` | Se há integrações externas |
 
-Após gerados, as rules já estão materializadas em `.cursor/rules/*.mdc` e/ou `.claude/rules/*.md` no repositório de implementação, conforme o ambiente escolhido no kickoff — nenhuma cópia manual é necessária.
+A tela segue a rule do harness `.claude/rules/harness/servicenow-ui.md` (Core UI clássica). Após gerados, as rules já estão materializadas em `.cursor/rules/*.mdc` e/ou `.claude/rules/*.md`, conforme o ambiente escolhido no kickoff — nenhuma cópia manual é necessária.
 
 ---
 
@@ -117,30 +116,31 @@ Após gerados, as rules já estão materializadas em `.cursor/rules/*.mdc` e/ou 
 
 ```
 spec-tech-rules/
-  SKILL.md                    ← orquestrador principal (este é o arquivo que o Cursor lê)
+  SKILL.md                    ← orquestrador principal
   README.md                   ← este arquivo
-  docs/
-    spec-tech-rules.html      ← documentação visual completa
+  references/
+    kickoff-blocos.md         ← os 10 blocos do kickoff (ServiceNow)
+    placeholders.md           ← de onde sai cada placeholder
+  tools/
+    mdc_to_md.py              ← conversão .mdc → .md (Claude) e steering (Kiro)
+    check-rules.mjs           ← NO_PLACEHOLDER_LEFT, SECURITY_UNMODIFIED, RULES_CONTRADICTION
   templates/
-    security.mdc              ← FIXO — copiado sem modificação (regra universal da empresa)
-    frontend-default.mdc      ← FIXO — padrão empresa Next.js + shadcn/ui + React Query
-    architecture.mdc          ← template com placeholders {{...}}
-    conventions.mdc           ← template com placeholders {{...}}
-    database.mdc              ← template com placeholders {{...}}
-    test-strategy.mdc         ← template com placeholders {{...}}
-    observability.mdc         ← template com placeholders {{...}}
-    auth.mdc                  ← template com placeholders {{...}}
-    deploy-and-build.mdc      ← template com placeholders {{...}}
-    frontend.mdc              ← template com placeholders {{...}}
-    messaging-and-queue.mdc   ← template com placeholders {{...}}
-    integrations.mdc          ← template com placeholders {{...}}
+    security.mdc              ← parte fixa da plataforma + bloco <!-- projeto:inicio/fim -->
+    architecture.mdc          ← template ServiceNow com placeholders {{...}}
+    conventions.mdc           ← template ServiceNow com placeholders {{...}}
+    test-strategy.mdc         ← template ServiceNow com placeholders {{...}}
+    deploy-and-build.mdc      ← template ServiceNow com placeholders {{...}}
+    auth.mdc, database.mdc, observability.mdc, messaging-and-queue.mdc,
+    integrations.mdc, frontend.mdc, frontend-default.mdc
+                              ← moldes do upstream, fora do alvo (merge com o harness)
+    upstream/                 ← originais do upstream dos cinco templates, do kickoff e dos placeholders
 ```
 
-### Templates fixos vs templates com placeholders
+### Template com parte fixa vs templates com placeholders
 
-**Templates fixos** (`security.mdc`, `frontend-default.mdc`): copiados integralmente ou com adição mínima de seção de decisões do projeto. O conteúdo não muda entre projetos.
+**`security.mdc`**: a parte fixa é copiada integralmente; só o bloco entre `<!-- projeto:inicio -->` e `<!-- projeto:fim -->` recebe as roles, a ACL de linha e o cross-scope do projeto. O `check-rules.mjs` confere o resto.
 
-**Templates com placeholders**: cada `{{NOME}}` é substituído pelo valor real da decisão correspondente. Blocos `{{#if CONDICAO}}...{{/if}}` são incluídos ou removidos conforme as respostas do kickoff. Nenhum placeholder sobrevive no output final.
+**Templates com placeholders**: cada `{{NOME}}` é substituído pelo valor real da decisão correspondente. Nenhum placeholder sobrevive no output final.
 
 ---
 
@@ -153,9 +153,11 @@ spec-tech-rules/
 
 | Skill seguinte | Artefatos produzidos para ela |
 |---------------|-------------------------------|
-| `spec-data-model` | `.cursor/rules/*.mdc` — lidos automaticamente via globs |
-| `spec-tasks` | `.cursor/rules/*.mdc` — cada task gerada é auto-suficiente com base nas rules |
-| `spec-implement` | `.cursor/rules/*.mdc` — agente de implementação guiado pelas rules |
+| `spec-hld` | rules — escopo, mecanismos e `SIM-` viram containers e ADRs |
+| `revisao-de-seguranca` | `security.mdc` — roles, ACL de linha e cross-scope |
+| `spec-data-model` | rules — nomenclatura de tabela e coluna |
+| `spec-tasks` | rules — cada task gerada é auto-suficiente com base nas rules |
+| `sn-implement` | rules — agente de implementação Fluent guiado pelas rules |
 
 ---
 

@@ -2,7 +2,7 @@
 
 Status: draft
 Última atualização: YYYY-MM-DD
-Fonte: legacy.md, product-vision.md, requirements/requirements.md, prototype.md (se existir)
+Fonte: legacy.md, product-vision.md, requirements/requirements.md, especificacao-funcional.md (telas TEL-), screens-manifest.json e screens/<TEL>.png (se existirem)
 
 **Âmbito deste arquivo:** PR (experiência, estados de UI, acessibilidade, jornadas).
 
@@ -64,7 +64,7 @@ Fonte: legacy.md, product-vision.md, requirements/requirements.md, prototype.md 
 
 **Personas:**
 **Prioridade:** Must / Should / Could
-**Origem:** `Protótipo` (validar na implementação) / `Discovery` (validar com cliente) / `Normativo`
+**Origem:** `Protótipo` (tela `TEL-` da instância; validar na implementação) / `Discovery` (validar com cliente) / `Normativo`
 
 **Contexto de uso:**
 

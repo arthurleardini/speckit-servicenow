@@ -37,6 +37,9 @@ Harness Elo (`--dir`): se a pasta de destino ja tem a rule do harness equivalent
 (harness/security.md e harness/frontend.md no Claude; harness-security.md e harness-frontend.md
 no Kiro), security.mdc e frontend-default.mdc nao sao convertidas -- o harness ja as carrega,
 com o mesmo corpo. O script nao apaga nada: copia antiga que sobrou vira aviso.
+Fork ServiceNow: a security.mdc com o bloco `<!-- projeto:inicio -->` nao e copia da rule do
+harness (e a seguranca da plataforma, com roles e ACL do projeto, restrita a app/src/**) e por isso
+E convertida, mesmo com a harness/security.md na pasta.
 
 Uso (script embutido na skill; caminho relativo ao SKILL.md do spec-tech-rules,
 conforme ../../tools/references/paths.md):
@@ -197,10 +200,24 @@ def convert_file(src, dst, kiro=False):
     return text
 
 
-def rule_do_harness(fn, dst_dir, kiro=False):
+MARCA_PROJETO = "<!-- projeto:inicio -->"
+
+
+def tem_bloco_do_projeto(src):
+    """True quando a rule traz o bloco do projeto (security ServiceNow): nao e copia do harness."""
+    try:
+        with open(src, encoding="utf-8") as fh:
+            return any(l.strip() == MARCA_PROJETO for l in fh)
+    except OSError:
+        return False
+
+
+def rule_do_harness(fn, dst_dir, kiro=False, src=None):
     """Caminho da rule do harness que ja cobre `fn` dentro de `dst_dir`, ou None."""
     par = RULES_DO_HARNESS.get(fn)
     if not par:
+        return None
+    if src and tem_bloco_do_projeto(src):
         return None
     p = os.path.join(dst_dir, *(par[1] if kiro else par[0]).split("/"))
     return p if os.path.isfile(p) else None
@@ -213,7 +230,7 @@ def convert_dir(src_dir, dst_dir, kiro=False):
         if not fn.endswith(".mdc"):
             continue
         dst = os.path.join(dst_dir, fn[:-4] + ".md")
-        harness = rule_do_harness(fn, dst_dir, kiro=kiro)
+        harness = rule_do_harness(fn, dst_dir, kiro=kiro, src=os.path.join(src_dir, fn))
         if harness:
             puladas.append(f"PULADA - {fn}: o harness ja carrega {harness}")
             if os.path.isfile(dst):

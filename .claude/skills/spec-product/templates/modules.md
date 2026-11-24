@@ -2,7 +2,7 @@
 
 Status: draft
 Última atualização: YYYY-MM-DD
-Fonte de verdade para todos os documentos. Códigos `MOD-XXX` usados em `requirements.md`, `business-rules.md`, `product-requirements.md`, `prototype.md` e `gaps.md` devem corresponder a uma linha desta tabela.
+Fonte de verdade para todos os documentos. Códigos `MOD-XXX` usados em `requirements.md`, `business-rules.md`, `product-requirements.md`, `especificacao-funcional.md` (telas `TEL-`) e `gaps.md` devem corresponder a uma linha desta tabela.
 
 <!-- id: modules-registry -->
 
@@ -15,7 +15,7 @@ Fonte de verdade para todos os documentos. Códigos `MOD-XXX` usados em `require
 **Convenções:**
 - **Código:** prefixo `MOD-` + abreviação curta (5-15 chars). Não usar nomes de tela (`MOD-TELA-X`) nem termos técnicos (`MOD-API-X`).
 - **Nome canônico:** a forma exata como aparece nos títulos `## Módulo:` dos demais documentos.
-- **Aliases:** outras formas que apareceram em transcrições ou no protótipo — útil para reconciliação de menções soltas.
+- **Aliases:** outras formas que apareceram em transcrições, no menu do app na instância ou em protótipo do cliente — útil para reconciliação de menções soltas.
 - **Status:** `ativo` (no escopo atual) · `futuro` (Next/Later no roadmap) · `descontinuado` (decidido fora do escopo).
 
 ---

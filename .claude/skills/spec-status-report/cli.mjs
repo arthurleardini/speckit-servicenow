@@ -24,6 +24,7 @@ import { describeScope, resolveScope } from "./lib/resolve-scope.mjs";
 import { loadDotenv } from "./lib/load-dotenv.mjs";
 import { renderStatusHtml, RENDERER_VERSION } from "./lib/render-status-html.mjs";
 import { attributeCasesToFiles, runTests } from "./lib/run-tests.mjs";
+import { mergeAtfReceipts } from "./lib/atf-receipts.mjs";
 import { dirExists, readJson, relPosix, writeJson } from "./lib/util.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -319,7 +320,7 @@ async function main() {
   }
 
   log(args.noTests ? "Testes: execução desativada (--no-tests)" : "Executando as suítes de teste (isto pode levar alguns minutos)…");
-  const tests = runTests(root, writeDir, {
+  const tests = mergeAtfReceipts(runTests(root, writeDir, {
     roots: scope.testRoots,
     skipAll: args.noTests,
     skipE2E: args.skipE2E,
@@ -327,7 +328,8 @@ async function main() {
     onlyRunners: args.onlyRunners,
     onlyKinds: args.onlyKinds,
     timeoutMs: (args.testTimeoutS || Number(process.env.STATUS_REPORT_TEST_TIMEOUT_S) || 900) * 1000,
-  });
+  }), root); // + recibos de ATF (alvo ServiceNow; não executa nada)
+  if (tests.atfReceipts?.length) log(`ATF: ${tests.atfReceipts.length} recibo(s) lido(s) de outputs/spec/auditorias/atf/`);
   if (tests.totals?.total) {
     log(`Testes: ${tests.totals.total} casos — ${tests.totals.passed} ok, ${tests.totals.failed} falhas, ${tests.totals.skipped} ignorados`);
   }

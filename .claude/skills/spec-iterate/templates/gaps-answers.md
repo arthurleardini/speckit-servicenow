@@ -26,7 +26,7 @@ Ao terminar: invoque `spec-iterate` e diga *"propagar respostas de gaps-answers.
 *(Sim — transcrição/reunião YYYY-MM-DD / Não — decisão interna)*
 
 **Artefatos afetados:**
-*(ex.: requirements.md §RF-PAG-001 Cenário 3, business-rules.md nova RN-NOVO-PAG-xxx, prototype.md /rota)*
+*(ex.: requirements.md §RF-PAG-001 Cenário 3, business-rules.md nova RN-NOVO-PAG-xxx, tela TEL-xxx da instância)*
 
 ---
 

@@ -38,6 +38,14 @@ Este arquivo é gerado pelo agente durante a **Etapa A (Auditoria Ativa)** do `s
 
 *(Cenários não cobertos: offboarding, permissões, falha de integração, migração de dados, etc.)*
 
+#### Pontos cegos de plataforma (ServiceNow)
+
+*(Upgrade/skip por customizar objeto da plataforma, acesso cross-scope, licença fulfiller × requester por papel, plugin ausente na instância, limite da Core UI. Perguntas em linguagem de negócio: custo e efeito, não nome de objeto)*
+
+#### Colheita das telas da instância
+
+*(Divergências entre `screens-manifest.json` (rota e print por `TEL-`), `flow-map.md` e PR da tela — saída do `check-flowmap.py --manifest` e achados `[colheita-llm]`)*
+
 ---
 
 ### ⚪ Melhorias de qualidade
@@ -64,7 +72,7 @@ Este arquivo é gerado pelo agente durante a **Etapa A (Auditoria Ativa)** do `s
 | **Dono sugerido** | *[área/papel]* |
 | **Sugestão de tratamento** | *[recomendação substantiva de como fechar este gap — ex.: "Realizar workshop com área X para definir critério Y; resultado esperado: decisão documentada em reunião Z"]* |
 | **Sugestão de artefato** | *[o que gerar após a resposta — ex.: nova RN-NOVO-xxx, RF atualizado, cláusula contratual]* |
-| **Afeta** | *[arquivos e seções específicas]* |
+| **Afeta** | *[arquivos e seções específicas; tela `TEL-xxx` quando a decisão muda a instância (regerar pelo `sn-scaffold` e recapturar)]* |
 | **Features bloqueadas** | *[RF-XXX, RNF-XXX]* |
 | **Fonte** | *[F-xxx ou referência]* |
 

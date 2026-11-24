@@ -2,7 +2,7 @@
 
 Última atualização: YYYY-MM-DD
 
-Este log é a **memória cronológica do projeto**. Toda execução de skill (`spec-ingest`, `spec-legacy`, `spec-benchmark`, `spec-product`, `spec-prototype`, `spec-iterate`, `spec-report`) registra uma linha aqui ao terminar. Skills subsequentes leem este log no início para entender de onde viemos antes de produzir novo conteúdo.
+Este log é a **memória cronológica do projeto**. Toda execução de skill (`spec-ingest`, `spec-legacy`, `spec-benchmark`, `spec-product`, `sn-scaffold`, `sn-capture`, `spec-iterate`, `spec-report`) registra uma linha aqui ao terminar. Skills subsequentes leem este log no início para entender de onde viemos antes de produzir novo conteúdo.
 
 <!-- id: sync-log -->
 
@@ -56,7 +56,7 @@ Mudanças entre artefatos resultantes do fecho de GAPs (Etapa B do `spec-iterate
 |------|---------|-------------|-------------------|-------------------|--------|---------|
 | YYYY-MM-DD | doc→proto \| proto→doc \| doc→doc | GAP-XXX | gaps-answers.md / chat / nova evidência F-xxx | arquivo §seção | resumo da mudança | consultor / cliente / nome |
 
-*(Direção: `doc→proto` = documento gerou alteração no protótipo; `proto→doc` = protótipo revelou alteração em documento; `doc→doc` = mudança entre documentos sem protótipo.)*
+*(Direção: `proto` é a instância, que é o protótipo (A2). `doc→proto` = documento gerou alteração na instância (regerada pelo `sn-scaffold`, reinstalada e recapturada); `proto→doc` = tela da instância revelou alteração em documento; `doc→doc` = mudança entre documentos sem tocar a instância.)*
 
 ---
 
@@ -72,4 +72,4 @@ Mudanças entre artefatos resultantes do fecho de GAPs (Etapa B do `spec-iterate
 - Se a execução fechou ou propagou GAPs, adicionar linhas em Seção B.
 - Atualizar `Última atualização` no topo.
 
-**Skills que produzem grandes alterações** (`spec-product`, `spec-prototype` Modo Geração) podem registrar **uma linha por artefato principal** quando o salto for grande — mas sem inflar para "uma linha por arquivo tocado".
+**Skills que produzem grandes alterações** (`spec-product`, `sn-scaffold`) podem registrar **uma linha por artefato principal** quando o salto for grande — mas sem inflar para "uma linha por arquivo tocado".

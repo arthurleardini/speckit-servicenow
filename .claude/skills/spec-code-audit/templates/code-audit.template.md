@@ -13,6 +13,7 @@ Auditor: spec-code-audit v2.3
 **Endpoints mapeados:** N | **Com dado sensível:** N
 **Entidades:** N | **Com PII:** N | **Com dado financeiro:** N
 **Módulos com `spec_story.md` consultado:** N (ver A.9)
+**Alvo ServiceNow:** escopo `<scope de app/now.config.json>` · lint RN-SN (0.4): N achados (ALTO N / MÉDIO N / BAIXO N) · recibos ATF verdes no commit atual: N/N stories
 
 ---
 

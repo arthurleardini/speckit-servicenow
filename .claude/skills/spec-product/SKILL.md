@@ -140,10 +140,11 @@ Duas ressalvas importantes:
 | `outputs/spec/legacy.md` | `spec-legacy` *(quando existir)* | Domínios, HUs, KPIs, RN, dores, UX atual |
 | `outputs/spec/legacy-analysis.md` | `spec-legacy` *(quando existir)* | Decisão Reuse/Replace/Retire |
 | `outputs/spec/threat-model.md` | `spec-legacy` *(quando existir)* | Lacunas de segurança → RNF compliance |
-| `outputs/spec/prototype.md` | `spec-prototype` *(se existir)* | **Leitura obrigatória** em toda execução |
+| `outputs/explore/especificacao-funcional.md` (tabela de telas `TEL-`) | Explore | **Leitura obrigatória** em toda execução: tela, tabela, tipo (form, list ou report), visão e papel |
+| `outputs/spec/screens-manifest.json` + `outputs/spec/screens/<TEL>.png` | `sn-scaffold` + `sn-capture` *(quando existirem)* | Rota da instância por `TEL-` e print na visão do papel. A instância é o protótipo (A2); o padrão de tela é a `.claude/rules/harness/servicenow-ui.md` (Core UI clássica) |
 | ERS, SRS, normas ou simulações em `inputs/` | Usuário | Cobertura negocial (sem copiar § técnica literalmente); alimentar matriz insumo→RF |
 
-Se `prototype.md` existir: ler integralmente antes de redigir qualquer um dos 6 artefatos.
+Ler a tabela de telas `TEL-` e, quando existirem, o `screens-manifest.json` e os prints antes de redigir qualquer um dos 6 artefatos. Os IDs `TEL-` vêm da especificação funcional e do manifesto: esta skill não cria `TEL-` novo nem renumera.
 
 ---
 
@@ -172,7 +173,7 @@ Registrar as respostas como **premissas da visão** antes de escrever o formato 
 
 **Antes** de redigir `product-vision.md`, `business-rules.md` ou `requirements.md`, alinhar com o consultor uma **lista candidata de módulos** — não o catálogo final (esse só fecha no Passo 3.0), mas o suficiente para não escrever quatro artefatos grandes sobre fronteiras de módulo erradas.
 
-1. Derivar a lista candidata das fontes já disponíveis: `context-map.md` seção **Candidatos a módulo / capacidade** (quando existir), `discovery-document.md` §4 (funcionalidades desejadas), `benchmark.md`, `prototype.md` (rotas/fluxos, quando existir).
+1. Derivar a lista candidata das fontes já disponíveis: `context-map.md` seção **Candidatos a módulo / capacidade** (quando existir), `discovery-document.md` §4 (funcionalidades desejadas), `benchmark.md`, `especificacao-funcional.md` (telas `TEL-` e módulos de menu, quando existir).
 2. Apresentar a lista candidata ao consultor em formato curto (nome + 1 frase de objetivo por módulo) e pedir confirmação explícita — adicionar, renomear, fundir ou remover módulos antes de prosseguir.
 3. **Gate bloqueante:** sem confirmação do consultor (ou decisão explícita de prosseguir com a lista candidata "as-is"), não iniciar o Passo 1. Registrar a resposta recebida.
 4. **Registrar no `sync-log.md`** (Seção A), na mesma linha ou logo após o kickoff geral do projeto:
@@ -189,9 +190,9 @@ Registrar as respostas como **premissas da visão** antes de escrever o formato 
 
 ## Passo 1 — Gerar `product-vision.md`
 
-### Nota: JTBD quando há protótipo existente
+### Nota: JTBD quando a instância já tem as telas
 
-Quando o kickoff inclui protótipo já construído, o **JTBD Funcional** pode ser derivado diretamente das rotas e fluxos do protótipo (via `prototype.md`). O **JTBD Emocional** e as **dores** ainda devem vir do discovery — o protótipo mostra *o que* o usuário faz, não *por que* ele quer isso nem como se sente. Não simplificar a seção inteira; apenas indicar a fonte do JTBD Funcional como `prototype.md §rota`.
+Quando o Explore já instalou o app na instância (telas `TEL-` com rota no `screens-manifest.json` e print em `screens/<TEL>.png`), o **JTBD Funcional** pode ser derivado das telas e do papel de cada uma. O **JTBD Emocional** e as **dores** ainda devem vir do discovery — a tela mostra *o que* o usuário faz, não *por que* ele quer isso nem como se sente. Não simplificar a seção inteira; apenas indicar a fonte do JTBD Funcional como `screens-manifest.json §TEL-xxx`.
 
 ---
 
@@ -277,7 +278,7 @@ Origem, Domínio, Enunciado «SE X ENTÃO Y», Exceções, Conflitos, Vinculada 
 
 ### Seção B — Regras do Novo Produto
 
-Regras que o produto novo precisa **definir e implementar** — não existiam no legado, ou são novas decisões derivadas do protótipo, benchmark e discovery. Toda regra nova deve ter origem identificável.
+Regras que o produto novo precisa **definir e implementar** — não existiam no legado, ou são novas decisões derivadas das telas do Explore (instância), benchmark e discovery. Toda regra nova deve ter origem identificável.
 
 Bloco campo a campo pronto no template (mesmos campos da Seção A, trocando Status por
 **Justificativa** e vinculando a RF/PR). **Origens válidas para RNs novas:**
@@ -315,18 +316,18 @@ Copiar do template [`templates/modules.md`](templates/modules.md) e preencher um
 
 Após `modules.md` fechar, preencher o **índice de módulos e cobertura** no topo de `requirements/requirements.md` usando os mesmos códigos. O índice de `requirements.md` é a visão operacional (com colunas Nº RF planejado / escritos / Lacunas); `modules.md` é o registro semântico (códigos + nomes + aliases + status).
 
-> **Regra de consistência:** os códigos `MOD-XXX` em `requirements.md`, `business-rules.md` (campo Módulo de cada RN), `product-requirements.md` (seções `## Módulo:`), `prototype.md` e `gaps.md` devem **todos** existir em `modules.md`. Divergência é problema de processo — rodar `python3 ../tools/check-modules.py` ao final do passo para validar (caminho relativo ao SKILL.md — ver [`../tools/references/paths.md`](../tools/references/paths.md)).
+> **Regra de consistência:** os códigos `MOD-XXX` em `requirements.md`, `business-rules.md` (campo Módulo de cada RN), `product-requirements.md` (seções `## Módulo:`), `especificacao-funcional.md` e `gaps.md` devem **todos** existir em `modules.md`. Divergência é problema de processo — rodar `python3 ../tools/check-modules.py` ao final do passo para validar (caminho relativo ao SKILL.md — ver [`../tools/references/paths.md`](../tools/references/paths.md)).
 
 ### Fontes
 
 - `discovery-document.md` §4 (funcionalidades desejadas)
 - `context-map.md` — seção **Candidatos a módulo / capacidade** (`spec-ingest`), quando existir
-- `benchmark.md`, `prototype.md`, `product-vision.md` escopo É/Não É
+- `benchmark.md`, `especificacao-funcional.md` (telas `TEL-`), `product-vision.md` escopo É/Não É
 - ERS/SRS ou normas em `inputs/` — só para **efeitos de negócio** e rastreio (sem copiar § técnica)
 
 ### Taxonomia — derivar do escopo do projeto
 
-**Não usar lista pré-fabricada.** O catálogo modular deve sair das fontes (discovery, benchmark, prototype.md), não de exemplos genéricos. Heurística para nomear: nome curto em linguagem do cliente que descreva uma capacidade de negócio observável (ex.: `MOD-COBRANCA`, `MOD-ATENDIMENTO`, `MOD-CADASTRO`). Evitar nomes técnicos (`MOD-API-X`) ou puramente UI (`MOD-TELA-HOME`).
+**Não usar lista pré-fabricada.** O catálogo modular deve sair das fontes (discovery, benchmark, especificacao-funcional.md), não de exemplos genéricos. Heurística para nomear: nome curto em linguagem do cliente que descreva uma capacidade de negócio observável (ex.: `MOD-COBRANCA`, `MOD-ATENDIMENTO`, `MOD-CADASTRO`). Evitar nomes técnicos (`MOD-API-X`) ou puramente UI (`MOD-TELA-HOME`).
 
 ### Para cada módulo listado
 
@@ -424,7 +425,7 @@ Agrupar PR por **mesmo índice modular** que `requirements.md` (seções `## Mó
 
 ### PR-XXX estrutura obrigatória
 
-A estrutura canônica de cada PR — **6 estados de UI**, **Inventário de campos**, **TTFV** e **WCAG 2.2 AA** — está definida **no template** [`templates/product-requirements.md`](templates/product-requirements.md), que é a **fonte canônica**. Preencher conforme o template; esta skill **não** re-especifica a lista de estados para evitar divergência. Regras de rastreio: cada PR liga a ≥ 1 `RF-MOD-XXX-NN`; campo **Origem** obrigatório (`Protótipo` / `Discovery` / `Normativo`); cada PR que documenta uma **tela** DEVE indicar a(s) etapa(s) do fluxo em que ela aparece — campo **Etapa do fluxo** = `ETP-xxx` do `flow-map.md`.
+A estrutura canônica de cada PR — **6 estados de UI**, **Inventário de campos**, **TTFV** e **WCAG 2.2 AA** — está definida **no template** [`templates/product-requirements.md`](templates/product-requirements.md), que é a **fonte canônica**. Preencher conforme o template; esta skill **não** re-especifica a lista de estados para evitar divergência. Regras de rastreio: cada PR liga a ≥ 1 `RF-MOD-XXX-NN`; campo **Origem** obrigatório (`Protótipo` = tela da instância `TEL-` / `Discovery` / `Normativo`); cada PR que documenta uma **tela** DEVE indicar a(s) etapa(s) do fluxo em que ela aparece — campo **Etapa do fluxo** = `ETP-xxx` do `flow-map.md`.
 
 > **Campo «Etapa do fluxo» — quando preencher (evita a dependência circular PR ↔ flow-map):**
 > neste passo o campo fica **literalmente** com o marcador `— (pendente Passo 4.7)`. **Nunca inventar `ETP-xxx`.**
@@ -443,7 +444,7 @@ Para cada PR que documenta uma tela, preencher a tabela **Inventário de campos*
 - **Origem das opções** sempre declarada, com a referência (`enum:SituacaoCadastral`, `endpoint:GET /contabilistas`).
 - Preencher também os blocos **Grid / listagem** (colunas, ordenação default, paginação, mensagem de vazio) e **Comportamento dos filtros** (aplica ao alterar ou por botão, AND/OR, limpar todos, persistência, dependências entre filtros).
 
-**Onde colher:** os RF de `requirements.md` costumam já enumerar campos, tipos e valores no enunciado EARS e nos cenários BDD — varrer primeiro. Depois `enumerations[]` do `data-model.json`, o `screens-manifest.json` (quando houver protótipo colhido) e, por último, o protótipo em `inputs/` para máscara, default e comportamento.
+**Onde colher:** os RF de `requirements.md` costumam já enumerar campos, tipos e valores no enunciado EARS e nos cenários BDD — varrer primeiro. Depois `enumerations[]` do `data-model.json`, o `screens-manifest.json` com o print `screens/<TEL>.png` (tela instalada na instância) e, por último, protótipo do cliente em `inputs/` para máscara, default e comportamento. Tipo de campo segue o que a Core UI oferece (choice, reference, date, string…; ver `.claude/rules/harness/servicenow-ui.md`): campo que a tela clássica não faz vira GAP para a `spec-iterate`, não comportamento inventado.
 
 > **Screenshot não substitui a tabela.** Anexar imagem da tela é bem-vindo como complemento; o inventário textual é obrigatório porque o agente implementador não lê imagens.
 
@@ -522,7 +523,7 @@ IDs `FLX/ETP/TEL/TRS-\d{3}`, células vazias = `—`) vive no template; não re-
 **Pré-requisito de ordem:** só rodar **depois** do Passo 4 (PR redigidos) — a seção `## Telas` deriva dos PR. Ao terminar, este passo **fecha** o campo «Etapa do fluxo» dos PR (item 4) e dispara o relint do delta (fim do Passo 4.5).
 
 1. **Derivar Fluxos:** AS-IS dos processos do legado (`PROC-xxx` de `legacy.md`, quando existirem); TO-BE do discovery e da visão.
-2. **Derivar Telas:** uma linha por tela documentada nos PR de `product-requirements.md` (RF/PR rastreados); Transições condicionadas pelas RN de `business-rules.md`.
+2. **Derivar Telas:** uma linha por tela documentada nos PR de `product-requirements.md` (RF/PR rastreados), com o **mesmo `TEL-`** da especificação funcional e do `screens-manifest.json` (nunca numeração própria). Screenshot = `screens/<TEL>.png` gerado pelo `sn-capture`, ou `—` se ainda não capturado. Transições condicionadas pelas RN de `business-rules.md`. Com o manifesto presente, rodar o validador com `--manifest outputs/spec/screens-manifest.json` (divergência vira AVISO).
 3. **Validar até exit 0:** rodar `python3 ../tools/check-flowmap.py outputs/spec/flow-map.md` e corrigir todos os ERROs; tratar ou justificar os AVISOs. Caminho relativo ao SKILL.md, conforme [`../tools/references/paths.md`](../tools/references/paths.md) — válido em qualquer espelho da skill (`skills/`, `.cursor/skills/`, `.claude/skills/`, `plugin/skills/`).
 4. **Cobertura e fechamento dos PR:** colar o bloco MÉTRICAS na seção `## Cobertura` do próprio `flow-map.md` e **substituir o marcador `— (pendente Passo 4.7)`** do campo **Etapa do fluxo** pelos `ETP-xxx` reais em cada PR de tela (ver Passo 4). Só aqui os IDs passam a existir.
 5. **Sync-log:** registrar na linha agregada da execução (Seção A):
@@ -603,7 +604,7 @@ inclusive as linhas de sync-log que eles exigem (`modulos-kickoff:`, `PROSE_LINT
 - [ ] Passo 0 executado: premissas da visão derivadas dos dados, 3 perguntas de validação respondidas
 - [ ] `requirements.md` com **matriz insumo→RF** preenchida (ou `QA-NN` em `## Questões em aberto`) e **tabela TO-BE de negócio**
 - [ ] Mapa de telas/jornadas do insumo (se existir): cada entrada mapeada a ≥ 1 RF ou `QA-NN` na matriz de cobertura
-- [ ] Toda RN nova com origem identificável (prototype.md, benchmark.md, F-xxx ou decisão explícita)
+- [ ] Toda RN nova com origem identificável (tela `TEL-` da instância, benchmark.md, F-xxx ou decisão explícita)
 - [ ] **Bandas operacionais** conferidas contra `../tools/references/spec-requirements-depth.md` §7; faixas 🔴 corrigidas ou justificadas com `QA-NN`
 - [ ] Nenhum RF/PR descreve contrato de API, stack ou detalhe de segurança de baixo nível (fronteira negócio/técnico)
 
@@ -643,7 +644,7 @@ inclusive as linhas de sync-log que eles exigem (`modulos-kickoff:`, `PROSE_LINT
 | `RF_EARS_PATTERN` | Todo RF usa exatamente 1 dos 5 padrões EARS (ref §2) |
 | `MUST_INFLATION` | `Must` ≤ 50% dos RFs por módulo (ref §6-7) |
 | `RF_RNF_MATRIX` | Matriz RF↔RNF presente em `requirements.md` |
-| `PROTOTYPE_READ` | `prototype.md` lido integralmente antes de redigir os 6 artefatos, quando existir |
+| `PROTOTYPE_READ` | tabela de telas `TEL-` da `especificacao-funcional.md` lida (e o `screens-manifest.json`, quando existir) antes de redigir os 6 artefatos. A instância é o protótipo (A2) |
 | `PROSE_LINTED` | Lint de prosa executado conforme o Passo 4.5 (carga dos estilos confirmada, triagem 🟡/⚪, relint do delta) e linha `PROSE_LINTED:` no sync-log |
 
 ---
@@ -654,7 +655,7 @@ inclusive as linhas de sync-log que eles exigem (`modulos-kickoff:`, `PROSE_LINT
 - Não cria `GAP-XXX` — essa numeração é exclusiva de `spec-iterate`; lacunas entram como `QA-NN` em `## Questões em aberto`
 - Não documenta o AS-IS do legado — isso é `spec-legacy`; aqui só se consulta `legacy.md`/`legacy-analysis.md` como insumo
 - Não analisa mercado ou concorrência — isso é `spec-benchmark`; aqui só se consome `benchmark.md` como insumo
-- Não gera protótipo, código ou telas — isso é `spec-prototype`; aqui só se lê `prototype.md` quando existir
+- Não gera telas, código nem app — as telas saem do `sn-scaffold` (instância) e os prints do `sn-capture`; aqui só se leem a tabela `TEL-`, o `screens-manifest.json` e os prints
 - Não gera backlog, tasks ou work items — fase posterior (`spec-tasks` em diante)
 
 ---
@@ -666,7 +667,7 @@ inclusive as linhas de sync-log que eles exigem (`modulos-kickoff:`, `PROSE_LINT
 | `spec-ingest` | — | `discovery-document.md`, `context-map.md` — insumos de visão, RF e RN |
 | `spec-legacy` | — | `legacy.md` (RN legado), `legacy-analysis.md` (Reuse/Replace/Retire), `threat-model.md` (RNF de compliance) — quando existir legado |
 | `spec-benchmark` | — | `benchmark.md` — posicionamento, gaps de paridade, modelo de negócio |
-| `spec-prototype` | `product-vision.md`, `requirements.md`, `product-requirements.md` (ramo A) | `prototype.md` — leitura obrigatória antes de redigir os 6 artefatos, quando existir |
+| `sn-scaffold` / `sn-capture` | `data-model.previa.json`, tabela `TEL-` (Explore) | `screens-manifest.json` e `screens/<TEL>.png` — telas da instância, lidas antes de redigir os 6 artefatos |
 | `spec-iterate` | `product-vision.md`, `business-rules.md`, `requirements.md`, `product-requirements.md`, `modules.md` | `GAP-XXX` a partir dos `QA-NN` registrados; rerroda esta skill só com tag `⚠️ REQUER spec-product` |
 | `spec-tech-rules` | `requirements.md`, `product-requirements.md` (Fase 6.5) | `tech-rules/*.mdc` — regras técnicas de implementação |
 
@@ -674,4 +675,4 @@ inclusive as linhas de sync-log que eles exigem (`modulos-kickoff:`, `PROSE_LINT
 
 ## Próxima etapa
 
-→ **`spec-prototype`** (se ainda não rodou) ou **`spec-iterate`** (reconciliação e GAPs).
+→ **`spec-iterate`** (reconciliação e GAPs). Se o `flow-map.md` mudou tela, voltar ao `sn-scaffold` e ao `sn-capture` para regerar a instância e os prints.

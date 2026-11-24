@@ -160,6 +160,29 @@ Vale para o `debug-report.md` e para a devolutiva no chat. Em especial: hipótes
 
 ---
 
+## Alvo ServiceNow — onde está a evidência e como se corrige
+
+Neste fork o código é o app Fluent em `app/` (escopo lido de `app/now.config.json`), instalado na
+instância só por `npm run reinstall`. Não há servidor local para subir nem stdout para ler: a
+evidência está na instância. As etapas abaixo continuam valendo; muda a origem do `EVID-NN`.
+
+| Etapa | No alvo ServiceNow |
+|-------|--------------------|
+| D — triagem de dado e configuração | Registro, role do usuário, propriedade do app (`sys_properties` do escopo), choice e ACL conferidos na instância (list com filtro, `sys_user_has_role`, `sys_security_acl`) **antes** de instrumentar. Dado do seed é fictício (`ficticio = true`); registro ausente no seed é classe (b) |
+| E — instrumentação | `gs.debug/info/warn/error` no script de servidor (`app/src/server/**`) com prefixo `[DEBUG-<TASK>]`, `sys_id` e ID da spec, nunca CPF/CNPJ; nunca `console.log`, `gs.log`, `gs.print` (RN-SN-12). Propriedade de debug do escopo ligada só durante a sessão e desligada no fim (RN-SN-102) |
+| F — reprodução | `npm run reinstall` com o commit atual e reprodução como o papel do bug: impersonate do usuário demo da role (nunca admin — ACL muda o resultado). Bug de ACL reproduzido como admin não está reproduzido |
+| G — leitura | **System Log** (`syslog`, filtro pela fonte do escopo e pela mensagem `[DEBUG-<TASK>]`); **execution details** — Script Debugger / Session Debug (Business Rule, ACL, SQL) para ver qual BR/ACL rodou e em que ordem; **Flow execution details** (contexto do flow, passo que falhou); **resultado ATF** (`sys_atf_result` e o recibo `outputs/spec/auditorias/atf/<STORY>.json`, com `status`, `commit` e horário) |
+| H — correção | Diff mínimo no `.now.ts` ou no script de `app/src/server/`; nunca correção feita pela interface da instância sem voltar para o git. Teste de regressão = `Test()` ATF em `app/src/fluent/tests/<STORY>.now.ts` com o caso negativo que reproduz o bug (RED) e passa depois do fix (GREEN). Arquivo gerado (`// gerado por sn-scaffold`/`sn-seed`) não se edita: corrige-se o `data-model.json` e regera |
+| I — verificação | `npm run reinstall` → `npm run atf -- --story <ID>` → recibo verde **do commit do fix**; `EVID-NN` novo do System Log mostrando o ponto que falhava agora correto; `npm run capture -- --story <ID>` quando o bug era de tela |
+| K — limpeza | Logs `[DEBUG-<TASK>]` removidos ou rebaixados para `gs.debug`, propriedade de debug em `false`, `npm run reinstall` final |
+
+- Formato do `EVID-NN` na instância: `EVID-NN — instância · syslog | sys_atf_result | flow context | session debug · <horário> · <sys_id>` seguido do trecho literal.
+- Classe (c) AMBIENTE típica: instância hibernada ou reclamada, plugin ausente, propriedade da
+  plataforma (ex.: `sn_atf.runner.enabled`), prefixo de escopo diferente do `now.config.json` (o
+  `npm run reinstall` para). Reportar com a evidência; não contornar.
+- Credencial: só os scripts (`reinstall`, `atf`, `capture`, `doutor`) carregam `.env.instancia`; o
+  agente não lê o arquivo nem escreve URL, usuário ou senha no relatório.
+
 ## Sync-log (obrigatório)
 
 Antes de iniciar, ler `outputs/spec/sync-log.md` (Seção A) — inclui a linha de kickoff (ver `../tools/references/task-pipeline.md` §4).

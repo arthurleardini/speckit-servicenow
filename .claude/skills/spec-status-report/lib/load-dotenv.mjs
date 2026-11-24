@@ -5,7 +5,8 @@
 //   1. <skill>/.env                       — .env próprio desta skill
 //   2. <root>/.env                        — .env do repositório do projeto
 //
-// Fork ServiceNow (item 27): o candidato <skill>/../spec-tasks-azure/.env saiu com a skill.
+// Fork ServiceNow (itens 27 e 31): não há mais .env de publicador vizinho — o backlog vai para o
+// GitHub pelo `sn-tasks-github`, e a credencial da instância (`.env.instancia`) não é lida aqui.
 //
 // Variáveis já presentes em process.env sempre vencem (permite override em CI).
 

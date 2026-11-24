@@ -5,7 +5,7 @@ description: >
   ETAPA A — Auditoria ativa: o agente varre todos os artefatos e gera um "Relatório de Revisão"
   com problemas detectados, pontos cegos e inconsistências — formatado como perguntas diretas
   ao consultor. ETAPA B — Resposta e propagação: consultor responde no arquivo de respostas
-  (gaps-answers.md ou diretamente em gaps.md), e o agente propaga decisões para protótipo e docs.
+  (gaps-answers.md ou diretamente em gaps.md), e o agente propaga decisões para a instância (via sn-scaffold) e docs.
   Formato GAP-XXX com 13 campos. Saídas: gaps.md + gaps-answers.md + sync-log.md.
 version: "1.4"
 updated: "2026-10-21"
@@ -25,7 +25,7 @@ Regras gerais em [`spec/SKILL.md`](../spec/SKILL.md) seção «Sync-log como mem
 
 **Etapa A:** varrer ativamente todos os artefatos e **revelar ao consultor** o que pode ter passado despercebido — inconsistências, pontos cegos, cenários não cobertos, regras conflitantes.
 
-**Etapa B:** receber as respostas do consultor e **propagar as decisões** para protótipo e documentação de forma rastreável.
+**Etapa B:** receber as respostas do consultor e **propagar as decisões** para a documentação e, quando a decisão muda tela ou tabela, para a instância (regerar pelo `sn-scaffold`, reinstalar com `npm run reinstall` e recapturar com `sn-capture`) de forma rastreável. A instância é o protótipo (A2).
 
 **Regra de ouro:** um GAP-XXX só está fechado quando (1) tem decisão específica em Answers, (2) foi propagado para todos os arquivos em "Afeta", e (3) entrou no `sync-log.md` no mesmo turno.
 
@@ -110,13 +110,14 @@ Vale para `gaps.md` e `gaps-answers.md`. Critério de aceite do GAP: **a pergunt
 
 ## Prioridade — GAPs de negócio (o coração do spec)
 
-O valor desta skill está em **decisões de negócio ainda abertas**, não em lista de dívidas técnicas do protótipo.
+O valor desta skill está em **decisões de negócio ainda abertas**, não em lista de dívidas técnicas da instância de protótipo.
 
 | Tipo | Incluir como GAP-XXX? | Exemplo |
 |------|----------------------|---------|
 | Competência, taxas, elegibilidade, migração do sistema legado, integrações obrigatórias, SLAs percebidos pelo usuário final, checklist documental, conflito entre normas | **Sim** — prioridade máxima | «Quem analisa quando há sobreposição entre apólice avulsa e contrato-mestre?» |
-| Auth OIDC, estado do React Router, MSW, modularização de componentes, escolha ORM | **Não** neste fluxo | Registar apenas em “Encaminhamento engenharia” ou documento fora do `gaps.md` |
-| Lacuna porque o **protótipo não implementou** funcionalidade | **Não** como GAP — em fidelidade Baixa/Média é esperado; em fidelidade **Alta** é defeito do protótipo (`SCREEN_INVENTORY_COMPLETE`) → devolver ao `spec-prototype` | Só GAP se a **regra de negócio** para o produto final estiver indefinida |
+| Escolha entre Business Rule e Flow, nome de Script Include, estrutura de pastas em `app/src/`, ACL de linha ainda não escrita | **Não** neste fluxo | Registar apenas em “Encaminhamento engenharia” ou documento fora do `gaps.md` |
+| Lacuna porque a **instância ainda não tem** a funcionalidade (BR, Flow, UI Action escritos por story) | **Não** como GAP — o Explore instala só tabela, form, list, menu, roles e seed; a lógica vem no Deliver (`sn-implement`). Tela `TEL-` sem rota ou sem print é defeito do Explore → devolver ao `sn-scaffold`/`sn-capture` | Só GAP se a **regra de negócio** para o produto final estiver indefinida |
+| Limite da plataforma que muda o que o negócio pediu (Core UI não faz o painel pedido, plugin ausente, licença do papel) | **Sim** — o negócio decide entre aceitar a forma da plataforma ou pagar a customização | «O painel do coordenador pode ser um report de barras em vez de tela própria?» |
 
 **Quota mínima:** para projetos com volume normativo alto (ex.: seguros, tributário, setores regulados), produzir **≥ 12 GAPs de negócio** na Etapa A ou justificar na capa por que há menos (ex.: cliente já fechou workshops).
 
@@ -131,9 +132,10 @@ Varre sistematicamente **todos os artefatos existentes** em `outputs/spec/` e le
 - Inconsistências entre documentos
 - Cenários de negócio não cobertos pelos RF
 - Regras de negócio sem reflexo na UI
-- Jornadas da persona sem cobertura no protótipo
+- Jornadas da persona sem tela `TEL-` instalada na instância
 - Dados mensuráveis prometidos sem baseline definido
 - Pontos cegos típicos de discovery (o que o consultor provavelmente não perguntou)
+- Pontos cegos de plataforma ServiceNow — ver «Pontos cegos de plataforma» abaixo
 
 Como base da varredura, executar `python3 ../tools/extract-gaps.py` (caminho relativo ao
 SKILL.md, conforme [`../tools/references/paths.md`](../tools/references/paths.md)) — ele extrai de
@@ -156,14 +158,15 @@ que está nos dois e fecha a saída com os GAPs abertos de lá que ainda não ch
 | `business-rules.md` | RN do legado sem status no novo produto; RN nova sem origem; conflitos não resolvidos |
 | `requirements.md` | RF sem 3 BDD; RNF sem métrica; RFs Must sem correspondência no roadmap Now; **buracos por módulo** — linha no índice modular sem RF Must e sem GAP na coluna Lacunas; seções `## Módulo:` em falta para módulos com RF; matriz insumo→RF com linhas órfãs; IDs RF fora do padrão `RF-MOD-XXX-NN` sem justificativa no kickoff |
 | `product-requirements.md` | PR sem RF ligado; estados de UI incompletos; TTFV ausente |
-| `prototype.md` *(se existir)* | Rotas sem linha na tabela UI→negócio; RN-NOVO-xxx não refletidas; estados faltando |
-| `src/` *(se existir)* | Componentes sem linha em prototype.md; lógica de negócio sem RN documentada |
-| **Colheita do protótipo** *(se existir protótipo)* | Inventário real de telas × `flow-map.md` × PRs — três camadas (manifesto → runtime → estático); ver «Colheita do protótipo» abaixo |
+| `outputs/explore/especificacao-funcional.md` *(tabela de telas `TEL-`)* | `TEL-` sem tabela, tipo, visão ou papel; RN-NOVO-xxx sem tela onde apareça |
+| `app/src/fluent/` *(se existir)* | Tabela ou campo do app sem RF/RN; `Table()` divergente do `data-model.previa.json`/`data-model.json` |
+| **Colheita das telas da instância** *(se existir `screens-manifest.json`)* | Inventário real de telas (rotas da instância) × `flow-map.md` × PRs; ver «Colheita das telas da instância» abaixo |
+| **Pontos cegos de plataforma** | Upgrade/skip, cross-scope, licença por papel, plugin ausente; ver «Pontos cegos de plataforma» abaixo |
 | `flow-map.md` *(se existir)* | Avisos do `check-flowmap.py` (telas órfãs, fluxos sem etapas, estados sem tela) ainda sem tratamento/justificativa na seção `## Cobertura` |
 | **Auditoria da amarração técnica** *(só quando as fases técnicas já rodaram — existe `data-model.json` e/ou `api-contracts.yaml`)* | Avisos e métricas do `check-flowmap.py --data-model`/`--contracts` sobre a `## Amarração Técnica` — ver «Auditoria da amarração técnica» abaixo |
 | `hld.md` *(se existir)* | Avisos do `check-hld.py` (container órfão, ADR sem alternativa, decisão das rules sem ADR, delta AS-IS ausente no brownfield) ainda sem tratamento na seção `## Cobertura`; RNF com «Risco aceito» sem dono nem data de revisão; módulo `N/A` na decomposição que voltou ao escopo |
 | `modules.md` *(se existir)* | Módulos sem correspondência em `requirements.md`/`business-rules.md`/`product-requirements.md`; aliases divergentes |
-| `design-system.md` *(se existir)* | Tokens/componentes sem uso refletido em `prototype.md` ou `product-requirements.md` |
+| `design-system.md` *(se existir)* | Tokens/componentes sem uso refletido em `product-requirements.md` (a Core UI clássica não usa tokens próprios: ver `.claude/rules/harness/servicenow-ui.md`) |
 | `## Questões em aberto` de qualquer artefato acima | Toda entrada `QA-NN` ainda sem conversão para `GAP-XXX`. Formato canônico da seção — mesma tabela `# / Pergunta / Evidência-contexto / Bloqueia próxima fase?` — definido em [`../tools/references/task-pipeline.md`](../tools/references/task-pipeline.md) §2; qualquer skill que grave `## Questões em aberto` fora desse formato é inconsistência a reportar |
 | **Lint de prosa** (todos os `.md` de negócio acima) | Termos vagos/não-testáveis, referentes ambíguos e critérios de aceitação sem gatilho EARS — ver «Lint de prosa na varredura» abaixo |
 
@@ -191,30 +194,40 @@ Parte obrigatória da varredura da Etapa A — o mesmo lint do Passo 4.5 da `spe
    - Demais ocorrências (termo vago em texto de apoio, `EngProc.PronomesVagos`) → ⚪ melhoria de qualidade
 4. Registrar no `sync-log.md`, junto da linha da Etapa A: `PROSE_LINTED: ocorrencias=<N> · modo=<vale|llm>`.
 
-### Colheita do protótipo (quando existe protótipo)
+### Colheita das telas da instância (quando existe `screens-manifest.json`)
 
-Parte da varredura da Etapa A — só roda quando existe protótipo (`prototype.md` ou diretório de protótipo, ex.: `src/`). O protótipo pode ser HTML puro, React ou qualquer stack (inclusive gerado por skills custom de projeto) — a colheita **nunca assume formato de código-fonte**. Três camadas, na ordem; usar a primeira viável:
+Parte da varredura da Etapa A. No Speckit ServiceNow não há protótipo HTML: a instância é o
+protótipo (A2). O `sn-scaffold` grava `outputs/spec/screens-manifest.json` depois do build, com uma
+entrada por `TEL-` (`id`, `title`, `route` da instância — ex.: `/<tabela>_list.do` ou
+`/<tabela>.do?sys_id=…` do registro demo —, `type` form/list/report, `role`, `table`,
+`screenshot`), e o `sn-capture` grava `outputs/spec/screens/<TEL>.png` na visão do papel
+(impersonate do usuário demo). A colheita **lê esse manifesto**; não serve nem varre HTML.
 
-**Camada a — Manifesto (preferida).** Existe `outputs/spec/screens-manifest.json` (contrato em [`../tools/references/screens-manifest.md`](../tools/references/screens-manifest.md); exemplo em [`../tools/references/screens-manifest.example.json`](../tools/references/screens-manifest.example.json))? Rodar:
+**Cross-check (determinístico).** Contrato do manifesto em
+[`../tools/references/screens-manifest.md`](../tools/references/screens-manifest.md). Rodar:
 
 ```bash
 python3 ../tools/check-flowmap.py outputs/spec/flow-map.md --manifest outputs/spec/screens-manifest.json
 ```
 
-Os `AVISO:` do cross-check são insumo direto do Relatório de Revisão. **Validador ausente** (script fora do espelho de skills, sem Python 3, timeout) → registrar `TOOL_UNAVAILABLE:check-flowmap (motivo curto)` no `sync-log.md` e fazer o cross-check tela/rota por leitura (marcado `[colheita-llm]`, como a camada c) — nunca tratar ferramenta ausente como flow-map inválido.
+Os `AVISO:` do cross-check são insumo direto do Relatório de Revisão. **Validador ausente** (script fora do espelho de skills, sem Python 3, timeout) → registrar `TOOL_UNAVAILABLE:check-flowmap (motivo curto)` no `sync-log.md` e fazer o cross-check tela/rota por leitura (marcado `[colheita-llm]`) — nunca tratar ferramenta ausente como flow-map inválido.
 
-**Camada b — Runtime (sem manifesto, protótipo executável em navegador).** Servir o protótipo e inventariar o DOM renderizado **rota a rota** (Playwright MCP ou `npx playwright`), gerando o próprio `outputs/spec/screens-manifest.json` com `"generatedBy": "spec-iterate/colheita-runtime"` e aproveitando para capturar screenshots faltantes em `outputs/spec/screens/`. Depois, rodar o cross-check da camada a sobre o manifesto gerado. Playwright indisponível → registrar `TOOL_UNAVAILABLE:playwright` no `sync-log.md` e cair para a camada c.
+**Conferências do manifesto (análise do modelo, `[colheita-llm]`):**
 
-**Camada c — Estático (melhor esforço).** Parse dos arquivos do protótipo pelo modelo (rotas, campos, ações e estados inferidos do markup/código); gerar o manifesto marcado com `"partial": true`, registrar `HARVEST_PARTIAL` no `sync-log.md` e rodar o cross-check da camada a sobre o manifesto parcial.
+- toda `TEL-` da `especificacao-funcional.md` tem entrada no manifesto, `route` e `screenshot` existente em disco;
+- `table` do manifesto existe em `data-model.previa.json`/`data-model.json` e em `app/src/fluent/tables/`;
+- `role` da tela é uma role do escopo (`<escopo>.<papel>`, escopo lido de `app/now.config.json`), e o print foi tirado nessa role;
+- campos visíveis no print × Inventário de campos do PR da tela.
 
-**Modo degradado (`camada=skipped`):** protótipo existe mas nenhuma camada é viável (ex.: só Figma/prints, ou `flow-map.md` ausente por `FLOWMAP_SKIPPED`) — justificar no `sync-log.md`.
+**Sem manifesto:** o Explore não fechou (o `fecho-explore` exige rota e PNG para toda `TEL-`).
+Registrar `camada=skipped` com o motivo no `sync-log.md` e devolver ao `sn-scaffold` + `npm run reinstall` + `sn-capture`. Não gerar manifesto à mão nem por varredura de DOM.
 
 **Cruzamentos que geram perguntas/GAPs no Relatório de Revisão** (P-xxx → GAP-XXX pela regra de mapeamento; formato padrão de 13 campos):
 
 | Cruzamento | Como detectar |
 |------------|---------------|
-| Tela no protótipo ausente do flow-map/PR | **Determinístico** — aviso «manifesto: tela ... ausente do flow-map» do `check-flowmap.py --manifest` |
-| Tela no flow-map sem protótipo | **Determinístico** — aviso «flow-map: tela TEL-xxx ausente do manifesto» |
+| Tela na instância (manifesto) ausente do flow-map/PR | **Determinístico** — aviso «manifesto: tela ... ausente do flow-map» do `check-flowmap.py --manifest` |
+| Tela no flow-map sem rota na instância | **Determinístico** — aviso «flow-map: tela TEL-xxx ausente do manifesto» |
 | Rota divergente (mesmo TEL, rotas diferentes) | **Determinístico** — aviso «rota divergente para TEL-xxx» |
 | Campo presente na tela e ausente do PR correspondente (e vice-versa) | **Análise do modelo** — `fields[]` do manifesto × PR da tela em `product-requirements.md` (o campo «Etapa do fluxo» liga PR ↔ ETP/TEL) |
 | Ação/estado da tela sem RN/cenário | **Análise do modelo** — `actions[]`/`states[]` do manifesto × `business-rules.md` / cenários BDD de `requirements.md` |
@@ -222,7 +235,24 @@ Os `AVISO:` do cross-check são insumo direto do Relatório de Revisão. **Valid
 Deixar explícito no Relatório: o cross-check **tela/rota é determinístico** (match por `id` OU por `route` no `check-flowmap.py --manifest`); o nível **campo/ação/estado é análise do modelo** sobre o manifesto — marcar esses achados com `[colheita-llm]`.
 
 **Registro no sync-log** (gate WARNING `PROTOTYPE_HARVESTED`), junto da linha da Etapa A:
-`PROTOTYPE_HARVESTED: camada=<manifest|runtime|static|skipped> · telas_manifesto=<N> · avisos_crosscheck=<M>`
+`PROTOTYPE_HARVESTED: camada=<manifest|skipped> · telas_manifesto=<N> · avisos_crosscheck=<M>`
+
+### Pontos cegos de plataforma
+
+Parte da varredura da Etapa A. São decisões que o consultor raramente pergunta e que a plataforma
+cobra depois. Cada achado vira pergunta ao consultor no Relatório de Revisão, em linguagem de
+negócio (o custo e o efeito, não o nome do objeto):
+
+| Ponto cego | O que procurar | Pergunta típica |
+|------------|----------------|-----------------|
+| **Upgrade / skip** | RF ou RN que só se cumpre alterando tabela, form ou script da plataforma (`task`, `incident`, `sys_user`) ou de outro app; customização onde configuração resolveria | «Para mudar a tela padrão de usuário, cada atualização anual da plataforma vai exigir revisão manual. Vale o custo, ou a tela do app basta?» |
+| **Cross-scope** | Leitura ou escrita em tabela ou Script Include de outro escopo além do previsto (ex.: `sys_user` só leitura); integração com outro app da instância | «O app precisa gravar no cadastro de outro sistema da instância, ou só ler?» |
+| **Licença fulfiller × requester** | Papel que só consulta ou só abre pedido recebendo role que grava em tabela do app (passa a contar como licença de fulfiller) | «Esse público só consulta, ou também altera registro? Quem altera precisa de licença paga» |
+| **Plugin ausente** | RF que depende de plugin, spoke ou produto não ativo na instância (ex.: Performance Analytics, Integration Hub, Document Templates) | «O cliente tem licença do recurso X? Sem ele, a alternativa é Y» |
+| **Limite da Core UI** | Tela pedida que a Core UI clássica não faz (painel, layout livre, workspace) — ver `.claude/rules/harness/servicenow-ui.md` | «Um report simples ou uma lista agrupada atende no lugar do painel?» |
+
+O que vier daqui com decisão de arquitetura vai também como insumo do ADR «configurar × customizar»
+da `spec-hld`.
 
 ### Auditoria da amarração técnica (quando as fases técnicas já rodaram)
 
@@ -287,8 +317,8 @@ se o usuário é notificado, ou se há retry automático.
 
 ### 🟡 Inconsistências entre documentos
 
-**[P-002] RN-NOVO-COB-001 contradiz prototype.md /cobranca/novo**
-A regra diz que boleto vencido bloqueia novo pedido, mas o protótipo permite criar pedido mesmo
+**[P-002] RN-NOVO-COB-001 contradiz a tela TEL-014 da instância**
+A regra diz que boleto vencido bloqueia novo pedido, mas a tela da instância permite criar pedido mesmo
 com boleto em atraso (sem validação visível na rota /cobranca/novo).
 → **Pergunta:** a validação deve acontecer: a) no momento de criar pedido, b) no checkout, ou c) só no pagamento?
 
@@ -333,7 +363,7 @@ ser o `gaps.md` desta skill, em `outputs/spec/`. A passagem de um para o outro a
 1. Importar para o `gaps.md` do Plan todo GAP do Explore com status `⏳ Aguardando` ou
    `🟡 Parcialmente`, com o **mesmo número** (o `GAP-003` do Explore continua `GAP-003`), os 13
    campos preenchidos a partir da linha de lá e `Origem: outputs/explore/gaps.md#GAP-003` no campo
-   **Fonte**. Renumerar quebra o rastreio: atas, protótipo e documentos do Explore citam o número
+   **Fonte**. Renumerar quebra o rastreio: atas, telas da instância e documentos do Explore citam o número
    antigo.
 2. GAP `✅ Respondido` no Explore não é importado — a decisão já está nos documentos do Explore, que
    a `spec-ingest` leu. O número dele continua ocupado.
@@ -358,7 +388,7 @@ Colar as respostas por ID (P-001: "a transação deve ser revertida..."). O agen
 **Caminho B — `gaps-answers.md`:**
 Preencher o arquivo de respostas (ver estrutura abaixo). Na próxima invocação de `spec-iterate`, pedir: "propagar respostas de gaps-answers.md".
 
-**Caminho C — Nova evidência (texto, documento ou protótipo) — fluxo principal de iteração:**
+**Caminho C — Nova evidência (texto, documento ou print/tela da instância) — fluxo principal de iteração:**
 
 Este é o caminho mais comum. Toda vez que chega uma nova ata, transcrição, documento ou decisão:
 
@@ -368,7 +398,7 @@ Este é o caminho mais comum. Toda vez que chega uma nova ata, transcrição, do
 
 **Quando rerrodar `spec-product`:** somente se o iterate detectar um GAP de **severidade CRÍTICA** que implique mudança estrutural — novo módulo inteiro, virada de escopo, nova persona principal. O iterate deixará isso explícito com a tag `⚠️ REQUER spec-product`. (`spec-product` é caro — 5 artefatos grandes, incluindo `modules.md`; na grande maioria das iterações a propagação cirúrgica basta.)
 
-Se a evidência vem como alteração em Figma/src/ → rodar `spec-prototype` (Análise); extrair decisões como F-xxx; depois fechar.
+Se a evidência vem como alteração na instância (tela, campo, menu) → a mudança volta para o `data-model` e o `sn-scaffold` (nunca fica só na instância), reinstala com `npm run reinstall` e recaptura com `sn-capture`; extrair decisões como F-xxx; depois fechar.
 
 ### Critério de "resposta válida" (Etapa B)
 
@@ -386,7 +416,7 @@ Molde completo em [`templates/gaps-answers.md`](templates/gaps-answers.md). Um b
 **Resposta:** a transação deve ser revertida automaticamente. O usuário recebe e-mail de notificação.
 Retry automático após 30 minutos (máx. 3 tentativas).
 **Novo F-xxx gerado?** Não — decisão tomada em reunião interna (registrar como CHAT-YYYYMMDD-1)
-**Artefatos afetados:** requirements.md §RF-PAG-001 (Cenário 3), business-rules.md (nova RN-NOVO-PAG-xxx), prototype.md (estado de erro /pagamentos/novo)
+**Artefatos afetados:** requirements.md §RF-PAG-001 (Cenário 3), business-rules.md (nova RN-NOVO-PAG-xxx), flow-map.md (TEL-012, estado de erro)
 ```
 
 Resposta ainda pendente fica registrada como `**Resposta:** [PENDENTE — levar para cliente]`.
@@ -403,13 +433,13 @@ Para cada resposta em `gaps-answers.md` (ou no chat):
 3. **Atualizar todos os artefatos listados em "Artefatos afetados":**
    - `business-rules.md` → adicionar/ajustar RN-NOVO-xxx
    - `requirements.md` → corrigir cenário BDD ou RNF
-   - `prototype.md` → atualizar tabela UI→negócio ou estados
+   - tela da instância (`TEL-`) → ajustar `data-model`/`especificacao-funcional.md`, rodar `sn-scaffold` + `npm run reinstall` + `sn-capture`
    - `product-requirements.md` → atualizar estados de UI ou PR
    - `flow-map.md` → criar/ajustar TEL/ETP/TRS afetados e **revalidar com `python3 ../tools/check-flowmap.py outputs/spec/flow-map.md` até exit 0**
    - `modules.md` → atualizar se a decisão alterar catálogo modular (raro)
 4. **Registrar em `sync-log.md`** no mesmo turno, incluindo coluna `Decisor` (consultor / cliente / nome)
 
-**GAPs de colheita (origem na «Colheita do protótipo» da Etapa A):** quando a resposta fecha um GAP de colheita, a propagação atinge explicitamente **três destinos** — (1) `flow-map.md`: criar/ajustar telas, etapas e transições e revalidar como no item 3 acima; (2) `product-requirements.md`: campos, ações e estados do PR da tela (incluindo o campo «Etapa do fluxo»); (3) `prototype.md`: tabela UI→negócio e estados. Registrar a direção na Seção B (`proto→doc` ou `doc→proto`).
+**GAPs de colheita (origem na «Colheita das telas da instância» da Etapa A):** quando a resposta fecha um GAP de colheita, a propagação atinge explicitamente **três destinos** — (1) `flow-map.md`: criar/ajustar telas, etapas e transições e revalidar como no item 3 acima; (2) `product-requirements.md`: campos, ações e estados do PR da tela (incluindo o campo «Etapa do fluxo»); (3) instância: `sn-scaffold` + `npm run reinstall` + `sn-capture`, para que `screens-manifest.json` e `screens/<TEL>.png` reflitam a decisão. Registrar a direção na Seção B (`proto→doc` ou `doc→proto`, em que `proto` = instância).
 
 **GAPs de amarração (origem na «Auditoria da amarração técnica» da Etapa A):** o fechamento propaga para a seção `## Amarração Técnica` do `flow-map.md` (adicionar/corrigir linha `| Tela | Entidades | Endpoints |`) e revalida como no item 3, repassando `--data-model`/`--contracts`. Quando a decisão implica mudança no próprio `data-model.json` ou `api-contracts.yaml` (nova entidade, endpoint novo/renomeado), **a mudança técnica em si é das skills 6a (`spec-data-model`) / 6b (`spec-api-contracts`)** — o iterate registra o encaminhamento no GAP e no `sync-log.md` (direção `doc→doc`) e ajusta apenas a amarração; endpoint órfão aceito como sem UI ganha justificativa registrada no `sync-log.md`.
 
@@ -519,7 +549,7 @@ Data de fechamento: YYYY-MM-DD
 | `outputs/spec/gaps.md` | [`templates/gaps.md`](templates/gaps.md) |
 | `outputs/spec/gaps-answers.md` | *(criado pelo consultor com base no Relatório de Revisão)* |
 | `outputs/spec/sync-log.md` | [`templates/sync-log.md`](templates/sync-log.md) |
-| `outputs/spec/screens-manifest.json` *(só camadas runtime/estático da colheita, quando o protótipo não emitiu o seu)* | contrato: [`../tools/references/screens-manifest.md`](../tools/references/screens-manifest.md) · exemplo: [`../tools/references/screens-manifest.example.json`](../tools/references/screens-manifest.example.json) |
+| `outputs/spec/screens-manifest.json` *(só leitura: quem grava é o `sn-scaffold`/`sn-capture`)* | contrato: [`../tools/references/screens-manifest.md`](../tools/references/screens-manifest.md) · exemplo: [`../tools/references/screens-manifest.example.json`](../tools/references/screens-manifest.example.json) |
 
 ---
 
@@ -569,7 +599,7 @@ Itens sem validator próprio:
 | `MIN_12_BUSINESS_GAPS` | Projetos com volume normativo alto produziram ≥ 12 GAPs de negócio na Etapa A, ou a capa justifica o número menor |
 | `BLIND_SPOTS_CHECKED` | Tabela de 10 pontos cegos típicos checada explicitamente |
 | `PROSE_LINTED` | Lint de prosa (vale/estilos `EngProc`, ou modo degradado `TOOL_UNAVAILABLE:vale` + dicionário de `Ambiguidade.yml` via LLM) rodado na varredura, com achados no Relatório de Revisão |
-| `PROTOTYPE_HARVESTED` | *(quando existe protótipo)* Colheita executada e registrada no sync-log — formato da linha na seção «Colheita do protótipo» |
+| `PROTOTYPE_HARVESTED` | *(quando existe `screens-manifest.json`)* Colheita das telas da instância executada e registrada no sync-log — formato da linha na seção «Colheita das telas da instância» |
 | `UI_BINDING_AUDITED` | *(quando existe `data-model.json` e/ou `api-contracts.yaml`)* Auditoria da amarração executada e registrada no sync-log — formato da linha na seção «Auditoria da amarração técnica»; avisos convertidos em perguntas/GAPs |
 | `VAGUE_ANSWERS_FLAGGED` | Respostas vagas em `gaps-answers.md` mantidas com `Status: aberto` em vez de fechadas |
 | `REQUER_SPEC_PRODUCT_TAGGED` | GAP crítico com mudança estrutural (novo módulo, virada de escopo, nova persona principal) sinalizado com `⚠️ REQUER spec-product` |
@@ -580,7 +610,7 @@ Itens sem validator próprio:
 
 - Não gera work items, tasks ou backlog no ADO — isso é fase posterior (`spec-tasks` em diante)
 - Não rerroda `spec-product` inteiro para cada nova fonte de informação — só quando um GAP crítico exigir mudança estrutural (`⚠️ REQUER spec-product`)
-- Não trata dívida técnica do protótipo (auth, roteamento, ORM, modularização de componentes) como `GAP-XXX` de negócio
+- Não trata dívida técnica da instância de protótipo (lógica ainda não escrita, ACL de linha pendente, script Fluent) como `GAP-XXX` de negócio
 - Não define arquitetura TO-BE, RNF técnico profundo nem contratos de API — isso é da cadeia técnica pós-discovery (`spec-tech-rules` em diante)
 
 ---
@@ -593,6 +623,6 @@ Itens sem validator próprio:
 | `spec-legacy` | — | `legacy.md`, `architecture.md`, `legacy-analysis.md`, `threat-model.md` — auditados quando existem |
 | `spec-benchmark` | — | `benchmark.md` — auditado por gaps de paridade sem RF |
 | `spec-product` | GAP crítico com tag `⚠️ REQUER spec-product` | `product-vision.md`, `business-rules.md`, `requirements.md`, `product-requirements.md` — auditados e corrigidos cirurgicamente |
-| `spec-prototype` | — | `prototype.md`, `src/`, `screens-manifest.json` — auditados (colheita do protótipo); inconsistências viram `GAP-XXX` |
+| `sn-scaffold` / `sn-capture` | `data-model.previa.json`, tabela `TEL-` | `app/src/fluent/`, `screens-manifest.json`, `screens/<TEL>.png` — auditados (colheita das telas da instância); inconsistências viram `GAP-XXX` |
 | `spec-report` | `gaps.md`, `sync-log.md` | Sumário executivo da capa (top GAPs críticos) |
 | `spec-tasks` | `gaps-document.md` (mecanismo próprio de GAP na Fase 8) | — (não é dono de `gaps.md`; usa seu próprio arquivo) |

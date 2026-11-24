@@ -8,12 +8,14 @@ description: >
   containers (C4 níveis 1 e 2 em Mermaid), decomposição módulo → container, integrações externas,
   fluxos arquiteturais, topologia, RNF → tática ou risco aceito, fronteiras de confiança, ADRs com
   alternativas rejeitadas, riscos com spikes e delta AS-IS → TO-BE. Não redecide a stack: lê as
-  decisões que já estão nas rules e registra cada uma como ADR. Validado por check-hld.py.
+  decisões que já estão nas rules e registra cada uma como ADR. Alvo ServiceNow: containers
+  instância/escopo do app/tabelas simuladas SIM-/GitHub e ADR-01 obrigatório «configurar ×
+  customizar». Validado por check-hld.py.
   Triggers: "desenho da arquitetura", "arquitetura TO-BE", "HLD", "high-level design", "diagrama
   de containers", "C4", "ADR", "decisão de arquitetura", "spec-hld". Conteúdo em Português do
   Brasil.
-version: "1.0"
-updated: "2026-08-25"
+version: "1.1"
+updated: "2026-11-24"
 ---
 
 # spec-hld — Desenho de Alto Nível do produto TO-BE
@@ -31,6 +33,36 @@ arquitetura, banco, autenticação e deploy, e essas decisões viram regras que 
 Esta skill é a camada **descritiva e estrutural**: pega as mesmas decisões e mostra que peças
 existem, quem fala com quem, onde cada módulo do produto vai morar e o que sustenta cada
 requisito não funcional com métrica.
+
+## Alvo ServiceNow (fork Speckit ServiceNow)
+
+O produto TO-BE é um **app escopado numa instância ServiceNow**, escrito em Fluent em `app/` e
+instalado por `npm run reinstall`. O desenho parte sempre dos mesmos containers, e o projeto
+acrescenta ou tira peças conforme as rules:
+
+| Container | O que é | Fonte |
+|-----------|---------|-------|
+| Interface Core UI | As telas `TEL-` como form, list ou report, menu, UI Action e UI Policy | `harness/servicenow-ui.md`, `outputs/spec/screens-manifest.json` |
+| Roles e ACLs | Quem lê, grava, cria e apaga cada tabela e campo | `security.mdc`, `plano-de-seguranca.md` |
+| Lógica de servidor | Business Rule, Script Include e Flow que a configuração não resolve | `architecture.mdc`, `conventions.mdc` |
+| Tabelas do negócio | As tabelas `<escopo>_<sufixo>` do `data-model.json` | `architecture.mdc` |
+| Tabelas simuladas `SIM-` | Os sistemas externos simulados, com rótulo «Simulado» e interruptor de falha | `inputs/simulacoes.md` |
+| Testes ATF | `Test()` e `TestSuite()` que provam as regras na instância | `test-strategy.mdc` |
+| Repositório GitHub | Fonte da verdade do app e da spec; backlog em issues | `deploy-and-build.mdc` |
+| now-sdk build e install | O caminho único de instalação (`npm run reinstall`) | `deploy-and-build.mdc` |
+
+- **Escopo e instância:** o escopo (`x_<código>_<app>`) e o nome do app vêm de `app/now.config.json`;
+  a instância vem do `deploy-and-build.mdc`. Nunca escrever o escopo de memória.
+- **Integrações externas:** cada sistema externo do `context-map.md` vira uma linha `INT-NN`. Se é
+  simulado, o protocolo diz qual tabela `SIM-` o representa e o que o interruptor de falha faz. A
+  instância (install pelo `now-sdk`) e o GitHub (issues) também entram como `INT-NN`.
+- **ADR-01 = configurar × customizar (obrigatório).** O primeiro ADR diz o que sai de configuração
+  nativa (dicionário, Form, List, report, menu, role, ACL, UI Policy, Data Policy) e o que exige
+  script (Business Rule, Script Include, Flow), segue a ordem de escolha da `architecture.mdc` e
+  diz o preço de cada script (teste ATF positivo e negativo, risco no upgrade). Tela que a Core UI
+  não faz vira form, list ou report simples e GAP — nunca Workspace, Service Portal ou UI Builder.
+- **Topologia:** PDI de desenvolvimento, instância de teste e produção do cliente; promoção por
+  Application Repository, nunca por update set (RN-SN-164, RN-SN-167).
 
 **Não há kickoff técnico aqui.** Esta skill **lê** as rules geradas na Fase 6.5 e registra cada
 decisão macro como um ADR (Architecture Decision Record — o registro de uma decisão de
@@ -145,7 +177,10 @@ O `<resultado-resumo>` registra:
 | `requirements/requirements.md` | Sim | Fase 6 | RNF com métrica → tática ou risco aceito (gate `NFR_TACTICS_MAPPED`); RF para dimensionar containers |
 | `tech-rules/*.mdc` (via `spec-tech-rules`, Fase 6.5) | Sim — se ausentes, solicitar execução antes | Fase 6.5 | Decisões macro que viram ADR; stack de cada container |
 | `context-map.md` | Sim | Fase 2 | Sistemas externos que precisam de linha `INT-NN` (gate `EXTERNAL_SYSTEMS_ADDRESSED`) |
-| `product-requirements/product-requirements.md` | Recomendado | Fase 6 | Superfície de UI → containers de frontend |
+| `product-requirements/product-requirements.md` | Recomendado | Fase 6 | Superfície de UI → container Interface Core UI |
+| `app/now.config.json` | Sim | `sn-scaffold` / `now-sdk init` | Escopo e nome do app nos containers da instância |
+| `screens-manifest.json` | Recomendado | `sn-scaffold` | Telas `TEL-` (rota na instância) servidas pela Interface Core UI |
+| `inputs/simulacoes.md` | Recomendado | Explore | Sistemas externos simulados → container de tabelas `SIM-` e linhas `INT-NN` |
 | `flow-map.md` (via `check-flowmap.py --json`) | Recomendado | Fase 6 | `FLX-xxx` de maior volume/risco → fluxos arquiteturais |
 | `benchmark.md` | Opcional | Fase 4 | Padrões de mercado que sustentam ou refutam uma alternativa do ADR |
 | `architecture.md` (AS-IS C4 nível 2) | Sim no brownfield | Fase 3 | Inventário de componentes → delta AS-IS → TO-BE |
@@ -202,6 +237,8 @@ A → Carregar insumos      (modules + requirements + context-map + tech-rules +
 
 B → Inventário de containers  (as peças que rodam e são implantadas sozinhas)
   ↪ PENSE: "O que roda separado? O que é só camada interna?" Camada interna NÃO é container.
+  ↪ ServiceNow: partir dos containers de «Alvo ServiceNow» (instância/escopo, tabelas, SIM-, ATF,
+     GitHub, now-sdk) e tirar ou acrescentar conforme as rules.
   ↪ A tecnologia de cada container vem da rule correspondente — não escolher aqui.
 
 C → Diagrama                  (Mermaid flowchart com subgraphs: contexto + containers)
@@ -225,6 +262,7 @@ H → Táticas por RNF           (todo RNF com métrica → tática OU risco ace
 
 I → ADRs                      (uma por decisão macro das rules + as que nasceram aqui)
   ↪ Cada ADR cita o arquivo de rule de origem e o que foi descartado.
+  ↪ ADR-01 é sempre «configurar × customizar» (validador ADR_CONFIGURE_VS_CUSTOMIZE).
 
 J → Riscos e spikes           (o que ainda pode derrubar o desenho; spike como pergunta verificável)
 
@@ -279,13 +317,14 @@ e registrar a revisão humana no sync-log.
 | `EXTERNAL_SYSTEMS_ADDRESSED` | Todo sistema externo da seção «Sistemas, integrações, contratos mencionados» do `context-map.md` tem uma linha `INT-NN`, com Direção e Estilo (síncrono/assíncrono) declarados |
 | `NFR_TACTICS_MAPPED` | Todo RNF com medida numérica em `requirements.md` aparece em `## Táticas por RNF` com tática ou com «Risco aceito — <motivo>» justificado |
 | `CONTAINERS_CONSISTENT` | Todo `CON-NN` citado em qualquer ponto do arquivo — tabelas e diagrama — existe no inventário de `## Contexto e containers` |
+| `ADR_CONFIGURE_VS_CUSTOMIZE` | ADR-01 é a decisão «configurar × customizar»: lista o que sai de configuração nativa, o que exige script (Business Rule, Script Include, Flow) e o preço do script; origem `architecture.mdc`. Conferido pelo agente — o `check-hld.py` não lê o conteúdo do ADR |
 | `HLD_VALID` | `../tools/check-hld.py` executado com **exit 0**. Exit 1 = FATAL. Degradações que rebaixam o gate a WARNING: `TOOL_UNAVAILABLE:check-hld` e `HLD_CROSS_PARTIAL` (fonte cruzada ausente) — ambas registradas no sync-log |
 
 ### WARNING — não bloqueia
 
 | Código | Verificação |
 |--------|-------------|
-| `ADR_PER_DECISION` | Toda rule de projeto em `tech-rules/` (fora `security` e `frontend-default`, que são padrão fixo da empresa) é citada na coluna Origem de algum ADR; as não citadas saem listadas |
+| `ADR_PER_DECISION` | Toda rule de projeto em `tech-rules/` (fora `security` e `frontend-default`, que o validador trata como padrão fixo) é citada na coluna Origem de algum ADR; as não citadas saem listadas |
 | `ASIS_DELTA_PRESENT` | Brownfield com `## Delta AS-IS → TO-BE` preenchido — uma linha por componente do `architecture.md` |
 | `COMPACT_MODE_DECLARED` | Modo compacto declarado no cabeçalho **e** no sync-log (`HLD_COMPACT: <motivo>`), com a lista do que ficou de fora |
 | `PTBR_STRINGS` | Todo texto legível por humanos em Português do Brasil |
@@ -297,6 +336,7 @@ A validade estrutural é dos validators acima — o agente confere além deles:
 - [ ] `python3 ../tools/check-hld.py outputs/spec/hld.md` com exit 0 e nenhum aviso não tratado
 - [ ] Bloco MÉTRICAS colado em `## Cobertura`, com cada aviso tratado ou justificado ali
 - [ ] Nenhum `[colchete]` de gabarito sobrando; tecnologia de cada container batendo com a rule
+- [ ] ADR-01 é «configurar × customizar»; escopo igual ao de `app/now.config.json`
 - [ ] Linha no `sync-log.md` com o resultado do gate e, se houver, `HLD_COMPACT` / `HLD_CROSS_PARTIAL`
 
 ## O que NÃO faz
@@ -307,7 +347,8 @@ A validade estrutural é dos validators acima — o agente confere além deles:
   usa a decomposição daqui para agrupar entidades por contexto.
 - **Não escreve contratos de API** — isso é `spec-api-contracts` (Fase 7b), que usa as linhas
   `INT-NN` daqui para separar o que é REST do que é evento.
-- **Não gera código, scaffold, IaC nem docker-compose** — isso é `spec-scaffold` (Fase 10).
+- **Não gera código nem metadado Fluent** — o app em `app/` sai do `sn-scaffold` (tabelas, telas,
+  roles, ACL de leitura) e da `sn-implement` (lógica por story).
 - **Não faz threat model** — o STRIDE do AS-IS é da `spec-legacy`; aqui só entram as fronteiras de
   confiança do TO-BE e a amarração aos `THR-xxx` existentes.
 - **Não documenta o AS-IS** — `architecture.md` é da `spec-legacy`; aqui só entra o delta.

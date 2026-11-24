@@ -474,6 +474,24 @@ Princípios que o agente precisa saber (todos implementados):
 - **`npx --no-install`** — a skill nunca instala dependência de teste por conta própria.
 - **Higiene de segredo e de ambiente** — variáveis sensíveis não são repassadas aos runners; `stderr` persistido passa por redação; variáveis que contaminam runner filho (`NODE_TEST_CONTEXT`, `NODE_OPTIONS`, …) são removidas.
 
+### Alvo ServiceNow — recibos de ATF (lidos, não executados)
+
+O teste do app roda **na instância** (ATF), não na máquina do relatório. Quem executa é o
+`npm run atf -- --story <ID>` da `sn-implement`, que grava um recibo por story (ou suíte) em
+`outputs/spec/auditorias/atf/<STORY>.json` com `status` (`success`/`failure`), `horario`, `commit`,
+`sys_id` e a lista `testes[]`. Esta skill **lê** esses recibos
+([`lib/atf-receipts.mjs`](lib/atf-receipts.mjs)) e os junta aos resultados dos runners locais:
+
+- cada `Test()` do recibo vira um caso da suíte **«ATF (recibo)»**, natureza Integração, com o
+  arquivo `app/src/fluent/tests/<STORY>.now.ts`; o recibo vermelho entra como falha;
+- recibo cujo `commit` difere do último commit de `app/src/fluent` sai com o aviso
+  `ATF_RECEIPT_STALE` — ele não prova o código atual; recibo ilegível sai como `ATF_RECEIPT_UNPARSED`;
+- a leitura acontece também com `--no-tests` (não executa nada) e nunca consulta a instância nem
+  carrega `.env.instancia`; sem a pasta, nada muda no relatório.
+
+A matriz de rastreio N1/N2/N3 do fork (`traceability.json`, `promocao.mjs --rastreio`) usa os
+mesmos recibos: N3 = recibo ATF verde do commit atual.
+
 ## Cobertura — três medidas, não uma
 
 O cliente pergunta "está coberto?" e há **três respostas diferentes**. O relatório mostra as
@@ -660,6 +678,8 @@ nas mensagens do próprio CLI. Os que **exigem reação do agente** antes de ent
 | `BUG_SEVERITY_ABSENT` | Os bugs não têm severidade — a coluna sai e a ausência é declarada; se o cliente espera a leitura, trazer `Microsoft.VSTS.Common.Severity` no snapshot |
 | `BUG_MODULE_MAP_UNKNOWN_ID` | `bug-module-map.json` cita item que não está entre os bugs coletados — corrigir o mapa |
 | `AZURE_ANCESTORS_UNAVAILABLE` | Os pais dos bugs fora do escopo não foram lidos — o módulo desses bugs saiu só das pistas do próprio card |
+| `ATF_RECEIPT_STALE` | Recibo ATF de commit anterior ao último de `app/src/fluent` — rodar `npm run reinstall` e `npm run atf -- --story <ID>` antes de entregar; não apresentar a story como testada |
+| `ATF_RECEIPT_UNPARSED` | Recibo em `outputs/spec/auditorias/atf/` ilegível — regerar pelo `npm run atf`, nunca editar à mão |
 | `AZURE_OPTIONAL_FIELDS_ABSENT` | O processo do projeto não tem `Severity` ou `ResolvedDate` (erro `TF51535`): o lote foi refeito sem eles e o backlog veio inteiro; a severidade fica fora desta geração |
 
 ### Responsabilidade do agente — não é gate do CLI
@@ -730,7 +750,7 @@ acima. O que o agente confere além deles:
 | `spec-tasks` | 7 | `tasks.json` alimenta o vínculo backlog ↔ regra de negócio |
 | `spec-test-plan` | 7a | Casos de negócio (UAT) listados ao lado dos testes automatizados |
 | `sn-tasks-github` | 9 | Publica o backlog em issues do GitHub e grava `id-map.json` + marcador `logical-id` |
-| `sn-implement` | 10 | Escreve o código e mantém os `spec_story.md` lidos como decisões |
+| `sn-implement` | 10 | Escreve o código, mantém os `spec_story.md` lidos como decisões e grava os recibos de ATF em `outputs/spec/auditorias/atf/` |
 | `spec-code-audit` | 11 | `code-audit.md` alimenta o semáforo (APROVADO/BLOQUEADO) |
 | `spec-estimate` | 7.5 | `estimate-report.md` entra como sinal de fase e contexto de delivery |
 | `spec-debug-fix` | 10c | Destino natural das falhas de teste que este relatório expõe |

@@ -1,102 +1,69 @@
 ---
-description: "{{DEPLOY_DESCRIPTION}}"
-globs: "**/Dockerfile*,**/.env*,**/docker-compose*"
+description: "Build, instalação e ciclo de vida do app ServiceNow {{APP_NAME}}: npm run reinstall como único caminho de instalação (build --frozenKeys, install, contagem, suíte de regressão, linha no sync-log), credencial fora do git, prefixo de escopo conferido, git como fonte de verdade. Triggers: instalar, buildar, publicar o app, now-sdk, .env.instancia, keys.ts, instância nova ou zerada."
+globs: "app/**,package.json,.env*"
 alwaysApply: false
 ---
 
-# Deploy e Build — {{PROJECT_NAME}}
+# Deploy e Build — {{APP_NAME}} (`{{SCOPE}}`)
 
-> **Modelo de entrega:** repositório entrega `Dockerfile` + `docker-compose.yml` para dev local.
-> Build de imagem, registry e deploy em produção são **responsabilidade do cliente**.
+## Por que esta rule existe
 
----
+A instância de desenvolvedor é volátil (reclamada depois de dias sem login). O app inteiro tem que voltar do zero, a partir do git, com um comando, sem duplicar registro e sem expor credencial. Instalação por outro caminho deixa a instância fora do que o git descreve e invalida o recibo de teste.
 
-## Dockerfile
+## Ambiente
 
-**MUST:** Multi-stage — imagem final sem ferramentas de build.
+| Item | Valor |
+|------|-------|
+| Instância | `{{INSTANCE_ALIAS}}` (release {{INSTANCE_RELEASE}}); alias do `now-sdk auth` = `{{INSTANCE_ALIAS}}` |
+| Escopo | `{{SCOPE}}`, `scopeId` em `app/now.config.json` |
+| SDK | `@servicenow/sdk` {{SDK_VERSION}} e `@servicenow/glide` {{GLIDE_VERSION}}, versões fixas em `app/package.json` e conferidas pelo `npm run doutor` |
+| Node | {{NODE_RANGE}} (raiz `package.json`) |
+| Ambientes | {{ENVIRONMENTS}}. Promoção entre instâncias por Application Repository, nunca por update set (RN-SN-164, RN-SN-167) |
 
-**MUST:** Usuário não-root no container — ver **security.mdc**.
+## Instalação: só por `npm run reinstall`
 
-```dockerfile
-{{DOCKERFILE_CONTENT}}
-```
+`npm run reinstall` (`.claude/skills/sn-reinstall/scripts/reinstall.mjs`) faz, nesta ordem:
 
----
+1. Confere que o prefixo da instância (`glide.appcreator.company.code`) é o do `app/now.config.json`; diferente → para antes de instalar (RN-SN-02).
+2. Confere todo documento do seed contra `app/src/fluent/seed/_documentos.json`.
+3. `now-sdk build --frozenKeys` — build falho para tudo (RN-SN-07).
+4. `now-sdk install --auth $SN_ALIAS` (com dados demo).
+5. Compara a contagem por tabela com `seed/_contagem.json`.
+6. Roda a suíte ATF "{{REGRESSION_SUITE}}".
+7. Escreve a linha de install no `outputs/spec/sync-log.md` (resultado e commit).
 
-## Docker Compose (dev local)
+- Proibido: `now-sdk install`, `npm run deploy` ou `now-sdk` direto no terminal para instalar; mudança feita pela interface da instância sem voltar para o `.now.ts` (RN-SN-08, RN-SN-164).
+- Idempotente: os `$id` são fixos, rodar duas vezes não duplica registro.
+- `--zerar` (reinstalação destrutiva) sempre pede confirmação humana.
+- Build sem install é permitido para checar tipos: `cd app && npx now-sdk build --frozenKeys`.
 
-```yaml
-{{DOCKER_COMPOSE_CONTENT}}
-```
+## `keys.ts` e remoção de metadado
 
-**MUST:** Rede `{{DOCKER_NETWORK}}` como `external: true` — nunca redefinir serviços de infra compartilhada.
+- `app/src/fluent/generated/keys.ts` é versionado e nunca editado à mão.
+- Campo ou objeto que some da fonte vira `deleted: true` no `keys.ts` e DELETE no install seguinte (SDK ≥ 4.14). Não há migração nem diff manual.
+- `--frozenKeys` impede que o build crie chave nova sem querer; objeto novo entra com `$id` explícito.
 
-**MUST:** `depends_on` com `condition: service_healthy` para dependências críticas.
+## Geração versus código à mão
 
----
+- Tabelas, forms, lists, menu, roles, ACL de leitura e seed saem do `sn-scaffold`/`sn-seed` a partir de `outputs/spec/data-model.json`. Mudar o modelo = mudar o JSON e regerar.
+- Lógica da story (BR, UI Action, Flow, ACL de linha, testes) é escrita à mão nas pastas próprias e não é tocada pelo gerador (`sn-implement`).
+- Depois de regerar, rodar `npm run reinstall` e `npm run capture` para atualizar os prints.
 
-## Secrets e Configuração
+## Credencial
 
-**MUST:** `.env.example` commitado com placeholders e comentários por variável.
+- `.env.instancia` na raiz, chmod 600, listado no `.gitignore`; modelo sem valores em `.env.example` (`SN_SDK_INSTANCE_URL`, `SN_SDK_USER`, `SN_SDK_USER_PWD`, `SN_SDK_AUTH_TYPE`, `SN_ALIAS`, `GH_REPO`).
+- O agente não lê o arquivo (`permissions.deny`); os scripts carregam as variáveis sem imprimir valores.
 
-**MUST:** `.env` real no `.gitignore` — nunca commitado.
+## Git
 
-**MUST NOT:** Credenciais em `application.yml`, `docker-compose.yml` ou código.
+- {{BRANCHING}}; push passa pelo `delivery-gate`, que lê o sync-log e o recibo ATF, e nunca roda `now-sdk`.
+- Sem `--no-verify` e sem `--force`.
+- Commit em `app/` só com build limpo.
+- Update set não é meio de entrega do app (RN-SN-165).
+- Backlog em issues do GitHub (`sn-tasks-github`); a story cita o commit e os prints por permalink.
 
-```bash
-# .env.example
-{{ENV_EXAMPLE_CONTENT}}
-```
+## Seed
 
----
-
-## Ambientes e Profiles
-
-| Ambiente | Propósito | DB | Integrações |
-|---------|-----------|-----|------------|
-{{ENVIRONMENTS_TABLE}}
-
-```{{CONFIG_FORMAT}}
-{{PROFILES_CONFIG}}
-```
-
-**MUST:** `{{PROFILE_ENV_VAR}}` via variável de ambiente — nunca hardcoded.
-
----
-
-## Branching — {{BRANCHING_STRATEGY}}
-
-| Branch | Propósito | Protegida |
-|--------|-----------|-----------|
-{{BRANCHES_TABLE}}
-
-**MUST:** Branches em `kebab-case` com ID de work item: `{{BRANCH_NAMING_EXAMPLE}}`
-
----
-
-## Pipeline (referência para o cliente)
-
-```
-{{PIPELINE_STAGES}}
-```
-
-**MUST:** Healthcheck passa antes de E2E iniciar.
-
-**MUST:** Gate de aprovação humana antes de `{{GATE_ENVIRONMENTS}}`.
-
----
-
-## Rollback
-
-**MUST:** Tags de imagem imutáveis — rollback = redeploy da tag anterior.
-
-**MUST:** Rollback de banco via nova migration forward-only — ver **database.mdc**.
-
----
-
-## Anti-patterns
-
-- Imagem com `{{BUILD_TOOL_IMAGE}}` em runtime — usar imagem de runtime mínima
-- Tag `latest` em produção — usar `{{TAG_STRATEGY}}`
-- Secrets em variáveis de ambiente da imagem Docker (expostos via `docker inspect`)
-- Debug port (`{{DEBUG_PORT}}`) exposto fora do ambiente local
+- `Record()` com `$meta: { installMethod: 'demo' }`; linha sem a marca é instalada como código e quebra instalação incremental (RN-SN-168).
+- Volume: até {{SEED_MAX_ROWS}} registros por tabela, por causa do limite de 1.000 iterações de laço em Flow (RN-SN-154).
+- Usuários demo por role, sem senha (impersonate pelo admin).

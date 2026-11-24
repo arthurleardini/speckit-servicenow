@@ -51,6 +51,39 @@ spec-product / spec-ingest → spec-data-model / spec-api-contracts
 
 **Fora de escopo:** ver «O que NÃO faz» ao final.
 
+## Alvo ServiceNow — os casos alimentam o ATF
+
+Neste fork o app é um app escopado ServiceNow escrito em Fluent (`app/`), e o teste automatizado
+é o **ATF** (Automated Test Framework). O `test-plan.md` continua sendo o roteiro de negócio, mas
+cada caso é escrito para virar um `Test()` sem reinterpretação:
+
+| No `test-plan.md` | No ATF (`sn-implement`) |
+|-------------------|-------------------------|
+| ID do caso `CT-MOD-F<n>-<nnn>` (transversal: `CT-MOD-T-<nnn>`) | nome do teste começa pelo RF; o `$id` dos steps leva a story (`Now.ID['<STORY>_test_<n>']`) |
+| Caso `[REGRA]` / `[ESTADO]` de uma RN | um caso **positivo** e um **negativo** por RN, cada um um `Test()` em `app/src/fluent/tests/<STORY>.now.ts` |
+| Resultado visível só no servidor (registro gravado, recusa, cálculo) | steps `atf.server` (`recordInsert`, `recordUpdate`, `recordValidation`, `runServerSideScript`) |
+| Resultado visível na tela (campo somente leitura, botão que some, mensagem) | steps `atf.form` (`formUI: 'standard_ui'`), Core UI clássica |
+| Pré-condição "usuário com o papel X" | `impersonate` do usuário demo da role do app — nunca admin, nunca `enforceSecurity: false` |
+| Caso `[ACESSO]` | positivo (o papel vê/edita) e negativo (outro papel não vê a linha na list e tem o form negado) |
+| Dados concretos do passo | `acceptanceScenarios[].testData` da task; fictícios, criados pelo próprio teste (não depende da ordem do seed) |
+
+- O caso continua em linguagem de negócio (§ Princípio de linguagem): quem traduz para step ATF é
+  a `sn-implement`, a partir do `acceptanceScenario` que a `spec-tasks` deriva do caso.
+- Caso que só a homologação humana prova (leitura de documento, decisão do usuário) fica marcado
+  na Tabela de Cobertura como "manual" e não vira `Test()`.
+- A evidência de execução é o recibo `outputs/spec/auditorias/atf/<STORY>.json` gravado pelo
+  `npm run atf -- --story <ID>`; o plano não registra resultado de ATF.
+
+### Formato do ID do caso
+
+- **Nativo do kit (preferido):** `CT-MOD-F<n>-<nnn>` para caso de funcionalidade e `CT-MOD-T-<nnn>`
+  para caso transversal, onde `MOD` é a sigla do módulo e `F<n>` a funcionalidade do RF que o caso
+  cobre (`CT-COB-F2-001` cobre `RF-COB-F2-…`). A numeração `<nnn>` é sequencial por funcionalidade.
+- **Legado:** `TC-NNN`, sequencial global. Continua aceito, inclusive em plano antigo.
+- O `check-testplan.mjs` lê os dois formatos (`### [TC-001] …` e `### [CT-COB-F2-001] …`) e
+  também na Tabela de Cobertura RN × Caso. Onde esta skill diz `TC-NNN`, vale o ID do caso em
+  qualquer dos dois formatos.
+
 ## Linguagem clara — como escrever o que o humano vai ler (OBRIGATÓRIO)
 
 <!-- linguagem-clara:v1 inicio -->
@@ -463,7 +496,7 @@ como fonte de cenários** das tasks de desenvolvimento:
    `"coverageNote": "Cobre TC-NNN do plano de testes"` — sync-log `SCENARIOS_FROM: test-plan`. O
    nome do arquivo não entra na frase: o `NO_EXTERNAL_REFS_IN_TASKS` da `spec-tasks` reprova, e o
    caminho já vai em `externalReferences`.
-3. O `spec-implement` (Fase 11) automatiza esses cenários test-first (unitário / integração / E2E).
+3. A `sn-implement` (Deliver) automatiza esses cenários test-first como `Test()` ATF (servidor e form), com positivo e negativo por RN.
 4. Referencia o arquivo em `externalReferences` (raiz do `tasks.json`) para rastreabilidade.
 
 > **O que NÃO acontece:** a `spec-tasks` **não cria** Story de Validação, task `class: "uat"` nem
@@ -599,8 +632,8 @@ D_change → Emitir test-plan_change-[sigla].md contendo:
 
 - Não gera código, testes unitários, automatizados ou de carga (`spec-tasks` faz isso via
   `implementationGuidance.testingStrategy`).
-- Não publica em Azure DevOps ou qualquer ferramenta externa (`spec-tasks-azure` faz isso).
-- Não implementa features (`spec-implement` faz isso).
+- Não publica em issues do GitHub nem em outra ferramenta externa (`sn-tasks-github` faz isso).
+- Não implementa features nem escreve `Test()` ATF (`sn-implement` faz isso).
 - Não define o shape de Story/Task do backlog — o schema é propriedade da `spec-tasks`
   (`tasks/v5.3`); esta skill apenas fornece o `test-plan.md` como insumo.
 - Não cria nem numera `GAP-XXX` — lacunas entram como Questões em aberto (`spec-iterate`
@@ -620,7 +653,7 @@ D_change → Emitir test-plan_change-[sigla].md contendo:
 | `spec-data-model` | 6a | Provê contexto opcional de campos e estados |
 | `spec-api-contracts` | 6b | Provê contexto opcional de respostas esperadas |
 | `spec-tasks` | 7 | **Consome `test-plan.md`** como fonte dos `acceptanceScenarios[]` das tasks de desenvolvimento (`coverageNote: "Cobre TC-NNN"`); **não** cria stories/tasks de homologação (`NO_UAT_BACKLOG`) |
-| `spec-implement` | 10 | Automatiza os cenários derivados dos `TC-NNN` (test-first) — rastreabilidade homologação ↔ teste técnico |
+| `sn-implement` | Deliver | Automatiza os cenários derivados dos casos (`CT-…`/`TC-NNN`) como `Test()` ATF em `app/src/fluent/tests/<STORY>.now.ts` e grava o recibo em `outputs/spec/auditorias/atf/` — rastreabilidade homologação ↔ teste técnico |
 
 ## Templates
 

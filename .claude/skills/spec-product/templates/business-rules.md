@@ -3,7 +3,7 @@
 Status: draft
 Última atualização: YYYY-MM-DD
 Total de RN: 0 legado · 0 novo produto
-Fonte: legacy.md (Dim. 8), prototype.md, benchmark.md, context-map.md (F-xxx)
+Fonte: legacy.md (Dim. 8), especificacao-funcional.md (telas TEL-), benchmark.md, context-map.md (F-xxx)
 
 ---
 
@@ -39,7 +39,7 @@ Fonte: legacy.md (Dim. 8), prototype.md, benchmark.md, context-map.md (F-xxx)
 
 ## Seção B — Regras do Novo Produto
 
-*(Regras que o produto novo precisa definir — não existiam no legado, ou são decisões derivadas do protótipo, benchmark e discovery. Toda regra nova deve ter origem identificável.)*
+*(Regras que o produto novo precisa definir — não existiam no legado, ou são decisões derivadas das telas da instância (Explore), benchmark e discovery. Toda regra nova deve ter origem identificável.)*
 
 <!-- id: br-new -->
 
@@ -50,7 +50,7 @@ Fonte: legacy.md (Dim. 8), prototype.md, benchmark.md, context-map.md (F-xxx)
 | Campo | Conteúdo |
 |-------|----------|
 | **Módulo** | MOD-XXX *(alinhado ao índice modular de `requirements.md`)* |
-| **Origem** | *(prototype.md §rota / benchmark.md §diferencial / discovery §4 F-xxx / decisão do cliente CHAT-XXX)* |
+| **Origem** | *(screens-manifest.json §TEL-xxx / benchmark.md §diferencial / discovery §4 F-xxx / decisão do cliente CHAT-XXX)* |
 | **Domínio** | |
 | **Tipo** | Fato / Restrição / Derivação / Inferência / Gatilho *(taxonomia BRG — ver [`../../tools/references/spec-requirements-depth.md`](../../tools/references/spec-requirements-depth.md) §5)* |
 | **Enunciado** | *(SE X ENTÃO Y — sempre condicional clara)* |

@@ -1,111 +1,61 @@
 ---
-description: "{{TEST_DESCRIPTION}}"
-globs: "**/*Test*,**/*Spec*,**/test/**,**/__tests__/**"
+description: "Estratégia de testes do app ServiceNow {{APP_NAME}}: ATF (Automated Test Framework) escrito em Fluent Test(), servidor por now-sdk cicd test run, form pelo Client Test Runner, recibo por story, suíte {{REGRESSION_SUITE}}, positivo e negativo por regra. Triggers: escrever ou alterar Test(), rodar npm run atf, validar story, cobrir regra de negócio ou ACL."
+globs: "app/src/fluent/tests/**,app/src/server/**"
 alwaysApply: false
 ---
 
-# Estratégia de Testes — {{PROJECT_NAME}}
+# Estratégia de Testes — {{APP_NAME}} (`{{SCOPE}}`)
 
----
+## Por que esta rule existe
 
-## Pirâmide de Testes
+Cada RF entregue é provado por um teste verde na instância (nível N3 da matriz de rastreio). Teste que só roda como admin, que usa sys_id fixo ou que não tem caso negativo dá verde sem provar a regra.
 
-| Camada | Ferramenta | Localização | Threshold |
+## Camadas
+
+| Camada | Ferramenta | O que cobre | Onde roda |
 |--------|-----------|-------------|-----------|
-{{TEST_PYRAMID_TABLE}}
+| Build | `now-sdk build --frozenKeys` (dentro do `npm run reinstall`) | tipos, `$id` únicos, metadados válidos | local |
+| ATF servidor | `Test()` com steps `atf.server` (`recordInsert`, `recordUpdate`, `recordValidation`, `runServerSideScript` com Jasmine) | Business Rule, Script Include, ACL (impersonando o papel), cálculo | instância, por `now-sdk cicd test run` |
+| ATF form | `Test()` com steps `atf.form` (`formUI: 'standard_ui'`) | UI Policy, UI Action, campo somente leitura, mensagem na tela | instância, {{ATF_FORM_RUNNER}} |
+| Captura | `sn-capture --story` | print da tela como o papel vê | instância |
+| Regressão | suíte `TestSuite()` "{{REGRESSION_SUITE}}" em `app/src/fluent/tests/suite.now.ts` | todos os testes do app | ao fim de cada `npm run reinstall` |
 
----
+- Preferir step de UI (`atf.form`) quando a regra é visível na tela; `atf.server` para dado e back-end (RN-SN-112).
+- Se o teste de form não executar sem navegador, a story registra a **isenção de ATF de form** em `outputs/spec/auditorias/_isencoes/<STORY>-atf-form.md`; o teste de servidor continua obrigatório.
 
-## Testes Unitários — Domínio
+## Regras de escrita
 
-**MUST:** Domínio testado sem contexto de framework — sem `{{DI_FRAMEWORK_ANNOTATION}}`, sem mocks de infra.
+- Toda lógica custom (BR, UI Policy, UI Action, ACL, transição de estado) tem caso **positivo e negativo** (RN-SN-110).
+- `recordInsert` e `recordUpdate` são caminhos separados, cada um com `recordValidation` (RN-SN-110).
+- Tabela só com comportamento padrão recebe um único teste CRUD (RN-SN-111).
+- Campos obrigatórios preenchidos no `recordInsert`; referência vem de step anterior ou lookup, nunca sys_id fixo; role por referência `Role`, não por nome (RN-SN-113).
+- ACL testada com usuário demo da role (`impersonate`), nunca com admin nem `enforceSecurity: false` (RN-SN-83).
+- `$id` único por step (RN-SN-06): `Now.ID['<STORY>_test_<n>']`.
+- Descrição do teste cita a regra, a tabela/campo e como valida, em 1 a 2 frases (RN-SN-115).
+- Regra mudou → teste muda no lugar; regra removida → `Now.del('sys_atf_test', …)` e o `.now.ts` sai (RN-SN-114).
+- Dados do teste vêm dos `acceptanceScenarios[].testData` da task e dos casos `CT-` do `test-plan.md`; são fictícios; o teste cria o que precisa e não depende da ordem do seed.
 
-**MUST:** Cobrir happy path + cada ramo de exceção de domínio.
+## Cobertura mínima por story
 
-```{{LANGUAGE}}
-{{DOMAIN_TEST_EXAMPLE}}
-```
+| Tipo de story | ATF servidor | ATF form | G3 com LLM |
+|---------------|--------------|----------|------------|
+| fio condutor (label `fio-condutor`) | obrigatório, positivo + negativo por RN | obrigatório ou isenção registrada | sim |
+| gerada (tabela, form, list, menu, role, seed) | 1 teste CRUD por tabela + 1 de leitura negada por role | obrigatório ou isenção registrada | isenção registrada |
+| outra feita à mão | positivo + negativo por RN | obrigatório ou isenção registrada | isenção registrada |
 
----
+Casos obrigatórios (um por RN do fio condutor; os IDs `CT-` vêm do `test-plan.md`):
 
-## Testes Unitários — Use Cases / Services
+| RN | Positivo | Negativo |
+|----|----------|----------|
+{{MANDATORY_CASES_TABLE}}
 
-**MUST:** Mockar apenas {{MOCK_TARGET}} — nunca classes concretas de infraestrutura.
+## Execução e recibo
 
-```{{LANGUAGE}}
-{{USECASE_TEST_EXAMPLE}}
-```
+- Rodar só pelo `npm run atf -- --story <ID>`; ele chama `now-sdk cicd test run -o json` (ou consulta `sys_atf_result`) e grava o recibo `outputs/spec/auditorias/atf/<STORY>.json` com `sys_id`, horário, status e commit.
+- Recibo verde é a única evidência aceita pelo `delivery-gate` e pela matriz de rastreio. Sem recibo, a story não é declarada testada.
+- O teste roda depois de `npm run reinstall` com o commit atual; recibo de commit antigo não vale.
 
----
+## O que não é teste
 
-## Testes de Integração — {{INTEGRATION_TEST_TYPE}}
-
-**MUST:** {{INTEGRATION_TEST_RULES}}
-
-**MUST:** {{DB_TEST_TOOL}} com banco real — sem `{{FAKE_DB}}`.
-
-```{{LANGUAGE}}
-{{INTEGRATION_TEST_EXAMPLE}}
-```
-
----
-
-## Cobertura — {{COVERAGE_TOOL}}
-
-**Threshold:** {{COVERAGE_THRESHOLD}}
-
-```{{CONFIG_FORMAT}}
-{{COVERAGE_CONFIG}}
-```
-
-**MUST:** CI falha se cobertura cair abaixo do threshold.
-
----
-
-{{#if E2E}}
-## E2E — {{E2E_TOOL}}
-
-**Localização:** `{{E2E_LOCATION}}`
-
-**Escopo:** {{E2E_SCOPE}}
-
-{{#if E2E_UI}}
-**MUST:** Seletores `data-testid` como primário — sem classes CSS frágeis.
-
-**MUST:** Cobrir por fluxo crítico: happy path + estado de erro + estado vazio.
-
-**MUST:** Testes navegam como o usuário: abrir páginas, clicar botões, preencher formulários — não apenas verificar DOM estático.
-{{/if}}
-
-{{#if E2E_API}}
-**MUST:** Testes de API E2E verificam contrato real do endpoint: status HTTP, body de resposta, headers, erros esperados.
-
-**MUST:** Usar ambiente de teste isolado com banco próprio — nunca prod ou dev compartilhado.
-{{/if}}
-
-{{E2E_EXTRA_RULES}}
-{{/if}}
-
----
-
-{{#if LOAD}}
-## Carga — {{LOAD_TOOL}}
-
-**Localização:** `{{LOAD_LOCATION}}`
-
-**SLO a validar (derivados dos RNFs do produto):**
-
-| Endpoint / Cenário | p95 | Taxa de erro | Throughput |
-|--------------------|-----|-------------|------------|
-{{LOAD_SLO}}
-
-**MUST:** Scripts de carga rodam em CI antes de deploy em homolog.
-
-**MUST:** Falha se qualquer métrica ultrapassar o SLO definido.
-{{/if}}
-
----
-
-## Anti-patterns
-
-{{ANTIPATTERNS_LIST}}
+- Print (`sn-capture`) mostra a tela; não prova regra.
+- Testes de execução manual do `test-plan.md` são roteiro de homologação do cliente, não item de backlog.

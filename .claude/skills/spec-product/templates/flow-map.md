@@ -45,7 +45,7 @@ Fonte: discovery-document.md, legacy.md (PROC-xxx), product-requirements.md, bus
 
 ## Telas
 
-*(Como derivar: uma linha por tela documentada nos PR de `product-requirements.md` — RF/PR lista os IDs que a tela realiza. Módulo = `MOD-xxx` de `modules.md`. Screenshot: capturas do protótipo em `screens/TEL-xxx.png` — caminho relativo a `outputs/spec/`, onde o arquivo real é `outputs/spec/screens/TEL-xxx.png` —, ou `—` quando não existirem.)*
+*(Como derivar: uma linha por tela documentada nos PR de `product-requirements.md` — RF/PR lista os IDs que a tela realiza. Módulo = `MOD-xxx` de `modules.md`. Tela: o mesmo `TEL-` da especificação funcional e do `screens-manifest.json`. Screenshot: print da instância gerado pelo `sn-capture` em `screens/TEL-xxx.png` — caminho relativo a `outputs/spec/`, onde o arquivo real é `outputs/spec/screens/TEL-xxx.png` —, ou `—` quando não existirem.)*
 
 | ID | Nome | Rota | Módulo | Estados UI | RF/PR | Screenshot |
 |----|------|------|--------|------------|-------|------------|

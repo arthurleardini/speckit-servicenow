@@ -28,7 +28,10 @@
  * Entra como WARNING (princípio P4 do plano de melhoria das skills): a skill continua dona dos FATAL.
  *
  * Exit codes: 0 sem achado FATAL · 1 com achado FATAL · 2 entrada não aplicável (arquivo ausente
- * ou nenhum `### [TC-NNN]` no documento).
+ * ou nenhum `### [TC-NNN]` / `### [CT-MOD-…]` no documento).
+ *
+ * Fork ServiceNow (item 31): o ID do caso pode ser o legado `TC-NNN` ou o nativo do kit
+ * `CT-MOD-F<n>-<nnn>` / `CT-MOD-T-<nnn>` (A7 do design). Os dois são aceitos, inclusive misturados.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -44,6 +47,10 @@ const TERMOS_TECNICOS = [
   /\bbanco de dados\b/i,
   /\btabela (?:do|no|de) banco\b/i,
 ];
+
+// ID de caso: `TC-001` (legado) ou `CT-COB-F2-001`, `CT-COB-T-003` (nativo do kit, A7).
+export const RE_ID_CASO_FONTE = String.raw`(?:TC-\d+|CT-[A-Z0-9]+-(?:F\d+|T)-\d+)`;
+const RE_ID_CASO_G = new RegExp(String.raw`\b${RE_ID_CASO_FONTE}\b`, 'g');
 
 const normCategoria = (c) => SEM_ACENTO[c.toUpperCase()] ?? c.toUpperCase();
 
@@ -61,7 +68,7 @@ export function lerPlano(texto) {
     if (mEpica) { epica = mEpica[1]; caso = null; naCobertura = false; continue; }
     if (/^## Cobertura RN × Caso/.test(linha)) { naCobertura = true; caso = null; epica = null; continue; }
     if (/^## /.test(linha)) { naCobertura = false; caso = null; continue; }
-    const mCaso = linha.match(/^### \[(TC-\d+)\]\s*(.*?)\s*\[([A-ZÇÃÕÉÍÓÚÂÊÔ]+)\]\s*$/);
+    const mCaso = linha.match(new RegExp(String.raw`^### \[(${RE_ID_CASO_FONTE})\]\s*(.*?)\s*\[([A-ZÇÃÕÉÍÓÚÂÊÔ]+)\]\s*$`));
     if (mCaso) {
       caso = { id: mCaso[1], titulo: mCaso[2], categoria: normCategoria(mCaso[3]), epica,
         regras: [], precondicoes: 0, passos: 0, esperados: 0, corpo: [] };
@@ -72,7 +79,7 @@ export function lerPlano(texto) {
     if (/^### /.test(linha)) { caso = null; continue; }
     if (naCobertura) {
       const m = linha.match(/^\|\s*(RN-[A-Za-z0-9-]+)\s*\|([^|]*)\|([^|]*)\|([^|]*)\|/);
-      if (m) cobertura.push({ rn: m[1], casos: (m[3].match(/TC-\d+/g) ?? []), status: m[4].trim() });
+      if (m) cobertura.push({ rn: m[1], casos: (m[3].match(RE_ID_CASO_G) ?? []), status: m[4].trim() });
       continue;
     }
     if (!caso) continue;
@@ -195,7 +202,7 @@ function main(argv) {
   if (br && !existsSync(br)) { process.stderr.write(`check-testplan: business-rules não encontrado: ${br}\n`); return 2; }
   const plano = lerPlano(readFileSync(arq, 'utf8'));
   if (plano.casos.length === 0) {
-    process.stderr.write(`check-testplan: nenhum caso «### [TC-NNN] … [CATEGORIA]» em ${arq} — nada a conferir.\n`);
+    process.stderr.write(`check-testplan: nenhum caso «### [TC-NNN] … [CATEGORIA]» nem «### [CT-MOD-F<n>-<nnn>] … [CATEGORIA]» em ${arq} — nada a conferir.\n`);
     return 2;
   }
   const textoBr = br ? readFileSync(br, 'utf8') : null;

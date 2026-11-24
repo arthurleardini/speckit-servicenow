@@ -10,11 +10,16 @@
  *   NO_PLACEHOLDER_LEFT — nenhum `{{NOME}}` em nenhum `.mdc` da pasta-fonte nem em nenhum `.md`/`.mdc`
  *                         das pastas materializadas (a varredura não desce em subpastas: a
  *                         `.claude/rules/harness/` do harness não é saída desta skill).
- *   SECURITY_UNMODIFIED — `<pasta_mdc>/security.mdc` idêntico a `templates/security.mdc` desta skill.
- *                         Fim de linha não conta (o git pode convertê-lo no checkout); qualquer outro
- *                         byte conta. Ausente também é achado: a skill gera a security sempre.
+ *   SECURITY_UNMODIFIED — `<pasta_mdc>/security.mdc` idêntico a `templates/security.mdc` desta skill,
+ *                         fora do bloco do projeto. No fork ServiceNow o template traz a parte fixa da
+ *                         plataforma e um bloco `<!-- projeto:inicio -->` … `<!-- projeto:fim -->` com
+ *                         roles, ACL de linha e cross-scope do projeto: o conteúdo entre os marcadores é
+ *                         livre, e todo o resto tem que bater com o template. Template sem marcadores =
+ *                         cópia integral, como no upstream. Fim de linha não conta (o git pode
+ *                         convertê-lo no checkout); qualquer outro byte conta. Ausente também é achado:
+ *                         a skill gera a security sempre.
  *   RULES_CONTRADICTION — duas contradições que dá para ver por texto (D46, teste ponta a ponta de
- *                         2026-10-21; o código é o mesmo da `spec-scaffold`, que as achava depois):
+ *                         2026-10-21; a `spec-scaffold` do upstream as achava depois; no fork ela saiu e o `sn-scaffold` gera o app):
  *     · módulo (`tipo: 'modulo'`): pasta de módulo citada numa rule (`src/modules/acesso/…`) ou
  *       módulo do `data-model.json` (`boundedContexts[].moduleIds`; o nome do contexto quando ele
  *       não tem `moduleIds`) que não está na lista de módulos da `architecture.mdc` — as pastas
@@ -23,6 +28,8 @@
  *     · dependência (`tipo: 'dependencia'`): uma rule diz «sem dependências de runtime» e a
  *       `database.mdc` escolhe um banco servidor (PostgreSQL, MySQL, SQL Server, MongoDB…), cujo
  *       driver É dependência de runtime. A linha que declara a exceção («… além do driver») não conta.
+ *       No fork ServiceNow não há banco próprio (persistência = tabelas da plataforma) e as rules
+ *       ServiceNow não têm `database.mdc`: a checagem fica inerte.
  *     `security.mdc` e `frontend-default.mdc` ficam fora: são cópia do template, não decisão do projeto.
  *     O `data-model.json` é o `<pasta_mdc>/../data-model.json` (o `outputs/spec/`), ou `--data-model`.
  *
@@ -158,6 +165,49 @@ export function contradicoes(fonte, dataModel = join(fonte, '..', 'data-model.js
   return achados;
 }
 
+// ——————————————————————— SECURITY_UNMODIFIED com bloco do projeto (fork ServiceNow) ———————————————————————
+
+export const MARCA_PROJETO_INICIO = '<!-- projeto:inicio -->';
+export const MARCA_PROJETO_FIM = '<!-- projeto:fim -->';
+
+/** `{ antes, depois, linhaFim }` em linhas, ou null quando o texto não tem os dois marcadores em ordem. */
+function partesProjeto(linhas) {
+  const i = linhas.findIndex((l) => l.trim() === MARCA_PROJETO_INICIO);
+  const f = linhas.findIndex((l, k) => k > i && l.trim() === MARCA_PROJETO_FIM);
+  if (i < 0 || f < 0) return null;
+  return { antes: linhas.slice(0, i + 1), depois: linhas.slice(f), inicioDepois: f };
+}
+
+/**
+ * Compara a security gerada com o template. Devolve null quando bate, ou `{ linha, motivo }` com a
+ * primeira linha (1-based, na security gerada) que difere. Com marcadores no template, o que fica
+ * entre eles na security gerada não é comparado.
+ */
+export function diferencaSecurity(gerada, template) {
+  const a = gerada.split('\n');
+  const b = template.split('\n');
+  const primeiraDif = (x, y, deslocamento = 0) => {
+    const k = x.findIndex((l, j) => l !== y[j]);
+    if (k >= 0) return deslocamento + k + 1;
+    return x.length !== y.length ? deslocamento + Math.min(x.length, y.length) + 1 : 0;
+  };
+  const pt = partesProjeto(b);
+  if (!pt) {
+    const linha = primeiraDif(a, b);
+    return linha ? { linha, motivo: `difere de templates/security.mdc a partir da linha ${linha}` } : null;
+  }
+  const pa = partesProjeto(a);
+  if (!pa) {
+    const linha = primeiraDif(a.slice(0, pt.antes.length), pt.antes) || a.length + 1;
+    return { linha, motivo: `difere de templates/security.mdc a partir da linha ${linha} — sem o bloco ${MARCA_PROJETO_INICIO} … ${MARCA_PROJETO_FIM}` };
+  }
+  const l1 = primeiraDif(pa.antes, pt.antes);
+  if (l1) return { linha: l1, motivo: `difere de templates/security.mdc a partir da linha ${l1}` };
+  const l2 = primeiraDif(pa.depois, pt.depois, pa.inicioDepois);
+  if (l2) return { linha: l2, motivo: `difere de templates/security.mdc a partir da linha ${l2} (depois do bloco do projeto)` };
+  return null;
+}
+
 /** Achados das pastas. Lê disco; não escreve nada. */
 export function conferirRules(fonte, materializadas = [], templateSecurity = TEMPLATE_SECURITY, { dataModel } = {}) {
   const achados = [];
@@ -173,12 +223,9 @@ export function conferirRules(fonte, materializadas = [], templateSecurity = TEM
   const sec = join(fonte, 'security.mdc');
   if (!existsSync(sec)) {
     achados.push({ code: 'SECURITY_UNMODIFIED', arquivo: sec, mensagem: `${sec} ausente — a security é gerada sempre` });
-  } else if (semCR(readFileSync(sec, 'utf8')) !== semCR(readFileSync(templateSecurity, 'utf8'))) {
-    const a = semCR(readFileSync(sec, 'utf8')).split('\n');
-    const b = semCR(readFileSync(templateSecurity, 'utf8')).split('\n');
-    const i = a.findIndex((l, k) => l !== b[k]);
-    const onde = i < 0 ? a.length + 1 : i + 1;
-    achados.push({ code: 'SECURITY_UNMODIFIED', arquivo: sec, linha: onde, mensagem: `${sec} difere de templates/security.mdc a partir da linha ${onde}` });
+  } else {
+    const dif = diferencaSecurity(semCR(readFileSync(sec, 'utf8')), semCR(readFileSync(templateSecurity, 'utf8')));
+    if (dif) achados.push({ code: 'SECURITY_UNMODIFIED', arquivo: sec, linha: dif.linha, mensagem: `${sec} ${dif.motivo}` });
   }
   achados.push(...contradicoes(fonte, dataModel ?? join(fonte, '..', 'data-model.json')));
   return { arquivos: alvos.length, achados };
