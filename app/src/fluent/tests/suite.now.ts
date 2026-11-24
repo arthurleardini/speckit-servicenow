@@ -7,6 +7,10 @@ import {
     t_f2002_nova_versao_neg, t_f2002_ciclo_neg, t_f2002_gravacao_neg, t_f2002_ui_pos, t_f2002_ui_publicada, t_f2002_ui_neg,
     t_f2002_outro_caminho_neg, t_f2002_nome_neg, t_f2002_ui_threshold,
 } from './US-MOD-F2-002.now'
+import {
+    t_f2004_sorteio_pos, t_f2004_semente_neg, t_f2004_sem_elegiveis, t_f2004_acao_neg,
+    t_f2004_publicar_neg, t_f2004_imutavel_neg, t_f2004_ui, t_f2004_ui_neg, t_f2004_outro_caminho,
+} from './US-MOD-F2-004.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -16,5 +20,7 @@ export const suite_cob_regressao = TestSuite({
         t_f2002_publicar_pos, t_f2002_publicar_neg, t_f2002_imutavel_neg, t_f2002_nova_versao_pos,
         t_f2002_nova_versao_neg, t_f2002_ciclo_neg, t_f2002_gravacao_neg, t_f2002_ui_pos, t_f2002_ui_publicada, t_f2002_ui_neg,
     t_f2002_outro_caminho_neg, t_f2002_nome_neg, t_f2002_ui_threshold,
+        t_f2004_sorteio_pos, t_f2004_semente_neg, t_f2004_sem_elegiveis, t_f2004_acao_neg,
+        t_f2004_publicar_neg, t_f2004_imutavel_neg, t_f2004_ui, t_f2004_ui_neg, t_f2004_outro_caminho,
     ],
 })
