@@ -1,0 +1,1278 @@
+{
+  "schemaVersion": "traceability/v1",
+  "fonteDoUniverso": "requirements",
+  "resumo": {
+    "total": 46,
+    "orfaos": 0,
+    "N0": 0,
+    "N1": 46,
+    "N2": 0,
+    "N3": 0
+  },
+  "orfaos": [],
+  "linhas": [
+    {
+      "rf": "RF-MOD-F1-001",
+      "ct": [
+        "CT-MOD-F1-001",
+        "CT-MOD-F1-005",
+        "CT-MOD-F1-104",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-106",
+        "CT-MOD-F1-110"
+      ],
+      "tel": [
+        "TEL-001",
+        "TEL-003",
+        "TEL-006"
+      ],
+      "story": "STORY-MOD-F1-001",
+      "stories": [
+        "STORY-MOD-F1-001"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-001-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-001_flow_consolidar_fontes"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-002",
+      "ct": [
+        "CT-MOD-F1-002",
+        "CT-MOD-F1-101",
+        "CT-MOD-F1-104",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-110",
+        "CT-MOD-T-007"
+      ],
+      "tel": [
+        "TEL-002",
+        "TEL-003",
+        "TEL-006"
+      ],
+      "story": "STORY-MOD-F1-002",
+      "stories": [
+        "STORY-MOD-F1-002"
+      ],
+      "tasks": [
+        "SEC-013",
+        "TASK-MOD-F1-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-002_si_vincular_debito"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-003",
+      "ct": [
+        "CT-MOD-F1-003",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-108"
+      ],
+      "tel": [
+        "TEL-003"
+      ],
+      "story": "STORY-MOD-F1-003",
+      "stories": [
+        "STORY-MOD-F1-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-003_br_regularizacao_intraciclo"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-004",
+      "ct": [
+        "CT-MOD-F1-004",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-107",
+        "CT-MOD-F1-110"
+      ],
+      "tel": [
+        "TEL-005"
+      ],
+      "story": "STORY-MOD-F1-004",
+      "stories": [
+        "STORY-MOD-F1-004"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-004_br_parcelamento_em_risco"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-005",
+      "ct": [
+        "CT-MOD-F1-101",
+        "CT-MOD-F1-102",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-110",
+        "CT-MOD-F5-006",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-103"
+      ],
+      "tel": [
+        "TEL-004",
+        "TEL-023"
+      ],
+      "story": "STORY-MOD-F1-005",
+      "stories": [
+        "STORY-MOD-F1-005",
+        "STORY-MOD-F5-007"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-005-01",
+        "SEC-002",
+        "TASK-MOD-F5-007-01",
+        "TASK-MOD-F5-007-02",
+        "TASK-MOD-F5-007-03"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-005_form_visao_unica",
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-006",
+      "ct": [
+        "CT-MOD-F1-006",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-109"
+      ],
+      "tel": [
+        "TEL-001"
+      ],
+      "story": "STORY-MOD-F1-006",
+      "stories": [
+        "STORY-MOD-F1-006"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-006_br_dedup_mpi_bigdata"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F1-007",
+      "ct": [
+        "CT-MOD-F1-005",
+        "CT-MOD-F1-103",
+        "CT-MOD-F1-105",
+        "CT-MOD-F1-106",
+        "CT-MOD-F1-110"
+      ],
+      "tel": [
+        "TEL-001"
+      ],
+      "story": "STORY-MOD-F1-007",
+      "stories": [
+        "STORY-MOD-F1-007"
+      ],
+      "tasks": [
+        "TASK-MOD-F1-007-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F1-007_br_status_execucao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-001",
+      "ct": [
+        "CT-MOD-F2-001",
+        "CT-MOD-F2-002",
+        "CT-MOD-F2-101",
+        "CT-MOD-F2-102",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-104",
+        "CT-MOD-F2-113"
+      ],
+      "tel": [
+        "TEL-007",
+        "TEL-008"
+      ],
+      "story": "STORY-MOD-F2-001",
+      "stories": [
+        "STORY-MOD-F2-001",
+        "STORY-MOD-F2-002"
+      ],
+      "tasks": [
+        "TASK-MOD-F2-001-01",
+        "SEC-009",
+        "TASK-MOD-F2-002-01",
+        "TASK-MOD-F2-002-02",
+        "TASK-MOD-F2-002-03"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-001_br_validar_parametros",
+        "RF-MOD-F2-002_br_bloquear_versao_publicada",
+        "RF-MOD-F2-002_ua_criar_nova_versao",
+        "RF-MOD-F2-002_ua_publicar_versao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-002",
+      "ct": [
+        "CT-MOD-F2-002",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-104",
+        "CT-MOD-F2-113"
+      ],
+      "tel": [
+        "TEL-007",
+        "TEL-008"
+      ],
+      "story": "STORY-MOD-F2-002",
+      "stories": [
+        "STORY-MOD-F2-002"
+      ],
+      "tasks": [
+        "SEC-009",
+        "TASK-MOD-F2-002-01",
+        "TASK-MOD-F2-002-02",
+        "TASK-MOD-F2-002-03"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-002_br_bloquear_versao_publicada",
+        "RF-MOD-F2-002_ua_criar_nova_versao",
+        "RF-MOD-F2-002_ua_publicar_versao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-003",
+      "ct": [
+        "CT-MOD-F2-001",
+        "CT-MOD-F2-005",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-105",
+        "CT-MOD-F2-106",
+        "CT-MOD-F2-110",
+        "CT-MOD-F2-111",
+        "CT-MOD-F2-113"
+      ],
+      "tel": [
+        "TEL-009",
+        "TEL-010"
+      ],
+      "story": "STORY-MOD-F2-003",
+      "stories": [
+        "STORY-MOD-F2-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F2-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-003_si_segmentar_carteira"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-004",
+      "ct": [
+        "CT-MOD-F2-003",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-107",
+        "CT-MOD-F2-108",
+        "CT-MOD-F2-110",
+        "CT-MOD-F6-003"
+      ],
+      "tel": [
+        "TEL-009",
+        "TEL-010"
+      ],
+      "story": "STORY-MOD-F2-004",
+      "stories": [
+        "STORY-MOD-F2-004"
+      ],
+      "tasks": [
+        "SEC-010",
+        "TASK-MOD-F2-004-01",
+        "TASK-MOD-F2-004-02"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-004_si_sortear_grupo_controle",
+        "RF-MOD-F2-004_ua_publicar_ciclo"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-005",
+      "ct": [
+        "CT-MOD-F2-004",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-112"
+      ],
+      "tel": [
+        "TEL-008",
+        "TEL-010"
+      ],
+      "story": "STORY-MOD-F2-005",
+      "stories": [
+        "STORY-MOD-F2-005"
+      ],
+      "tasks": [
+        "TASK-MOD-F2-005-01",
+        "TASK-MOD-F2-005-02"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-005_br_marcar_sem_score",
+        "RF-MOD-F2-005_si_fallback_sem_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F2-006",
+      "ct": [
+        "CT-MOD-F2-001",
+        "CT-MOD-F2-002",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-105",
+        "CT-MOD-F2-106",
+        "CT-MOD-F2-109",
+        "CT-MOD-F2-113"
+      ],
+      "tel": [
+        "TEL-009"
+      ],
+      "story": "STORY-MOD-F2-006",
+      "stories": [
+        "STORY-MOD-F2-006"
+      ],
+      "tasks": [
+        "TASK-MOD-F2-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-006_ua_gerar_previa"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-001",
+      "ct": [
+        "CT-MOD-F3-001",
+        "CT-MOD-F3-101",
+        "CT-MOD-F3-103",
+        "CT-MOD-F3-104",
+        "CT-MOD-F3-105",
+        "CT-MOD-F3-106"
+      ],
+      "tel": [
+        "TEL-012"
+      ],
+      "story": "STORY-MOD-F3-001",
+      "stories": [
+        "STORY-MOD-F3-001"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-001-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-001_si_normalizar_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-002",
+      "ct": [
+        "CT-MOD-F2-102",
+        "CT-MOD-F3-002",
+        "CT-MOD-F3-103"
+      ],
+      "tel": [
+        "TEL-012"
+      ],
+      "story": "STORY-MOD-F3-002",
+      "stories": [
+        "STORY-MOD-F3-002"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-002_si_priorizar_por_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-003",
+      "ct": [
+        "CT-MOD-F3-004",
+        "CT-MOD-F5-102"
+      ],
+      "tel": [
+        "TEL-024"
+      ],
+      "story": "STORY-MOD-F3-003",
+      "stories": [
+        "STORY-MOD-F3-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-003_uip_score_dossie"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-004",
+      "ct": [
+        "CT-MOD-F3-005",
+        "CT-MOD-F3-103"
+      ],
+      "tel": [
+        "TEL-012"
+      ],
+      "story": "STORY-MOD-F3-004",
+      "stories": [
+        "STORY-MOD-F3-004"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-004_flow_atualizar_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-005",
+      "ct": [
+        "CT-MOD-F3-003",
+        "CT-MOD-F3-103",
+        "CT-MOD-F5-002"
+      ],
+      "tel": [
+        "TEL-012"
+      ],
+      "story": "STORY-MOD-F3-005",
+      "stories": [
+        "STORY-MOD-F3-005"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-005-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-005_si_ordem_sem_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F3-006",
+      "ct": [
+        "CT-MOD-F3-102",
+        "CT-MOD-F3-103",
+        "CT-MOD-F3-104",
+        "CT-MOD-F3-106"
+      ],
+      "tel": [
+        "TEL-011"
+      ],
+      "story": "STORY-MOD-F3-006",
+      "stories": [
+        "STORY-MOD-F3-006"
+      ],
+      "tasks": [
+        "TASK-MOD-F3-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F3-006_report_cobertura_score"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-001",
+      "ct": [
+        "CT-MOD-F4-001",
+        "CT-MOD-F4-002",
+        "CT-MOD-F4-101",
+        "CT-MOD-F4-102",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-013",
+        "TEL-014"
+      ],
+      "story": "STORY-MOD-F4-001",
+      "stories": [
+        "STORY-MOD-F4-001"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-001-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-001_br_validar_etapa"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-002",
+      "ct": [
+        "CT-MOD-F4-001",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-107",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-015"
+      ],
+      "story": "STORY-MOD-F4-002",
+      "stories": [
+        "STORY-MOD-F4-002"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-002_flow_disparar_regua"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-003",
+      "ct": [
+        "CT-MOD-F4-001",
+        "CT-MOD-F4-002",
+        "CT-MOD-F4-103"
+      ],
+      "tel": [
+        "TEL-014",
+        "TEL-015"
+      ],
+      "story": "STORY-MOD-F4-003",
+      "stories": [
+        "STORY-MOD-F4-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-003_si_escalonar"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-004",
+      "ct": [
+        "CT-MOD-F4-003",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-105",
+        "CT-MOD-F4-108",
+        "CT-MOD-F4-109"
+      ],
+      "tel": [
+        "TEL-014",
+        "TEL-018"
+      ],
+      "story": "STORY-MOD-F4-004",
+      "stories": [
+        "STORY-MOD-F4-004"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-004_si_fallback_canal"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-005",
+      "ct": [
+        "CT-MOD-F4-003",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-104",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-017",
+        "TEL-018"
+      ],
+      "story": "STORY-MOD-F4-005",
+      "stories": [
+        "STORY-MOD-F4-005"
+      ],
+      "tasks": [
+        "SEC-019",
+        "TASK-MOD-F4-005-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-005_br_exigir_optin"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-006",
+      "ct": [
+        "CT-MOD-F4-004",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-108",
+        "CT-MOD-F4-111",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-015",
+        "TEL-019"
+      ],
+      "story": "STORY-MOD-F4-006",
+      "stories": [
+        "STORY-MOD-F4-006"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-006_ua_reenviar"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-007",
+      "ct": [
+        "CT-MOD-F4-002",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-106",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-020"
+      ],
+      "story": "STORY-MOD-F4-007",
+      "stories": [
+        "STORY-MOD-F4-007"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-007-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-007_br_marcar_origem"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-008",
+      "ct": [
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-110",
+        "CT-MOD-F4-113"
+      ],
+      "tel": [
+        "TEL-016"
+      ],
+      "story": "STORY-MOD-F4-008",
+      "stories": [
+        "STORY-MOD-F4-008"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-008-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-008_report_efetividade_regua"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F4-009",
+      "ct": [
+        "CT-MOD-F4-005",
+        "CT-MOD-F4-103",
+        "CT-MOD-F4-112"
+      ],
+      "tel": [
+        "TEL-014"
+      ],
+      "story": "STORY-MOD-F4-009",
+      "stories": [
+        "STORY-MOD-F4-009"
+      ],
+      "tasks": [
+        "TASK-MOD-F4-009-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F4-009_br_encaminhar_qualificada"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-001",
+      "ct": [
+        "CT-MOD-F5-001",
+        "CT-MOD-F5-103",
+        "CT-MOD-F5-108",
+        "CT-MOD-F5-109"
+      ],
+      "tel": [
+        "TEL-021",
+        "TEL-022"
+      ],
+      "story": "STORY-MOD-F5-001",
+      "stories": [
+        "STORY-MOD-F5-001"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-001-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-001_flow_distribuir_casos"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-002",
+      "ct": [
+        "CT-MOD-F5-002",
+        "CT-MOD-F5-006",
+        "CT-MOD-F5-105",
+        "CT-MOD-F5-109"
+      ],
+      "tel": [
+        "TEL-023"
+      ],
+      "story": "STORY-MOD-F5-002",
+      "stories": [
+        "STORY-MOD-F5-002"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-002_list_fila_priorizada"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-003",
+      "ct": [
+        "CT-MOD-F5-003",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-105",
+        "CT-MOD-F5-109"
+      ],
+      "tel": [
+        "TEL-024"
+      ],
+      "story": "STORY-MOD-F5-003",
+      "stories": [
+        "STORY-MOD-F5-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-003-01",
+        "TASK-MOD-F5-003-02"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-003_form_dossie_niveis",
+        "RF-MOD-F5-003_si_montar_dossie"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-004",
+      "ct": [
+        "CT-MOD-F5-003",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-104"
+      ],
+      "tel": [
+        "TEL-024"
+      ],
+      "story": "STORY-MOD-F5-004",
+      "stories": [
+        "STORY-MOD-F5-004"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-004_br_sinalizar_medida"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-005",
+      "ct": [
+        "CT-MOD-F5-004",
+        "CT-MOD-F5-101",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-107",
+        "CT-MOD-F5-109"
+      ],
+      "tel": [
+        "TEL-024",
+        "TEL-025"
+      ],
+      "story": "STORY-MOD-F5-005",
+      "stories": [
+        "STORY-MOD-F5-005"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-005-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-005_br_registrar_interacao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-006",
+      "ct": [
+        "CT-MOD-F5-005",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-106"
+      ],
+      "tel": [
+        "TEL-024"
+      ],
+      "story": "STORY-MOD-F5-006",
+      "stories": [
+        "STORY-MOD-F5-006"
+      ],
+      "tasks": [
+        "TASK-MOD-F5-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-006_br_encerrar_caso"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F5-007",
+      "ct": [
+        "CT-MOD-F5-006",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-103"
+      ],
+      "tel": [
+        "TEL-023"
+      ],
+      "story": "STORY-MOD-F5-007",
+      "stories": [
+        "STORY-MOD-F5-007"
+      ],
+      "tasks": [
+        "SEC-002",
+        "TASK-MOD-F5-007-01",
+        "TASK-MOD-F5-007-02",
+        "TASK-MOD-F5-007-03"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-001",
+      "ct": [
+        "CT-MOD-F6-001",
+        "CT-MOD-F6-103",
+        "CT-MOD-F6-105",
+        "CT-MOD-F6-107",
+        "CT-MOD-F6-108"
+      ],
+      "tel": [
+        "TEL-026"
+      ],
+      "story": "STORY-MOD-F6-001",
+      "stories": [
+        "STORY-MOD-F6-001"
+      ],
+      "tasks": [
+        "TASK-MOD-F6-001-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F6-001_report_funil"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-002",
+      "ct": [
+        "CT-MOD-F6-004",
+        "CT-MOD-F6-005",
+        "CT-MOD-F6-101",
+        "CT-MOD-F6-102",
+        "CT-MOD-F6-107",
+        "CT-MOD-F6-108"
+      ],
+      "tel": [
+        "TEL-027",
+        "TEL-030",
+        "TEL-031"
+      ],
+      "story": "STORY-MOD-F6-006",
+      "stories": [
+        "STORY-MOD-F6-006",
+        "STORY-MOD-F6-002"
+      ],
+      "tasks": [
+        "SEC-003",
+        "TASK-MOD-F6-006-01",
+        "TASK-MOD-F6-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F6-002_report_kpis_metas",
+        "RF-MOD-F6-006_acl_regularizacao_perfil"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-003",
+      "ct": [
+        "CT-MOD-F6-002",
+        "CT-MOD-F6-105",
+        "CT-MOD-F6-107",
+        "CT-MOD-F6-108"
+      ],
+      "tel": [
+        "TEL-020",
+        "TEL-028"
+      ],
+      "story": "STORY-MOD-F6-003",
+      "stories": [
+        "STORY-MOD-F6-003"
+      ],
+      "tasks": [
+        "TASK-MOD-F6-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F6-003_report_origem"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-004",
+      "ct": [
+        "CT-MOD-F2-003",
+        "CT-MOD-F2-103",
+        "CT-MOD-F2-107",
+        "CT-MOD-F2-108",
+        "CT-MOD-F2-110",
+        "CT-MOD-F6-003",
+        "CT-MOD-F6-104",
+        "CT-MOD-F6-107",
+        "CT-MOD-F6-108"
+      ],
+      "tel": [
+        "TEL-009",
+        "TEL-010",
+        "TEL-029"
+      ],
+      "story": "STORY-MOD-F2-004",
+      "stories": [
+        "STORY-MOD-F2-004",
+        "STORY-MOD-F6-004"
+      ],
+      "tasks": [
+        "SEC-010",
+        "TASK-MOD-F2-004-01",
+        "TASK-MOD-F2-004-02",
+        "TASK-MOD-F6-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F2-004_si_sortear_grupo_controle",
+        "RF-MOD-F2-004_ua_publicar_ciclo",
+        "RF-MOD-F6-004_si_efeito_incremental"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-005",
+      "ct": [
+        "CT-MOD-F6-005",
+        "CT-MOD-F6-102",
+        "CT-MOD-F6-105",
+        "CT-MOD-F6-107"
+      ],
+      "tel": [
+        "TEL-027",
+        "TEL-030"
+      ],
+      "story": "STORY-MOD-F6-005",
+      "stories": [
+        "STORY-MOD-F6-005"
+      ],
+      "tasks": [
+        "TASK-MOD-F6-005-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F6-005_report_ipva_itcd"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-006",
+      "ct": [
+        "CT-MOD-F5-006",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-103",
+        "CT-MOD-F6-004",
+        "CT-MOD-F6-108"
+      ],
+      "tel": [
+        "TEL-023",
+        "TEL-031"
+      ],
+      "story": "STORY-MOD-F5-007",
+      "stories": [
+        "STORY-MOD-F5-007",
+        "STORY-MOD-F6-006"
+      ],
+      "tasks": [
+        "SEC-002",
+        "TASK-MOD-F5-007-01",
+        "TASK-MOD-F5-007-02",
+        "TASK-MOD-F5-007-03",
+        "SEC-003",
+        "TASK-MOD-F6-006-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira",
+        "RF-MOD-F6-006_acl_regularizacao_perfil"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-F6-007",
+      "ct": [
+        "CT-MOD-F6-003",
+        "CT-MOD-F6-106",
+        "CT-MOD-F6-107"
+      ],
+      "tel": [
+        "TEL-026",
+        "TEL-027",
+        "TEL-028"
+      ],
+      "story": "STORY-MOD-F6-007",
+      "stories": [
+        "STORY-MOD-F6-007"
+      ],
+      "tasks": [
+        "TASK-MOD-F6-007-01"
+      ],
+      "nowIds": [
+        "RF-MOD-F6-007_ua_exportar_insumos"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-T-001",
+      "ct": [
+        "CT-MOD-F5-006",
+        "CT-MOD-F5-102",
+        "CT-MOD-F5-103",
+        "CT-MOD-T-001",
+        "CT-MOD-T-002",
+        "CT-MOD-T-008"
+      ],
+      "tel": [
+        "TEL-023",
+        "TEL-033"
+      ],
+      "story": "STORY-MOD-T-001",
+      "stories": [
+        "STORY-MOD-T-001",
+        "STORY-MOD-F5-007"
+      ],
+      "tasks": [
+        "SEC-011",
+        "TASK-MOD-T-001-01",
+        "SEC-002",
+        "TASK-MOD-F5-007-01",
+        "TASK-MOD-F5-007-02",
+        "TASK-MOD-F5-007-03"
+      ],
+      "nowIds": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira",
+        "RF-MOD-T-001_br_registrar_exportacao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-T-002",
+      "ct": [
+        "CT-MOD-F1-110",
+        "CT-MOD-T-003",
+        "CT-MOD-T-004",
+        "CT-MOD-T-009"
+      ],
+      "tel": [
+        "TEL-003",
+        "TEL-010",
+        "TEL-032"
+      ],
+      "story": "STORY-MOD-T-002",
+      "stories": [
+        "STORY-MOD-T-002"
+      ],
+      "tasks": [
+        "TASK-MOD-T-002-01"
+      ],
+      "nowIds": [
+        "RF-MOD-T-002_list_filtros_padrao"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-T-003",
+      "ct": [
+        "CT-MOD-F1-102",
+        "CT-MOD-F1-105",
+        "CT-MOD-T-005",
+        "CT-MOD-T-007"
+      ],
+      "tel": [
+        "TEL-004",
+        "TEL-032"
+      ],
+      "story": "STORY-MOD-T-003",
+      "stories": [
+        "STORY-MOD-T-003"
+      ],
+      "tasks": [
+        "TASK-MOD-T-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-T-003_ua_abrir_visao_unica"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-T-004",
+      "ct": [
+        "CT-MOD-T-006"
+      ],
+      "tel": [
+        "TEL-020"
+      ],
+      "story": "STORY-MOD-T-004",
+      "stories": [
+        "STORY-MOD-T-004"
+      ],
+      "tasks": [
+        "TASK-MOD-T-004-01"
+      ],
+      "nowIds": [
+        "RF-MOD-T-004_br_origem_obrigatoria"
+      ],
+      "nowIdsInstalados": [],
+      "atf": [],
+      "nivel": "N1"
+    }
+  ],
+  "geradoEm": "2026-11-24T16:51:55.485Z"
+}
