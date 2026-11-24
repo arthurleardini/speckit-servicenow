@@ -1,0 +1,14 @@
+{
+  "name": "sn-tasks-github",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Publica o tasks.json (spec-tasks v5.3/v5.4) como issues e sub-issues do GitHub, com o print da tela por permalink.",
+  "scripts": {
+    "push": "node cli.mjs",
+    "test": "node --test \"lib/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
