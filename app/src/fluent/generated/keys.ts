@@ -366,6 +366,54 @@ declare global {
                         table: 'sys_script_include'
                         id: 'e71ad2515eef41f691cb059ba7b4a4de'
                     }
+                    'RF-MOD-F5-003_rel_comunicacoes': {
+                        table: 'sys_relationship'
+                        id: '4d65b2f1039b4bafba76eacbaf02c882'
+                    }
+                    'RF-MOD-F5-003_rel_debitos': {
+                        table: 'sys_relationship'
+                        id: 'a8a351882b44405d89e13e732248ef81'
+                    }
+                    'RF-MOD-F5-003_rel_entrada_comunicacoes': {
+                        table: 'sys_ui_related_list_entry'
+                        id: 'f32f31b1476e490baf5ca156f037940f'
+                    }
+                    'RF-MOD-F5-003_rel_entrada_debitos': {
+                        table: 'sys_ui_related_list_entry'
+                        id: '214ddc2fd53248a5bb3cd87aa3c3c9cc'
+                    }
+                    'RF-MOD-F5-003_rel_entrada_interacoes': {
+                        table: 'sys_ui_related_list_entry'
+                        id: '3327120917dc4425a4199d4351aff93a'
+                    }
+                    'RF-MOD-F5-003_rel_entrada_parcelamentos': {
+                        table: 'sys_ui_related_list_entry'
+                        id: '51944552c62e4fc0a3368d15044eea69'
+                    }
+                    'RF-MOD-F5-003_rel_entrada_regularizacoes': {
+                        table: 'sys_ui_related_list_entry'
+                        id: '64fb274db22d4272a594a60ba0843344'
+                    }
+                    'RF-MOD-F5-003_rel_listas_dossie': {
+                        table: 'sys_ui_related_list'
+                        id: '08c8feb86a584c7ab7a8940605c40bf0'
+                    }
+                    'RF-MOD-F5-003_rel_parcelamentos': {
+                        table: 'sys_relationship'
+                        id: '9b31bcf8806447a8baa74d6c993244e2'
+                    }
+                    'RF-MOD-F5-003_rel_regularizacoes': {
+                        table: 'sys_relationship'
+                        id: '5e8ff98823864bc689fbabf4cd19219b'
+                    }
+                    'RF-MOD-F5-003_si_montar_dossie': {
+                        table: 'sys_script_include'
+                        id: 'd092adfcafa84890b0a4c5c79229e426'
+                    }
+                    'RF-MOD-F5-003_viewrule_dossie': {
+                        table: 'sysrule_view'
+                        id: '0b85974cf8634199ade9d4b40147eeee'
+                    }
                     'RF-MOD-F5-007_acl_caso_carteira': {
                         table: 'sys_security_acl'
                         id: '6a9d65419fb444418c05bce285cc526f'
@@ -4682,6 +4730,10 @@ declare global {
                         table: 'x_2326104_cob_sincronizacao'
                         id: 'a34ba0732d184411a89428a60885a014'
                     }
+                    src_server_atendimento_CasoDossie_server_js: {
+                        table: 'sys_module'
+                        id: '1f0f825fbe7641cdb9e6d9b7b3e529fb'
+                    }
                     src_server_carteira_CarteiraAtendente_server_js: {
                         table: 'sys_module'
                         id: '6305e630b7864512a8838b8f9395290e'
@@ -5337,6 +5389,78 @@ declare global {
                     'US-MOD-F2-005_test_11': {
                         table: 'sys_atf_step'
                         id: 'ee8462e6855f46909049775ee3e0a824'
+                    }
+                    'US-MOD-F5-003_atf_dossie_completo_positivo': {
+                        table: 'sys_atf_test'
+                        id: 'b48d7683df04419f8c9fb7de24e11cc7'
+                    }
+                    'US-MOD-F5-003_atf_dossie_outro_atendente_negativo': {
+                        table: 'sys_atf_test'
+                        id: '5b66b477e0ef4bed92475c082147f360'
+                    }
+                    'US-MOD-F5-003_atf_ui_dossie_positivo': {
+                        table: 'sys_atf_test'
+                        id: '32131d7622194773b1b84e2c858dcad1'
+                    }
+                    'US-MOD-F5-003_test_01': {
+                        table: 'sys_atf_step'
+                        id: '073dab2b81c24e4b80bf2116c79e0b7a'
+                    }
+                    'US-MOD-F5-003_test_02': {
+                        table: 'sys_atf_step'
+                        id: '8862f80d0d094691befecb297ec2ab60'
+                    }
+                    'US-MOD-F5-003_test_03': {
+                        table: 'sys_atf_step'
+                        id: '30e2177b186c4399982e393135f279bd'
+                    }
+                    'US-MOD-F5-003_test_04': {
+                        table: 'sys_atf_step'
+                        id: '292c7e8afe0340a9bbdadeef9991921e'
+                    }
+                    'US-MOD-F5-003_test_05': {
+                        table: 'sys_atf_step'
+                        id: 'aabe39da989e4a94be5dba102a1ec21e'
+                    }
+                    'US-MOD-F5-003_test_06': {
+                        table: 'sys_atf_step'
+                        id: '1623cc1cbf614e44ab053c5f6213550b'
+                    }
+                    'US-MOD-F5-003_test_07': {
+                        table: 'sys_atf_step'
+                        id: '2ea11021fd164ce8811e42362d5698f2'
+                    }
+                    'US-MOD-F5-003_test_08': {
+                        table: 'sys_atf_step'
+                        id: 'ba68bd5d4b384ac49702a48cec0553a9'
+                    }
+                    'US-MOD-F5-003_test_09': {
+                        table: 'sys_atf_step'
+                        id: '3749b393bb204ebfaa36a0a72c775489'
+                    }
+                    'US-MOD-F5-003_test_10': {
+                        table: 'sys_atf_step'
+                        id: 'c8c2dc03358c49f59deeb3cb4301bc5a'
+                    }
+                    'US-MOD-F5-003_test_11': {
+                        table: 'sys_atf_step'
+                        id: '919b9657fc454e6c8b167b1f7b67cb37'
+                    }
+                    'US-MOD-F5-003_test_12': {
+                        table: 'sys_atf_step'
+                        id: '848394b8453e422cb697200208366caf'
+                    }
+                    'US-MOD-F5-003_test_13': {
+                        table: 'sys_atf_step'
+                        id: '8ab5f2b15bda4253a72cf621577d80a4'
+                    }
+                    'US-MOD-F5-003_test_14': {
+                        table: 'sys_atf_step'
+                        id: '8f0f56430ab34cd39fe6a6b1601f8591'
+                    }
+                    'US-MOD-F5-003_test_15': {
+                        table: 'sys_atf_step'
+                        id: '2a3e7848174048afaffc4423d5fbb171'
                     }
                     'US-MOD-F5-007_atf_carteira_outro_atendente_negativo': {
                         table: 'sys_atf_test'
@@ -6581,6 +6705,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '09d9f3c3342c47c8921f682cdfaca521'
+                        key: {
+                            document_key: '292c7e8afe0340a9bbdadeef9991921e'
+                            variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '09ef77e49d5b48ce8e2f42712b243d83'
                         key: {
@@ -7092,6 +7224,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '0f42ac7ddb544b19ad30d1bd5fa06f89'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'valor_em_aberto'
+                            position: '7'
+                        }
+                    },
+                    {
                         table: 'sys_choice_set'
                         id: '0f63261d3ee3407d9a6c532f653d3ccb'
                         key: {
@@ -7108,6 +7262,14 @@ declare global {
                             value: 'email'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '101264da674743d9b61b31abe8ca72bc'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: '787a9b535320220002c6435723dc3455'
                         }
                     },
                     {
@@ -7672,6 +7834,20 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_policy_action'
+                        id: '160070ec0fe94de4b8a8878915784e64'
+                        key: {
+                            ui_policy: {
+                                id: 'e7a6f60d013c4b14aa58515ed9b06455'
+                                key: {
+                                    table: 'x_2326104_cob_caso'
+                                    short_description: 'Sinalizações do dossiê somente leitura'
+                                }
+                            }
+                            field: 'sinal_coercitivo'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '1632d4e10ec24c2b95eb3a6fac3b84bf'
                         key: {
@@ -8150,6 +8326,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '1c6938f12e0b42bdb140c6af36fa6df8'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'atendente'
+                            position: '2'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '1c728ae156be4c06b4af537698fb047c'
                         key: {
@@ -8432,6 +8630,14 @@ declare global {
                             }
                             element: '.begin_split'
                             position: '0'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '1fcb215705094e4cac06aa6936eb6720'
+                        key: {
+                            document_key: '8862f80d0d094691befecb297ec2ab60'
+                            variable: '915990ab531000109e02ddeeff7b12f8'
                         }
                     },
                     {
@@ -8929,6 +9135,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '2516cabc196948069629461bf7c25397'
+                        key: {
+                            document_key: '3749b393bb204ebfaa36a0a72c775489'
+                            variable: '42f2564b73031300440211d8faf6a777'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '25be6dc4a35047c18f325ca1c39e5c4e'
                         key: {
@@ -9007,6 +9221,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '269264f19076410781d67c39508dbfa2'
+                        key: {
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'encerrado_em'
+                            position: '3'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '269c2928826a43df97fa2fd7bd404155'
                         key: {
                             sys_ui_section: {
@@ -9025,6 +9261,28 @@ declare global {
                             }
                             element: '.split'
                             position: '9'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '269ff697659a4a8ca3d7881eacfb6f2a'
+                        key: {
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'motivo_encerramento'
+                            position: '1'
                         }
                     },
                     {
@@ -9122,6 +9380,14 @@ declare global {
                                     name: 'x_2326104_cob.admin'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '279289c79353415fa7870acccf63629b'
+                        key: {
+                            document_key: '8862f80d0d094691befecb297ec2ab60'
+                            variable: 'b86c0427531000109e02ddeeff7b1227'
                         }
                     },
                     {
@@ -9320,6 +9586,14 @@ declare global {
                     },
                     {
                         table: 'sys_variable_value'
+                        id: '29d20f73c8524542acaf342f17747143'
+                        key: {
+                            document_key: '2a3e7848174048afaffc4423d5fbb171'
+                            variable: '02fb0027531000109e02ddeeff7b120b'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
                         id: '2a02c2d85b164a3e8707e3e3e370faae'
                         key: {
                             document_key: 'e4e0a32cac6c41328d416c1c714be559'
@@ -9345,6 +9619,15 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_element_mapping'
+                        id: '2a6fec87ac7747e5815ca27ff8b8bf95'
+                        key: {
+                            id: '073dab2b81c24e4b80bf2116c79e0b7a'
+                            table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
+                            field: 'script'
                         }
                     },
                     {
@@ -9414,6 +9697,14 @@ declare global {
                         key: {
                             document_key: '349e35d422114312b5b715f923c40355'
                             variable: 'b27b2b29ff6033008d3f5d9ad53bf164'
+                        }
+                    },
+                    {
+                        table: 'sys_atf_test_suite_test'
+                        id: '2b400719355f4bc094b26c3dfcda701a'
+                        key: {
+                            test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
+                            test: 'b48d7683df04419f8c9fb7de24e11cc7'
                         }
                     },
                     {
@@ -9729,6 +10020,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '2f05d54d51194881bc472e3f0a0418ad'
+                        key: {
+                            document_key: '8f0f56430ab34cd39fe6a6b1601f8591'
+                            variable: '2c77697437f1030064a52f3c8e41f15a'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '2f0bdac1b14d462289818a062bedb120'
                         key: {
@@ -9763,6 +10062,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '2f2af5dd1485449b8fcd22199ddeffc8'
+                        key: {
+                            document_key: '8862f80d0d094691befecb297ec2ab60'
+                            variable: '02fb0027531000109e02ddeeff7b120b'
+                        }
+                    },
+                    {
                         table: 'sys_atf_test_suite_test'
                         id: '2f411c009bab47159fa9aaf8f6f4c5a0'
                         key: {
@@ -9785,6 +10092,14 @@ declare global {
                             name: 'x_2326104_cob_debito'
                             element: 'contribuinte'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '2fa40af6dc7a411b90e42fc55882ca73'
+                        key: {
+                            document_key: '073dab2b81c24e4b80bf2116c79e0b7a'
+                            variable: '42f2564b73031300440211d8faf6a777'
                         }
                     },
                     {
@@ -9876,6 +10191,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_element_mapping'
+                        id: '30d0f05250b9483a8599803a4378c215'
+                        key: {
+                            id: 'ba68bd5d4b384ac49702a48cec0553a9'
+                            table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
+                            field: 'script'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '30d6f88ca9c34c8e8c463283b33cae9e'
                         key: {
@@ -9956,6 +10280,15 @@ declare global {
                                 }
                             }
                             element: 'origem'
+                        }
+                    },
+                    {
+                        table: 'sys_element_mapping'
+                        id: '3193455e939f490d98f8901b8c164ee4'
+                        key: {
+                            id: '292c7e8afe0340a9bbdadeef9991921e'
+                            table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
+                            field: 'script'
                         }
                     },
                     {
@@ -10430,6 +10763,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '36939d45267e4da19c32ae9241c8c5b0'
+                        key: {
+                            document_key: 'aabe39da989e4a94be5dba102a1ec21e'
+                            variable: '42f2564b73031300440211d8faf6a777'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '36b9e32d9a844adb8c0f48b55701f024'
                         key: {
@@ -10862,6 +11203,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '3bd9d0707f2b44558ddf25fc7ff5e98e'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'prioridade'
+                            position: '6'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '3c2196ca3cbe44da9ce35bf782ff693e'
                         key: {
@@ -11154,6 +11517,36 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '3dd9face2dd541a2b54a1cf9fde049fd'
+                        key: {
+                            document_key: '2ea11021fd164ce8811e42362d5698f2'
+                            variable: '586e2c4253e0220002c6435723dc3415'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '3de24c484e6741ccb942f6b98a810473'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'estagio'
+                            position: '5'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '3e3edc5b970045998e2e323e84743860'
                         key: {
@@ -11202,6 +11595,39 @@ declare global {
                             name: 'x_2326104_cob_regua'
                             element: 'ativa'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_form_section'
+                        id: '3e7642f0e4bf4736b4cff5890884e358'
+                        key: {
+                            sys_ui_form: {
+                                id: '58f7a02538774c3eb2e56e12fa0a1722'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: 'a7907b8219b94b63bf90ff600586cdfa'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Atividades'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
                         }
                     },
                     {
@@ -11546,6 +11972,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_atf_test_suite_test'
+                        id: '42c0736dee6c433db396efe2e4207ea2'
+                        key: {
+                            test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
+                            test: '32131d7622194773b1b84e2c858dcad1'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '42c0dc25a9d44475b5931e379e143e98'
                         key: {
@@ -11627,6 +12061,14 @@ declare global {
                             }
                             element: 'canal'
                             position: '9'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '4321186ce80e4a9b9882eb52ce422ec8'
+                        key: {
+                            document_key: '2a3e7848174048afaffc4423d5fbb171'
+                            variable: 'b86c0427531000109e02ddeeff7b1227'
                         }
                     },
                     {
@@ -11893,6 +12335,39 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form_section'
+                        id: '457a5a152d8448498dde0fca80f98ddf'
+                        key: {
+                            sys_ui_form: {
+                                id: '58f7a02538774c3eb2e56e12fa0a1722'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_choice_set'
                         id: '45a099ed09c443b492901586da48410e'
                         key: {
@@ -12151,6 +12626,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '4767fec9567b4ec383597c60a4cdd220'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: '80f953535320220002c6435723dc340f'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '47a6a04665e1459f993afd3b1c484d8d'
                         key: {
@@ -12276,6 +12759,21 @@ declare global {
                             name: 'x_2326104_cob_interacao'
                             element: 'resultado'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_section'
+                        id: '492caf0218724c77a7980e963e9ef05c'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            caption: 'Score'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
                         }
                     },
                     {
@@ -12558,6 +13056,14 @@ declare global {
                             value: 'parcelado'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '4ce72d5f6efe459387bab54fa1f40c8a'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: 'e81ad3535320220002c6435723dc340c'
                         }
                     },
                     {
@@ -12929,6 +13435,21 @@ declare global {
                             value: 'aberto'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_section'
+                        id: '4f6a1334704d48f782aa2f3a59c4089c'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            caption: 'Caso'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
                         }
                     },
                     {
@@ -13627,6 +14148,20 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form'
+                        id: '58f7a02538774c3eb2e56e12fa0a1722'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_ui_form_section'
                         id: '58febf60ca5d40ad9d88bfcfaef68016'
                         key: {
@@ -14003,6 +14538,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '5c644c8a96424390b58cc950a8c16d9c'
+                        key: {
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sem_score'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '5ce76082650440d78c5f3c0e2355ee48'
                         key: {
@@ -14138,6 +14695,14 @@ declare global {
                                     sys_domain: 'global'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '5e2a3b4c02e54d9da9404a8ccb4f8f15'
+                        key: {
+                            document_key: 'c8c2dc03358c49f59deeb3cb4301bc5a'
+                            variable: '915990ab531000109e02ddeeff7b12f8'
                         }
                     },
                     {
@@ -14335,6 +14900,14 @@ declare global {
                                     sys_domain: 'global'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '5f97144ee1574d84a90ecf9a0310fe86'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: 'b1fefcde73633300b19898b8caf6a7af'
                         }
                     },
                     {
@@ -14966,6 +15539,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '65ec00ad1d86445490f519e65ba454f3'
+                        key: {
+                            document_key: '1623cc1cbf614e44ab053c5f6213550b'
+                            variable: 'b86c0427531000109e02ddeeff7b1227'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '65f84a562c124fd09e101472d43f6d92'
                         key: {
@@ -15004,6 +15585,14 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_regularizacao'
                             element: 'data'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '676ed47522c74861847f11c52aaa53b9'
+                        key: {
+                            document_key: '2a3e7848174048afaffc4423d5fbb171'
+                            variable: '915990ab531000109e02ddeeff7b12f8'
                         }
                     },
                     {
@@ -15112,6 +15701,14 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_regua'
                             element: 'ordem_fallback'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '6867ab0f6fd34e69a3a733769b41e2ea'
+                        key: {
+                            document_key: 'c8c2dc03358c49f59deeb3cb4301bc5a'
+                            variable: '78b8d86b531000109e02ddeeff7b12f3'
                         }
                     },
                     {
@@ -15553,6 +16150,14 @@ declare global {
                     },
                     {
                         table: 'sys_variable_value'
+                        id: '6c7a357902884edb8b7c2bee76d05db8'
+                        key: {
+                            document_key: '30e2177b186c4399982e393135f279bd'
+                            variable: '586e2c4253e0220002c6435723dc3415'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
                         id: '6c844c753b224bee82ac587941fb4687'
                         key: {
                             document_key: 'caa2cc9a440a49f09b6be1ef4c8c7f56'
@@ -15665,6 +16270,23 @@ declare global {
                             value: 'qualificada'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '6d8bc13a086f4eccbb442f90b77bf518'
+                        key: {
+                            document_key: '8f0f56430ab34cd39fe6a6b1601f8591'
+                            variable: '2bf688e637310300b8a62f3c8e41f1d0'
+                        }
+                    },
+                    {
+                        table: 'sys_element_mapping'
+                        id: '6d99180b2fcd4144984a4496c062f012'
+                        key: {
+                            id: '2ea11021fd164ce8811e42362d5698f2'
+                            table: 'var__m_atf_input_variable_071ee5b253331200040729cac2dc348d'
+                            field: 'user'
                         }
                     },
                     {
@@ -15825,6 +16447,15 @@ declare global {
                             value: 'encerrado'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_element_mapping'
+                        id: '6f0d6b2f14f448c8bb0687cf0fe8f37d'
+                        key: {
+                            id: '3749b393bb204ebfaa36a0a72c775489'
+                            table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
+                            field: 'script'
                         }
                     },
                     {
@@ -16765,6 +17396,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '77abd0678314423a84791bb12a463e7b'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: 'b124164e53a0220002c6435723dc34c5'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '77b57ba75dfb4e3bb6d26b7dd061bb86'
                         key: {
@@ -17638,6 +18277,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_element_mapping'
+                        id: '8128e2eb2ef940b08fceb1ecadff164b'
+                        key: {
+                            id: '919b9657fc454e6c8b167b1f7b67cb37'
+                            table: 'var__m_atf_input_variable_071ee5b253331200040729cac2dc348d'
+                            field: 'user'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list'
                         id: '8131ec97367943bb9641f4c5672d97de'
                         key: {
@@ -17991,6 +18639,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '84f1e21aada046c3b156a647624a85af'
+                        key: {
+                            sys_ui_section: {
+                                id: 'ab8fa055306f4b7c95bdcd938ff0c090'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Sinalizações'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sinal_coercitivo'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '851d1d27817449eaaa6ea591e5be3d56'
                         key: {
@@ -18202,6 +18872,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '8733b4d15b324dcba42eec8314c764a5'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: 'e63a97535320220002c6435723dc34b8'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '875cb448808e4e6aa663414032634320'
                         key: {
@@ -18344,6 +19022,28 @@ declare global {
                                     name: 'x_2326104_cob.admin'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '891502d552b7433188ad72c57fe7e80d'
+                        key: {
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '0'
                         }
                     },
                     {
@@ -18647,6 +19347,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '8c11b8c62a3a4a769cf24aff6bb4e925'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '8'
+                        }
+                    },
+                    {
                         table: 'sys_ui_form'
                         id: '8c21193423ae4137b22b2d3f4f51b89d'
                         key: {
@@ -18805,6 +19527,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '8d49904b502246198aa9cf7458612e32'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: 'c2eb56e853422110248dddeeff7b1261'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '8d6d0ec25ae741bd863a9bde996f7435'
                         key: {
@@ -18889,6 +19619,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '8e6e04de66774cf495f09e8a605755e3'
+                        key: {
+                            document_key: 'aabe39da989e4a94be5dba102a1ec21e'
+                            variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '8e817c9f1afe417a8bda32003db46fdf'
                         key: {
@@ -18911,6 +19649,61 @@ declare global {
                         key: {
                             document_key: 'd6f21f328f574562990349ea5d72a4a7'
                             variable: '98c44875ffa033008d3f5d9ad53bf1fa'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '8ecf709cdc08447c968b230535cb54a3'
+                        key: {
+                            sys_ui_section: {
+                                id: 'a7907b8219b94b63bf90ff600586cdfa'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Atividades'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'activity.xml'
+                            position: '1'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_form_section'
+                        id: '8f2449770c074502af436090d5e71a4d'
+                        key: {
+                            sys_ui_form: {
+                                id: '58f7a02538774c3eb2e56e12fa0a1722'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: 'ab8fa055306f4b7c95bdcd938ff0c090'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Sinalizações'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
                         }
                     },
                     {
@@ -19073,6 +19866,15 @@ declare global {
                             }
                             element: '.end_split'
                             position: '17'
+                        }
+                    },
+                    {
+                        table: 'sys_element_mapping'
+                        id: '907a3f8ef9e340bcbf698cca506d6f27'
+                        key: {
+                            id: '30e2177b186c4399982e393135f279bd'
+                            table: 'var__m_atf_input_variable_071ee5b253331200040729cac2dc348d'
+                            field: 'user'
                         }
                     },
                     {
@@ -19416,6 +20218,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '94e53cf3851140b28d0aa5f60d45d4df'
+                        key: {
+                            document_key: 'ba68bd5d4b384ac49702a48cec0553a9'
+                            variable: '42f2564b73031300440211d8faf6a777'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '9553d24bc65f462d81e4e8fb9a9cfade'
                         key: {
@@ -19710,6 +20520,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '99152895f65e41dea53cab005d927de3'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: '17d732a9c7a333005e5c45b881c26007'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '9946961f29df4725a5c711c81b79af6b'
                         key: {
@@ -19856,6 +20674,20 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_policy_action'
+                        id: '9b5e5cf0c07d490f80be1e9f4a340e8e'
+                        key: {
+                            ui_policy: {
+                                id: 'e7a6f60d013c4b14aa58515ed9b06455'
+                                key: {
+                                    table: 'x_2326104_cob_caso'
+                                    short_description: 'Sinalizações do dossiê somente leitura'
+                                }
+                            }
+                            field: 'sinal_coercitivo_desc'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '9baae373ba7e4e509e142e76cace2aca'
                         key: {
@@ -19891,6 +20723,28 @@ declare global {
                         key: {
                             document_key: '1741b4bd8b7148788d819baea1b4802f'
                             variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '9c4390e9c1fb41a094c51be320ac1906'
+                        key: {
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '2'
                         }
                     },
                     {
@@ -20013,6 +20867,14 @@ declare global {
                                     name: 'x_2326104_cob.atendente'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '9dd0a3d1f86c4df5b046e89fd628b5a1'
+                        key: {
+                            document_key: '919b9657fc454e6c8b167b1f7b67cb37'
+                            variable: '586e2c4253e0220002c6435723dc3415'
                         }
                     },
                     {
@@ -20172,6 +21034,14 @@ declare global {
                         key: {
                             document_key: 'f3e5ece0593a47b5888921e0727cd56e'
                             variable: '1985e0ceff2433008d3f5d9ad53bf1ba'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '9fa5cd1fbf7c49b589f5434b17b3d2c8'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: '74d6e7a0a3023110571967d1361e616b'
                         }
                     },
                     {
@@ -20519,6 +21389,28 @@ declare global {
                         key: {
                             document_key: '7ad687927b9846ed955c4f0c9935a239'
                             variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'a35343c864f94afba5e4cc269a286cc9'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '0'
                         }
                     },
                     {
@@ -21004,6 +21896,21 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_section'
+                        id: 'a7907b8219b94b63bf90ff600586cdfa'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            caption: 'Atividades'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'a7ad74a05e034fc38aa01d25cc5ae207'
                         key: {
@@ -21088,6 +21995,39 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form_section'
+                        id: 'aa31bddd8a034b6c918abf3b9f93abdd'
+                        key: {
+                            sys_ui_form: {
+                                id: '58f7a02538774c3eb2e56e12fa0a1722'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_atf_test_suite_test'
                         id: 'aa59204b93e84854bb02bf27c27adad8'
                         key: {
@@ -21106,6 +22046,28 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'aa98a9f8fe4f4ef88c08ed5ba0de422d'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'contribuinte'
+                            position: '1'
                         }
                     },
                     {
@@ -21192,6 +22154,21 @@ declare global {
                                 }
                             }
                             element: 'score_usado'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_section'
+                        id: 'ab8fa055306f4b7c95bdcd938ff0c090'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            caption: 'Sinalizações'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
                         }
                     },
                     {
@@ -21492,6 +22469,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'afc36f688da441baa1cfdd468f09108d'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: 'ad351a4e53a0220002c6435723dc34f0'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'afc9573a3c964e718f2f5a25d4ae4af6'
                         key: {
@@ -21648,6 +22633,14 @@ declare global {
                             name: 'x_2326104_cob_debito_stg'
                             element: 'processado'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'b082b485accf4950ade1e8cfd64bfde4'
+                        key: {
+                            document_key: '2a3e7848174048afaffc4423d5fbb171'
+                            variable: '78b8d86b531000109e02ddeeff7b12f3'
                         }
                     },
                     {
@@ -21957,6 +22950,14 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_debito_stg'
                             element: 'cpf'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'b46e70ecd0b848069769d10a31c69809'
+                        key: {
+                            document_key: '1623cc1cbf614e44ab053c5f6213550b'
+                            variable: '02fb0027531000109e02ddeeff7b120b'
                         }
                     },
                     {
@@ -23068,6 +24069,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'be48d733c89446cbb210c6342392c4ce'
+                        key: {
+                            document_key: '848394b8453e422cb697200208366caf'
+                            variable: '6e55da4e53a0220002c6435723dc34a0'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'be52da5e62074cb6a17fba37e224a85e'
                         key: {
@@ -23578,6 +24587,21 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_section'
+                        id: 'c440d08f4699428889a0993a3533824b'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            caption: 'Encerramento'
+                            view: {
+                                id: 'd42aa48d068e4a738c5b683457329f4a'
+                                key: {
+                                    name: 'x_2326104_cob_dossie'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: 'c46197598c0d48c58dab132b407a4c7d'
                         key: {
@@ -23861,6 +24885,39 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form_section'
+                        id: 'c686001b7cb24a309889ad5a4e24d836'
+                        key: {
+                            sys_ui_form: {
+                                id: '58f7a02538774c3eb2e56e12fa0a1722'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'c687eb26d7164658af92c73a5dc7a996'
                         key: {
@@ -24031,6 +25088,14 @@ declare global {
                     },
                     {
                         table: 'sys_variable_value'
+                        id: 'c88ac2e95f284ef59e241df3cf12bf11'
+                        key: {
+                            document_key: 'ba68bd5d4b384ac49702a48cec0553a9'
+                            variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
                         id: 'c898008fb1d94880a333a3bc719ca4cd'
                         key: {
                             document_key: 'ee8462e6855f46909049775ee3e0a824'
@@ -24077,6 +25142,36 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'c9834c625a1b476d91aaa2518ec6f2a5'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: '0cd9df135320220002c6435723dc3426'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ca005d2da8f94f49a6d52338c9cc9be9'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ciclo'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'ca11df9cbdcf47db928bf1f88aca4ba5'
                         key: {
@@ -24098,6 +25193,22 @@ declare global {
                             value: 'ipva'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_atf_test_suite_test'
+                        id: 'ca387f40b69d4d4884dfbc1ddea25f0b'
+                        key: {
+                            test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
+                            test: '5b66b477e0ef4bed92475c082147f360'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'caacd8c289484059b68006e57364624b'
+                        key: {
+                            document_key: 'c8c2dc03358c49f59deeb3cb4301bc5a'
+                            variable: '02fb0027531000109e02ddeeff7b120b'
                         }
                     },
                     {
@@ -24608,6 +25719,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'cf5c4408ba1741078e71963a435ce375'
+                        key: {
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'ua_table_licensing_config'
                         id: 'cf5f3c3474864374a6c47c2e60c56503'
                         key: {
@@ -25002,6 +26135,65 @@ declare global {
                             value: 'regularizado'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_view'
+                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                        key: {
+                            name: 'x_2326104_cob_dossie'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'd44b0618ba8c4f0da2387d7ccc8bad6f'
+                        key: {
+                            document_key: '073dab2b81c24e4b80bf2116c79e0b7a'
+                            variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd493fd57c02b435f90f0e6c1a46b2afb'
+                        key: {
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '2'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd4a20ca1066144019cda7207ab108de0'
+                        key: {
+                            sys_ui_section: {
+                                id: 'ab8fa055306f4b7c95bdcd938ff0c090'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Sinalizações'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sinal_coercitivo_desc'
+                            position: '1'
                         }
                     },
                     {
@@ -25488,6 +26680,14 @@ declare global {
                         key: {
                             document_key: 'ec41c642e7634cf49acf90afade51835'
                             variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'd9211bb1beb84c78b84cbf9f98de0f30'
+                        key: {
+                            document_key: '1623cc1cbf614e44ab053c5f6213550b'
+                            variable: '915990ab531000109e02ddeeff7b12f8'
                         }
                     },
                     {
@@ -26337,6 +27537,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'e0ab2e2e2c6c4201be2fd9914c81dbdb'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: '6e5a1b535320220002c6435723dc3498'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'e0bbbae43eda4dcb8b098d1a3a47dec0'
                         key: {
@@ -27061,6 +28269,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_policy'
+                        id: 'e7a6f60d013c4b14aa58515ed9b06455'
+                        key: {
+                            table: 'x_2326104_cob_caso'
+                            short_description: 'Sinalizações do dossiê somente leitura'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'e84e0314798741cba16f23e0e01586c7'
                         key: {
@@ -27166,6 +28382,14 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_debito_stg'
                             element: 'origem'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'e984edfd7ad148d9a6c3903ac91af81b'
+                        key: {
+                            document_key: '8862f80d0d094691befecb297ec2ab60'
+                            variable: '78b8d86b531000109e02ddeeff7b12f3'
                         }
                     },
                     {
@@ -27309,6 +28533,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'ebfb7d39aa38488293e03fe004c7bcc8'
+                        key: {
+                            sys_ui_section: {
+                                id: 'a7907b8219b94b63bf90ff600586cdfa'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Atividades'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'ec022fd72fae470a8705df1fd7ad771e'
                         key: {
@@ -27366,6 +28612,22 @@ declare global {
                         key: {
                             document_key: '12b24eece66148aa8fb0d24bc079295a'
                             variable: '1778a7480f20101091d0f00c97767e03'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'eca9aabced8c47dc8d27ebe240838558'
+                        key: {
+                            document_key: '3749b393bb204ebfaa36a0a72c775489'
+                            variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'ecd76ae0b7ae4fb895ca19a47fe18438'
+                        key: {
+                            document_key: 'c8c2dc03358c49f59deeb3cb4301bc5a'
+                            variable: 'b86c0427531000109e02ddeeff7b1227'
                         }
                     },
                     {
@@ -27617,6 +28879,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_element_mapping'
+                        id: 'f08c2858eeef4200b32ab32e6ab4018a'
+                        key: {
+                            id: '848394b8453e422cb697200208366caf'
+                            table: 'var__m_atf_input_variable_5f2e0e535332120028bc29cac2dc34d3'
+                            field: 'record_id'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'f0a1521d1daa48acba816f7fe6753abe'
                         key: {
@@ -27704,6 +28975,14 @@ declare global {
                             value: 'telefone'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'f105d6688f1c46d8b3fba34a5322f7d6'
+                        key: {
+                            document_key: '1623cc1cbf614e44ab053c5f6213550b'
+                            variable: '78b8d86b531000109e02ddeeff7b12f3'
                         }
                     },
                     {
@@ -27911,6 +29190,28 @@ declare global {
                         key: {
                             document_key: '9796ee2818c34598a65900d1d2c43009'
                             variable: '17d732a9c7a333005e5c45b881c26007'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'f381938462424853b1bad87fafd68ee5'
+                        key: {
+                            sys_ui_section: {
+                                id: 'c440d08f4699428889a0993a3533824b'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Encerramento'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '4'
                         }
                     },
                     {
@@ -28207,11 +29508,42 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_element_mapping'
+                        id: 'f6ff0d14fe90452ea9bd87edbcaac57a'
+                        key: {
+                            id: 'aabe39da989e4a94be5dba102a1ec21e'
+                            table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
+                            field: 'script'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'f74b048e47e64104be416e69021b40ca'
                         key: {
                             name: 'x_2326104_cob_segmentacao'
                             element: 'motivo'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'f77caafa888e402cacee2bf15056ca74'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '4'
                         }
                     },
                     {
@@ -28337,6 +29669,28 @@ declare global {
                         key: {
                             document_key: '7b8579168f7c4c558357d08cc73761e7'
                             variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'f9503b6ddda04324af6568faa93d266f'
+                        key: {
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '4'
                         }
                     },
                     {
@@ -28497,6 +29851,14 @@ declare global {
                             value: 'sem_contato'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'fab41b26d9b04b3ead23a3e9be1d27eb'
+                        key: {
+                            document_key: '8ab5f2b15bda4253a72cf621577d80a4'
+                            variable: '592a17535320220002c6435723dc34d7'
                         }
                     },
                     {
@@ -28729,6 +30091,14 @@ declare global {
                                     sys_domain: 'global'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'fc3fec57dcfe4bea9b16aa5970db0a0e'
+                        key: {
+                            document_key: '292c7e8afe0340a9bbdadeef9991921e'
+                            variable: '42f2564b73031300440211d8faf6a777'
                         }
                     },
                     {
@@ -29133,6 +30503,36 @@ declare global {
                             name: 'x_2326104_cob_interacao'
                             element: 'caso'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'ff24ec5a25af4714a80e1e24d5db6dd6'
+                        key: {
+                            document_key: '8f0f56430ab34cd39fe6a6b1601f8591'
+                            variable: '820ec4e93735030064a52f3c8e41f1a4'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ff6316820fdb42d982fda7048f1189a2'
+                        key: {
+                            sys_ui_section: {
+                                id: '492caf0218724c77a7980e963e9ef05c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Score'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'score'
+                            position: '1'
                         }
                     },
                     {

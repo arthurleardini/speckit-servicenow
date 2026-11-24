@@ -13,6 +13,7 @@ import {
 } from './US-MOD-F2-004.now'
 import { t_f2005_score, t_f2005_fallback, t_f2005_fallback_neg, t_f2005_autorizacao } from './US-MOD-F2-005.now'
 import { t_f5007_propria_pos, t_f5007_outro_neg, t_f5007_coord_pos } from './US-MOD-F5-007.now'
+import { t_f5003_dossie_pos, t_f5003_dossie_neg, t_f5003_ui } from './US-MOD-F5-003.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -26,5 +27,6 @@ export const suite_cob_regressao = TestSuite({
         t_f2004_publicar_neg, t_f2004_imutavel_neg, t_f2004_ui, t_f2004_ui_neg, t_f2004_outro_caminho,
         t_f2005_score, t_f2005_fallback, t_f2005_fallback_neg, t_f2005_autorizacao,
         t_f5007_propria_pos, t_f5007_outro_neg, t_f5007_coord_pos,
+        t_f5003_dossie_pos, t_f5003_dossie_neg, t_f5003_ui,
     ],
 })
