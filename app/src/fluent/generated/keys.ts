@@ -4537,14 +4537,17 @@ declare global {
                     src_server_qualificacao_QualificacaoCiclo_server_js: {
                         table: 'sys_module'
                         id: '2273116000e4479d892d2ca979819153'
+                        deleted: true
                     }
                     src_server_qualificacao_recusarAcaoControle_server_js: {
                         table: 'sys_module'
                         id: 'aa822de32ea6451482060b9cd1b04090'
+                        deleted: true
                     }
                     src_server_qualificacao_segmentoControleImutavel_server_js: {
                         table: 'sys_module'
                         id: '7aad343335cf4f6e864356ce7358b01f'
+                        deleted: true
                     }
                     suite_cob_regressao: {
                         table: 'sys_atf_test_suite'
@@ -4694,6 +4697,10 @@ declare global {
                         table: 'sys_atf_test'
                         id: 'e80fcf8e6dd245dc9ca5399d6a6a41df'
                     }
+                    'US-MOD-F2-002_atf_ui_versao_publicada_positivo': {
+                        table: 'sys_atf_test'
+                        id: '896e0639b6054239803a49a5ad6776b7'
+                    }
                     'US-MOD-F2-002_atf_versao_publicada_imutavel_negativo': {
                         table: 'sys_atf_test'
                         id: '7ae2ff4e2a5e4251b195552097b1d37a'
@@ -4833,6 +4840,10 @@ declare global {
                     'US-MOD-F2-002_test_34': {
                         table: 'sys_atf_step'
                         id: '5a741111e55c4edda4b3582dc9ce948c'
+                    }
+                    'US-MOD-F2-002_test_35': {
+                        table: 'sys_atf_step'
+                        id: 'c704100dd1194cb18a1ae2e1a5db3526'
                     }
                     usuario_demo_admin: {
                         table: 'sys_user'
@@ -5427,6 +5438,14 @@ declare global {
                                 }
                             }
                             element: 'fonte'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '057c01063efc48c2a13a15264c1096f5'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: '1985e0ceff2433008d3f5d9ad53bf1ba'
                         }
                     },
                     {
@@ -8000,6 +8019,14 @@ declare global {
                             name: 'x_2326104_cob_contribuinte'
                             element: 'email'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '268070500a734befb13d83a9f4a96fc6'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: '1778a7480f20101091d0f00c97767e03'
                         }
                     },
                     {
@@ -10738,6 +10765,14 @@ declare global {
                         key: {
                             document_key: '12b24eece66148aa8fb0d24bc079295a'
                             variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
+                        table: 'sys_atf_test_suite_test'
+                        id: '474a3894b3a64f54a5313a8600543871'
+                        key: {
+                            test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
+                            test: '896e0639b6054239803a49a5ad6776b7'
                         }
                     },
                     {
@@ -13631,6 +13666,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: '6abcabc6ac174585b0d71c9f219b7d3d'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '6ace3a901a5146279eba0222df6fffe7'
                         key: {
@@ -13992,6 +14035,14 @@ declare global {
                             name: 'x_2326104_cob_debito_stg'
                             element: 'origem'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: '6f7483246d6f4d2e941b92b95c27e041'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: 'b27b2b29ff6033008d3f5d9ad53bf164'
                         }
                     },
                     {
@@ -17979,6 +18030,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'a26915031f2f4b29928390a95d78eae1'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: 'ff06ab840f20101091d0f00c97767e6d'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'a27c4aec65c841f98b9716c09b736454'
                         deleted: true
@@ -19594,6 +19653,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_variable_value'
+                        id: 'b5e2a662493147a3b89b751bdc4ce985'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: '6f69fc4aff6433008d3f5d9ad53bf18c'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'b5f5e16bfba14165b25f2c703076977d'
                         key: {
@@ -20108,6 +20175,14 @@ declare global {
                             }
                             element: 'tributo'
                             position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_variable_value'
+                        id: 'bb3ea302132740f7b153d41b0f8accee'
+                        key: {
+                            document_key: 'c704100dd1194cb18a1ae2e1a5db3526'
+                            variable: '98c44875ffa033008d3f5d9ad53bf1fa'
                         }
                     },
                     {

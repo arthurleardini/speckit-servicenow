@@ -423,8 +423,8 @@ jasmine.getEnv().execute();`,
 
 export const t_f2002_ui_pos = Test({
     $id: Now.ID['US-MOD-F2-002_atf_ui_acoes_coordenador_positivo'],
-    name: 'RF-MOD-F2-002 — coordenador vê «Publicar versão» no rascunho e «Criar nova versão» na publicada',
-    description: 'Abre no form (TEL-008) uma versão em rascunho e uma publicada como coordenador: no rascunho aparece «Publicar versão» e não «Criar nova versão»; na publicada aparece «Criar nova versão», some «Publicar versão» e o valor mínimo e o atraso ficam somente leitura (UI Action e ACL, lado positivo).',
+    name: 'RF-MOD-F2-002 — coordenador vê «Publicar versão» no rascunho',
+    description: 'Abre no form (TEL-008) uma versão em rascunho como coordenador: aparece «Publicar versão» e não aparece «Criar nova versão» (UI Action, lado positivo).',
     failOnServerError: true,
 }, (atf) => {
     const rascunho = atf.server.recordInsert({
@@ -432,6 +432,18 @@ export const t_f2002_ui_pos = Test({
         table: 'x_2326104_cob_criterio',
         fieldValues: { nome: 'ICMS alto valor (fictício)', codigo: 'ATF-F2002-UI1', versao: 1, estado: 'rascunho' },
     })
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_23'], firstName: 'ATF', lastName: 'Coordenador F2-002 UI', roles: [role_coordenador] })
+    atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_24'], table: 'x_2326104_cob_criterio', recordId: rascunho.record_id })
+    atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_25'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')] })
+})
+
+// Um form por teste: o segundo openExistingRecord no mesmo teste ficou esperando até o timeout.
+export const t_f2002_ui_publicada = Test({
+    $id: Now.ID['US-MOD-F2-002_atf_ui_versao_publicada_positivo'],
+    name: 'RF-MOD-F2-002 — versão publicada mostra «Criar nova versão» e fica somente leitura',
+    description: 'Abre no form (TEL-008) uma versão publicada como coordenador: aparece «Criar nova versão», não aparece «Publicar versão», e o valor mínimo e o atraso ficam somente leitura (UI Action e ACL de escrita por estado, RN-NOVO-F2-001).',
+    failOnServerError: true,
+}, (atf) => {
     atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-F2-002_test_22'],
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
@@ -450,9 +462,7 @@ export const t_f2002_ui_pos = Test({
     })
     // A versão publicada nasce sem a business rule (setWorkflow false); o id vem de uma consulta.
     const publicada = atf.server.recordQuery({ $id: Now.ID['US-MOD-F2-002_test_34'], table: 'x_2326104_cob_criterio', fieldValues: 'codigo=ATF-F2002-UI2', assert: 'records_match_query' })
-    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_23'], firstName: 'ATF', lastName: 'Coordenador F2-002 UI', roles: [role_coordenador] })
-    atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_24'], table: 'x_2326104_cob_criterio', recordId: rascunho.record_id })
-    atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_25'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')] })
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_35'], firstName: 'ATF', lastName: 'Coordenador F2-002 UI publicada', roles: [role_coordenador] })
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_26'], table: 'x_2326104_cob_criterio', recordId: publicada.first_record })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_27'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')] })
     atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_28'], table: 'x_2326104_cob_criterio', readOnly: ['valor_minimo', 'atraso_minimo_dias'] })
