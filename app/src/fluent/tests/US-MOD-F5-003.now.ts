@@ -138,6 +138,7 @@ export const t_f5003_dossie_neg = Test({
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
     describe('Dossiê de outro atendente', function() {
         var g = new GlideRecord('x_2326104_cob_caso');
+        g.setWorkflow(false); // só para achar o id do caso do outro atendente: a consulta normal já não o traz
         g.addQuery('contribuinte.nome', 'Contribuinte fictício dossiê negado F5-003');
         g.query();
         g.next();
