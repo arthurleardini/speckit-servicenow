@@ -14,6 +14,10 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 29 | 2026-11-24 15:29 | now-sdk-install | dev493801 | x_2326104_cob | cbda6cf09b2586c69d1d1b066e884f3f05ff50e4 | ok; 1056 registros | — | sn-capture |
+| 28 | 2026-11-24 15:12 | now-sdk-install | dev493801 | x_2326104_cob | cd03ed7e709a1a2eac4558f73ad1663030170812 | ok; 1056 registros | — | sn-capture |
+| 27 | 2026-11-24 14:59 | now-sdk-install | dev493801 | x_2326104_cob | 6d5888a0b28faecd2c5b1fe0f390f576c8646f4e | ok; 1056 registros | — | sn-capture |
+| 26 | 2026-11-24 14:56 | now-sdk-install | dev493801 | x_2326104_cob | 6d5888a0b28faecd2c5b1fe0f390f576c8646f4e | falha-contagem; 1058 registros | — | corrigir e rodar npm run reinstall |
 | 25 | 2026-11-24 14:46 | now-sdk-install | dev493801 | x_2326104_cob | a947eb1e1635746be4971b44cc3396561100f941 | ok; 1056 registros | — | sn-capture |
 | 24 | 2026-11-24 14:43 | now-sdk-install | dev493801 | x_2326104_cob | a947eb1e1635746be4971b44cc3396561100f941 | falha-contagem; 1057 registros | — | corrigir e rodar npm run reinstall |
 | 23 | 2026-11-24 13:56 | sn-tasks-github | --dry-run e depois publicação (GH_BIN=/tmp/ghx.sh) em arthurleardini/speckit-servicenow | outputs/spec/tasks.json, traceability.json, inputs/fio-condutor.md, screens/*.png (commit 48e8686) | issues #7–#90, outputs/spec/id-map.json | dry-run: 84 a criar (7 epic, 23 feature, 54 story), 77 vínculos, 9 labels novos, 0 avisos · publicação: 84 criadas, 77 sub-issues, 0 erros · conferência: cada logical-id em exatamente 1 issue aberta; 46/46 stories de RF com print por permalink; 5 stories com label fio-condutor | — | marco do Plan: spec-estimate e congelamento do Explore pendentes |
