@@ -11,11 +11,12 @@
 //
 // Grava o recibo <dir>/<STORY|suite|test-sysid>.json { sys_id, resultId, status, horario, commit, ... }
 // e sai com código ≠ 0 se algum teste falhar.
+import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  APP, RAIZ, abrirNavegador, buscar, carregarCredencial, commitAtual, extrairJson, login, sdk, urlInstancia,
+  APP, RAIZ, SDK_BIN, abrirNavegador, buscar, carregarCredencial, commitAtual, extrairJson, login, urlInstancia,
 } from '../../sn-reinstall/scripts/lib/instancia.mjs';
 
 /** Passos que precisam de navegador (Client Test Runner). */
@@ -85,8 +86,26 @@ async function abrirRunner() {
   return nav;
 }
 
-function rodar(args) {
-  const r = sdk([...args, '-o', 'json'], { eco: false });
+/**
+ * O CLI do SDK em processo filho ASSÍNCRONO. Com o `spawnSync` de antes, o laço de eventos do Node
+ * parava enquanto o teste rodava, o Playwright deixava de ler a conexão com o Chromium do runner, o
+ * runner travava ao encher o buffer (ele loga muito) e o teste de form ficava `running` até o timeout
+ * de 600 s, com todos os passos verdes (Deliver, 2026-11-24).
+ */
+function sdkAssincrono(args) {
+  return new Promise((ok) => {
+    const filho = spawn(process.execPath, [SDK_BIN, ...args], { cwd: APP, env: process.env });
+    let stdout = '';
+    let stderr = '';
+    filho.stdout.on('data', (d) => { stdout += d; });
+    filho.stderr.on('data', (d) => { stderr += d; });
+    const limite = setTimeout(() => filho.kill('SIGTERM'), 20 * 60 * 1000);
+    filho.on('close', (status) => { clearTimeout(limite); ok({ status: status ?? 1, stdout, stderr }); });
+  });
+}
+
+async function rodar(args) {
+  const r = await sdkAssincrono([...args, '-o', 'json']);
   const env = extrairJson(r.stdout) ?? extrairJson(r.stderr);
   const { status, resultId, resumo, mensagem, url } = lerEnvelope(env);
   const ok = r.status === 0 && status !== 'failure' && status !== 'error';
@@ -131,7 +150,7 @@ export async function executar(args) {
         if (precisaRunner && (args['com-runner'] || temPassoUi(fonteStory, t.chave))) { nav = await abrirRunner(); usouRunner = true; }
         try {
           console.log(`atf: rodando ${t.chave} (${t.sysId})`);
-          execucoes.push({ chave: t.chave, sys_id: t.sysId, ...rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
+          execucoes.push({ chave: t.chave, sys_id: t.sysId, ...await rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
         } finally {
           if (nav) { await nav.close(); nav = null; }
         }
@@ -140,11 +159,11 @@ export async function executar(args) {
       const [s] = await buscar('sys_atf_test_suite', `name=${alvo.nome}`, 'sys_id,name', 2);
       if (!s) throw new Error(`suíte "${alvo.nome}" não existe na instância`);
       console.log(`atf: rodando suíte ${alvo.nome} (${s.sys_id})`);
-      execucoes.push({ chave: alvo.nome, sys_id: s.sys_id, ...rodar(['cicd', 'testsuite', 'run', '--test-suite-sys-id', s.sys_id]) });
+      execucoes.push({ chave: alvo.nome, sys_id: s.sys_id, ...await rodar(['cicd', 'testsuite', 'run', '--test-suite-sys-id', s.sys_id]) });
     } else {
       const id = String(args['test-sys-id']);
       console.log(`atf: rodando teste ${id}`);
-      execucoes.push({ chave: id, sys_id: id, ...rodar(['cicd', 'test', 'run', '--test-sys-id', id]) });
+      execucoes.push({ chave: id, sys_id: id, ...await rodar(['cicd', 'test', 'run', '--test-sys-id', id]) });
     }
   } finally {
     if (nav) await nav.close();
