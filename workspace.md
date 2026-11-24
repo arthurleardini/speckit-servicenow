@@ -14,33 +14,24 @@
 ## Changelog
 | Versão | Data | Mudança |
 |---|---|---|
-| 1.0 | AAAA-MM-DD | criação do manifesto |
+| 1.0 | 2026-11-24 | criação do manifesto: repositório único `speckit-servicenow` (decisão A3 do design) |
 
 ## Repositórios
 
-| Papel | Repositório no ADO | Pasta local | Para que serve |
+| Papel | Repositório | Pasta local | Para que serve |
 |---|---|---|---|
-| docs | `<repo-docs>` | `<pasta>` | artefatos de fase; publicado como wiki |
-| codigo | `<repo-codigo>` | `<pasta>` | código da solução |
-| prototipo | `<repo-prototipo>` | `<pasta>` | protótipo de alta fidelidade |
+| docs + codigo | `arthurleardini/speckit-servicenow` (GitHub, privado) | `.` | kit, spec (`inputs/`, `outputs/`), app Fluent em `app/` e backlog em issues |
+
+Não há repositório de protótipo: a instância `dev493801` é o protótipo (decisão A2), com prints em `outputs/spec/screens/`.
 
 <!-- harness:workspace -->
 - papel: docs
-  repositorio: https://dev.azure.com/<org>/<projeto>/_git/<repo-docs>
-<!-- codigo entra só no Deliver — descomente as três linhas abaixo quando o repositório de
-     código existir, e preencha os tokens:
-- papel: codigo
-  repositorio: https://dev.azure.com/<org>/<projeto>/_git/<repo-codigo>
-  branch-de-integracao: main
--->
-- papel: prototipo
-  repositorio: https://dev.azure.com/<org>/<projeto>/_git/<repo-prototipo>
+  repositorio: https://github.com/arthurleardini/speckit-servicenow
 <!-- /harness:workspace -->
 
-> `branch-de-integracao` é opcional (default `main`). Declare quando o repo integrar em `master`,
-> `develop` ou outro — sem isso o gate não consegue calcular os commits do push e bloqueia.
->
-> Cardinalidade: **exatamente um** `docs`; zero ou mais `codigo`; zero ou mais `prototipo`.
-> O manifesto nasce no Explore com `docs` e `prototipo`; `codigo` entra no Deliver.
+> **Mono-repo.** O mesmo repositório tem os dois papéis. O manifesto aceita um nome de repositório
+> uma única vez, então o bloco declara só a entrada `docs`, que é obrigatória. Com a sessão aberta
+> na raiz do repositório (sem subpastas candidatas), o harness opera em mono-repo e o
+> `delivery-gate` trata o push como `codigo`: o código em `app/` é fiscalizado por story.
 >
 > Valide com: `node .claude/hooks/workspace.mjs --validar`
