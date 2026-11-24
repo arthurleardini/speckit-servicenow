@@ -5,9 +5,9 @@
     "total": 46,
     "orfaos": 0,
     "N0": 0,
-    "N1": 46,
+    "N1": 36,
     "N2": 0,
-    "N3": 0
+    "N3": 10
   },
   "orfaos": [],
   "linhas": [
@@ -152,9 +152,21 @@
         "RF-MOD-F5-007_acl_contribuinte_carteira",
         "RF-MOD-F5-007_acl_interacao_carteira"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F5-007",
+          "status": "success",
+          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
+          "horario": "2026-11-24T20:33:40.947Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F1-006",
@@ -239,9 +251,21 @@
         "RF-MOD-F2-002_ua_criar_nova_versao",
         "RF-MOD-F2-002_ua_publicar_versao"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F2-002_br_bloquear_versao_publicada",
+        "RF-MOD-F2-002_ua_criar_nova_versao",
+        "RF-MOD-F2-002_ua_publicar_versao"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F2-002",
+          "status": "success",
+          "commit": "f80af6bdc354be83ba8b85ef4efa56fb664e377c",
+          "horario": "2026-11-24T19:35:07.625Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F2-002",
@@ -266,13 +290,44 @@
         "TASK-MOD-F2-002-03"
       ],
       "nowIds": [
+        "RF-MOD-F2-002_acl_criterio_create",
+        "RF-MOD-F2-002_acl_criterio_delete",
+        "RF-MOD-F2-002_acl_criterio_write",
+        "RF-MOD-F2-002_acl_criterio_write_campos",
+        "RF-MOD-F2-002_br_bloquear_exclusao_publicada",
         "RF-MOD-F2-002_br_bloquear_versao_publicada",
+        "RF-MOD-F2-002_br_ciclo_publicado_imutavel",
+        "RF-MOD-F2-002_br_conferir_gravacao_criterio",
+        "RF-MOD-F2-002_br_substituir_versao_anterior",
+        "RF-MOD-F2-002_si_criterio_versao",
+        "RF-MOD-F2-002_ua_criar_nova_versao",
+        "RF-MOD-F2-002_ua_publicar_versao",
+        "RF-MOD-F2-002_uip_threshold_sem_score"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-F2-002_acl_criterio_create",
+        "RF-MOD-F2-002_acl_criterio_delete",
+        "RF-MOD-F2-002_acl_criterio_write",
+        "RF-MOD-F2-002_acl_criterio_write_campos",
+        "RF-MOD-F2-002_br_bloquear_exclusao_publicada",
+        "RF-MOD-F2-002_br_bloquear_versao_publicada",
+        "RF-MOD-F2-002_br_ciclo_publicado_imutavel",
+        "RF-MOD-F2-002_br_conferir_gravacao_criterio",
+        "RF-MOD-F2-002_br_substituir_versao_anterior",
+        "RF-MOD-F2-002_si_criterio_versao",
         "RF-MOD-F2-002_ua_criar_nova_versao",
         "RF-MOD-F2-002_ua_publicar_versao"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "atf": [
+        {
+          "story": "STORY-MOD-F2-002",
+          "status": "success",
+          "commit": "f80af6bdc354be83ba8b85ef4efa56fb664e377c",
+          "horario": "2026-11-24T19:35:07.625Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F2-003",
@@ -328,12 +383,37 @@
         "TASK-MOD-F2-004-02"
       ],
       "nowIds": [
+        "RF-MOD-F2-004_acl_ciclo_create",
+        "RF-MOD-F2-004_acl_ciclo_write",
+        "RF-MOD-F2-004_acl_ciclo_write_campos",
+        "RF-MOD-F2-004_br_publicar_ciclo",
+        "RF-MOD-F2-004_br_recusar_caso_controle",
+        "RF-MOD-F2-004_br_recusar_comunicacao_controle",
+        "RF-MOD-F2-004_br_segmento_controle_imutavel",
         "RF-MOD-F2-004_si_sortear_grupo_controle",
         "RF-MOD-F2-004_ua_publicar_ciclo"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F2-004_acl_ciclo_create",
+        "RF-MOD-F2-004_acl_ciclo_write",
+        "RF-MOD-F2-004_acl_ciclo_write_campos",
+        "RF-MOD-F2-004_br_publicar_ciclo",
+        "RF-MOD-F2-004_br_recusar_caso_controle",
+        "RF-MOD-F2-004_br_recusar_comunicacao_controle",
+        "RF-MOD-F2-004_br_segmento_controle_imutavel",
+        "RF-MOD-F2-004_si_sortear_grupo_controle",
+        "RF-MOD-F2-004_ua_publicar_ciclo"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F2-004",
+          "status": "success",
+          "commit": "a0164b0dd34d5411dd5030481c4387c466088dae",
+          "horario": "2026-11-24T19:58:57.221Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F2-005",
@@ -356,11 +436,24 @@
       ],
       "nowIds": [
         "RF-MOD-F2-005_br_marcar_sem_score",
+        "RF-MOD-F2-005_br_propagar_sem_score",
         "RF-MOD-F2-005_si_fallback_sem_score"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F2-005_br_marcar_sem_score",
+        "RF-MOD-F2-005_br_propagar_sem_score",
+        "RF-MOD-F2-005_si_fallback_sem_score"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F2-005",
+          "status": "success",
+          "commit": "74aecbca6fa6bbe9b802f6f20d616a69154a970e",
+          "horario": "2026-11-24T20:06:21.643Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F2-006",
@@ -840,11 +933,45 @@
       ],
       "nowIds": [
         "RF-MOD-F5-003_form_dossie_niveis",
-        "RF-MOD-F5-003_si_montar_dossie"
+        "RF-MOD-F5-003_rel_comunicacoes",
+        "RF-MOD-F5-003_rel_debitos",
+        "RF-MOD-F5-003_rel_entrada_comunicacoes",
+        "RF-MOD-F5-003_rel_entrada_debitos",
+        "RF-MOD-F5-003_rel_entrada_interacoes",
+        "RF-MOD-F5-003_rel_entrada_parcelamentos",
+        "RF-MOD-F5-003_rel_entrada_regularizacoes",
+        "RF-MOD-F5-003_rel_listas_dossie",
+        "RF-MOD-F5-003_rel_parcelamentos",
+        "RF-MOD-F5-003_rel_regularizacoes",
+        "RF-MOD-F5-003_si_montar_dossie",
+        "RF-MOD-F5-003_uip_sinalizacoes_somente_leitura",
+        "RF-MOD-F5-003_view_dossie",
+        "RF-MOD-F5-003_viewrule_dossie"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F5-003_rel_comunicacoes",
+        "RF-MOD-F5-003_rel_debitos",
+        "RF-MOD-F5-003_rel_entrada_comunicacoes",
+        "RF-MOD-F5-003_rel_entrada_debitos",
+        "RF-MOD-F5-003_rel_entrada_interacoes",
+        "RF-MOD-F5-003_rel_entrada_parcelamentos",
+        "RF-MOD-F5-003_rel_entrada_regularizacoes",
+        "RF-MOD-F5-003_rel_listas_dossie",
+        "RF-MOD-F5-003_rel_parcelamentos",
+        "RF-MOD-F5-003_rel_regularizacoes",
+        "RF-MOD-F5-003_si_montar_dossie",
+        "RF-MOD-F5-003_viewrule_dossie"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F5-003",
+          "status": "success",
+          "commit": "9c571894f432019ff354476d3cc51acff464f536",
+          "horario": "2026-11-24T20:51:44.112Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F5-004",
@@ -943,12 +1070,76 @@
       ],
       "nowIds": [
         "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_caso_write",
+        "RF-MOD-F5-007_acl_caso_write_campos",
+        "RF-MOD-F5-007_acl_caso_write_carteira",
+        "RF-MOD-F5-007_acl_comunicacao_carteira",
+        "RF-MOD-F5-007_acl_consentimento_carteira",
         "RF-MOD-F5-007_acl_contribuinte_carteira",
-        "RF-MOD-F5-007_acl_interacao_carteira"
+        "RF-MOD-F5-007_acl_debito_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira",
+        "RF-MOD-F5-007_acl_interacao_create",
+        "RF-MOD-F5-007_acl_interacao_create_carteira",
+        "RF-MOD-F5-007_acl_interacao_write",
+        "RF-MOD-F5-007_acl_interacao_write_campos",
+        "RF-MOD-F5-007_acl_interacao_write_carteira",
+        "RF-MOD-F5-007_acl_parcelamento_carteira",
+        "RF-MOD-F5-007_acl_regularizacao_carteira",
+        "RF-MOD-F5-007_acl_score_carteira",
+        "RF-MOD-F5-007_br_caso_carteira",
+        "RF-MOD-F5-007_br_consulta_carteira_caso",
+        "RF-MOD-F5-007_br_consulta_carteira_comunicacao",
+        "RF-MOD-F5-007_br_consulta_carteira_consentimento",
+        "RF-MOD-F5-007_br_consulta_carteira_contribuinte",
+        "RF-MOD-F5-007_br_consulta_carteira_debito",
+        "RF-MOD-F5-007_br_consulta_carteira_interacao",
+        "RF-MOD-F5-007_br_consulta_carteira_parcelamento",
+        "RF-MOD-F5-007_br_consulta_carteira_regularizacao",
+        "RF-MOD-F5-007_br_consulta_carteira_score_sim",
+        "RF-MOD-F5-007_br_interacao_carteira",
+        "RF-MOD-F5-007_si_carteira_atendente"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_caso_write",
+        "RF-MOD-F5-007_acl_caso_write_campos",
+        "RF-MOD-F5-007_acl_caso_write_carteira",
+        "RF-MOD-F5-007_acl_comunicacao_carteira",
+        "RF-MOD-F5-007_acl_consentimento_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_debito_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira",
+        "RF-MOD-F5-007_acl_interacao_create",
+        "RF-MOD-F5-007_acl_interacao_create_carteira",
+        "RF-MOD-F5-007_acl_interacao_write",
+        "RF-MOD-F5-007_acl_interacao_write_campos",
+        "RF-MOD-F5-007_acl_interacao_write_carteira",
+        "RF-MOD-F5-007_acl_parcelamento_carteira",
+        "RF-MOD-F5-007_acl_regularizacao_carteira",
+        "RF-MOD-F5-007_acl_score_carteira",
+        "RF-MOD-F5-007_br_caso_carteira",
+        "RF-MOD-F5-007_br_consulta_carteira_caso",
+        "RF-MOD-F5-007_br_consulta_carteira_comunicacao",
+        "RF-MOD-F5-007_br_consulta_carteira_consentimento",
+        "RF-MOD-F5-007_br_consulta_carteira_contribuinte",
+        "RF-MOD-F5-007_br_consulta_carteira_debito",
+        "RF-MOD-F5-007_br_consulta_carteira_interacao",
+        "RF-MOD-F5-007_br_consulta_carteira_parcelamento",
+        "RF-MOD-F5-007_br_consulta_carteira_regularizacao",
+        "RF-MOD-F5-007_br_consulta_carteira_score_sim",
+        "RF-MOD-F5-007_br_interacao_carteira",
+        "RF-MOD-F5-007_si_carteira_atendente"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F5-007",
+          "status": "success",
+          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
+          "horario": "2026-11-24T20:33:40.947Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F6-001",
@@ -1069,9 +1260,20 @@
         "RF-MOD-F2-004_ua_publicar_ciclo",
         "RF-MOD-F6-004_si_efeito_incremental"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F2-004_si_sortear_grupo_controle",
+        "RF-MOD-F2-004_ua_publicar_ciclo"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F2-004",
+          "status": "success",
+          "commit": "a0164b0dd34d5411dd5030481c4387c466088dae",
+          "horario": "2026-11-24T19:58:57.221Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F6-005",
@@ -1131,9 +1333,21 @@
         "RF-MOD-F5-007_acl_interacao_carteira",
         "RF-MOD-F6-006_acl_regularizacao_perfil"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F5-007",
+          "status": "success",
+          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
+          "horario": "2026-11-24T20:33:40.947Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-F6-007",
@@ -1194,9 +1408,21 @@
         "RF-MOD-F5-007_acl_interacao_carteira",
         "RF-MOD-T-001_br_registrar_exportacao"
       ],
-      "nowIdsInstalados": [],
-      "atf": [],
-      "nivel": "N1"
+      "nowIdsInstalados": [
+        "RF-MOD-F5-007_acl_caso_carteira",
+        "RF-MOD-F5-007_acl_contribuinte_carteira",
+        "RF-MOD-F5-007_acl_interacao_carteira"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-F5-007",
+          "status": "success",
+          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
+          "horario": "2026-11-24T20:33:40.947Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
     },
     {
       "rf": "RF-MOD-T-002",
@@ -1274,5 +1500,5 @@
       "nivel": "N1"
     }
   ],
-  "geradoEm": "2026-11-24T16:51:55.485Z"
+  "geradoEm": "2026-11-24T20:59:54.043Z"
 }

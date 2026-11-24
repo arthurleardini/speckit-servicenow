@@ -601,6 +601,72 @@ Business rule e Script Include que rodam na sessão do atendente só enxergam a 
 **Opções identificadas:**
 1. Registrar no `architecture.mdc` e testar a primeira lógica de sistema que rodar como atendente.
 
+### GAP-144 — ATF de form do dossiê cobre só a lista de Interações (TEST-001)
+
+**Área:** MOD-F5, TEL-024
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F5-003-02
+
+**Descrição:**
+Faltam no form: as 4 listas filtradas pelo contribuinte do caso, o caso com dono diferente do dono do contribuinte, o form negado a outro atendente e o dossiê visto pelo coordenador (auditoria US-MOD-F5-003). Fecha em parte o GAP-137.
+
+**Opções identificadas:**
+1. Acrescentar os testes de form e lista.
+
+### GAP-145 — Suíte cob-regressao sem recibo no commit da US-MOD-F5-003 (TEST-002)
+
+**Área:** Deliver
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** —
+
+**Descrição:**
+Mesma causa do GAP-122: a suíte roda no reinstall completo do fim do fio condutor.
+
+**Opções identificadas:**
+1. Guardar o recibo da suíte do reinstall completo.
+
+### GAP-146 — Dossiê sem log de montagem e de recusa por caso vazio (OBS-001)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F5-003-01
+
+**Descrição:**
+`CasoDossie.montar()` só registra a recusa por carteira.
+
+**Opções identificadas:**
+1. Log com sys_id e motivo em todas as recusas.
+
+### GAP-147 — CasoDossie.montar() só é chamado pelo ATF (CONF-001)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F5-003-01
+
+**Descrição:**
+A tela mostra o dossiê pelo form e pelas listas relacionadas (o filtro das listas usa o mesmo Script Include); a montagem em 3 níveis serve à exportação e a usos futuros.
+
+**Opções identificadas:**
+1. Usar na exportação do dossiê (RF-MOD-T-001).
+2. Manter só como API de servidor.
+
+### GAP-148 — Mensagens de recusa do dossiê copiadas do texto genérico da spec (CONF-002)
+
+**Área:** MOD-F5, spec
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F5-003-01
+
+**Descrição:**
+As mensagens «Operação recusada: dossiê em 3 níveis (premissa).» e «… visão única do contribuinte por documento.» vêm do `errorMessages` gerado na spec e não dizem o que fazer.
+
+**Opções identificadas:**
+1. Reescrever as mensagens na spec e no código.
+
 ---
 
 ## Respostas
@@ -858,6 +924,36 @@ Business rule e Script Include que rodam na sessão do atendente só enxergam a 
 **Impacto na task:** _(a preencher)_
 
 ### GAP-143
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-144
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-145
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-146
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-147
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-148
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

@@ -54272,7 +54272,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Script include que monta o dossiê do caso em 3 níveis",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Script include que monta o dossiê do caso em 3 níveis. Entrega o comportamento do requisito RF-MOD-F5-003 (Dossiê consolidado do caso) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "script_include",
@@ -54815,7 +54815,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Form do dossiê com as seções dos 3 níveis e as listas relacionadas",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Form do dossiê com as seções dos 3 níveis e as listas relacionadas. Entrega o comportamento do requisito RF-MOD-F5-003 (Dossiê consolidado do caso) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "form",

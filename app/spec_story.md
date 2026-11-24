@@ -54,6 +54,22 @@
 
 ## Histórico de tasks
 
+### US-MOD-F5-003 — dossiê consolidado do caso (TASK-MOD-F5-003-01..02)
+**Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 2 tasks)
+
+**Implementado:**
+- `src/server/atendimento/CasoDossie.server.js` + `script-includes/caso-montar-dossie.now.ts` — 3 níveis, por GlideRecordSecure (carteira)
+- `ui/caso-dossie-niveis.now.ts` — view «Dossiê do caso» (seções Caso, Score, Sinalizações, Encerramento, Atividades), 4 relacionamentos por contribuinte + interações por caso, View Rule para o form do caso, UI Policy de sinalização somente leitura
+
+**Testes:**
+- Cenários: 8 | Verdes: 8 (3 testes ATF: 2 de servidor, 1 de form) | Vermelhos: 0
+- Por categoria: HAPPY_PATH 2/2 · AUTHORIZATION 2/2 · EDGE_CASE 2/2 · BUSINESS_RULE_VIOLATION 2/2 · INVALID_INPUT n/a · EXTERNAL_SERVICE_FAILURE n/a
+- Arquivo: `src/fluent/tests/US-MOD-F5-003.now.ts`
+
+**Decisões:**
+- O form do TEL-024 (gerado) fica como está; o dossiê é uma view própria aberta por View Rule. `Form()` não aceita `$id`: o ID do RF fica na view e nas listas.
+- `relatedListVisibility` com lista implícita (`x_2326104_cob_interacao.caso`) funciona no ATF de form.
+
 ### US-MOD-F5-007 — atendente vê só a própria carteira (TASK-MOD-F5-007-01..03, SEC-002)
 **Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 4 tasks)
 
