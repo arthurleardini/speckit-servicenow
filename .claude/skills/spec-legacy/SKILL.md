@@ -144,7 +144,7 @@ Este gate cruza duas informações independentes — **nunca decidir só por uma
 
 | Tipo detectado | Classificação | Ação |
 |---------------|---------------|------|
-| React/Vue/Angular SPA sem servidor real (sem Express/Django/etc. no mesmo repo, sem migrações de DB) | Protótipo de validação | **IGNORAR para esta skill** — encaminhar para `spec-prototype` |
+| React/Vue/Angular SPA sem servidor real (sem Express/Django/etc. no mesmo repo, sem migrações de DB) | Protótipo de validação | ***IGNORAR para esta skill** — é insumo visual do `spec-ingest` (o protótipo deste kit é a instância: `sn-scaffold` + `sn-capture`) |
 | Arquivos `mock*.ts`, `data.json`, seed/fixture files, `localStorage` como persistência | Protótipo de validação | **IGNORAR para esta skill** |
 | Figma, wireframes, screenshots, HTML estático | Insumo visual | **IGNORAR para esta skill** — já tratado em `spec-ingest` |
 | Documentação normativa (ERS, SRS, leis, portarias) | Insumo documental | **IGNORAR para esta skill** — fonte para `spec-ingest` |

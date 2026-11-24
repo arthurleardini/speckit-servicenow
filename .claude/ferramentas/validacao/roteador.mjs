@@ -3,9 +3,28 @@
 // Cada validador custa uma chamada de modelo. Rodar os seis em toda task é o desenho ingênuo que o
 // plano mediu em milhões de tokens por rodada; aqui a dimensão só roda se a entrega toca o que ela
 // examina, e a que fica de fora sai com o MOTIVO escrito — dispensa calada é o defeito que a
-// `spec-implement` já proíbe na matriz de testes (`TEST_LAYERS_FROM_RULES`).
+// `sn-implement` já proíbe na matriz de testes (`TEST_LAYERS_FROM_RULES`).
+//
+// Fork Speckit ServiceNow (design v0, item 32): entra a dimensão `escopo-app` (agente
+// `validador-escopo-app`, as 21 regras da seção 2.12 do catálogo RN-SN), que roda só quando a entrega
+// toca o app escopado. As heurísticas de performance e observabilidade passam a reconhecer Glide
+// (`GlideRecord`, `GlideAggregate`, `.query()`, `.next()`) e o log da plataforma (`gs.info/warn/
+// error/debug`): sem isso, os dois validadores ficavam dispensados em todo `.now.ts` e `src/server/`.
 
-export const DIMENSOES = ['regras-negocio', 'testes', 'seguranca', 'performance', 'observabilidade', 'rules-tecnicas'];
+export const DIMENSOES = ['regras-negocio', 'testes', 'seguranca', 'performance', 'observabilidade', 'rules-tecnicas', 'escopo-app'];
+
+/**
+ * Arquivo do app ServiceNow. O G3 do app roda com `--repo app` (os caminhos chegam como
+ * `src/fluent/…`) ou da raiz (`app/src/…`); os dois contam. `now.config.json` também: é onde o escopo
+ * do app mora.
+ */
+export function ehDoAppServiceNow(caminho) {
+  const p = String(caminho).replace(/\\/g, '/');
+  return /\.now\.ts$/i.test(p)
+    || /(^|\/)app\/src\//.test(p)
+    || /^src\/(fluent|server)\//.test(p)
+    || /(^|\/)now\.config\.json$/.test(p);
+}
 
 /**
  * Lock de dependências: gerado pela ferramenta, não escrito por ninguém. Classe própria, que nenhum
@@ -40,8 +59,8 @@ export function classificar(caminho) {
 // Heurísticas deliberadamente largas: o custo de rodar um validador barato à toa é pequeno; o de
 // deixar de rodar o que devia é um defeito que passa. Caminho OU linha acrescentada bastam.
 const PERFORMANCE_CAMINHO = /(repositor|repo\b|dao|query|queries|service|controller|route|handler|api\/)/i;
-const PERFORMANCE_CODIGO = /\b(select|insert|update|delete|join|where)\b|\.(find\w*|query|aggregate|findMany|findAll)\s*\(|\b(prisma|sequelize|typeorm|knex|mongoose|axios)\b|\bfetch\s*\(|for\s*\(.*\)\s*\{[\s\S]*?\bawait\b/i;
-const OBSERVABILIDADE_CODIGO = /\b(logger|log\.(info|warn|error|debug)|console\.(log|error|warn)|catch\s*\(|throw\s+new|router\.(get|post|put|patch|delete)|app\.(get|post|put|patch|delete)|@(Get|Post|Put|Patch|Delete|Request)Mapping|export\s+(async\s+)?function\s+(GET|POST|PUT|PATCH|DELETE)\b)/;
+const PERFORMANCE_CODIGO = /\b(select|insert|update|delete|join|where)\b|\.(find\w*|query|aggregate|findMany|findAll)\s*\(|\b(prisma|sequelize|typeorm|knex|mongoose|axios)\b|\bfetch\s*\(|for\s*\(.*\)\s*\{[\s\S]*?\bawait\b|GlideRecord|GlideAggregate|\.query\(|\.next\(/i;
+const OBSERVABILIDADE_CODIGO = /\b(logger|log\.(info|warn|error|debug)|console\.(log|error|warn)|catch\s*\(|throw\s+new|router\.(get|post|put|patch|delete)|app\.(get|post|put|patch|delete)|@(Get|Post|Put|Patch|Delete|Request)Mapping|export\s+(async\s+)?function\s+(GET|POST|PUT|PATCH|DELETE)\b)|\bgs\.(info|warn|error|debug)\b/;
 
 /**
  * @param {{arquivos: {arquivo: string, classe: string, acrescentadas: string}[], temRegras: boolean}} entrada
@@ -75,5 +94,8 @@ export function escolherDimensoes({ arquivos, temRegras }) {
   decidir('rules-tecnicas', codigo.length > 0 || visuais.length > 0,
     'a entrega altera código ou estilo, que as rules técnicas regem',
     'a entrega não altera código nem estilo');
+  decidir('escopo-app', arquivos.some((a) => a.classe !== 'doc' && ehDoAppServiceNow(a.arquivo)),
+    'a entrega altera o app escopado ServiceNow (`.now.ts`, `src/fluent/`, `src/server/` ou `now.config.json`)',
+    'a entrega não toca o app escopado ServiceNow');
   return { rodar, dispensadas };
 }

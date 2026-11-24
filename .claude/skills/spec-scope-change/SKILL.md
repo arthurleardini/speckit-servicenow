@@ -163,7 +163,7 @@ dedicado** (Artefato 4, no mesmo formato de 9 colunas) — colar o conteúdo des
 |----------|-------------|-------|
 | Um ou mais Documentos de Alteração de Escopo | **Sim** | Área negocial / cliente |
 | `tasks.json` (original + complementos já gerados) | **Sim** | outputs/spec/ do projeto |
-| `spec_story.md` de cada pasta de código (memória do módulo, mantida pela `spec-implement`) | **Sim**, quando o desenvolvimento já começou (K3) | raiz de cada pasta de código — no harness Elo, a «Pasta local» de cada repositório de papel `codigo` no `workspace.md` |
+| `spec_story.md` de cada pasta de código (memória do módulo, mantida pela `sn-implement`) | **Sim**, quando o desenvolvimento já começou (K3) | raiz de cada pasta de código — no harness Elo, a «Pasta local» de cada repositório de papel `codigo` no `workspace.md` |
 | `gaps-document.md` ou `gaps.md` originais | Recomendado | outputs/spec/ do projeto |
 | `data-model.json` | Recomendado | outputs/spec/ ou equivalente |
 | `api-contracts.yaml` | Recomendado | outputs/spec/ ou equivalente |
@@ -398,7 +398,7 @@ se fosse só texto de especificação:
    `spec_story.md`. Task sem entrada no `spec_story.md` e sem estado no ADO conta como não
    iniciada — e isso fica escrito na análise.
 2. **Memória dos módulos afetados.** Ler inteiro o `spec_story.md` da raiz de cada pasta de código
-   que o delta toca (é a memória do módulo, mantida pela `spec-implement` e pela `spec-debug-fix`):
+   que o delta toca (é a memória do módulo, mantida pela `sn-implement` e pela `spec-debug-fix`):
    a lista «Implementado» de cada task traz os arquivos; o bloco «Testes», os testes que provam o
    comportamento atual; «Padrões estabelecidos» e «Decisões», o que a mudança pode contradizer.
 3. **Código já entregue que a mudança toca.** Para cada regra, campo, faixa ou mensagem que muda,
@@ -562,8 +562,8 @@ PASSO 5 — Relatório visual
   Invocar: spec-tasks-html
   Saída: tasks-complementary_change-[sigla]-view.html
 
-PASSO 6 — Publicar no ADO
-  Invocar: spec-tasks-azure
+PASSO 6 — Publicar no GitHub
+  Invocar: sn-tasks-github --change
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -737,7 +737,7 @@ validator próprio:
 | `spec-api-contracts` | `data-model_change.json` + `scope-change-analysis.md` | `api-contracts_change.yaml` + suplemento |
 | `spec-tasks` | Artefatos `_change` + CHGs fechados | `tasks-complementary_change-[sigla].json` |
 | `spec-tasks-html` | `tasks-complementary_change-*.json` | Relatório HTML do change |
-| `spec-tasks-azure` | `tasks-complementary_change-*.json` | Work items publicados no ADO |
+| `sn-tasks-github` | `tasks-complementary_change-*.json` | Issues atualizadas e criadas no GitHub (`--change`) |
 
 ## O que NÃO faz
 - Não re-executa `spec-ingest`, `spec-legacy` ou `spec-product` do zero — preserva os artefatos base do projeto

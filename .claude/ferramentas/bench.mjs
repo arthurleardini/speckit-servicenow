@@ -272,7 +272,7 @@ function pontaAPonta(payload) {
 
 /**
  * Projeto maduro sintético: `N` arquivos sob `outputs/spec/`, no formato de árvore que a
- * `spec-prototype` de fato produz (`prototype/node_modules/pkg-k/arquivo-j.js`).
+ * `spec-prototype` (removida no fork ServiceNow) de fato produzia (`prototype/node_modules/pkg-k/arquivo-j.js`).
  *
  * MEDE A CURVA, NÃO UM PONTO. O interessante não é "200 arquivos custam X"; é a partir de quantos
  * arquivos o orçamento estoura — e isso só uma curva responde. As cargas são construídas

@@ -31,6 +31,10 @@ ninguém: lê um arquivo de entrada, examina o código, grava um JSON e termina.
 - **Erro engolido**: `catch` vazio, ou que só faz `console.log` e segue como se nada tivesse
   acontecido. Quem opera o sistema nunca vai saber que falhou: **ALTO**.
 - **Dado pessoal no log**: CPF, e-mail, telefone, cartão ou senha registrados sem máscara: **ALTO**.
+- **App ServiceNow**: falha de Business Rule, Script Include ou Flow sem `gs.error`/`gs.warn` (o
+  system log é a evidência que a `spec-debug-fix` lê); `console.log`, `gs.print` ou `gs.log` no lugar
+  de `gs.info/warn/error/debug` — os dois últimos não existem em app escopado (RN-SN-12, RN-SN-84);
+  `try/catch` que engole o erro do `GlideRecord.insert()`/`update()` sem registrar: **ALTO**.
 
 No `motivo`, diga o que quem opera deixa de ver: "se o pagamento falhar, nada fica registrado e o
 pedido some sem rastro".

@@ -105,6 +105,7 @@ Outras flags: `--sem-atf`, `--suite <nome>` (padrão `cob-regressao`), `--sync-l
 |---|---|---|
 | 1 | `glide.appcreator.company.code` (REST Table API, basic auth) contra o escopo de `app/now.config.json`: o escopo precisa começar com `x_<prefixo>_` | exit 3 |
 | 2 | todo CPF/CNPJ em `app/src/fluent/seed/*.now.ts` com DV válido e presente em `_documentos.json` | exit 5 |
+| 2b | poda do `keys.ts`: tira as entradas `deleted: true` cuja tabela do app já não existe na instância (consulta `sys_db_object`). Avisa para versionar o `keys.ts` | — |
 | 3 | `now-sdk build` (ou `build --frozenKeys` com `--frozen`). Avisa quando o `keys.ts` mudou | linha `falha-build` |
 | 4 | `now-sdk install` (em modo CI não leva `--auth`; fora dele, `--auth $SN_ALIAS`). Com `--zerar`, `--reinstall` | linha `falha-install` |
 | 4b | apaga pela REST API os registros de dados com `deleted: true` no `keys.ts` (tabelas do app, `sys_user`, `sys_user_has_role`, `sys_journal_field`): o install aplica o DELETE de metadado, mas não o de registro de dados | — |
@@ -158,6 +159,15 @@ gr.addQuery('name', '<tabela>');
 gr.query();
 if (gr.next()) gr.deleteRecord();
 ```
+
+Depois de apagar a tabela, o `keys.ts` continua com as entradas `deleted: true` dela: os registros
+do seed e o `sys_dictionary`, `sys_documentation` e `sys_choice` que apontam para ela pelo
+`key.name`. No install seguinte o SDK manda essas entradas como DELETE no
+`author_elective_update`, a tabela não existe mais e o install quebra com
+`this.fPrimaryKey is null` (estágio 1, 2026-11-24). Por isso a etapa 2b tira essas entradas do
+`keys.ts` antes do build (`podarKeysOrfas` em `scripts/reinstall.mjs`). Entrada `deleted: true` de
+tabela que ainda existe fica, porque é ela que remove da instância o que saiu da fonte. Depois do
+reinstall, versionar o `keys.ts`.
 
 ## Módulo compartilhado
 

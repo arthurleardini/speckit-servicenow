@@ -27,15 +27,15 @@ updated: "2026-08-24"
 ## Papel
 
 Esta é a **Fase 11c** da cadeia técnica (evento, não etapa — como `spec-scope-change`).
-Roda quando uma task já implementada (Fase 11 — `spec-implement`) volta com **retorno de
+Roda quando uma task já implementada (Fase 11 — `sn-implement`) volta com **retorno de
 teste**: QA reprovou, comportamento divergente em homologação, bug reportado em produção,
 ou "não reproduz". O ciclo é: **entender → mapear → instrumentar → reproduzir → provar →
 corrigir → verificar → proteger contra regressão → reportar**.
 
-**Posição no pipeline:** entre `spec-implement` (Fase 11) e `spec-code-audit` (Fase 12),
+**Posição no pipeline:** entre `sn-implement` (Fase 11) e `spec-code-audit` (Fase 12),
 podendo ser invocada a qualquer momento pós-implementação.
 
-**Out of scope:** implementar funcionalidade nova (use `spec-implement`); auditoria ampla de
+**Out of scope:** implementar funcionalidade nova (use `sn-implement`); auditoria ampla de
 qualidade/segurança (use `spec-code-audit`); redefinir requisito quando a classe da falha é
 (d) works-as-designed com spec errada (devolver ao fluxo de produto / `spec-scope-change`).
 
@@ -537,7 +537,7 @@ declarados.
    Em classe (d), a devolutiva cita RF/RN/critério que o comportamento atual cumpre.
 4. **Publicação/commit/PR/estado do card: SÓ após confirmação explícita do usuário.**
    Apresentar o rascunho e perguntar. Em Modo B/C (sem tracker), o report em chat encerra.
-5. Atualizar `spec_story.md` de cada pasta tocada (mesmo padrão que o `spec-implement` mantém): entrada nova com o
+5. Atualizar `spec_story.md` de cada pasta tocada (mesmo padrão que o `sn-implement` mantém): entrada nova com o
    bug, causa-raiz, fix, teste de regressão criado e o que ficou para depois. Se o diagnóstico
    revelou um **padrão recorrente** (ex.: "toda integração X exige identificador novo por
    idempotência"), registrar em Padrões estabelecidos.
@@ -573,7 +573,7 @@ As proibições estão codificadas nos **validators FATAL** abaixo — cada "nun
 `INSTRUMENTATION_TRACKED`). Única proibição sem validator: **nunca** "corrigir" comportamento
 classe (d) sem mudança formal de escopo.
 
-> **Por que `EXTERNAL_ACTION_CONFIRMED` aqui e não na `spec-implement`:** lá, o pedido de
+> **Por que `EXTERNAL_ACTION_CONFIRMED` aqui e não na `sn-implement`:** lá, o pedido de
 > implementação já contém a autorização de atualizar o work item (é o entregável); aqui, o
 > comentário/estado nasce de um **diagnóstico** — publicar sem confirmação seria decidir pelo
 > usuário o destino do card.
@@ -635,7 +635,7 @@ Conteúdo humano em **Português do Brasil**.
 
 ## O que NÃO faz
 
-- Não implementa funcionalidade nova nem work item sem retorno — use `spec-implement` (Fase 11).
+- Não implementa funcionalidade nova nem work item sem retorno — use `sn-implement` (Fase 11).
 - Não audita o código em largura (segurança/performance/cobertura geral) — use `spec-code-audit` (Fase 12).
 - Não corrige "bugs" classe (d) sem mudança formal de escopo — use `spec-scope-change`.
 - Não cria/carrega massa de dados de terceiros nem obtém credenciais — classes (b)/(c) são reportadas, não contornadas.
@@ -648,7 +648,7 @@ Conteúdo humano em **Português do Brasil**.
 
 | Skill | Quando |
 |-------|--------|
-| `spec-implement` | Implementou a task original e é o **dono do `spec_story.md`**; esta skill trata o retorno de teste, segue os padrões do `spec_story.md` e registra o fix nele com o mesmo formato. |
+| `sn-implement` | Implementou a task original e é o **dono do `spec_story.md`**; esta skill trata o retorno de teste, segue os padrões do `spec_story.md` e registra o fix nele com o mesmo formato. |
 | `spec-code-audit` | Auditoria ampla pós-implementação; se o debug revelar problema sistêmico (ex.: erro silenciado em toda uma camada), recomendar auditoria. |
 | `spec-scope-change` | Destino de bugs classe (d) quando a spec é que precisa mudar. |
 | `spec-tasks` | Se o fix exigir trabalho novo relevante (além do bug), gerar task nova em vez de inflar o escopo do debug. |

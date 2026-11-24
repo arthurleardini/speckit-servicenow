@@ -15,9 +15,12 @@ import { tmpdir } from 'node:os';
 
 test('a tabela cobre a cadeia técnica do Plan e do Deliver', () => {
   for (const s of ['spec-product', 'spec-tech-rules', 'spec-data-model', 'spec-api-contracts',
-                   'spec-tasks', 'spec-security-review', 'spec-estimate', 'spec-scaffold', 'spec-implement']) {
+                   'spec-tasks', 'spec-security-review', 'spec-estimate',
+                   'sn-scaffold', 'sn-capture', 'sn-tasks-github', 'sn-implement']) {
     assert.ok(PRE_REQUISITOS.has(s), s);
   }
+  // Saíram com o item 27 do design v0 (a instância é o protótipo; o app é Fluent).
+  for (const s of ['spec-prototype', 'spec-scaffold', 'spec-implement']) assert.ok(!PRE_REQUISITOS.has(s), s);
 });
 
 test('toda entrada declara exige não vazio e validador', () => {
@@ -77,31 +80,66 @@ test('a mensagem diz o que fazer, não só o que falta', () => {
   assert.match(r.motivo, /Produza|Rode|invoque/i);
 });
 
-test('spec-prototype no Explore usa o de-para, não os artefatos do kit', () => {
-  const contexto = {
-    fase: 'explore',
-    presentesExplore: new Set(['hld-funcional.md', 'especificacao-funcional.md']),
-  };
-  assert.equal(avaliarSkill('spec-prototype', new Set(), contexto), null);
+// ————— item 17 do design v0: os pré-requisitos do Speckit ServiceNow —————
+// Um teste de bloqueio por condição nova, e a liberação correspondente.
+
+test('item 17 — spec-data-model --previa (Explore) exige o modelo-de-dados.md, e não as tech-rules', () => {
+  const r = avaliarSkill('spec-data-model', new Set(), { fase: 'explore', presentesExplore: new Set() });
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /Faltam em `outputs\/explore\/`: `modelo-de-dados\.md`/);
+  assert.ok(!/tech-rules/.test(r.motivo), r.motivo);
+  assert.equal(avaliarSkill('spec-data-model', new Set(), { fase: 'explore', presentesExplore: new Set(['modelo-de-dados.md']) }), null);
+  // `--previa` fora do Explore pede a mesma lista; sem ela, no Plan, valem as tech-rules.
+  assert.equal(avaliarSkill('spec-data-model', new Set(), { fase: 'plan', previa: true, presentesExplore: new Set(['modelo-de-dados.md']) }), null);
+  assert.match(avaliarSkill('spec-data-model', new Set(), { fase: 'plan' }).motivo, /tech-rules\/tech-rules-summary\.md/);
 });
 
-test('spec-prototype no Explore é negada sem os documentos do de-para', () => {
-  const r = avaliarSkill('spec-prototype', new Set(), { fase: 'explore', presentesExplore: new Set() });
+test('item 17 — sn-scaffold no Explore exige a PRÉVIA do modelo, em outputs/spec/', () => {
+  const r = avaliarSkill('sn-scaffold', new Set(), { fase: 'explore', presentesExplore: new Set(['modelo-de-dados.md']) });
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /hld-funcional\.md/);
-  assert.match(r.motivo, /especificacao-funcional\.md/);
+  assert.match(r.motivo, /Faltam em `outputs\/spec\/`: `data-model\.previa\.json`/);
+  assert.equal(avaliarSkill('sn-scaffold', new Set(['data-model.previa.json']), { fase: 'explore' }), null);
 });
 
-test('spec-prototype no Plan cobra os artefatos do kit', () => {
-  const r = avaliarSkill('spec-prototype', new Set(), { fase: 'plan' });
+test('item 17 — sn-scaffold no Plan exige o modelo FINAL', () => {
+  const r = avaliarSkill('sn-scaffold', new Set(['data-model.previa.json']), { fase: 'plan' });
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /modules\.md/);
+  assert.match(r.motivo, /`data-model\.json`/);
+  assert.equal(avaliarSkill('sn-scaffold', new Set(['data-model.json']), { fase: 'plan' }), null);
+});
+
+test('item 17 — sn-capture exige o screens-manifest.json nas duas fases', () => {
+  for (const fase of ['explore', 'plan']) {
+    const r = avaliarSkill('sn-capture', new Set(), { fase });
+    assert.equal(r.acao, 'deny', fase);
+    assert.match(r.motivo, /screens-manifest\.json/, fase);
+    assert.equal(avaliarSkill('sn-capture', new Set(['screens-manifest.json']), { fase }), null, fase);
+  }
+});
+
+test('item 17 — sn-tasks-github exige tasks.json e traceability.json, e explica o gate de rastreio', () => {
+  const r = avaliarSkill('sn-tasks-github', new Set(['tasks.json']));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /`traceability\.json`/);
+  assert.match(r.motivo, /promocao\.mjs --rastreio/);
+  assert.equal(avaliarSkill('sn-tasks-github', new Set(['tasks.json', 'traceability.json'])), null);
+});
+
+test('item 17 — sn-implement exige o id-map.json do backlog publicado', () => {
+  const r = avaliarSkill('sn-implement', new Set(['tasks.json']));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /`id-map\.json`/);
+  assert.equal(avaliarSkill('sn-implement', new Set(['tasks.json', 'id-map.json'])), null);
+});
+
+test('item 17 — spec-tasks deixou de exigir api-contracts.yaml', () => {
+  assert.equal(avaliarSkill('spec-tasks', new Set(['data-model.json', 'test-plan.md'])), null);
 });
 
 test('sem contexto, vale a semântica do Plan', () => {
-  const r = avaliarSkill('spec-prototype', new Set());
+  const r = avaliarSkill('sn-scaffold', new Set());
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /modules\.md/);
+  assert.match(r.motivo, /`data-model\.json`/);
 });
 
 test('a spec-hld entra na cadeia exigindo as rules tecnicas, e NINGUEM exige o hld.md', () => {
@@ -135,7 +173,7 @@ test('RAZAO_EXTRA só existe para skill cuja dependência não é óbvia', () =>
 
 test('nenhuma exigência repete a raiz, usa contrabarra ou vem absoluta', () => {
   for (const [nome, d] of PRE_REQUISITOS) {
-    for (const c of [...d.exige, ...(d.exigeNoExplore || [])]) {
+    for (const c of [...d.exige, ...(d.exigeNoExplore || []), ...(d.exigeNoExploreNaSpec || [])]) {
       assert.ok(!c.includes('\\'), `${nome}: ${c} tem contrabarra`);
       assert.ok(!c.startsWith('/') && !/^[A-Za-z]:/.test(c), `${nome}: ${c} é absoluto`);
       assert.ok(!c.startsWith(`${RAIZ_SPEC}/`), `${nome}: ${c} repete a raiz`);
@@ -144,9 +182,9 @@ test('nenhuma exigência repete a raiz, usa contrabarra ou vem absoluta', () => 
   }
 });
 
-test('só a spec-prototype tem o segundo conjunto de pré-requisito', () => {
-  const comExplore = [...PRE_REQUISITOS].filter(([, d]) => d.exigeNoExplore).map(([n]) => n);
-  assert.deepEqual(comExplore, ['spec-prototype']);
+test('só spec-data-model, sn-scaffold e sn-capture têm o conjunto do Explore', () => {
+  const comExplore = [...PRE_REQUISITOS].filter(([, d]) => d.exigeNoExplore || d.exigeNoExploreNaSpec).map(([n]) => n);
+  assert.deepEqual(comExplore, ['spec-data-model', 'sn-scaffold', 'sn-capture']);
 });
 
 // ———————————————————— o CONTEÚDO da tabela, e não só a forma dela ————————————————————
@@ -170,7 +208,7 @@ test('só a spec-prototype tem o segundo conjunto de pré-requisito', () => {
 // vai resolver", e é a ordem em que os nomes aparecem na mensagem. Inverter a lista era a mutação
 // M3 da rodada L, e sobrevivia.
 
-test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validador', () => {
+test('M-3 — a tabela inteira, por deepEqual: 14 skills, nomes, ordem, validador', () => {
   const esperada = [
     ['spec-legacy', {
       exige: ['context-map.md'],
@@ -184,16 +222,6 @@ test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validado
       exige: ['context-map.md', 'discovery-document.md'],
       validador: 'V-PRD-01',
     }],
-    ['spec-prototype', {
-      exige: [
-        'modules.md',
-        'requirements/requirements.md',
-        'business-rules.md',
-        'product-requirements/product-requirements.md',
-      ],
-      exigeNoExplore: ['hld-funcional.md', 'especificacao-funcional.md'],
-      validador: 'V-PRD-02',
-    }],
     ['spec-tech-rules', {
       exige: ['requirements/requirements.md', 'product-requirements/product-requirements.md'],
       validador: 'CADEIA-TEC-00',
@@ -204,6 +232,7 @@ test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validado
     }],
     ['spec-data-model', {
       exige: ['tech-rules/tech-rules-summary.md'],
+      exigeNoExplore: ['modelo-de-dados.md'],
       validador: 'CADEIA-TEC-01',
     }],
     ['spec-api-contracts', {
@@ -211,7 +240,7 @@ test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validado
       validador: 'CADEIA-TEC-02',
     }],
     ['spec-tasks', {
-      exige: ['data-model.json', 'api-contracts.yaml', 'test-plan.md'],
+      exige: ['data-model.json', 'test-plan.md'],
       validador: 'CADEIA-TEC-03',
     }],
     ['spec-security-review', {
@@ -222,13 +251,23 @@ test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validado
       exige: ['tasks.json'],
       validador: 'CADEIA-TEC-04',
     }],
-    ['spec-scaffold', {
-      exige: ['tech-rules/tech-rules-summary.md', 'data-model.json', 'api-contracts.yaml'],
-      validador: 'CADEIA-DEV-01',
+    ['sn-scaffold', {
+      exige: ['data-model.json'],
+      exigeNoExploreNaSpec: ['data-model.previa.json'],
+      validador: 'CADEIA-SN-01',
     }],
-    ['spec-implement', {
-      exige: ['tasks.json'],
-      validador: 'CADEIA-DEV-02',
+    ['sn-capture', {
+      exige: ['screens-manifest.json'],
+      exigeNoExploreNaSpec: ['screens-manifest.json'],
+      validador: 'CADEIA-SN-02',
+    }],
+    ['sn-tasks-github', {
+      exige: ['tasks.json', 'traceability.json'],
+      validador: 'CADEIA-SN-03',
+    }],
+    ['sn-implement', {
+      exige: ['tasks.json', 'id-map.json'],
+      validador: 'CADEIA-SN-04',
     }],
   ];
   assert.deepEqual([...PRE_REQUISITOS], esperada);
@@ -237,7 +276,7 @@ test('M-3 — a tabela inteira, por deepEqual: 12 skills, nomes, ordem, validado
 test('M-3 — a tabela não ganha nem perde skill sem alguém dizer o número', () => {
   // Redundante com o `deepEqual` de propósito: quando ele falhar, esta linha diz em uma frase se o
   // que mudou foi o TAMANHO da política (entrada nova, entrada apagada) ou só o conteúdo de uma.
-  assert.equal(PRE_REQUISITOS.size, 13);
+  assert.equal(PRE_REQUISITOS.size, 14);
 });
 
 // ————————————————————— o TEXTO da mensagem, que é o produto desta trava —————————————————————
@@ -295,17 +334,17 @@ test('m-5/M13 — a mensagem manda procurar em UMA raiz, e nomeia a certa', () =
 });
 
 test('m-5/M22 — no Explore a mensagem aponta para outputs/explore, e só para ela', () => {
-  // No Explore a `spec-prototype` roda sobre o de-para da `explore.md`, cujos documentos moram em
+  // No Explore a `spec-data-model --previa` lê o `modelo-de-dados.md`, que mora em
   // `outputs/explore/`. Mandar olhar em `outputs/spec/` ali é mandar olhar no lugar errado.
-  const r = avaliarSkill('spec-prototype', new Set(), { fase: 'explore', presentesExplore: new Set() });
+  const r = avaliarSkill('spec-data-model', new Set(), { fase: 'explore', presentesExplore: new Set() });
   assert.match(r.motivo, new RegExp(`\`${RAIZ_EXPLORE}/\``));
   assert.ok(!r.motivo.includes(`\`${RAIZ_SPEC}/\``), 'a mensagem do Explore não pode citar a raiz do Plan');
   assert.ok(!r.motivo.includes('task-generator'), 'nem a raiz descontinuada, que já nem existe');
 });
 
-test('m-5/M29 — a RAZAO_EXTRA da spec-prototype chega à mensagem', () => {
-  const r = avaliarSkill('spec-prototype', new Set());
-  assert.match(r.motivo, /modo Geração/i);
+test('m-5/M29 — a RAZAO_EXTRA do sn-tasks-github chega à mensagem', () => {
+  const r = avaliarSkill('sn-tasks-github', new Set());
+  assert.match(r.motivo, /promocao\.mjs --rastreio/);
 });
 
 test('m-5/M3 — a mensagem lista o que falta na ORDEM da tabela, do fundamental ao derivado', () => {
@@ -314,7 +353,7 @@ test('m-5/M3 — a mensagem lista o que falta na ORDEM da tabela, do fundamental
   // o texto. Sem os dois, `.reverse()` no ponto de uso continua verde — medido: com só o
   // `deepEqual`, essa mutação sobrevivia.
   const r = avaliarSkill('spec-tasks', new Set());
-  const posicoes = ['data-model.json', 'api-contracts.yaml', 'test-plan.md']
+  const posicoes = ['data-model.json', 'test-plan.md']
     .map((c) => r.motivo.indexOf(c));
   assert.ok(posicoes.every((p) => p >= 0), r.motivo);
   assert.deepEqual(posicoes, [...posicoes].sort((a, b) => a - b), `fora de ordem:\n${r.motivo}`);
@@ -358,7 +397,7 @@ test('u-1 — a RAZAO_EXTRA também é achada em outra caixa, e não some pelo c
   // não está na `PRE_REQUISITOS`: consertar só as duas primeiras faria a skill ser bloqueada
   // CORRETAMENTE mas sem a explicação de POR QUÊ — o pedaço da mensagem que existe para o
   // consultor não redescobrir a razão na próxima vez. Falha silenciosa, e nenhum teste vermelho.
-  assert.match(avaliarSkill('Spec-Prototype', new Set()).motivo, /modo Geração/i);
+  assert.match(avaliarSkill('SN-Tasks-GitHub', new Set()).motivo, /rastreio/i);
   assert.match(avaliarSkill('SPEC-TASKS', new Set()).motivo, /test-plan/i);
   assert.match(avaliarSkill('Spec-Security-Review', new Set()).motivo, /plano-geral/i);
 });
@@ -512,10 +551,18 @@ test('casca u-1 — a pré-filtragem por nome também é por `chave`, e combina 
 });
 
 test('casca — o payload pode trazer o nome em `name` em vez de `skill`', () => {
-  const io = ioFalso([`${RAIZ_SPEC}/sync-log.md`]);
+  const io = ioFalso([`${RAIZ_SPEC}/sync-log.md`, `${RAIZ_SPEC}/modules.md`]);
   const r = avaliar({ tool_name: 'Skill', tool_input: { name: 'spec-data-model' } }, io);
   assert.equal(r.acao, 'deny');
   assert.match(r.motivo, /tech-rules-summary\.md/);
+});
+
+test('casca — `--previa` nos argumentos pede a lista do Explore mesmo fora dele', () => {
+  // No Plan (há `modules.md`), sem `--previa` a spec-data-model cobra as tech-rules; com ele, o
+  // modelo preliminar do Explore — que está presente, e a skill passa.
+  const io = ioFalso([`${RAIZ_SPEC}/modules.md`, `${RAIZ_EXPLORE}/modelo-de-dados.md`]);
+  assert.equal(avaliar({ tool_name: 'Skill', tool_input: { skill: 'spec-data-model' } }, io).acao, 'deny');
+  assert.equal(avaliar({ tool_name: 'Skill', tool_input: { skill: 'spec-data-model', args: '--previa' } }, io), null);
 });
 
 test('casca — a raiz do Plan é uma: artefato só conta em outputs/spec/', () => {
@@ -536,30 +583,25 @@ test('casca — a raiz do Plan é uma: artefato só conta em outputs/spec/', () 
   assert.equal(avaliar(invocar('spec-api-contracts'), noNovo), null);
 });
 
-test('casca — a fase detectada de verdade muda o veredito da spec-prototype', () => {
-  // Mesmos documentos de Explore nos dois casos. O que muda é UM arquivo em `outputs/spec/`:
-  // `sync-log.md` está na whitelist do Explore e não caracteriza Plan; `modules.md` não está.
+test('casca — a fase detectada de verdade muda o veredito do sn-scaffold', () => {
+  // O que muda é UM arquivo em `outputs/spec/`: `sync-log.md` e a prévia estão na whitelist do
+  // Explore e não caracterizam Plan; `modules.md` não está.
   //
   // Este teste também mata o defeito de convenção: `detectarFase` exige os caminhos COM o
   // prefixo `outputs/spec/`, e alimentá-lo com o retorno cru do `inventariar` faz QUALQUER
   // arquivo em `outputs/spec/` — o `sync-log.md` do kickoff, inclusive — virar fase Plan.
-  const docs = [
-    `${RAIZ_EXPLORE}/hld-funcional.md`,
-    `${RAIZ_EXPLORE}/especificacao-funcional.md`,
-  ];
+  const base = [`${RAIZ_SPEC}/sync-log.md`, `${RAIZ_SPEC}/data-model.previa.json`];
 
-  const noExplore = ioFalso([...docs, `${RAIZ_SPEC}/sync-log.md`]);
-  assert.equal(avaliar(invocar('spec-prototype'), noExplore), null);
+  assert.equal(avaliar(invocar('sn-scaffold'), ioFalso(base)), null);
 
-  const noPlan = ioFalso([...docs, `${RAIZ_SPEC}/sync-log.md`, `${RAIZ_SPEC}/modules.md`]);
-  const r = avaliar(invocar('spec-prototype'), noPlan);
+  const r = avaliar(invocar('sn-scaffold'), ioFalso([...base, `${RAIZ_SPEC}/modules.md`]));
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /business-rules\.md/);
+  assert.match(r.motivo, /`data-model\.json`/);
 });
 
 test('casca — projeto vazio: ausência devolve vazio e a avaliação segue até a negação', () => {
   const io = ioFalso([]);
-  const r = avaliar(invocar('spec-implement'), io);
+  const r = avaliar(invocar('sn-implement'), io);
   assert.equal(r.acao, 'deny');
   assert.match(r.motivo, /tasks\.json/);
 });
@@ -696,24 +738,26 @@ const despacharSkill = (raiz, nome) => despachar(
 const invocarPeloRegistro = (raiz, skill) => despacharSkill(raiz, `algum-plugin:${skill}`);
 const invocarNuPeloRegistro = (raiz, skill) => despacharSkill(raiz, skill);
 
-test('C-1 — spec-prototype no Explore com o revisao.json que o GATE EXIGE escrito: allow', () => {
+test('C-1 — sn-scaffold no Explore com o revisao.json que o GATE EXIGE escrito: allow', () => {
   const { raiz, escrever } = projetoNoExplore();
   try {
     escrever(`${RAIZ_SPEC}/revisao.json`, '{"ok":true}');
-    const r = invocarPeloRegistro(raiz, 'spec-prototype');
+    escrever(`${RAIZ_SPEC}/data-model.previa.json`, '{}');
+    const r = invocarPeloRegistro(raiz, 'sn-scaffold');
     assert.equal(r.acao, 'allow', r.motivo || '');
   } finally {
     rmSync(raiz, { recursive: true, force: true });
   }
 });
 
-test('C-1 — spec-prototype no Explore com a ISENÇÃO que a negação oferece escrita: allow', () => {
+test('C-1 — sn-scaffold no Explore com a ISENÇÃO que a negação oferece escrita: allow', () => {
   const { raiz, escrever } = projetoNoExplore();
   try {
     escrever(`${RAIZ_SPEC}/revisao.json`, '{"ok":true}');
+    escrever(`${RAIZ_SPEC}/data-model.previa.json`, '{}');
     escrever('outputs/spec/auditorias/_isencoes/isencao-acme.md',
       'gate:isencao\nmotivo: escopo reduzido\n');
-    const r = invocarPeloRegistro(raiz, 'spec-prototype');
+    const r = invocarPeloRegistro(raiz, 'sn-scaffold');
     assert.equal(r.acao, 'allow', r.motivo || '');
   } finally {
     rmSync(raiz, { recursive: true, force: true });
@@ -727,19 +771,20 @@ test('C-1 — o conserto NÃO afrouxa: com artefato de Plan escrito, a fase vira
   const { raiz, escrever } = projetoNoExplore();
   try {
     escrever(`${RAIZ_SPEC}/revisao.json`, '{"ok":true}');
+    escrever(`${RAIZ_SPEC}/data-model.previa.json`, '{}');
     escrever(`${RAIZ_SPEC}/modules.md`, '# Módulos\n');
-    const r = invocarPeloRegistro(raiz, 'spec-prototype');
+    const r = invocarPeloRegistro(raiz, 'sn-scaffold');
     assert.equal(r.acao, 'deny');
-    assert.match(r.motivo, /V-PRD-02/);
-    assert.match(r.motivo, /business-rules\.md/);
+    assert.match(r.motivo, /CADEIA-SN-01/);
+    assert.match(r.motivo, /`data-model\.json`/);
 
     // A MESMA cobrança pela forma NUA, que é a que a vendorização produz. As duas pontas: se o
     // corte de prefixo sumisse, a linha acima ficaria vermelha; se a tabela parasse de casar o
     // nome nu, esta ficaria. Nenhuma das duas sozinha prova que as duas formas chegam.
-    const nu = invocarNuPeloRegistro(raiz, 'spec-prototype');
+    const nu = invocarNuPeloRegistro(raiz, 'sn-scaffold');
     assert.equal(nu.acao, 'deny');
-    assert.match(nu.motivo, /V-PRD-02/);
-    assert.match(nu.motivo, /business-rules\.md/);
+    assert.match(nu.motivo, /CADEIA-SN-01/);
+    assert.match(nu.motivo, /`data-model\.json`/);
   } finally {
     rmSync(raiz, { recursive: true, force: true });
   }

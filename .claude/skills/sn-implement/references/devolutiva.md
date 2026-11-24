@@ -1,4 +1,4 @@
-# spec-implement — a devolutiva em chat (passo J)
+# sn-implement — a devolutiva em chat (passo J)
 
 > Lido no passo J, antes de escrever a devolutiva. A obrigação, o público e o porquê estão no
 > `SKILL.md`, § «J — Devolutiva em chat».
@@ -165,7 +165,7 @@ Reler uma vez e responder quatro perguntas. Qualquer "não" volta para o texto:
 | **Devolutiva em chat (passo J)** | **a pessoa que está lendo agora, técnica ou não** | **explicação em linguagem simples: o que mudou no negócio, as decisões técnicas e o preço delas sem jargão, como o código faz isso** |
 
 Os três coexistem. A devolutiva **não** substitui nenhum dos outros dois, e nenhum deles dispensa a
-devolutiva — inclusive em Mode A, onde o comentário do ADO já foi escrito.
+devolutiva — inclusive em Mode A, onde o comentário da issue já foi escrito.
 
 **Quando a execução falha** (validação vermelha, bloqueio, nada implementado), a devolutiva
 acontece do mesmo jeito, com as seções ajustadas: o que se tentou fazer, onde parou, o que a

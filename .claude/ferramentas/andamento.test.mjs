@@ -336,9 +336,10 @@ test('D49 — em multi-repo o marcador nasce no repositório de docs, onde o del
 // citada, ela tem de estar no PASSO certo: conferir e abrir a US antes da Fase 2 (antes de qualquer
 // código), concluir depois do G3 e antes do I.
 
-const skill = () => readFileSync(doRepo('.claude/skills/spec-implement/SKILL.md'), 'utf8').replace(/\r\n/g, '\n');
+// Fork ServiceNow (item 29): a spec-implement virou sn-implement, que manteve D2, G3, H (Mode B) e I.
+const skill = () => readFileSync(doRepo('.claude/skills/sn-implement/SKILL.md'), 'utf8').replace(/\r\n/g, '\n');
 
-test('D48/D49 — a spec-implement manda conferir e abrir a US antes da Fase 2', () => {
+test('D48/D49 — a sn-implement manda conferir e abrir a US antes da Fase 2', () => {
   const s = skill();
   const fase2 = s.indexOf('# FASE 2 — Projeto de testes');
   const conferirEm = s.indexOf('node .claude/ferramentas/andamento.mjs conferir');
@@ -351,7 +352,7 @@ test('D48/D49 — a spec-implement manda conferir e abrir a US antes da Fase 2',
   }
 });
 
-test('D48 — a spec-implement manda concluir depois do G3 e antes do I', () => {
+test('D48 — a sn-implement manda concluir depois do G3 e antes do I', () => {
   const s = skill();
   const g3 = s.indexOf('## G3 — Validação independente');
   const i = s.indexOf('## I — Update spec_story.md');
@@ -364,6 +365,6 @@ test('D49 — a rule do Deliver e o template dizem quem cria o marcador', () => 
   assert.match(deliver, /andamento\.mjs abrir-us/);
   assert.match(deliver, /andamento\.mjs concluir/);
   const modelo = readFileSync(doRepo('.claude/templates/em-andamento.md'), 'utf8');
-  assert.match(modelo, /spec-implement/, 'o template não diz quem o cria');
+  assert.match(modelo, /sn-implement/, 'o template não diz quem o cria');
   assert.match(modelo, /andamento\.mjs abrir-us/);
 });

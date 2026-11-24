@@ -531,20 +531,11 @@ test('as rules de fase só carregam pela injeção: `paths:` entre aspas, aponta
   }
 });
 
-test('a rule de frontend só carrega com arquivo de frontend; a de segurança carrega sempre', () => {
-  // Desde a Decisão 73 esta rule toma o lugar do `frontend-default.mdc`, que não é mais materializado
-  // no projeto. Então ela cobre as MESMAS extensões que ele cobria — derivadas do `globs:` dele, não
-  // fixadas aqui. O `**/*.canvas.tsx` de lá já está dentro do `tsx`.
-  const padrao = /^globs:\s*"([^"]+)"\s*$/m.exec(frontmatter('.claude/skills/spec-tech-rules/templates/frontend-default.mdc'));
-  assert.ok(padrao, 'o frontend-default.mdc da spec-tech-rules não tem mais `globs:`');
-  const doPadrao = new Set(padrao[1].split(',').map((g) => /^\*\*\/\*\.([a-z]+)$/.exec(g.trim())?.[1]).filter(Boolean));
-  // Um glob só, com chaves, entre aspas — a forma documentada do Claude Code. A lista separada por
-  // vírgula numa string única não é documentada, e nada garante que ele a parta.
-  const fe = /^paths:\s*"([^"]+)"\s*$/m.exec(frontmatter('.claude/rules/harness/frontend.md'));
-  assert.ok(fe, 'frontend.md sem `paths:` entre aspas');
-  const chaves = /^\*\*\/\*\.\{([a-z,]+)\}$/.exec(fe[1]);
-  assert.ok(chaves, `o paths: deixou de ser um glob só, com chaves: ${fe[1]}`);
-  assert.deepEqual(new Set(chaves[1].split(',')), doPadrao);
+test('a rule de interface só carrega com arquivo do app Fluent; a de segurança carrega sempre', () => {
+  // A rule de interface ServiceNow (Core UI) substitui a de frontend Next.js: rege só `app/src/fluent/**`.
+  const fe = /^paths:\s*"([^"]+)"\s*$/m.exec(frontmatter('.claude/rules/harness/servicenow-ui.md'));
+  assert.ok(fe, 'servicenow-ui.md sem `paths:` entre aspas');
+  assert.equal(fe[1], 'app/src/fluent/**');
   assert.ok(!/^paths:/m.test(frontmatter('.claude/rules/harness/security.md')), 'security.md não pode ter `paths:`');
 });
 

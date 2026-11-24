@@ -142,7 +142,7 @@ ou `UI_BINDING_SKIPPED: sem flow-map`, e qualquer degradação `TOOL_UNAVAILABLE
 | `api-contracts.yaml` | Especificação OpenAPI 3.0+ com paths, schemas, security, examples |
 | `api-contracts-supplement.json` | Campos não cobertos pelo OpenAPI: chaves de idempotência, semântica HTTP por operação, rate limiting, metadata de operação |
 
-**Fora de escopo:** gerar código de servidor/cliente (`spec-scaffold` e `spec-implement` fazem isso — Fases 10-11), testes ou páginas de documentação.
+**Fora de escopo:** gerar código de servidor/cliente (`sn-scaffold` e `sn-implement` fazem isso — Fases 10-11), testes ou páginas de documentação.
 
 > **Regra de idioma:** Nos dois artefatos, todos os valores de string legíveis por humanos
 > (summaries, descriptions, mensagens de erro, exemplos com texto ao usuário) devem estar em
@@ -304,7 +304,7 @@ declarada** (`BREAKING_CHANGES_MAPPED: modo=revisao-manual · revisor=<quem>`). 
 > **Nota — mock server (Prism, opcional, não é gate):** com o contrato lintado, é possível subir
 > um mock imediato com `npx @stoplight/prism-cli mock api-contracts.yaml` para validação
 > antecipada — front-end e integrações conseguem consumir a API especificada antes de existir
-> implementação. Ver também o uso no `spec-prototype` (protótipo conectado).
+> implementação. (No fork ServiceNow a etapa é opcional: as integrações são tabelas simuladas `SIM-`.)
 
 ## Amarração UI — Endpoints (Passo L — gate `UI_BINDING_UPDATED`)
 

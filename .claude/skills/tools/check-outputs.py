@@ -119,11 +119,9 @@ ARTIFACTS = {
         ("modules.md",                                   OPTIONAL, "opcional — registro canônico de módulos"),
         ("flow-map.md",                                  COND_UI,  "obrigatório quando o produto tem UI (gate FLOWMAP_VALID) — ausente só com FLOWMAP_SKIPPED no sync-log"),
     ],
-    "spec-prototype (opcional)": [
-        ("prototype.md",          OPTIONAL, "opcional"),
-        ("frontend-decisions.md", OPTIONAL, "opcional — só se frontend.mdc ausente"),
-        ("design-system.md",      OPTIONAL, "opcional — só quando não há design system prévio"),
-        ("screens-manifest.json", OPTIONAL, "opcional — contrato de colheita (gate WARNING SCREENS_MANIFEST_EMITTED)"),
+    "instância como protótipo (spec-data-model --previa, sn-scaffold, sn-capture)": [
+        ("data-model.previa.json", OPTIONAL, "modelo de dados preliminar do Explore (spec-data-model --previa)"),
+        ("screens-manifest.json", OPTIONAL, "telas TEL- na instância (sn-scaffold); o fecho-explore exige rota e print de cada uma"),
     ],
     "spec-iterate": [
         ("gaps.md",               REQUIRED, "obrigatório"),
@@ -148,7 +146,7 @@ ARTIFACTS = {
     ],
 }
 
-# Artefatos da cadeia técnica (spec-hld → spec-tasks-azure)
+# Artefatos da cadeia técnica (spec-hld → sn-tasks-github)
 PIPELINE_ARTIFACTS = {
     "spec-hld": [
         ("hld.md",                        OPTIONAL, "opcional — Fase 6.6; gate HLD_VALID via check-hld.py"),
@@ -801,7 +799,7 @@ def print_pipeline_report(pipeline_base: Path):
         print("  → Artefatos obrigatórios da cadeia técnica ausentes.")
         print("    Verifique se spec-data-model e spec-tasks foram executados.\n")
     if total_missing_mandatory == 0 and total_thin == 0:
-        print("  → Cadeia técnica completa. Pronto para spec-tasks-html e spec-tasks-azure.\n")
+        print("  → Cadeia técnica completa. Pronto para spec-tasks-html e sn-tasks-github.\n")
 
     # tasks.json: verificar schemaVersion
     tasks_json = pipeline_base / "tasks.json"

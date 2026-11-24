@@ -3,8 +3,9 @@
 // Ordem de procura (a primeira que existir ganha; as demais complementam variáveis
 // ainda não definidas):
 //   1. <skill>/.env                       — .env próprio desta skill
-//   2. <skill>/../spec-tasks-azure/.env   — reaproveita as credenciais já configuradas
-//   3. <root>/.env                        — .env do repositório do projeto
+//   2. <root>/.env                        — .env do repositório do projeto
+//
+// Fork ServiceNow (item 27): o candidato <skill>/../spec-tasks-azure/.env saiu com a skill.
 //
 // Variáveis já presentes em process.env sempre vencem (permite override em CI).
 
@@ -18,7 +19,6 @@ const SKILL_DIR = resolve(HERE, "..");
 export function loadDotenv(root = process.cwd()) {
   const candidates = [
     join(SKILL_DIR, ".env"),
-    join(SKILL_DIR, "..", "spec-tasks-azure", ".env"),
     join(root, ".env"),
   ];
   const loaded = [];

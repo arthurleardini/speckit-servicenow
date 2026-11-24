@@ -40,7 +40,7 @@ perguntas que o cliente sempre faz:
 |---|---|---|
 | “O que este produto faz e sob quais regras?” | Negócio | `product-vision.md`, `modules.md`, `business-rules.md`, `requirements.md`, `product-requirements.md`, `flow-map.md` |
 | “Como foi construído tecnicamente?” | Técnico | `tech-rules/*.mdc` (+ `.cursor/rules`, `.claude/rules`), `data-model.json`, `api-contracts.yaml`, `threat-model.md`, `code-audit.md` |
-| “Quanto de código foi escrito e com que decisões?” | Código | varredura do repositório, `git`, ADRs, `spec_story.md` (memória do `spec-implement`) |
+| “Quanto de código foi escrito e com que decisões?” | Código | varredura do repositório, `git`, ADRs, `spec_story.md` (memória do `sn-implement`) |
 | **“Onde cada coisa de negócio foi implementada?”** | Negócio (por operação) ou Código (rastro do pipeline) | cruzamento por ID entre documentos, código, testes e itens de trabalho |
 | “Os testes passam e o que está coberto?” | Testes e Cobertura | **execução real** dos frameworks + cobertura de código/negócio/plano |
 | “O que falta testar, e o que fazer com cada item?” | O que falta testar | matriz de rastreabilidade + `status/test-gaps.json` (análise do agente) |
@@ -514,12 +514,12 @@ atual. Quando há divergência, o CLI avisa `LEGACY_LAYOUT` e o Sumário ganha o
 Duas rotas, nesta ordem:
 
 **1. REST (preferida).** Credenciais do `.env`, carregado de: `<skill>/.env` →
-`<skill>/../spec-tasks-azure/.env` (reaproveita o que já está configurado) → `<root>/.env`.
+`<root>/.env`.
 Variáveis já presentes em `process.env` vencem, para CI. Requer
 `AZURE_DEVOPS_PAT` (escopo *Work Items: Read*), `AZURE_DEVOPS_ORG`, `AZURE_DEVOPS_PROJECT`.
 
 Escopo da consulta, em precedência: `--azure-wiql <arquivo>` → **`id-map.json`** (exatamente
-os work items publicados por `spec-tasks-azure` — o escopo mais preciso) → projeto com
+os work items publicados no ADO — o escopo mais preciso; no fork ServiceNow o `id-map.json` é o do `sn-tasks-github`, com issues do GitHub) → projeto com
 filtro opcional de área/iteração. IDs viram campos via `/wit/workitemsbatch` em lotes de 200.
 
 **2. Snapshot (fallback MCP).** Sem credencial, o CLI **não falha**: emite
@@ -539,7 +539,7 @@ coleta. Estado é normalizado para concluído/em andamento/a fazer/removido, pre
 rótulo real do ADO ao lado — projeto com processo customizado não vira “outros”.
 
 A ligação com a matriz de rastreabilidade é a tag `logical-id:<ID>` (gravada por
-`spec-tasks-azure` em toda criação) ou o prefixo do título (`TASK-XXX-XXX: …`).
+publicador do ADO em toda criação) ou o prefixo do título (`TASK-XXX-XXX: …`).
 
 **Rollup só sobre folhas.** Progresso, pontos e horas são somados apenas nos itens
 **folha** do escopo — item-pai não entra junto com os filhos (senão o mesmo trabalho conta
@@ -710,7 +710,7 @@ acima. O que o agente confere além deles:
   `executive-summary.md` e deve ser rastreável aos artefatos.
 - Não instala dependências de teste nem cria ambiente de E2E — runner que não roda vira
   aviso, não instalação silenciosa no repositório do cliente.
-- Não escreve nada no Azure DevOps (leitura apenas; publicação é `spec-tasks-azure`).
+- Não escreve nada no Azure DevOps (leitura apenas; no fork ServiceNow a publicação é o `sn-tasks-github`, no GitHub).
 - Não decide, fecha nem prioriza GAP — reflete o estado de `gaps.md` no momento da geração.
 - Não substitui `spec-code-audit` (Fase 12): reporta a decisão da auditoria, não a executa.
 - Não substitui `spec-report` (kit de discovery): aquele compila a documentação de
@@ -729,8 +729,8 @@ acima. O que o agente confere além deles:
 | `spec-data-model` / `spec-api-contracts` | 6a/6b | Fontes do modelo de dados e da superfície de API |
 | `spec-tasks` | 7 | `tasks.json` alimenta o vínculo backlog ↔ regra de negócio |
 | `spec-test-plan` | 7a | Casos de negócio (UAT) listados ao lado dos testes automatizados |
-| `spec-tasks-azure` | 8 | Publica os work items e grava `id-map.json` + tag `logical-id` — é o que torna a correlação ADO precisa |
-| `spec-implement` | 10 | Escreve o código e mantém os `spec_story.md` lidos como decisões |
+| `sn-tasks-github` | 9 | Publica o backlog em issues do GitHub e grava `id-map.json` + marcador `logical-id` |
+| `sn-implement` | 10 | Escreve o código e mantém os `spec_story.md` lidos como decisões |
 | `spec-code-audit` | 11 | `code-audit.md` alimenta o semáforo (APROVADO/BLOQUEADO) |
 | `spec-estimate` | 7.5 | `estimate-report.md` entra como sinal de fase e contexto de delivery |
 | `spec-debug-fix` | 10c | Destino natural das falhas de teste que este relatório expõe |

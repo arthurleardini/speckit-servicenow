@@ -73,7 +73,7 @@ test('Decisão 69 — uma regra de rastreio SEC, citada pelas duas auditorias e 
 test('Decisão 69 — o mesmo motor determinístico nos três escopos', () => {
   assert.match(ler('.claude/skills/auditoria-de-us/SKILL.md'), /varrer-entrega\.mjs --desde-o-ramo/);
   assert.match(ler('.claude/skills/spec-code-audit/SKILL.md'), /varrer-entrega\.mjs --tudo/);
-  assert.match(ler('.claude/skills/spec-implement/SKILL.md'), /validar\.mjs/);
+  assert.match(ler('.claude/skills/sn-implement/SKILL.md'), /validar\.mjs/);
 });
 
 // ————————————————————————— Decisão 71 — spec-frame fora do fluxo padrão —————————————————————————
@@ -110,24 +110,7 @@ test('Decisão 71 — fora do fluxo PADRÃO não é proibida: no Explore ela é 
   assert.match(acel, /`outputs\/spec\/frame\.md`/, 'a rule não diz onde a saída mora');
 });
 
-// ————————————————————————— Decisão 72 — spec-convert-prototype —————————————————————————
-
-test('Decisão 72 — a spec-convert-prototype converte protótipo externo e grava em outputs/spec/', () => {
-  const t = ler('.claude/skills/spec-convert-prototype/SKILL.md');
-  assert.match(t, /## Âmbito — quando usar esta skill \(Decisão 72\)/);
-  assert.ok(!/(^|[^/])docs\//m.test(t), 'sobrou artefato em docs/');
-  for (const arq of ['pending-legacy.md', 'pending-rule.md', 'legacy-parity-matrix.md', 'frontend-md-verification.md']) {
-    assert.ok(t.includes(`outputs/spec/convert-prototype/${arq}`), `${arq} fora de outputs/spec/convert-prototype/`);
-  }
-  assert.match(t, /--verification <RAIZ>\/outputs\/spec\/convert-prototype\/frontend-md-verification\.md/);
-  assert.ok(!ler('.claude/skills/spec-convert-prototype/templates/verify-frontend-md-compliance.mjs').includes('docs/'));
-  // O protótipo de fidelidade Alta já nasce no padrão: não passa pela convert, nas duas skills.
-  assert.match(t, /em fidelidade \*\*Alta\*\* não passa por aqui/);
-  const proto = ler('.claude/skills/spec-prototype/SKILL.md');
-  assert.ok(!/base para `spec-convert-prototype`\/`spec-implement`/.test(proto));
-  assert.ok(!/serviços reais é do `spec-convert-prototype`/.test(proto));
-  assert.match(proto, /o de fidelidade Alta não passa por ela/);
-});
+// ————————— Decisão 72 — a spec-convert-prototype saiu no fork ServiceNow (item 27): não há protótipo HTML —————————
 
 // ————————————————————————— Decisão 74 — perguntar e criar a task SEC pelo MCP —————————————————————————
 
@@ -136,10 +119,12 @@ test('Decisão 74 — achado SEC sem task: a auditoria pergunta se cria; com sim
   assert.match(regra, /Decisão 74/);
   assert.match(regra, /\*\*Perguntar\*\* ao usuário/);
   assert.match(regra, /inject-sec\.mjs outputs\/spec\/tasks\.json .* --acrescentar/);
-  assert.match(regra, /MCP do Azure DevOps/);
+  // Fork ServiceNow (A4): o backlog é o GitHub, e a task SEC chega à issue pelo sn-tasks-github --change.
+  assert.match(regra, /sn-tasks-github --change/);
+  assert.ok(!/MCP do Azure DevOps\*\*/.test(regra), 'a criação pelo MCP do Azure DevOps voltou');
   assert.match(regra, /`logical-id:SEC-NNN`/);
   assert.match(regra, /`outputs\/spec\/id-map\.json`/);
-  // Com «não», ou com o MCP falhando, o achado continua aberto — o bloqueio da Decisão 69 fica.
+  // Com «não», ou com o publicador falhando, o achado continua aberto — o bloqueio da Decisão 69 fica.
   assert.match(regra, /\*\*Não\*\*/);
   assert.match(regra, /BLOQUEADA/);
   assert.ok(!/Quem audita não cria task no backlog/.test(regra), 'a frase antiga contradiz o fluxo novo');

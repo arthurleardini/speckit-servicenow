@@ -11,7 +11,9 @@
 
 const RULE_SEGURANCA = '.claude/rules/harness/security.md';
 const VETORES = '.claude/references/seguranca/vetores.md';
-const RULE_FRONTEND = '.claude/rules/harness/frontend.md';
+// Fork Speckit ServiceNow (design v0, item 11): a rule de frontend Next.js saiu, e a de interface do
+// harness é a da Core UI clássica. O nome da constante ficou: ela é "a rule de tela do harness".
+const RULE_FRONTEND = '.claude/rules/harness/servicenow-ui.md';
 const PASTA_RULES_DO_PROJETO = '.claude/rules';
 
 export const LIMITE_TRECHOS = 14_000;
@@ -26,11 +28,15 @@ const rulesDoProjeto = (listar) => listar(PASTA_RULES_DO_PROJETO)
   .filter((n) => /\.mdc?$/i.test(n) && !/^harness-/i.test(n));
 
 const CAMADAS_DE_SEGURANCA = /^Camada [ABCEFG] —/;
-const SECOES_DE_FRONTEND = /^(MUST NOT \(lista compacta\)|Anti-patterns|Erros \(`AppError`\)|Server vs Client)/;
+const SECOES_DE_FRONTEND = /^(MUST NOT \(lista compacta\)|Anti-patterns|Form|List|Ações de tela|Comportamento do form|Identificadores)$/;
 const SECOES_DE_RULE_DO_PROJETO = /MUST NOT|Anti-?patterns|Proibid/i;
 
-/** Arquivo de tela ou de JavaScript/TypeScript — o que a rule de frontend rege. */
-export const ehDeFrontend = (caminho) => /\.(m?[jt]sx?|cjs|css|html|mdx)$/i.test(String(caminho));
+/**
+ * Arquivo que a rule de tela rege: os metadados Fluent (`.now.ts` e o resto de `app/src/fluent/`) e
+ * JavaScript/TypeScript em geral (script de servidor em `app/src/server/`, client script).
+ */
+export const ehDeFrontend = (caminho) => /\.now\.ts$|(^|\/)app\/src\/fluent\//i.test(String(caminho).replace(/\\/g, '/'))
+  || /\.(m?[jt]sx?|cjs|css|html|mdx)$/i.test(String(caminho));
 
 /**
  * As seções do markdown cujo título casa com `filtro`. Cada seção vai do título até o próximo título
@@ -63,18 +69,21 @@ function montar(blocos, limite) {
 }
 
 /**
- * A rule de frontend Next.js do harness está em vigor neste projeto? Duas regras da varredura
- * (`fetch-na-tela`, `formato-no-jsx`) só se sustentam com ela. Em vigor quando a rule do harness
- * existe E nenhuma rule de frontend do projeto (raiz de `.claude/rules/`, nome com "frontend") a
- * contradiz — rule de projeto tem precedência, e uma rule de frontend que não fala de Next.js é de
- * outra stack (Angular, Vue…). É heurística de propósito simples; quem sabe mais passa
- * `--regras-frontend sim|nao` ao `validar.mjs`.
+ * A rule de tela do harness (Core UI clássica, `servicenow-ui.md`) está em vigor neste projeto? As
+ * regras de `.now.ts` da varredura (`soRegraDeUi`) só se sustentam com ela. Em vigor quando a rule do
+ * harness existe E nenhuma rule de interface do projeto (raiz de `.claude/rules/`, nome com
+ * "frontend" ou "ui") a contradiz — rule de projeto tem precedência, e uma rule de interface que não
+ * fala de ServiceNow é de outra stack. Heurística simples de propósito; quem sabe mais passa
+ * `--regras-frontend sim|nao` ao `validar.mjs` (o nome da flag ficou o da base).
  */
-export function regrasFrontendNextEmVigor({ ler, listar }) {
+export function regrasUiEmVigor({ ler, listar }) {
   if (!String(ler(RULE_FRONTEND) || '').trim()) return false;
-  const doProjeto = rulesDoProjeto(listar).filter((n) => /frontend/i.test(n));
-  return doProjeto.every((n) => /\bnext(\.js)?\b/i.test(String(ler(`${PASTA_RULES_DO_PROJETO}/${n}`) || '')));
+  const doProjeto = rulesDoProjeto(listar).filter((n) => /frontend|(^|[-_.])ui([-_.]|$)/i.test(n));
+  return doProjeto.every((n) => /servicenow|fluent|core ui|ui16/i.test(String(ler(`${PASTA_RULES_DO_PROJETO}/${n}`) || '')));
 }
+
+/** Nome da base, mantido para quem ainda o importa (`varrer-entrega.mjs`). */
+export const regrasFrontendNextEmVigor = regrasUiEmVigor;
 
 /**
  * Os trechos que valem para um agente.

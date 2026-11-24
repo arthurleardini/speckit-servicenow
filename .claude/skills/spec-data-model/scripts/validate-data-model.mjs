@@ -32,8 +32,22 @@
  *        existente no modelo (entidades legadas devem entrar como EXISTING_REF);
  *   (ii) nomes de entidade são únicos em todo o modelo (cross bounded contexts).
  *
+ * FORMATO SERVICENOW (Speckit ServiceNow). O modelo com `scope` + `entities[]` na raiz é o formato
+ * do app escopado (o mesmo da prévia `outputs/spec/data-model.previa.json`) e é validado contra
+ * templates/data-model.servicenow.schema.json, mais as checagens semânticas da plataforma:
+ *   - `scope` igual ao `scope` de app/now.config.json (o prefixo nunca é digitado de cabeça);
+ *   - tabela com o prefixo `<escopo>_`, até 30 caracteres, sem nome repetido;
+ *   - coluna de tabela própria sem prefixo (`x_…_` ou `u_`), sem nome repetido;
+ *   - `reference` só para tabela deste modelo ou tabela OOTB conhecida (RN-SN-03/04); `extends`
+ *     e `display` coerentes; `choice` com choices;
+ *   - módulos e telas apontando tabelas e campos que existem; papel da tela entre as `roles`;
+ *   - modo final (sem `--previa`): toda tabela que não é simulação declara `rf[]` (rastreio).
+ * O formato antigo (boundedContexts) continua validado como antes.
+ *
  * Uso:
  *   node validate-data-model.mjs [caminho/do/data-model.json] [caminho/do/schema.json]
+ *   node validate-data-model.mjs --previa [caminho]   (prévia do Explore; rf/rn opcionais)
+ *   --now-config=<caminho>  default app/now.config.json (relativo ao cwd)
  *
  * Defaults (na ordem):
  *   data-model : outputs/spec/data-model.json → outputs/data-model.json (relativo ao cwd)
@@ -60,6 +74,26 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const VENDOR_ANCHOR = path.join(SCRIPT_DIR, '..', '..', 'spec-tasks', 'templates', 'noop.js');
 const VENDOR_DIR = path.dirname(VENDOR_ANCHOR);
 const DEFAULT_SCHEMA = path.join(SCRIPT_DIR, '..', 'templates', 'data-model.schema.json');
+const DEFAULT_SN_SCHEMA = path.join(SCRIPT_DIR, '..', 'templates', 'data-model.servicenow.schema.json');
+const DEFAULT_PREVIA = path.join('outputs', 'spec', 'data-model.previa.json');
+const DEFAULT_NOW_CONFIG = path.join('app', 'now.config.json');
+/**
+ * Tabelas OOTB que uma `reference` (ou `extends`) pode apontar sem estar no modelo. Lista curta de
+ * propósito: referência a tabela fora daqui é quase sempre erro de digitação ou tabela que ainda
+ * não foi modelada (RN-SN-03/04). Precisa de outra? Acrescente aqui, com o motivo no commit.
+ */
+const TABELAS_OOTB = new Set([
+  'sys_user', 'sys_user_group', 'sys_user_role', 'sys_choice', 'sys_attachment', 'sys_journal_field',
+  'core_company', 'cmn_location', 'cmn_department', 'cmn_cost_center', 'task', 'sys_report',
+]);
+/** Tabelas OOTB que aceitam `extends`. */
+const TABELAS_EXTENSIVEIS = new Set(['task']);
+/** Campos que toda tabela tem (podem aparecer em `screens[].fields` sem estar em `columns`). */
+const CAMPOS_DE_SISTEMA = new Set([
+  'sys_id', 'number', 'sys_created_on', 'sys_created_by', 'sys_updated_on', 'sys_updated_by',
+  'sys_mod_count', 'sys_class_name', 'comments', 'work_notes', 'activity',
+]);
+const LIMITE_NOME_TABELA = 30;
 const DEFAULT_DATA_CANDIDATES = [
   path.join('outputs', 'spec', 'data-model.json'),
   path.join('outputs', 'data-model.json'),
@@ -71,6 +105,7 @@ function printHelp() {
 
 Uso:
   node validate-data-model.mjs [data-model.json] [schema.json]
+  node validate-data-model.mjs --previa [data-model.previa.json]
 
 Argumentos (posicionais, ambos opcionais):
   1º  caminho do data-model.json
@@ -79,6 +114,9 @@ Argumentos (posicionais, ambos opcionais):
       default: <skill>/templates/data-model.schema.json
 
 Opções:
+  --previa             modo prévia do Explore: default outputs/spec/data-model.previa.json,
+                       formato ServiceNow obrigatório, rf/rn por tabela opcionais
+  --now-config=<arq>   onde ler o escopo do app (default app/now.config.json)
   --no-npx             não tentar a rota efêmera (npx ajv-cli) quando o ajv faltar;
                        cair direto no validador reduzido embutido. Equivale a
                        SPEC_KIT_NO_NPX=1 no ambiente (use em máquina offline).
@@ -126,13 +164,22 @@ if (args.includes('-h') || args.includes('--help')) {
   process.exit(0);
 }
 const positional = args.filter((a) => !a.startsWith('-'));
+const modoPrevia = args.includes('--previa');
+const nowConfigArg = args.find((a) => a.startsWith('--now-config='));
+const nowConfigPath = nowConfigArg ? nowConfigArg.slice('--now-config='.length) : DEFAULT_NOW_CONFIG;
 const noNpx = args.includes('--no-npx') || process.env.SPEC_KIT_NO_NPX === '1';
 const npxTimeoutArg = args.find((a) => a.startsWith('--npx-timeout='));
 const npxTimeoutS = npxTimeoutArg
   ? Number(npxTimeoutArg.split('=')[1]) || NPX_TIMEOUT_DEFAULT_S
   : NPX_TIMEOUT_DEFAULT_S;
 
-let dataPath = positional[0];
+let dataPath = positional[0] ?? (modoPrevia ? DEFAULT_PREVIA : undefined);
+if (modoPrevia && !existsSync(dataPath)) {
+  fail(
+    `prévia do modelo não encontrada em "${dataPath}". Escreva-a a partir de outputs/explore/modelo-de-dados.md ` +
+      '(ver SKILL.md, «Modo --previa») e rode de novo.'
+  );
+}
 if (!dataPath) {
   dataPath = DEFAULT_DATA_CANDIDATES.find((p) => existsSync(p));
   if (!dataPath) {
@@ -143,7 +190,10 @@ if (!dataPath) {
     );
   }
 }
-const schemaPath = positional[1] || DEFAULT_SCHEMA;
+// O schema sai do FORMATO do arquivo quando não é dado: `scope` + `entities[]` na raiz é o modelo
+// ServiceNow; o resto é o formato boundedContexts de sempre.
+const ehServiceNow = (m) => m !== null && typeof m === 'object' && typeof m.scope === 'string' && Array.isArray(m.entities);
+let schemaPath = positional[1];
 
 // ---------- rota 1: ajv vendorizado / local ----------
 function loadAjv() {
@@ -488,6 +538,11 @@ function validateReduced(schema, data, ptr, errors, unsupported) {
 
 // ---------- execução ----------
 const model = readJson(dataPath, 'data-model');
+const formatoServiceNow = ehServiceNow(model);
+if (modoPrevia && !formatoServiceNow) {
+  fail(`"${dataPath}" não está no formato ServiceNow (scope + entities[] na raiz), que a prévia exige.`);
+}
+if (!schemaPath) schemaPath = formatoServiceNow ? DEFAULT_SN_SCHEMA : DEFAULT_SCHEMA;
 const schema = readJson(schemaPath, 'schema');
 
 let mode = null; // 'completa (…)' | 'REDUZIDA (…)'
@@ -530,7 +585,134 @@ if (ajvLoaded) {
 
 // ---------- checagens semânticas (sempre, em qualquer rota) ----------
 const semanticErrors = [];
-const contexts = Array.isArray(model.boundedContexts) ? model.boundedContexts : [];
+const warnings = [];
+
+/**
+ * As regras da plataforma que o schema não alcança. Só para o formato ServiceNow.
+ * `escopo` é o de app/now.config.json (ou null se o arquivo não existe — vira aviso).
+ */
+function checarServiceNow(m, { escopo, final }) {
+  const erros = [];
+  const avisos = [];
+  const lista = (v) => (Array.isArray(v) ? v : []);
+  if (escopo && m.scope !== escopo) {
+    erros.push(`[servicenow] /scope: "${m.scope}" difere do escopo do app em ${nowConfigPath} ("${escopo}") — o prefixo vem sempre do now.config.json`);
+  }
+  const prefixo = `${escopo || m.scope}_`;
+  const tabelas = new Map();
+  lista(m.entities).forEach((e, i) => {
+    const p = `/entities/${i}`;
+    const nome = e?.name;
+    if (typeof nome !== 'string' || !nome) return; // o schema reporta
+    if (tabelas.has(nome)) erros.push(`[servicenow] ${p}: tabela "${nome}" repetida (primeira em ${tabelas.get(nome).p})`);
+    else tabelas.set(nome, { p, e });
+    if (!nome.startsWith(prefixo)) erros.push(`[servicenow] ${p}: tabela "${nome}" sem o prefixo do escopo "${prefixo}"`);
+    if (nome.length > LIMITE_NOME_TABELA) {
+      erros.push(`[servicenow] ${p}: tabela "${nome}" tem ${nome.length} caracteres — o limite da plataforma é ${LIMITE_NOME_TABELA}`);
+    }
+  });
+  const existe = (t) => tabelas.has(t) || TABELAS_OOTB.has(t);
+  for (const [nome, { p, e }] of tabelas) {
+    const colunas = new Set();
+    lista(e.columns).forEach((c, j) => {
+      const pc = `${p}/columns/${j}`;
+      const cn = c?.name;
+      if (typeof cn !== 'string') return;
+      if (colunas.has(cn)) erros.push(`[servicenow] ${pc}: coluna "${cn}" repetida em ${nome}`);
+      colunas.add(cn);
+      if (cn.startsWith(prefixo) || /^x_[a-z0-9]+_/.test(cn) || cn.startsWith('u_')) {
+        erros.push(`[servicenow] ${pc}: coluna "${cn}" com prefixo — coluna de tabela do próprio escopo não leva x_<escopo>_ nem u_`);
+      }
+      if (c?.type === 'reference') {
+        if (typeof c.reference !== 'string' || !c.reference) {
+          erros.push(`[servicenow] ${pc}: coluna reference "${cn}" sem a tabela alvo em "reference"`);
+        } else if (!existe(c.reference)) {
+          erros.push(
+            `[servicenow] ${pc}: reference "${cn}" aponta "${c.reference}", que não está no modelo nem na lista de tabelas OOTB ` +
+              `(${[...TABELAS_OOTB].join(', ')}) — RN-SN-03/04`
+          );
+        }
+      } else if (c?.reference !== undefined) {
+        erros.push(`[servicenow] ${pc}: "reference" só vale em coluna do tipo reference (a coluna "${cn}" é ${c?.type})`);
+      }
+      if (c?.type === 'choice' && (!c.choices || typeof c.choices !== 'object' || !Object.keys(c.choices).length)) {
+        erros.push(`[servicenow] ${pc}: coluna choice "${cn}" sem choices`);
+      }
+    });
+    if (e.display !== undefined && !colunas.has(e.display)) {
+      erros.push(`[servicenow] ${p}/display: coluna de exibição "${e.display}" não existe em ${nome}`);
+    }
+    if (e.extends !== undefined && !tabelas.has(e.extends) && !TABELAS_EXTENSIVEIS.has(e.extends)) {
+      erros.push(`[servicenow] ${p}/extends: "${e.extends}" não é tabela do modelo nem tabela OOTB extensível (${[...TABELAS_EXTENSIVEIS].join(', ')})`);
+    }
+    if (final && e.simulation !== true && !lista(e.rf).length) {
+      erros.push(`[servicenow] ${p}/rf: tabela "${nome}" sem rf[] — no modelo final toda tabela que não é simulação diz que RF atende`);
+    }
+  }
+  const emModulo = new Set();
+  lista(m.modules).forEach((mod, i) => {
+    lista(mod?.tables).forEach((t, j) => {
+      emModulo.add(t);
+      if (!tabelas.has(t)) erros.push(`[servicenow] /modules/${i}/tables/${j}: "${t}" não está em entities[]`);
+    });
+  });
+  for (const nome of tabelas.keys()) {
+    if (!emModulo.has(nome)) avisos.push(`tabela "${nome}" não está em nenhum módulo — não vai aparecer no menu`);
+  }
+  const papeis = new Set(lista(m.roles));
+  const telas = new Set();
+  lista(m.screens).forEach((s, i) => {
+    const p = `/screens/${i}`;
+    if (typeof s?.id === 'string') {
+      if (telas.has(s.id)) erros.push(`[servicenow] ${p}: tela "${s.id}" repetida`);
+      telas.add(s.id);
+    }
+    const alvo = tabelas.get(s?.table);
+    if (!alvo) {
+      erros.push(`[servicenow] ${p}: tela ${s?.id} aponta a tabela "${s?.table}", que não está em entities[]`);
+      return;
+    }
+    const cols = new Set(lista(alvo.e.columns).map((c) => c?.name));
+    for (const f of lista(s.fields)) {
+      if (!cols.has(f) && !CAMPOS_DE_SISTEMA.has(f)) erros.push(`[servicenow] ${p}/fields: campo "${f}" da tela ${s.id} não existe em ${s.table}`);
+    }
+    if (s.groupBy !== undefined && !cols.has(s.groupBy) && !CAMPOS_DE_SISTEMA.has(s.groupBy)) {
+      erros.push(`[servicenow] ${p}/groupBy: campo "${s.groupBy}" da tela ${s.id} não existe em ${s.table}`);
+    }
+    if (papeis.size && s.role !== undefined && !papeis.has(s.role)) {
+      erros.push(`[servicenow] ${p}/role: papel "${s.role}" da tela ${s.id} não está em roles[]`);
+    }
+    // Related list é AVISO: além da reference direta (`tabela.campo`), a plataforma tem related
+    // list por relacionamento definido, que a prévia anota em texto.
+    for (const rl of lista(s.relatedLists)) {
+      const mm = /^([a-z0-9_]+)\.([a-z0-9_]+)$/.exec(String(rl).trim());
+      const col = mm && tabelas.get(mm[1]) && lista(tabelas.get(mm[1]).e.columns).find((c) => c?.name === mm[2]);
+      if (!col || col.type !== 'reference' || col.reference !== s.table) {
+        avisos.push(`tela ${s.id}: related list "${rl}" não é uma reference direta para ${s.table} — confira se é relacionamento definido`);
+      }
+    }
+  });
+  return { erros, avisos };
+}
+
+let escopoDoApp = null;
+if (formatoServiceNow) {
+  if (existsSync(nowConfigPath)) {
+    try {
+      escopoDoApp = JSON.parse(readFileSync(nowConfigPath, 'utf8')).scope || null;
+      if (!escopoDoApp) warnings.push(`${nowConfigPath} sem o campo "scope" — prefixo conferido contra o próprio modelo`);
+    } catch (e) {
+      fail(`${nowConfigPath} não é JSON válido: ${e.message}`);
+    }
+  } else {
+    warnings.push(`${nowConfigPath} não encontrado — o escopo NÃO foi conferido contra o app (use --now-config=<arquivo>)`);
+  }
+  const r = checarServiceNow(model, { escopo: escopoDoApp, final: !modoPrevia });
+  semanticErrors.push(...r.erros);
+  warnings.push(...r.avisos);
+}
+
+const contexts = !formatoServiceNow && Array.isArray(model.boundedContexts) ? model.boundedContexts : [];
 const entityIndex = new Map(); // nome → instancePath da 1ª ocorrência
 
 contexts.forEach((bc, i) => {
@@ -571,7 +753,6 @@ contexts.forEach((bc, i) => {
 });
 
 // ---------- avisos de placeholder (stub não preenchido) — não bloqueiam ----------
-const warnings = [];
 const STUB_PROJECT_NAME = 'NOME-DO-PROJETO';
 const STUB_GENERATED_AT = '2026-01-15T09:30:00Z'; // valor de exemplo em templates/data-model.stub.json
 if (model.projectName === STUB_PROJECT_NAME) {
@@ -588,7 +769,8 @@ if (model.generatedAt === STUB_GENERATED_AT) {
 // ---------- relatório ----------
 const errors = [...schemaErrors, ...semanticErrors];
 
-console.log(`data-model : ${dataPath}`);
+console.log(`data-model : ${dataPath}${formatoServiceNow ? ` (formato ServiceNow${modoPrevia ? ', prévia' : ', final'})` : ''}`);
+if (formatoServiceNow) console.log(`escopo     : ${escopoDoApp ? `${escopoDoApp} (${nowConfigPath})` : `${model.scope} (não conferido)`}`);
 console.log(`schema     : ${schemaPath}`);
 console.log(`validação  : ${mode}`);
 for (const n of notes) console.log(`aviso      : ${n}`);
@@ -614,5 +796,9 @@ if (mode.startsWith('REDUZIDA')) {
   process.exit(2);
 }
 
-console.log('\nDATAMODEL_VALID: OK — schema válido, relacionamentos íntegros, nomes de entidade únicos.');
+console.log(
+  formatoServiceNow
+    ? '\nDATAMODEL_VALID: OK — schema válido, escopo, nomes de tabela e coluna, references e telas conferidos.'
+    : '\nDATAMODEL_VALID: OK — schema válido, relacionamentos íntegros, nomes de entidade únicos.'
+);
 process.exit(0);

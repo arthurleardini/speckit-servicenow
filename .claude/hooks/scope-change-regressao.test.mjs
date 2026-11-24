@@ -2,7 +2,7 @@
 // teste ponta a ponta de 2026-10-21).
 //
 // A seção «Regressões potenciais» auditava só o `tasks.json` e os complementos: o `spec_story.md`
-// (memória de cada módulo, mantida pela `spec-implement`) e o código entregue não apareciam —
+// (memória de cada módulo, mantida pela `sn-implement`, antes `spec-implement`) e o código entregue não apareciam —
 // `grep -c spec_story` dava 0. No teste, a mudança de uma constante já implementada
 // (`DISCOUNT_BANDS.LOW_UP_TO_CENTS`) e os testes de borda que a prendiam só entraram na análise
 // porque quem executava os conhecia. Este arquivo prende a forma escrita da correção: o passo B lê
@@ -46,10 +46,10 @@ test('D65 — o passo B da ordem de execução lê o spec_story.md e o estado da
 test('D65 — «Regressões potenciais» parte do que já foi entregue, não só do tasks.json', () => {
   const secao = trecho(skill(), '## Regressões potenciais', '## Avaliação de risco');
   assert.match(secao, /spec_story\.md/, 'a seção não lê a memória do módulo');
-  assert.match(secao, /spec-implement/, 'não diz quem mantém o spec_story.md');
+  assert.match(secao, /sn-implement/, 'não diz quem mantém o spec_story.md');
   assert.match(secao, /System\.State/, 'não lê o estado da task no ADO');
   assert.match(secao, /\*\*State:\*\*/, 'não lê o estado registrado no spec_story.md');
-  assert.match(secao, /«Implementado»/, 'não usa a lista de arquivos que a spec-implement registrou');
+  assert.match(secao, /«Implementado»/, 'não usa a lista de arquivos que a sn-implement registrou');
   assert.match(secao, /Código já entregue que a mudança toca/, 'não lista o código entregue');
   assert.match(secao, /constante/i, 'o caso do D65 (constante já implementada) não está coberto');
   assert.match(secao, /teste/i);

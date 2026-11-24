@@ -11,22 +11,27 @@ import {
 import * as fecho from './fecho-explore.mjs';
 import {
   MARCADOR_CONGELAMENTO, DIR_AUDITORIAS, DIR_ISENCOES, RAIZ_SPEC, RAIZ_EXPLORE,
-  RE_KICKOFF, montarKickoff, lerKickoff, CABECALHO_SECAO_A, chave,
+  RE_KICKOFF, montarKickoff, lerKickoff, CABECALHO_SECAO_A, montarLinhaSecaoA, chave, mesmoCommit as mesmoCommitKit,
 } from './kit.mjs';
 import { REGISTRO, despachar, IO_REAL, criarRegistro } from './pretooluse.mjs';
 import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, realpathSync, utimesSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
+/** O último commit de `app/src/fluent` nos projetos de mentira, e o que a linha de install registra. */
+const COMMIT_FLUENT = '0123456789abcdef0123456789abcdef01234567';
+
 const COMPLETO = {
   presentesExplore: new Set(['hld-funcional.md', 'especificacao-funcional.md', 'especificacao-tecnica.md', 'gaps.md']),
-  presentesSpec: new Set(['sync-log.md', 'prototype.md', 'design-system.md', 'screens-manifest.json']),
+  presentesSpec: new Set(['sync-log.md', 'screens-manifest.json', 'screens/TEL-001.png']),
   kickoff: { presente: true, legado: 'nao', ramo: 'A', ambiente: 'claude', inputs: 'inputs/reuniao-01.txt' },
   manifestoValido: true,
-  temPrototipo: true,
-  // A fidelidade que o `prototype.md` declara (D9): o fecho só fecha o Explore com Alta.
-  fidelidadePrototipo: 'alta',
+  // As três condições da instância (item 16 do design v0), satisfeitas.
+  telas: { manifestoPresente: true, semRota: [], semPrint: [] },
+  install: { commitFluent: COMMIT_FLUENT, ultimo: { numero: 2, quando: '2026-11-24 10:00', resultado: 'ok', commit: COMMIT_FLUENT } },
+  seed: { documentos: 3, listaPresente: true, foraDaLista: [] },
   // Os opcionais ausentes SEM linha de dispensa no `gaps.md` (D8). Vazia: o `modelo-de-dados.md`
   // está ausente aqui (ver `presentesExplore`), e o projeto completo registrou a dispensa.
   dispensasFaltando: [],
@@ -103,7 +108,7 @@ test('âncora de arquivo: escrita fora da whitelist dispara', () => {
 });
 
 test('âncora de arquivo: escrita na whitelist NÃO dispara', () => {
-  for (const f of ['sync-log.md', 'context-map.md', 'prototype.md', 'screens/login.png']) {
+  for (const f of ['sync-log.md', 'context-map.md', 'data-model.previa.json', 'screens-manifest.json', 'screens/login.png']) {
     const p = { tool_name: 'Write', tool_input: { file_path: 'outputs/spec/' + f } };
     assert.equal(ehPrimeiraAcaoDoPlan(p, new Set()), false, f);
   }
@@ -193,25 +198,7 @@ test('D8 — modelo-de-dados ausente SEM a linha de dispensa bloqueia, e é a ú
   const r = decidir({ ...COMPLETO, dispensasFaltando: ['modelo-de-dados.md'] });
   assert.equal(r.acao, 'deny');
   assert.match(r.motivo, /`modelo-de-dados\.md` ausente e sem dispensa/);
-  assert.ok(!/kickoff|Manifesto inválido|revisao\.json|Fidelidade/.test(r.motivo), r.motivo);
-});
-
-test('D9 — no `decidir`, só `alta` fecha; Média, Baixa, o template e a ausência negam', () => {
-  for (const declarada of ['alta', 'Alta', 'ALTA (frontend completo)']) {
-    assert.equal(decidir({ ...COMPLETO, fidelidadePrototipo: declarada }).acao, 'allow', declarada);
-  }
-  for (const declarada of ['média', 'baixa', 'baixa | média | alta', 'altíssima', null]) {
-    const r = decidir({ ...COMPLETO, fidelidadePrototipo: declarada });
-    assert.equal(r.acao, 'deny', String(declarada));
-    assert.match(r.motivo, /[Ff]idelidade/, String(declarada));
-  }
-  // Sem o `prototype.md`, a fidelidade não é perguntada: o item do protótipo já diz o que falta.
-  const semPrototipo = decidir({
-    ...COMPLETO, fidelidadePrototipo: null, temPrototipo: false,
-    presentesSpec: new Set(['sync-log.md', 'design-system.md', 'screens-manifest.json']),
-  });
-  assert.equal(semPrototipo.acao, 'deny');
-  assert.ok(!/Fidelidade do protótipo não declarada/.test(semPrototipo.motivo), semPrototipo.motivo);
+  assert.ok(!/kickoff|Manifesto inválido|revisao\.json|manifesto de telas|install/.test(r.motivo), r.motivo);
 });
 
 test('a negação por kickoff ENSINA o formato do kit, e o que ela ensina é inerte', () => {
@@ -285,10 +272,12 @@ test('decidir nega sem manifesto válido', () => {
   assert.match(r.motivo, /workspace\.md|manifesto/i);
 });
 
-test('decidir nega sem protótipo', () => {
-  const r = decidir({ ...COMPLETO, temPrototipo: false });
+test('decidir nega sem o manifesto de telas da instância', () => {
+  const r = decidir({ ...COMPLETO, telas: { manifestoPresente: false, semRota: ['TEL-001'], semPrint: ['TEL-001'] } });
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /prot(ó|o)tipo/i);
+  assert.match(r.motivo, /manifesto de telas/);
+  // Fato ausente é falha, não «não medido»: o bloqueante que não recebeu o fato não libera.
+  assert.equal(decidir({ ...COMPLETO, telas: undefined }).acao, 'deny');
 });
 
 test('decidir nega com erro de gramática, citando o arquivo', () => {
@@ -317,7 +306,7 @@ test('GAP aberto NÃO bloqueia — é combustível do Plan', () => {
 test('isenção válida libera mesmo com tudo faltando', () => {
   const r = decidir({
     ...COMPLETO,
-    presentesExplore: new Set(), temPrototipo: false, kickoff: { presente: false },
+    presentesExplore: new Set(), telas: undefined, install: undefined, seed: undefined, kickoff: { presente: false },
     isencao: { repositorio: 'https://dev.azure.com/o/p/_git/r', autor: 'Fulano', data: '2026-08-25', motivo: 'pré-projeto herdado de outro fornecedor' },
   });
   assert.equal(r.acao, 'allow');
@@ -359,7 +348,7 @@ test('a negação NÃO promete que o gate registra a isenção', () => {
 });
 
 test('a negação lista TODOS os problemas, não só o primeiro', () => {
-  const r = decidir({ ...COMPLETO, presentesExplore: new Set(), temPrototipo: false, kickoff: { presente: false } });
+  const r = decidir({ ...COMPLETO, presentesExplore: new Set(), telas: undefined, kickoff: { presente: false } });
   assert.match(r.motivo, /kickoff/i);
   assert.match(r.motivo, /prot(ó|o)tipo/i);
   assert.match(r.motivo, /hld-funcional/);
@@ -492,6 +481,12 @@ function ioFalso(arquivos, opcoes = {}) {
       if (rel === null) return false;
       return (rel ? `${rel}/${MARCADOR_CONGELAMENTO}` : MARCADOR_CONGELAMENTO) in arquivos;
     },
+    // A SEXTA, do Speckit ServiceNow: o último commit de `app/src/fluent`. `opcoes.commitFluent`
+    // troca a resposta (`null` = sem commit); o padrão é o commit que a linha de install registra.
+    ultimoCommitDe(raizProjeto, rel) {
+      chamadas.push(['ultimoCommitDe', relDe(raizProjeto), rel]);
+      return 'commitFluent' in opcoes ? opcoes.commitFluent : COMMIT_FLUENT;
+    },
   };
 }
 
@@ -589,27 +584,42 @@ const KICKOFF = montarKickoff({ legado: 'nao', ramo: 'A', ambiente: 'claude', in
 /** O que este gate EXIGIA até a Task 7, e que o kit nunca conheceu. Fixture do contraexemplo. */
 const KICKOFF_INVENTADO = '> **KICKOFF 2026-08-25** · cliente: Acme · legado: nao · protótipo: obrigatório';
 
-/**
- * O `prototype.md` de um protótipo que FECHA o Explore: a linha `Fidelidade:` do cabeçalho do
- * template da `spec-prototype` declara Alta. Desde o D9 do teste ponta a ponta o fecho confere essa
- * linha, e o fixture sem ela — o que vigorou até aqui — passou a ser um protótipo que não declara
- * fidelidade nenhuma, que o gate nega.
- */
-const PROTOTIPO_ALTA = '# Protótipo\n\nModo: geração\nFidelidade: alta\n\nSeis estados por tela.\n';
+/** A linha de install que o `reinstall.mjs` escreve na Seção A (item 18 do design v0). */
+const linhaInstall = ({ numero = 2, resultado = 'ok', commit = COMMIT_FLUENT } = {}) => montarLinhaSecaoA({
+  numero, data: '2026-11-24', hora: '10:00', skill: 'now-sdk-install', modo: 'dev493801',
+  inputs: 'x_2326104_cob', outputs: commit, decisoes: `${resultado}; 12 registros`, decisor: '—', proximo: 'sn-capture',
+});
 
-/** Projeto de mentira COMPLETO: os seis itens do gate satisfeitos. */
+/** Sync-log com o kickoff e as linhas de install dadas. */
+const syncLog = (...installs) => '# Sync Log\n\n' + KICKOFF + '\n\n' + CABECALHO_SECAO_A + '\n' + installs.join('\n') + '\n';
+
+/** Manifesto de telas do `sn-scaffold`, com rota e print para cada `TEL-` dada. */
+const manifestoDeTelas = (...tels) => JSON.stringify({
+  version: 1, generatedBy: 'sn-scaffold',
+  screens: tels.map((id) => ({ id, route: `/x_cob_${id.toLowerCase()}_list.do`, type: 'list', role: 'coordenador', screenshot: `screens/${id}.png` })),
+});
+
+/** Seed de mentira: um arquivo com CPF e CNPJ, e a lista de fictícios que os contém. */
+const SEED_OK = {
+  'app/src/fluent/seed/contribuinte.now.ts': { texto: "Record({ $id: Now.ID['c1'], data: { cpf: '786.251.478-52', cnpj: '46.077.745/0001-50' } })\n", mtime: 100 },
+  'app/src/fluent/seed/_documentos.json': { texto: JSON.stringify({ documentos: [{ valor: '786.251.478-52' }, { valor: '46.077.745/0001-50' }] }), mtime: 100 },
+};
+
+/** Projeto de mentira COMPLETO: todos os itens do gate satisfeitos, com a instância como protótipo. */
 function projetoCompleto(extras = {}) {
   const arq = {
     'workspace.md': { texto: MANIFESTO_OK, mtime: 100 },
-    'outputs/spec/sync-log.md': { texto: '# Sync Log\n\n' + KICKOFF + '\n', mtime: 100 },
-    'outputs/spec/prototype.md': { texto: PROTOTIPO_ALTA, mtime: 100 },
-    'outputs/spec/design-system.md': { texto: '# Design System\n\nTokens e componentes.\n', mtime: 100 },
-    'outputs/spec/screens-manifest.json': { texto: '{"telas":[]}', mtime: 100 },
+    'outputs/spec/sync-log.md': { texto: syncLog(linhaInstall()), mtime: 100 },
+    'outputs/spec/screens-manifest.json': { texto: manifestoDeTelas('TEL-001'), mtime: 100 },
+    'outputs/spec/screens/TEL-001.png': { texto: 'PNG', mtime: 100 },
     'outputs/spec/revisao.json': { texto: '{"versao":"1.0"}', mtime: 900 },
+    ...SEED_OK,
   };
   for (const [nome, texto] of Object.entries(DOCS_BONS)) {
     arq[`${RAIZ_EXPLORE}/${nome}`] = { texto, mtime: 500 };
   }
+  // A tabela de telas da especificação cita a `TEL-001`, que o manifesto cobre.
+  arq[`${RAIZ_EXPLORE}/especificacao-funcional.md`].texto += '\nA lista de boletos é a TEL-001.\n';
   return { ...arq, ...extras };
 }
 
@@ -655,7 +665,7 @@ test('casca — registro legítimo com `HH:MM` em OUTRA célula não é exemplo,
   ].join(' ');
   const r = avaliar(PROD, ioFalso(projetoCompleto({
     'outputs/spec/sync-log.md': {
-      texto: '# Sync Log\n\n## Seção A\n\n' + CABECALHO_SECAO_A + '\n' + linha + '\n',
+      texto: '# Sync Log\n\n## Seção A\n\n' + CABECALHO_SECAO_A + '\n' + linhaInstall() + '\n' + linha + '\n',
       mtime: 100,
     },
   })));
@@ -694,7 +704,9 @@ test('casca — cada item do gate, removido sozinho do projeto completo, NEGA po
     ['documento do Explore', [`${RAIZ_EXPLORE}/gaps.md`], /gaps\.md/],
     ['manifesto', ['workspace.md'], /manifesto|workspace\.md/i],
     ['kickoff', ['outputs/spec/sync-log.md'], /kickoff/i],
-    ['protótipo', ['outputs/spec/screens-manifest.json'], /prot(ó|o)tipo/i],
+    ['manifesto de telas', ['outputs/spec/screens-manifest.json'], /manifesto de telas/i],
+    ['print da tela', ['outputs/spec/screens/TEL-001.png'], /sem print[\s\S]*TEL-001/i],
+    ['lista de fictícios do seed', ['app/src/fluent/seed/_documentos.json'], /lista de fictícios/i],
     ['relatório de revisão', ['outputs/spec/revisao.json'], /revisao/i],
   ];
   for (const [nome, remover, esperado] of casos) {
@@ -713,21 +725,6 @@ test('casca — documento mal formado do Explore NEGA, citando arquivo e defeito
   assert.equal(r.acao, 'deny');
   assert.match(r.motivo, /gaps\.md/);
   assert.match(r.motivo, /<produto>/);
-});
-
-test('casca — o `prototype.md` de outputs/spec NÃO é validado como documento do Explore', () => {
-  // O `carregarDocs` devolve `prototype.md` (de outputs/spec) na mesma lista dos quatro do
-  // Explore. Ele tem validador `check-modules`, não `check-explore`, e por isso um token de
-  // template dentro dele NÃO pode virar negação do fecho — a gramática do Explore não é o
-  // contrato dele.
-  //
-  // O que este teste NÃO prova é a raiz do rótulo (`outputs/spec/` vs `outputs/explore/`): medido,
-  // as duas formas devolvem lista vazia hoje, e a mutação que fixa `RAIZ_EXPLORE` é EQUIVALENTE.
-  // Ver o comentário em `avaliar`.
-  const arq = projetoCompleto();
-  arq['outputs/spec/prototype.md'] = { texto: '# Protótipo — <produto>\n\nFidelidade: alta\n', mtime: 100 };
-  const r = avaliar(PROD, ioFalso(arq));
-  assert.equal(r.acao, 'allow', r && r.motivo);
 });
 
 // ————— D8 do teste ponta a ponta: a dispensa do `modelo-de-dados.md` —————
@@ -765,7 +762,7 @@ test('D8 — `dispensaRegistrada`: a linha do template com o nome e os três cam
   assert.equal(fecho.dispensaRegistrada('', 'modelo-de-dados.md'), false);
 });
 
-test('D8/D9 — a rule do Explore e o template do `gaps.md` dizem o que o fecho de fato confere', () => {
+test('D8/item 16 — a rule do Explore e o template do `gaps.md` dizem o que o fecho de fato confere', () => {
   // O defeito dos dois itens era este: a rule prometia uma conferência que o fecho não fazia. O
   // teste prende as duas pontas ao MESMO texto — se uma mudar sem a outra, fica vermelho.
   const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -773,7 +770,10 @@ test('D8/D9 — a rule do Explore e o template do `gaps.md` dizem o que o fecho 
   // `\s+`: a rule quebra linha em ~100 colunas, e a quebra pode cair entre as duas palavras.
   assert.match(rule, /Dispensas\s+registradas/, 'a rule não diz onde mora a linha de dispensa');
   assert.match(rule, /o fecho confere/i);
-  assert.match(rule, /`Fidelidade: alta`/, 'a rule não diz qual linha do prototype.md o fecho lê');
+  // As três condições da instância (item 16 do design v0), no lugar da antiga linha `Fidelidade:`.
+  assert.match(rule, /screens-manifest\.json/, 'a rule não diz que o fecho lê o manifesto de telas');
+  assert.match(rule, /_documentos\.json/, 'a rule não diz que o fecho confere o seed');
+  assert.match(rule, /npm run reinstall/, 'a rule não diz como o install é registrado');
   assert.match(rule, /isenção/);
   // O template: a tabela dele, com a linha de exemplo trocada por uma preenchida, é o que o gate lê.
   const template = readFileSync(join(raiz, '.claude/templates/gaps.md'), 'utf8');
@@ -835,54 +835,124 @@ test('D8 — a linha que a negação imprime, colada SEM EDITAR, não conta como
   assert.match(r.motivo, /modelo-de-dados\.md/);
 });
 
-// ————— D9 do teste ponta a ponta: a fidelidade declarada do protótipo —————
+// ————— item 16 do design v0: a instância é o protótipo —————
 //
-// A `explore.md` exige protótipo de ALTA fidelidade, e o fecho só conferia a presença de três
-// arquivos. O `design-system.md` só nasce no modo Geração, que a fidelidade Média pula: quem
-// escolhia Média tinha de adivinhar que precisava gerar o `design-system.md` por fora, e aí passava.
+// O fecho deixou de exigir protótipo HTML de alta fidelidade e passou a exigir três condições:
+// toda `TEL-` com rota e print; o último install `ok` sobre o último commit de `app/src/fluent`; e
+// todo CPF/CNPJ do seed na lista de fictícios. Um teste de bloqueio por condição, mais as pontas.
 
-const comPrototipo = (texto) => projetoCompleto({ 'outputs/spec/prototype.md': { texto, mtime: 100 } });
-
-test('D9 — protótipo declarado em fidelidade Média NEGA, mesmo com os três artefatos, e aponta a isenção', () => {
-  const r = avaliar(PROD, ioFalso(comPrototipo('# Protótipo\n\nModo: análise+geração\nFidelidade: média\n')));
+test('item 16 — condição 1: TEL- da especificação sem rota no manifesto NEGA, citando a tela', () => {
+  const arq = projetoCompleto();
+  arq[`${RAIZ_EXPLORE}/especificacao-funcional.md`].texto += '\nO detalhe do boleto é a TEL-002.\n';
+  const r = avaliar(PROD, ioFalso(arq));
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /Fidelidade: média/);
-  assert.match(r.motivo, /exige Alta/);
-  assert.match(r.motivo, /isenção/);
-  assert.match(r.motivo, /<!--\s*gate:isencao\s*-->/, 'a isenção apontada tem que vir com o bloco');
+  assert.match(r.motivo, /sem rota[\s\S]*TEL-002/);
+  assert.ok(!/TEL-001/.test(r.motivo), 'a TEL-001 tem rota e print e não pode ser acusada');
 });
 
-test('D9 — `prototype.md` sem a linha de fidelidade NEGA, e ensina a linha', () => {
-  const r = avaliar(PROD, ioFalso(comPrototipo('# Protótipo\n\nSeis estados por tela.\n')));
+test('item 16 — condição 1: manifesto com a rota mas sem o PNG NEGA por print', () => {
+  const arq = projetoCompleto();
+  delete arq['outputs/spec/screens/TEL-001.png'];
+  const r = avaliar(PROD, ioFalso(arq));
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /não declarada/);
-  assert.match(r.motivo, /Fidelidade: alta/);
+  assert.match(r.motivo, /sem print[\s\S]*TEL-001/i);
+  assert.ok(!/sem rota/.test(r.motivo), r.motivo);
 });
 
-test('D9 — a linha intocada do template («baixa | média | alta») não declara fidelidade nenhuma', () => {
-  const r = avaliar(PROD, ioFalso(comPrototipo('# Protótipo\n\nFidelidade: baixa | média | alta\n')));
+test('item 16 — condição 1: manifesto que não é JSON NEGA como ausente, com o detalhe', () => {
+  const r = avaliar(PROD, ioFalso(projetoCompleto({ 'outputs/spec/screens-manifest.json': { texto: '{ quebrado', mtime: 100 } })));
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /fidelidade/i);
+  assert.match(r.motivo, /manifesto de telas[\s\S]*não é JSON válido/);
 });
 
-test('D9 — `**Fidelidade:** Alta`, com ênfase e maiúscula, libera — a forma não é o contrato', () => {
-  for (const linha of ['**Fidelidade:** Alta', '> **Fidelidade**: alta (frontend completo em `src/`)', '- Fidelidade: ALTA']) {
-    const r = avaliar(PROD, ioFalso(comPrototipo(`# Protótipo\n\n${linha}\n`)));
-    assert.equal(r.acao, 'allow', `${linha}: ${r && r.motivo}`);
-  }
+test('item 16 — condição 2: sem linha de install no sync-log NEGA e manda rodar o reinstall', () => {
+  const r = avaliar(PROD, ioFalso(projetoCompleto({ 'outputs/spec/sync-log.md': { texto: syncLog(), mtime: 100 } })));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /Nenhum install registrado/);
+  assert.match(r.motivo, /npm run reinstall/);
+  assert.ok(!/kickoff/i.test(r.motivo), 'o kickoff continua lá e não pode ser acusado');
 });
 
-test('D9 — Média COM isenção libera: a saída que a mensagem aponta funciona', () => {
-  const arq = comPrototipo('# Protótipo\n\nFidelidade: média\n');
-  arq[`${DIR_ISENCOES}/prototipo-medio.md`] = {
+test('item 16 — condição 2: o ÚLTIMO install com falha NEGA, mesmo com um ok antes', () => {
+  const texto = syncLog(linhaInstall({ numero: 3, resultado: 'falha-install' }), linhaInstall({ numero: 2 }));
+  const r = avaliar(PROD, ioFalso(projetoCompleto({ 'outputs/spec/sync-log.md': { texto, mtime: 100 } })));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /linha 3[\s\S]*falha-install/);
+});
+
+test('item 16 — condição 2: install ok de OUTRO commit NEGA — a instância não tem o app atual', () => {
+  const velho = 'fedcba9876543210fedcba9876543210fedcba98';
+  const r = avaliar(PROD, ioFalso(projetoCompleto({
+    'outputs/spec/sync-log.md': { texto: syncLog(linhaInstall({ commit: velho })), mtime: 100 },
+  })));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /não tem o último commit do app/);
+  assert.match(r.motivo, /fedcba987654/);
+});
+
+test('item 16 — condição 2: app/src/fluent sem commit NEGA (fail-closed), e o io é consultado na raiz certa', () => {
+  const io = ioFalso(projetoCompleto(), { commitFluent: null });
+  const r = avaliar(PROD, io);
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /app\/src\/fluent` sem commit/);
+  assert.ok(io.chamadas.some((c) => c[0] === 'ultimoCommitDe' && c[1] === '' && c[2] === 'app/src/fluent'), JSON.stringify(io.chamadas));
+});
+
+test('item 16 — condição 2: SHA abreviado na linha de install casa com o completo', () => {
+  const r = avaliar(PROD, ioFalso(projetoCompleto({
+    'outputs/spec/sync-log.md': { texto: syncLog(linhaInstall({ commit: COMMIT_FLUENT.slice(0, 9) })), mtime: 100 },
+  })));
+  assert.equal(r.acao, 'allow', r && r.motivo);
+  assert.equal(mesmoCommitKit('abc', 'abcdef0'), false, 'âncora curta demais não casa');
+});
+
+test('item 16 — condição 3: CPF no seed fora de _documentos.json NEGA, e a mensagem não repete o número', () => {
+  const r = avaliar(PROD, ioFalso(projetoCompleto({
+    'app/src/fluent/seed/outro.now.ts': { texto: "Record({ data: { cpf: '111.444.777-35' } })\n", mtime: 100 },
+  })));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /1 documento\(s\) no seed que não estão em/);
+  assert.ok(!r.motivo.includes('111.444.777-35') && !r.motivo.includes('11144477735'), 'a negação repetiu o documento inteiro');
+});
+
+test('item 16 — condição 3: documento cru entre aspas também é conferido; o JSON da lista não conta como seed', () => {
+  assert.deepEqual([...fecho.documentosNoTexto("cpf: '11144477735', id: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'")], ['11144477735']);
+  const r = avaliar(PROD, ioFalso(projetoCompleto()));
+  assert.equal(r.acao, 'allow', r && r.motivo);
+});
+
+test('item 16 — condição 3: seed com documentos e lista de fictícios ilegível NEGA', () => {
+  const r = avaliar(PROD, ioFalso(projetoCompleto({ 'app/src/fluent/seed/_documentos.json': { texto: '[quebrado', mtime: 100 } })));
+  assert.equal(r.acao, 'deny');
+  assert.match(r.motivo, /sem lista de fictícios válida[\s\S]*não é JSON válido/);
+});
+
+test('item 16 — projeto sem seed nenhum não é acusado pela condição 3', () => {
+  const arq = projetoCompleto();
+  for (const k of Object.keys(SEED_OK)) delete arq[k];
+  assert.equal(avaliar(PROD, ioFalso(arq)).acao, 'allow');
+});
+
+test('item 16 — a isenção de fase continua liberando o Explore sem a instância', () => {
+  const arq = projetoCompleto();
+  delete arq['outputs/spec/screens-manifest.json'];
+  arq[`${DIR_ISENCOES}/sem-instancia.md`] = {
     texto: montarIsencao({
-      repositorio: 'https://dev.azure.com/acme/portal/_git/portal-docs',
-      autor: 'Fulana de Tal', data: '2026-10-21',
-      motivo: 'o cliente aprovou protótipo de fidelidade média para este pré-projeto',
+      repositorio: 'https://github.com/acme/portal', autor: 'Fulana de Tal', data: '2026-11-24',
+      motivo: 'pré-projeto herdado, a instância é de outro fornecedor',
     }),
   };
   const r = avaliar(PROD, ioFalso(arq));
   assert.equal(r.acao, 'allow', r && r.motivo);
+});
+
+test('item 16 — a isenção POR STORY (`gate:isencao-story`) NÃO isenta a fase', () => {
+  const arq = projetoCompleto();
+  delete arq['outputs/spec/screens-manifest.json'];
+  arq[`${DIR_ISENCOES}/US-001-atf-form.md`] = {
+    texto: '<!-- gate:isencao-story -->\nstory: US-001\ntipo: atf-form\nautor: Fulana\ndata: 2026-11-24\nmotivo: runner fora\n<!-- /gate:isencao-story -->\n',
+  };
+  assert.equal(avaliar(PROD, ioFalso(arq)).acao, 'deny');
 });
 
 // ————————————————————————— F16: `estadoRevisao` —————————————————————————
@@ -1139,7 +1209,7 @@ function escreverPreProjeto(raiz, sub, faltando = []) {
   for (const [nome, texto] of Object.entries(DOCS_BONS)) {
     por(`${RAIZ_EXPLORE}/${nome}`, texto, 1_700_000_500);
   }
-  por(`${RAIZ_SPEC}/sync-log.md`, '# Sync Log\n\n' + KICKOFF + '\n', 1_700_000_000);
+  // O sync-log com o install sai no FIM, depois do commit do app — a linha registra o SHA real.
   // OS DOIS ARTEFATOS DA `spec-ingest` ENTRARAM COM A TASK 6, e não mudam nada do que estes testes
   // medem: ambos estão na `WHITELIST_EXPLORE`, então a fase continua Explore e o veredito do fecho
   // é o mesmo com ou sem eles. Estão aqui porque o `cadeia` passou a rodar ANTES no `REGISTRO` e o
@@ -1147,10 +1217,25 @@ function escreverPreProjeto(raiz, sub, faltando = []) {
   // ao `PROD` seria o `cadeia`, e estes testes deixariam de exercitar o fecho.
   por(`${RAIZ_SPEC}/context-map.md`, '# Context Map\n\nF-001 — fato ancorado.\n', 1_700_000_000);
   por(`${RAIZ_SPEC}/discovery-document.md`, '# Discovery\n\nProblema central.\n', 1_700_000_000);
-  por(`${RAIZ_SPEC}/prototype.md`, PROTOTIPO_ALTA, 1_700_000_000);
-  por(`${RAIZ_SPEC}/design-system.md`, '# Design System\n\nTokens e componentes.\n', 1_700_000_000);
-  por(`${RAIZ_SPEC}/screens-manifest.json`, '{"telas":[]}', 1_700_000_000);
+  por(`${RAIZ_SPEC}/screens-manifest.json`, manifestoDeTelas('TEL-001'), 1_700_000_000);
+  por(`${RAIZ_SPEC}/screens/TEL-001.png`, 'PNG', 1_700_000_000);
+  por(`${RAIZ_EXPLORE}/especificacao-funcional.md`, DOCS_BONS['especificacao-funcional.md'] + '\nA lista de boletos é a TEL-001.\n', 1_700_000_500);
+  for (const [rel, { texto }] of Object.entries(SEED_OK)) por(rel, texto, 1_700_000_000);
+  por('app/src/fluent/tables/boleto.now.ts', "export const t = Table({ name: 'x_cob_boleto' })\n", 1_700_000_000);
   por(`${RAIZ_SPEC}/revisao.json`, '{"versao":"1.0"}', 1_700_000_900);
+
+  // A INSTÂNCIA DE VERDADE NÃO EXISTE AQUI, mas o git sim: o `IO_REAL.ultimoCommitDe` roda `git log`
+  // na raiz dos artefatos, e a linha de install registra o SHA que ele vai achar.
+  const base = sub ? join(raiz, sub) : raiz;
+  const g = (...a) => execFileSync('git', ['-C', base, '-c', 'user.name=teste', '-c', 'user.email=teste@exemplo.invalid', ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  let commit = 'sem-commit';
+  if (!pular.has('app/src/fluent')) {
+    g('init', '-q');
+    g('add', 'app/src/fluent');
+    g('commit', '-q', '-m', 'app');
+    commit = g('rev-parse', 'HEAD');
+  }
+  por(`${RAIZ_SPEC}/sync-log.md`, syncLog(linhaInstall({ commit })), 1_700_000_000);
 }
 
 /** Projeto REAL em disco. `faltando` é a lista de caminhos relativos que NÃO são criados. */
@@ -1597,14 +1682,16 @@ test('congelado + relatório AUSENTE em disco: o gate nega pela casca, não só 
 });
 
 test('congelado NÃO perdoa as outras cinco exigências', () => {
-  // A Decisão 22 diz "só o frescor". Um congelamento que perdoasse documento ausente ou protótipo
-  // incompleto seria a proposta "marcador ⇒ null" entrando pela porta de trás.
+  // A Decisão 22 diz "só o frescor". Um congelamento que perdoasse documento ausente ou instância
+  // incompleta seria a proposta "marcador ⇒ null" entrando pela porta de trás.
   const base = { ...COMPLETO, exploreCongelado: true };
   const casos = [
     [{ presentesExplore: new Set() }, /Documentos do Explore ausentes/],
     [{ manifestoValido: false }, /Manifesto inválido/],
     [{ kickoff: { presente: false } }, /sem linha de kickoff/],
-    [{ temPrototipo: false }, /Protótipo de alta fidelidade/],
+    [{ telas: { manifestoPresente: false, semRota: [], semPrint: [] } }, /manifesto de telas/],
+    [{ install: { commitFluent: COMMIT_FLUENT, ultimo: null } }, /Nenhum install registrado/],
+    [{ seed: { documentos: 1, listaPresente: true, foraDaLista: ['11144477735'] } }, /no seed que não estão/],
     [{ errosGramatica: [{ arquivo: 'gaps.md', erros: ['token'] }] }, /mal formados/],
   ];
   for (const [delta, esperado] of casos) {

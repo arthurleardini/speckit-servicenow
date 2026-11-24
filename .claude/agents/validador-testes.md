@@ -49,6 +49,17 @@ Vereditos:
   ponto falta: "o teste confere só que houve erro, não a mensagem de estoque".
 - **INCERTO**: o teste chama algo cujo comportamento você não conseguiu ver.
 
+**App ServiceNow** (`app/src/fluent/tests/*.now.ts`, `Test()` do ATF):
+
+- **Cada RN tem `Test()` positivo e negativo.** O positivo mostra a regra deixando passar; o negativo
+  provoca a violação (registro fora da regra, papel sem permissão) e confere a recusa. Só o positivo
+  é NAO_CUMPRE.
+- O passo de asserção confere o **valor gravado ou a mensagem** (`assert`/validação de campo, de
+  mensagem ou de registro), não só que o servidor respondeu.
+- Teste de ACL usa **impersonate do usuário demo do papel** e confere a negação com o papel errado.
+- O `Test()` da story está na suíte `TestSuite()` "cob-regressao" (`app/src/fluent/tests/suite.now.ts`);
+  fora dela, o `npm run reinstall` não o roda.
+
 Achados (lista `achados`): teste que não testa nada (`expect(true)`), asserção comentada, teste
 pulado (`skip`, `xit`), fixture com valor de mentira (`"TODO"`, `"xxx"`). Só quando é o único teste de uma
 regra (ALTO); no resto, não reporte.

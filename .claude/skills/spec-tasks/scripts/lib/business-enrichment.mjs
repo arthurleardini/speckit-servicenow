@@ -1251,7 +1251,8 @@ export function enrichDocument(doc, options = {}) {
   for (const feature of doc.features ?? []) enrichFeature(feature, stories, ctx);
 
   doc.metadata = doc.metadata ?? {};
-  doc.metadata.schemaVersion = doc.metadata.schemaVersion ?? 'tasks/v5.3';
+  // tasks/v5.4 = v5.3 + Task.snArtifact opcional; arquivo que já declara versão fica com a dele.
+  doc.metadata.schemaVersion = doc.metadata.schemaVersion ?? 'tasks/v5.4';
 
   // Lacunas são parte do artefato: sem elas, "campo ausente" é indistinguível de "esquecimento".
   if (ctx.gaps.length) doc.metadata.enrichmentGaps = ctx.gaps;

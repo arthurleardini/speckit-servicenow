@@ -61,9 +61,9 @@ console.log(`\nFixture: ${fixturePath}\n`);
 // 1. Loader + normalização de rótulo (`name` ?? `title` ?? `id`)
 // ---------------------------------------------------------------------------
 const htmlLoader = siblingUrl('spec-tasks-html/lib/load-tasks.mjs');
-const azureLoader = siblingUrl('spec-tasks-azure/lib/load-tasks.mjs');
+const azureLoader = siblingUrl('sn-tasks-github/lib/load-tasks.mjs'); // a spec-tasks-azure saiu (item 27); o loader vive no sn-tasks-github
 
-for (const [label, url] of [['spec-tasks-html', htmlLoader], ['spec-tasks-azure', azureLoader]]) {
+for (const [label, url] of [['spec-tasks-html', htmlLoader], ['sn-tasks-github', azureLoader]]) {
   if (!url) {
     console.log(`SKIP ${label}/lib/load-tasks.mjs não encontrado (skill ausente neste layout)`);
     continue;

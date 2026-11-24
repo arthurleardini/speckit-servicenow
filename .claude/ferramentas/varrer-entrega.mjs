@@ -1,6 +1,6 @@
 // Harness Elo v2 — Varredura determinística do que uma entrega mudou, sem modelo. Casca de I/O.
 //
-// O mesmo motor do passo G3 da `spec-implement` (`validacao/varredura.mjs`, e Semgrep/gitleaks quando
+// O mesmo motor do passo G3 da `sn-implement` (`validacao/varredura.mjs`, e Semgrep/gitleaks quando
 // instalados), exposto como comando para quem audita uma ENTREGA inteira — a `auditoria-de-us`, com o
 // escopo do diff da US. Antes, o Passo A dela fazia o inventário de segredo, dado pessoal em log, HTML
 // cru, injeção e erro engolido lendo código com o modelo, e declarava "não executa SAST" com o motor

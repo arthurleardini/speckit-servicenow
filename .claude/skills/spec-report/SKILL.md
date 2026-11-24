@@ -296,7 +296,7 @@ A estrutura do HTML (domínios, sidebar, exclusões, placeholders, degradações
 | `spec-data-model` / `spec-api-contracts` | `data-model.json`, `*.svg`, `api-contracts.yaml` | Fonte do domínio "Técnico" (YAML só referenciado, nunca parseado) |
 | `spec-tech-rules` | `tech-rules/tech-rules-summary.md` | Capítulo «Regras técnicas» do domínio "Técnico" (os `.mdc` não entram — são rules para o agente) |
 | *revisão do harness* (`.claude/hooks/revisao.mjs`) | `revisao.json` | Fonte do domínio "Revisão" — não é skill do kit, é o harness Elo v2 |
-| `spec-prototype` | — | `prototype.md` é referenciado por nota na capa, **não** incorporado ao HTML; screenshots do protótipo entram via `screens/` |
+| `sn-capture` | — | prints da instância (a instância é o protótipo) entram via `screens/`; um `prototype.md` de projeto antigo é referenciado por nota na capa, **não** incorporado ao HTML |
 
 ---
 

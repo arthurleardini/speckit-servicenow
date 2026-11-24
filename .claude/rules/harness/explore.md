@@ -1,5 +1,5 @@
 ---
-description: Fase Explore — pré-projeto conversacional que fecha com quatro documentos e um protótipo de alta fidelidade.
+description: Fase Explore — pré-projeto conversacional que fecha com quatro documentos e o app preliminar instalado na instância ServiceNow como protótipo.
 paths: ".claude/rules/harness/explore.md"
 ---
 
@@ -27,8 +27,8 @@ com os repositórios lado a lado como subpastas dela; o repo de docs é a única
 negar o push do próprio repo de docs. O `--validar` e o aviso do início da sessão acusam esse
 layout pela coluna «Pasta local» do manifesto.
 
-Logo em seguida, `outputs/spec/sync-log.md` com a linha de kickoff — é pré-requisito da
-`spec-prototype` e é a memória cronológica única das três fases.
+Logo em seguida, `outputs/spec/sync-log.md` com a linha de kickoff — é a memória cronológica única
+das três fases, e é nele que o `npm run reinstall` registra cada install.
 
 ## O que o Explore entrega
 
@@ -38,12 +38,15 @@ Logo em seguida, `outputs/spec/sync-log.md` com a linha de kickoff — é pré-r
 | `hld-funcional.md` | `outputs/explore/` | completo |
 | `especificacao-funcional.md` | `outputs/explore/` | cobertura completa, profundidade preliminar |
 | `especificacao-tecnica.md` | `outputs/explore/` | preliminar |
-| `modelo-de-dados.md` | `outputs/explore/` | preliminar e **opcional** |
+| `modelo-de-dados.md` | `outputs/explore/` | preliminar; é a entrada da `spec-data-model --previa` |
 | `gaps.md` | `outputs/explore/` | vivo |
 | `sync-log.md` | `outputs/spec/` | com linha de kickoff |
-| protótipo | repositório próprio | alta fidelidade |
+| `data-model.previa.json` | `outputs/spec/` | prévia do modelo, da `spec-data-model --previa` |
+| app preliminar | `app/` (Fluent) | instalado na instância, install registrado no `sync-log.md` |
+| `screens-manifest.json` e `screens/<TEL>.png` | `outputs/spec/` | rota e print para toda `TEL-` |
 
-A ausência de `modelo-de-dados.md` não bloqueia o fecho, mas **exige linha de dispensa no
+Neste kit o `modelo-de-dados.md` é necessário na prática: sem ele não há prévia do modelo, nem
+scaffold, nem app na instância. Para o fecho, a ausência dele **exige linha de dispensa no
 `gaps.md`** — decisão não registrada é decisão não tomada. A linha vai na tabela «Dispensas
 registradas» do template, com o nome do arquivo na primeira coluna e Motivo, Quem decidiu e Data
 preenchidos de verdade:
@@ -63,23 +66,35 @@ Os templates estão em `.claude/templates/`. Copie para `outputs/explore/` e pre
 
 `F-xxx` é proibido aqui. Ver `CLAUDE.md`, seção Vocabulário de IDs.
 
+Neste kit a tabela de telas usa `TEL-nnn`, e as integrações simuladas usam `SIM-nn`
+(`inputs/simulacoes.md`). São rótulos de tela e de simulação, não famílias de requisito.
+
 ## Ordem interna — por dependência real, não por decreto
 
 1. `workspace.md` e `sync-log.md` com a linha de kickoff
-2. *opcional:* `spec-frame` (só se o pedido chegou vago) → `spec-ingest` → `spec-legacy` e/ou `spec-benchmark`
-3. `hld-funcional.md` — visão, módulos com `MOD-CODIGO`, funcionalidades por módulo
-4. `especificacao-funcional.md` — personas, matriz de acesso, telas, `RF-nnn` e `RN-nnn`
-5. `especificacao-tecnica.md` preliminar · `modelo-de-dados.md` preliminar
-6. `spec-prototype` modo Geração, fidelidade Alta
-7. revisão do `gaps.md` e da tabela de telas contra o que o protótipo revelou
+2. *opcional:* `spec-frame`, só se o pedido chegou vago (sem mudança)
+3. `spec-ingest`
+4. *opcional, fora do v0:* `spec-legacy` (e `spec-benchmark`)
+5. `hld-funcional.md` — visão, módulos com `MOD-CODIGO`, funcionalidades por módulo
+6. `especificacao-funcional.md` — personas, matriz de acesso com as roles `<escopo>.*`, a tabela
+   de telas `TEL-` (tabela, tipo, visão, papel, registro demo), `RF-nnn` e `RN-nnn`
+7. `especificacao-tecnica.md` e `modelo-de-dados.md` preliminares — os dois obrigatórios aqui
+8. `spec-data-model --previa` → `outputs/spec/data-model.previa.json`
+9. `sn-scaffold` — `Table()`, `Form()`/`List()` por `TEL-`, menu, roles, ACL base, usuários demo e
+   seed fictício (chama o `sn-seed`); grava o `screens-manifest.json` depois do build
+10. `npm run reinstall` — build e install na instância, com a linha de install no `sync-log.md`
+11. `sn-capture` — print de cada `TEL-` com o usuário demo do papel → `outputs/spec/screens/<TEL>.png`
+12. revisão do `gaps.md` contra a instância
+13. `fecho-explore`
 
-O passo 6 não roda antes do 4 por dependência real: a skill lê os documentos de produto antes do
-primeiro arquivo em `src/`. O passo 7 é o retorno esperado — o protótipo encontra erro de
-entendimento mais rápido que qualquer documento.
+O passo 9 não roda antes do 8 por dependência real: o scaffold lê a prévia do modelo e a tabela de
+telas. O passo 12 é o retorno esperado — a tela de verdade encontra erro de entendimento mais rápido
+que qualquer documento, e o que a Core UI não faz como o plano pede vira GAP.
 
 ## Aceleradores opcionais
 
-`spec-ingest`, `spec-legacy` e `spec-benchmark` estão disponíveis. Não são obrigatórios.
+`spec-legacy` e `spec-benchmark` estão disponíveis e não são obrigatórios; no v0 ficam como na
+base, fora do caminho.
 
 `spec-legacy` e `spec-benchmark` exigem `outputs/spec/context-map.md` (validadores `V-LEG-01` e
 `V-BEN-01`). Portanto **quem quer uma das duas roda `spec-ingest` primeiro** — é um pacote, não
@@ -96,40 +111,36 @@ ingestão lê o `frame.md` como fonte, e hipótese não vira `F-xxx`. A Decisão
 declara desnecessária —, mas não a proibiu: este é o único lugar onde ela roda. No Plan ela não
 roda (`.claude/rules/harness/plan.md`).
 
-## Protótipo — obrigatório, alta fidelidade
+## Protótipo — a instância é o protótipo
 
-A `spec-prototype` roda em modo Geração, fidelidade **Alta**, sem negociar a stack: a constituição
-frontend já está materializada em `.claude/rules/harness/frontend.md` e o Passo 3.0 da skill a
-encontra.
+Não há protótipo HTML. Depois do modelo de dados preliminar, o app é gerado em `app/src/fluent/`
+pelo `sn-scaffold`, instalado na instância pelo `npm run reinstall` e fotografado pelo `sn-capture`.
+O cliente valida a tela que vai existir. A constituição da tela é
+`.claude/rules/harness/servicenow-ui.md` (Core UI clássica, UI16); Workspace, Portal e UI Builder
+ficam fora.
 
-**O fecho confere a fidelidade declarada**, não só a presença dos arquivos. Ele lê a linha
-`Fidelidade:` do cabeçalho do `outputs/spec/prototype.md` — a que a skill escreve no Passo 1.2 — e
-só fecha o Explore com `Fidelidade: alta` mais os três artefatos (`prototype.md`, `design-system.md`
-e `screens-manifest.json`). Fidelidade Média ou Baixa não fecha a fase, nem com o `design-system.md`
-gerado por fora: o `design-system.md` é saída do modo Geração, e a fidelidade menor pula esse modo.
-Linha ausente, ou ainda com as opções do template (`baixa | média | alta`), conta como não
-declarada. Se o pré-projeto foi legitimamente reduzido a um protótipo de fidelidade menor — o
-cliente aprovou wireframe, por exemplo —, o caminho é a isenção (ver **Marco da fase**), que fica
-registrada com autor, data e motivo.
+- **Escrita de modelo no Explore:** só a prévia, `outputs/spec/data-model.previa.json`. O
+  `data-model.json` final é do Plan.
+- **Dados:** só fictícios. CPF e CNPJ com DV válido de semente fixa, `ficticio = true` nos
+  registros de pessoa e a lista dos documentos gerados em `app/src/fluent/seed/_documentos.json`.
+- **Instalação:** só por `npm run reinstall`. Ele confere o prefixo de escopo da instância contra
+  `app/now.config.json` e escreve a linha de install na Seção A do `sync-log.md` (Skill
+  `now-sdk-install`, o alias da instância, o escopo, o commit de `app/src/fluent` e `ok; N
+  registros`). Commite o que mudou em `app/src/fluent/` **antes** do reinstall: o commit da linha
+  tem que ser o último commit daquela pasta.
+- **Telas fora do padrão** (dossiê consolidado, painel de KPIs) entram como form com related lists
+  e report simples, com a diferença registrada como GAP.
 
-O Passo 3.1 da skill exige cinco artefatos do kit que não existem no Explore. Este é o de-para —
-a skill **não é editada**:
+**O fecho confere três condições** sobre o app, além dos documentos:
 
-| Exigência (Passo 3.1) | Satisfeita no Explore por |
-|---|---|
-| `modules.md` — catálogo `MOD-CODIGO` | `hld-funcional.md` §2 e §3 |
-| `requirements.md` — RF/RNF | `especificacao-funcional.md` §3 — `RF-nnn` |
-| `business-rules.md` — RN | `especificacao-funcional.md` §3 — `RN-nnn` |
-| `product-requirements.md` — PR, estados de UI, TTFV, WCAG | `especificacao-funcional.md` §1 e §2; estados de UI, TTFV e WCAG vêm da constituição frontend |
-| `context-map.md` — `F-xxx` | dispensado no Explore. Se o pacote opcional rodou, usa-se o real |
-| `frontend.mdc` | `.claude/rules/harness/frontend.md` |
-| Design system | questionário do Passo 3.0.1 → `design-system.md` |
+1. toda `TEL-` da tabela de telas tem `route` e `screenshot` no `outputs/spec/screens-manifest.json`,
+   e o PNG existe;
+2. a última linha de install do `sync-log.md` tem resultado `ok` e commit igual a
+   `git log -1 --format=%H -- app/src/fluent` — app mudado depois do install não fecha;
+3. todo CPF ou CNPJ encontrado em `app/src/fluent/seed/` está em `_documentos.json`.
 
-Os cenários de caminho feliz e de erro de negócio da fidelidade Alta são **derivados pela skill a
-partir das `RN-nnn`** — não lidos de um documento. É por isso que não há CT nem CA nesta fase.
-
-**O protótipo é do repositório, não da máquina.** Se o registry npm estiver bloqueado localmente,
-construa o repo onde o npm funciona e consuma o resultado navegável para revisão.
+Faltando alguma, o fecho nega e lista o que falta. A saída legítima para pré-projeto reduzido
+continua sendo a isenção (ver **Marco da fase**).
 
 ## Forma agora, profundidade no Plan
 
@@ -190,11 +201,11 @@ changelog.
 | Nível | Quem | Tempo | O que lê |
 |---|---|---|---|
 | 1 | Decisor | ~10 min | `hld-funcional.md` mais o relatório do `revisao.mjs` |
-| 2 | Validador de negócio | ~1 h | o protótipo navegável, mais a `especificacao-funcional.md` do seu módulo |
+| 2 | Validador de negócio | ~1 h | o app na instância (ou os prints de `outputs/spec/screens/`), mais a `especificacao-funcional.md` do seu módulo |
 | 3 | Auditoria | sob demanda | `gaps.md`, `sync-log.md` e, se o pacote opcional rodou, `context-map.md` |
 
-O protótipo de alta fidelidade é o principal instrumento de revisão: clicar em telas reais com os
-seis estados encontra erro de entendimento mais rápido que ler documento.
+A instância é o principal instrumento de revisão: clicar na tela que vai existir, com os dados
+fictícios e no papel de quem a usa, encontra erro de entendimento mais rápido que ler documento.
 
 O `product-discovery-kit.html` **não** é entregável do Explore — é do Plan.
 
@@ -202,8 +213,9 @@ O `product-discovery-kit.html` **não** é entregável do Explore — é do Plan
 
 O `fecho-explore` morde na primeira escrita em `outputs/spec/` fora da whitelist do Explore, ou na
 invocação de uma skill de fase Plan. Ele verifica presença, gramática, preenchimento, a linha de
-dispensa do `modelo-de-dados.md` ausente, o protótipo (os três artefatos e a `Fidelidade: alta`
-declarada) e o relatório de revisão. Pré-projeto legitimamente reduzido declara isenção em arquivo,
+dispensa do `modelo-de-dados.md` ausente, as três condições do app (rota e print por `TEL-`,
+install `ok` no commit atual de `app/src/fluent`, seed só com documentos de `_documentos.json`) e o
+relatório de revisão. Pré-projeto legitimamente reduzido declara isenção em arquivo,
 com repositório, autor, data e motivo.
 
 ### A isenção — onde mora e como se escreve

@@ -20,7 +20,7 @@
 
 import {
   validadorPara, acharMalFormados, acharProibidos, caminhoDaTool,
-  FAMILIAS_EXPLORE, RAIZ_EXPLORE, ID_PADRAO, CODIGOS_DE_AUSENCIA_DE_DOCUMENTO,
+  FAMILIAS_EXPLORE, FAMILIAS_SN, RAIZ_EXPLORE, ID_PADRAO, CODIGOS_DE_AUSENCIA_DE_DOCUMENTO,
 } from './kit.mjs';
 import { tokensSobreviventes, secoesVazias, CERCA_NAO_FECHADA } from './tokens.mjs';
 
@@ -101,6 +101,8 @@ const COMO_SE_ESCREVE = Object.freeze({
   RF: 'numeração com três dígitos (`RF-007`), quatro tolerados — o padding é o que faz o relatório ordenar certo',
   RN: 'numeração com três dígitos (`RN-007`), quatro tolerados — o padding é o que faz o relatório ordenar certo',
   GAP: 'numeração com três dígitos (`GAP-007`), quatro tolerados — o padding é o que faz o relatório ordenar certo',
+  SIM: 'integração simulada com dois dígitos (`SIM-01`), como em `inputs/simulacoes.md`',
+  CT: 'critério de aceite no formato do kit, com o código do módulo e da funcionalidade (`CT-MOD-F2-001`), como o `RF-MOD-F2-001` que ele verifica',
 });
 
 /**
@@ -111,9 +113,18 @@ const COMO_SE_ESCREVE = Object.freeze({
  * sobreviveu à suíte do plano, porque todos os casos de ID mal formado dela eram de `RF`; hoje há
  * um caso por família, e cada um morre se a sua sair do laço.
  */
+/**
+ * As famílias cuja forma mal escrita vira erro. As do Explore e a `SIM` (Speckit ServiceNow). A `CT`
+ * fica DE FORA de propósito: os documentos do Explore citam os critérios do plano de origem pela
+ * numeração dele (`CT-07`, com o de-para em `inputs/de-para-ids.md`), e acusar essa citação como ID
+ * mal formado seria falso positivo sobre referência legítima. A `CT-MOD-…` continua reconhecida
+ * pelo kit (`validarId`/`extrairIds`).
+ */
+const FAMILIAS_CONFERIDAS = Object.freeze([...FAMILIAS_EXPLORE, ...FAMILIAS_SN.filter((f) => f !== 'CT')]);
+
 function conferirIds(texto) {
   const erros = [];
-  for (const familia of FAMILIAS_EXPLORE) {
+  for (const familia of FAMILIAS_CONFERIDAS) {
     for (const bruto of acharMalFormados(familia, texto)) {
       erros.push(
         `\`${bruto}\` não é um ID válido da família \`${familia}\`. ` +

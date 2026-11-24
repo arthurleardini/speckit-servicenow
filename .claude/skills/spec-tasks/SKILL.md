@@ -136,7 +136,7 @@ auto-avaliação)". Sem essa linha, não há evidência de que os gates rodaram.
 
 | Artefato | Conteúdo |
 |----------|----------|
-| `tasks.json` | `metadata` (`schemaVersion: tasks/v5.3`, backlogHierarchy, compactProse, azureDevOps, **`effortSummary`**), `epics[]`, `features[]`, `stories[]` (cada task com **`effortHours`**), `globalDependencies`, `glossary`, `externalReferences` (na **raiz** do documento) |
+| `tasks.json` | `metadata` (`schemaVersion: tasks/v5.4` — `tasks/v5.3` continua aceito, backlogHierarchy, compactProse, azureDevOps, **`effortSummary`**), `epics[]`, `features[]`, `stories[]` (cada task com **`effortHours`**), `globalDependencies`, `glossary`, `externalReferences` (na **raiz** do documento) |
 | `gaps-document.md` | Gaps de negócio com IDs estáveis `GAP-NNN` |
 
 **Fora de escopo:** gerar código; criar modelos de dados ou contratos de API (Fase 7 faz isso);
@@ -719,6 +719,25 @@ Gravar em `metadata.backlogHierarchy` com esta forma (objeto literal):
 
 O restante da `metadata` (`backlogHierarchy`, `compactProse`, …) segue o schema — validado por script; exemplo preenchido no `tasks.example-completo.json` (lido no Passo 9).
 
+### `tasks/v5.4` — task ServiceNow (`snArtifact`)
+
+No Speckit ServiceNow, toda task que produz um objeto do app declara **`snArtifact`**:
+`{ kind, table?, fluentFile, nowId }`. `kind` é um de `table`, `form`, `list`, `business_rule`,
+`client_script`, `ui_policy`, `ui_action`, `script_include`, `acl`, `role`, `flow`, `atf`,
+`notification`, `report`, `menu`, `seed`, `simulation`. `fluentFile` é o `.now.ts` onde o objeto fica
+(`app/src/fluent/<tipo>/…`) e `nowId` é a chave do `Now.ID`, com o ID da spec na frente
+(`RF-MOD-F2-003_br_publicar_versao`) — é o elo da matriz de rastreio. `table` é obrigatório só em
+`table`, `form`, `list`, `business_rule`, `client_script`, `ui_policy`, `ui_action`, `acl` e `seed`.
+**`Task.type` não muda** (continua `backend`, `frontend`…). A rota da tela na instância vai em
+`uiContext.rota`, como o `screens-manifest.json` a grava.
+
+O que muda nos validadores para a task com `snArtifact` (FATAL `SN_ARTIFACT_COMPLETE` quando o
+campo vem pela metade): `apiContracts` dispensado (exceto `kind = simulation`); colunas do
+`persistenceModel` aceitas em tipo ServiceNow (`string`, `reference`, `glide_date_time`…);
+`persistenceModel` ausente vira aviso; `acceptanceScenarios[].testData` traz o registro de entrada
+(`record`, `records`, `input` ou `update`) e o `expectedDatabaseState` do `Test()` ATF, sem
+`request`/`expectedResponse` HTTP. Exemplo completo: `templates/tasks.sn-story-example.json`.
+
 ### Combinações suportadas e regras
 
 | `chosen` | Semântica | Caso de uso comum |
@@ -989,7 +1008,7 @@ Quando uma task ou story é grande demais para caber em 0,5–2 dias (viola o cr
 
 ## Saídas
 
-Exatamente **dois artefatos**: `outputs/spec/tasks.json` (schema `tasks/v5.3`) e
+Exatamente **dois artefatos**: `outputs/spec/tasks.json` (schema `tasks/v5.4`) e
 `outputs/spec/gaps-document.md`. Schemas e exemplos de referência em `./templates/`
 (catálogo comentado em § "Templates e Schemas").
 
@@ -1103,7 +1122,7 @@ Passos numerados, únicos e sequenciais. As referências apontam para **seções
      ↪ Com test-plan.md: todo TC coberto por ≥1 acceptanceScenario de task funcional (coverageNote);
        TEST-PLAN em externalReferences (raiz do tasks.json)
 
-15. Emitir                      → tasks.json (schemaVersion tasks/v5.3) + gaps-document.md
+15. Emitir                      → tasks.json (schemaVersion tasks/v5.4) + gaps-document.md
      ↪ Verificação final: tasks.json + rules do projeto devem ser SUFICIENTES para implementação
      ↪ Validar estrutura via scripts (§ Execução obrigatória) — nunca ler o schema para conferir à mão
 ```

@@ -20,4 +20,4 @@ Continuar com **`spec-benchmark`** (e depois `spec-product`, …) conforme plano
 
 ## Anti-confusão
 
-- **Protótipo / código em `inputs/`** não é “legado”: é artefato de **validação de intenção** do produto-alvo, coberto por `spec-ingest` e `spec-prototype`, nunca por `spec-legacy`.
+- **Protótipo / código em `inputs/`** não é “legado”: é artefato de **validação de intenção** do produto-alvo, coberto por `spec-ingest` (e, neste kit, pela instância como protótipo: `sn-scaffold` + `sn-capture`), nunca por `spec-legacy`.

@@ -79,6 +79,8 @@ test('modo relatório: divergência não falha (exit 0); sem tabela canônica, e
 test('no repositório: o description de toda skill (o gatilho) bate com a tabela canônica', () => {
   const r = relatorio();
   assert.ok(r, 'a tabela canônica não foi lida');
-  assert.ok(r.descricoes.length >= 20, `só ${r.descricoes.length} descriptions com «(Fase N» foram lidos`);
+  // Fork ServiceNow (item 27): saíram quatro skills com «(Fase N» no description (spec-prototype,
+  // spec-convert-prototype, spec-scaffold, spec-tasks-azure); a spec-implement virou sn-implement.
+  assert.ok(r.descricoes.length >= 19, `só ${r.descricoes.length} descriptions com «(Fase N» foram lidos`);
   assert.deepEqual(r.descricoes.filter((d) => !d.ok), []);
 });

@@ -31,7 +31,7 @@
  * o Cursor ignora `.md` em `.cursor/rules/`; o resto de `.claude/` vira `.cursor/` pela linha final.
  */
 export const REESCRITAS = [
-  [/\.claude\/rules\/harness\/(security|explore|plan|deliver|frontend)\.md/g, '.cursor/rules/harness/$1.mdc'],
+  [/\.claude\/rules\/harness\/(security|explore|plan|deliver|servicenow-ui)\.md/g, '.cursor/rules/harness/$1.mdc'],
   // `.claude/settings.json` vira o `.cursor/hooks.json` montado por `converterSettings` — as
   // referências em PROSA (README, MANUTENCAO, um teste que cita o caminho) seguem junto.
   ['.claude/settings.json', '.cursor/hooks.json'],
@@ -168,20 +168,11 @@ export const REMENDOS = [
       + "  }\n"
       + "});\n"
       + "\n"
-      + "test('a rule de frontend só carrega com arquivo de frontend; a de segurança carrega sempre', () => {\n"
-      + "  // Desde a Decisão 73 esta rule toma o lugar do `frontend-default.mdc`, que não é mais materializado\n"
-      + "  // no projeto. Então ela cobre as MESMAS extensões que ele cobria — derivadas do `globs:` dele, não\n"
-      + "  // fixadas aqui. O `**/*.canvas.tsx` de lá já está dentro do `tsx`.\n"
-      + "  const padrao = /^globs:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/skills/spec-tech-rules/templates/frontend-default.mdc'));\n"
-      + "  assert.ok(padrao, 'o frontend-default.mdc da spec-tech-rules não tem mais `globs:`');\n"
-      + "  const doPadrao = new Set(padrao[1].split(',').map((g) => /^\\*\\*\\/\\*\\.([a-z]+)$/.exec(g.trim())?.[1]).filter(Boolean));\n"
-      + "  // Um glob só, com chaves, entre aspas — a forma documentada do Claude Code. A lista separada por\n"
-      + "  // vírgula numa string única não é documentada, e nada garante que ele a parta.\n"
-      + "  const fe = /^paths:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/rules/harness/frontend.md'));\n"
-      + "  assert.ok(fe, 'frontend.md sem `paths:` entre aspas');\n"
-      + "  const chaves = /^\\*\\*\\/\\*\\.\\{([a-z,]+)\\}$/.exec(fe[1]);\n"
-      + "  assert.ok(chaves, `o paths: deixou de ser um glob só, com chaves: ${fe[1]}`);\n"
-      + "  assert.deepEqual(new Set(chaves[1].split(',')), doPadrao);\n"
+      + "test('a rule de interface só carrega com arquivo do app Fluent; a de segurança carrega sempre', () => {\n"
+      + "  // A rule de interface ServiceNow (Core UI) substitui a de frontend Next.js: rege só `app/src/fluent/**`.\n"
+      + "  const fe = /^paths:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/rules/harness/servicenow-ui.md'));\n"
+      + "  assert.ok(fe, 'servicenow-ui.md sem `paths:` entre aspas');\n"
+      + "  assert.equal(fe[1], 'app/src/fluent/**');\n"
       + "  assert.ok(!/^paths:/m.test(frontmatter('.claude/rules/harness/security.md')), 'security.md não pode ter `paths:`');\n"
       + "});",
     para: "test('as rules de fase só carregam pela injeção: `globs:` apontando o próprio arquivo, `alwaysApply: false`', () => {\n"
@@ -194,16 +185,9 @@ export const REMENDOS = [
       + "  }\n"
       + "});\n"
       + "\n"
-      + "test('a rule de frontend só carrega com arquivo de frontend; a de segurança carrega sempre', () => {\n"
-      + "  const padrao = /^globs:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/skills/spec-tech-rules/templates/frontend-default.mdc'));\n"
-      + "  assert.ok(padrao, 'o frontend-default.mdc da spec-tech-rules não tem mais `globs:`');\n"
-      + "  const doPadrao = new Set(padrao[1].split(',').map((g) => /^\\*\\*\\/\\*\\.([a-z]+)$/.exec(g.trim())?.[1]).filter(Boolean));\n"
-      + "  const fm = frontmatter('.claude/rules/harness/frontend.md');\n"
-      + "  const fe = /^globs:\\s*(.+)$/m.exec(fm);\n"
-      + "  assert.ok(fe && fe[1].split(',').includes('**/*.tsx'), 'frontend sem `globs:` em lista expandida');\n"
-      + "  assert.ok(!/[{}]/.test(fe[1]), 'o Cursor parte o `globs:` na vírgula: chave de glob não pode sobrar');\n"
-      + "  // As mesmas extensões do `frontend-default.mdc`, que ela substitui desde a Decisão 73.\n"
-      + "  assert.deepEqual(new Set(fe[1].split(',').map((g) => /^\\*\\*\\/\\*\\.([a-z]+)$/.exec(g.trim())?.[1])), doPadrao);\n"
+      + "test('a rule de interface só carrega com arquivo do app Fluent; a de segurança carrega sempre', () => {\n"
+      + "  const fm = frontmatter('.claude/rules/harness/servicenow-ui.md');\n"
+      + "  assert.match(fm, /^globs: app\\/src\\/fluent\\/\\*\\*$/m, 'servicenow-ui sem `globs:`');\n"
       + "  assert.match(fm, /^alwaysApply: false$/m);\n"
       + "  const sec = frontmatter('.claude/rules/harness/security.md');\n"
       + "  assert.ok(!/^globs:/m.test(sec), 'a de segurança não pode ter `globs:`');\n"
@@ -670,7 +654,7 @@ export function validarSkill(pasta, skillMd) {
   return { erros, avisos };
 }
 
-const RULE_HARNESS = /^\.claude\/rules\/harness\/([a-z]+)\.md$/;
+const RULE_HARNESS = /^\.claude\/rules\/harness\/([a-z-]+)\.md$/;
 const AGENTE = /^\.claude\/agents\/[^/]+\.md$/;
 
 /** Que classe é `rel` na FONTE, e para onde/como ele vai — puro, sem tocar disco. */
@@ -691,7 +675,7 @@ function comoTexto(buf) {
   return Buffer.from(t, 'utf8').equals(buf) ? t : null;
 }
 
-const RULES_DE_FASE = new Set(['explore', 'plan', 'deliver', 'frontend']);
+const RULES_DE_FASE = new Set(['explore', 'plan', 'deliver', 'servicenow-ui']);
 
 function converter(rel, texto, sha) {
   if (rel === 'CLAUDE.md') return converterClaudeMd(texto);

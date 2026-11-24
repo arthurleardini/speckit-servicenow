@@ -1,0 +1,270 @@
+{
+  "_comment": "Exemplo tasks/v5.4 (Speckit ServiceNow): Story com uma task que declara snArtifact.kind = business_rule. Valida contra #/definitions/Story, e a task contra #/definitions/Task. Task.type continua no enum de sempre; o tipo ServiceNow fica em snArtifact. A task ServiceNow nao traz apiContracts (dispensado quando kind != simulation) e as colunas do persistenceModel usam tipos ServiceNow (string, reference, glide_date_time...). Dados ficticios.",
+  "id": "STORY-MOD-F2-003",
+  "epicId": "EPIC-MOD-F2",
+  "featureId": "FEAT-MOD-F2-CRITERIO",
+  "name": "Publicar versao do criterio de qualificacao",
+  "priority": "HIGH",
+  "adoWorkItemType": "User Story",
+  "userStory": {
+    "asA": "coordenador de cobranca",
+    "iWant": "publicar uma versao do criterio de qualificacao da carteira",
+    "soThat": "o proximo ciclo use regras fechadas, que ninguem altera depois de publicadas"
+  },
+  "narrative": {
+    "elevatorPitch": "Como coordenador de cobranca, quero publicar a versao do criterio de qualificacao para que o ciclo seguinte rode sobre regras congeladas e auditaveis, sem risco de alguem mudar o criterio no meio do ciclo.",
+    "context": "O criterio de qualificacao define quais debitos entram na cobranca qualificada: tributo, valor minimo, atraso minimo e uso do score de liquidez. Hoje a versao fica editavel o tempo todo, e o ciclo pode rodar com regra diferente da que foi aprovada. A publicacao fecha a versao.",
+    "problem": "Sem publicacao, o criterio aprovado pode ser alterado depois do aceite, e nao ha como provar com que regra cada ciclo rodou.",
+    "deliveredValue": "Cada ciclo fica amarrado a uma versao publicada e imutavel do criterio, com quem publicou e quando.",
+    "actors": [
+      "Coordenador de cobranca"
+    ]
+  },
+  "businessRules": [
+    {
+      "id": "RN-MOD-F2-001",
+      "title": "Versao publicada e imutavel",
+      "description": "Depois de publicada, a versao do criterio nao aceita alteracao em nenhum campo. Mudar o criterio exige criar uma nova versao a partir da publicada, que nasce em rascunho e aponta a anterior.",
+      "sourceStoryIds": [
+        "STORY-MOD-F2-003"
+      ]
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "CT-MOD-F2-003",
+      "statement": "Ao publicar, a versao passa a publicada, grava quem publicou e quando, e deixa de aceitar alteracao (RF-MOD-F2-003)."
+    }
+  ],
+  "uiContext": {
+    "tela": "TEL-008",
+    "telaNome": "Versao do criterio de qualificacao",
+    "rota": "/x_2326104_cob_criterio.do?sys_id=<sys_id do registro demo TEL-008>"
+  },
+  "tasks": [
+    {
+      "id": "TASK-MOD-F2-003-01",
+      "storyId": "STORY-MOD-F2-003",
+      "featureId": "FEAT-MOD-F2-CRITERIO",
+      "type": "backend",
+      "title": "Business rule que congela a versao publicada do criterio",
+      "description": "Criar a business rule que impede alterar uma versao do criterio de qualificacao depois de publicada, e que grava quem publicou e quando no momento da publicacao.",
+      "effortHours": {
+        "manual": 6,
+        "aiAssisted": 3
+      },
+      "snArtifact": {
+        "kind": "business_rule",
+        "table": "x_2326104_cob_criterio",
+        "fluentFile": "app/src/fluent/business-rules/criterio.now.ts",
+        "nowId": "RF-MOD-F2-003_br_publicar_versao"
+      },
+      "agentExecutionContext": {
+        "selfContainedSummary": "O QUE ENTREGAR: uma business rule (regra que roda no servidor da instancia quando um registro e gravado) na tabela x_2326104_cob_criterio, a tabela das versoes do criterio de qualificacao da carteira de cobranca. CONTEXTO DE NEGOCIO: o coordenador de cobranca define o criterio que decide quais debitos entram na cobranca qualificada (tributo, valor minimo, atraso minimo em dias, uso do score de liquidez e percentual do grupo de controle). Quando ele publica uma versao, o ciclo seguinte passa a rodar sobre ela, e a versao nao pode mais mudar: se mudasse, nao haveria como provar com que regra cada ciclo rodou. FLUXO PRINCIPAL: (1) o coordenador abre a versao em rascunho no form; (2) aciona a UI Action Publicar; (3) a business rule before update ve o estado mudando de rascunho para publicada e grava publicada_por com o usuario atual e publicada_em com a data e hora atuais; (4) a gravacao segue. FLUXO DE BLOQUEIO: em qualquer update posterior de uma versao ja publicada, a business rule cancela a gravacao (setAbortAction) e mostra a mensagem 'Versao publicada nao pode ser alterada. Crie uma nova versao.'. PRE-CONDICAO: a versao existe e esta em rascunho. POS-CONDICAO: versao publicada, com autor e data, e imutavel. DECISOES: regra no servidor (e nao so UI Policy) porque a UI Policy nao protege gravacao por script, importacao ou API; mensagem de erro em portugues e sem jargao; o $id do registro Fluent usa o ID da spec para o rastreio.",
+        "criticalWarnings": [
+          "A protecao tem de estar no servidor: UI Policy sozinha nao impede gravacao por script ou API.",
+          "Nunca apagar a versao publicada; mudanca de criterio sempre vira nova versao."
+        ],
+        "doNotDo": [
+          "Nao usar console.log; registrar com gs.info/gs.warn.",
+          "Nao consultar a tabela com GlideRecord dentro de laco."
+        ],
+        "minimumOutputToDeliver": [
+          "BusinessRule() em app/src/fluent/business-rules/criterio.now.ts com $id Now.ID['RF-MOD-F2-003_br_publicar_versao']",
+          "Test() ATF com caso positivo (publicar grava autor e data) e negativo (alterar publicada e recusado)"
+        ]
+      },
+      "implementationGuidance": {
+        "architecturalDecisions": [
+          "Business rule before update na tabela x_2326104_cob_criterio, porque precisa cancelar a gravacao antes de ela acontecer.",
+          "Condicao no servidor, em script, e nao so na UI Policy: protege gravacao vinda de qualquer canal.",
+          "Registro Fluent com $id derivado do ID da spec, para o rastreio spec -> instancia."
+        ],
+        "dataFlow": [
+          "1. O coordenador abre a versao do criterio em rascunho.",
+          "2. Aciona a UI Action Publicar.",
+          "3. A instancia dispara o update do registro.",
+          "4. A business rule before update roda.",
+          "5. Le o estado anterior (previous.estado) e o novo (current.estado).",
+          "6. Se a versao ja estava publicada, cancela a gravacao.",
+          "7. Mostra a mensagem de versao imutavel ao usuario.",
+          "8. Se esta passando de rascunho para publicada, grava publicada_por com o usuario atual.",
+          "9. Grava publicada_em com a data e hora atuais.",
+          "10. A gravacao segue e o activity stream registra a mudanca."
+        ],
+        "errorHandling": {
+          "VERSAO_PUBLICADA_ALTERADA": {
+            "scenario": "Update em versao com estado publicada.",
+            "action": "Cancelar a gravacao e mostrar 'Versao publicada nao pode ser alterada. Crie uma nova versao.'.",
+            "userImpact": "O coordenador entende que precisa criar nova versao."
+          },
+          "PUBLICACAO_SEM_CAMPOS": {
+            "scenario": "Publicar versao sem tributo ou sem valor minimo.",
+            "action": "Cancelar a gravacao e listar os campos que faltam.",
+            "userImpact": "Nao nasce versao publicada incompleta."
+          },
+          "USUARIO_SEM_ROLE": {
+            "scenario": "Usuario sem a role de coordenador tenta publicar.",
+            "action": "A ACL recusa a escrita antes da regra rodar.",
+            "userImpact": "So o coordenador publica."
+          }
+        },
+        "observability": {
+          "structuredLogging": [
+            "gs.info na publicacao: versao, usuario.",
+            "gs.warn na tentativa de alterar versao publicada: versao, usuario.",
+            "gs.error se a gravacao de publicada_por ou publicada_em falhar: versao."
+          ],
+          "metrics": [
+            "Contagem de publicacoes por mes (report simples sobre x_2326104_cob_criterio agrupado por publicada_em).",
+            "Contagem de tentativas de alterar versao publicada (gs.warn no system log, filtro pela mensagem).",
+            "Quantidade de versoes por criterio (list com group-by em nome)."
+          ],
+          "tracing": [
+            "Activity stream do registro mostra quem publicou e quando."
+          ]
+        },
+        "securityConsiderations": [
+          "Escrita na tabela protegida por ACL da role coordenador.",
+          "A regra roda no servidor e vale para qualquer canal de gravacao."
+        ],
+        "testingStrategy": {
+          "unitTests": [
+            "ATF: publicar versao em rascunho grava publicada_por e publicada_em.",
+            "ATF: alterar versao publicada e recusado com a mensagem de versao imutavel."
+          ],
+          "integrationTests": [
+            "Build e install da app sem erro, e a regra aparece ativa na tabela."
+          ]
+        }
+      },
+      "persistenceModel": {
+        "entities": [
+          {
+            "table": "x_2326104_cob_criterio",
+            "purpose": "Versoes do criterio de qualificacao da carteira",
+            "operationType": "NEW",
+            "columns": "nome string NOT NULL - Nome da versao do criterio | versao integer NOT NULL - Numero sequencial da versao | estado choice NOT NULL - rascunho ou publicada | publicada_por reference -> sys_user - Quem publicou | publicada_em glide_date_time - Quando foi publicada | versao_anterior reference -> x_2326104_cob_criterio - Versao de origem",
+            "identifierStrategy": "sys_id (GUID gerado pela plataforma)",
+            "primaryKey": "sys_id",
+            "dataModelRef": "data-model.json#/entities/x_2326104_cob_criterio"
+          }
+        ]
+      },
+      "businessRules": [
+        {
+          "id": "RN-MOD-F2-001",
+          "title": "Versao publicada e imutavel",
+          "description": "Depois de publicada, a versao do criterio de qualificacao nao aceita alteracao em nenhum campo, por nenhum canal (form, script, importacao ou API). Para mudar o criterio, o coordenador cria uma nova versao a partir da publicada; a nova nasce em rascunho e aponta a anterior em versao_anterior.",
+          "implementation": {
+            "validationPoint": "Business rule before update em x_2326104_cob_criterio",
+            "algorithm": [
+              "1. Se previous.estado == 'publicada': current.setAbortAction(true) e gs.addErrorMessage(VERSAO_IMUTAVEL)",
+              "2. Se previous.estado == 'rascunho' e current.estado == 'publicada': gravar publicada_por = gs.getUserID() e publicada_em = new GlideDateTime()",
+              "3. Senao: seguir a gravacao"
+            ],
+            "errorMessages": {
+              "VERSAO_IMUTAVEL": "Versao publicada nao pode ser alterada. Crie uma nova versao."
+            }
+          },
+          "testScenarios": [
+            {
+              "id": "TS-RN-MOD-F2-001-01",
+              "category": "HAPPY_PATH",
+              "description": "Publicar versao em rascunho grava autor e data",
+              "given": "Versao 2 em rascunho",
+              "then": "estado publicada, publicada_por e publicada_em preenchidos"
+            },
+            {
+              "id": "TS-RN-MOD-F2-001-02",
+              "category": "BUSINESS_RULE_VIOLATION",
+              "description": "Alterar versao publicada e recusado",
+              "given": "Versao 2 publicada com valor_minimo 500000",
+              "then": "gravacao cancelada com a mensagem VERSAO_IMUTAVEL; valor_minimo segue 500000"
+            }
+          ],
+          "traceability": {
+            "requirementId": "RF-MOD-F2-003"
+          }
+        }
+      ],
+      "acceptanceScenarios": [
+        {
+          "id": "AS-TASK-MOD-F2-003-01-01",
+          "category": "HAPPY_PATH",
+          "title": "Publicar versao em rascunho",
+          "given": "Versao 2 ficticia do criterio em rascunho (tributo ICMS, valor_minimo 500000, atraso_minimo_dias 90) e usuario cob.coordenador.demo com a role x_2326104_cob.coordenador",
+          "when": "O coordenador aciona a UI Action Publicar no form da versao",
+          "then": [
+            "A versao fica com estado publicada",
+            "publicada_por = cob.coordenador.demo e publicada_em preenchida"
+          ],
+          "testData": {
+            "record": {
+              "table": "x_2326104_cob_criterio",
+              "nome": "Criterio ICMS 2027",
+              "versao": 2,
+              "estado": "rascunho",
+              "tributo": "icms",
+              "valor_minimo": 500000,
+              "atraso_minimo_dias": 90
+            },
+            "user": "cob.coordenador.demo",
+            "expectedRecord": {
+              "estado": "publicada",
+              "publicada_por": "cob.coordenador.demo"
+            },
+            "expectedDatabaseState": {
+              "x_2326104_cob_criterio": "versao 2: estado=publicada, publicada_por=cob.coordenador.demo, publicada_em preenchida; demais campos inalterados"
+            }
+          },
+          "verificationSteps": [
+            "Criar o registro de teste em rascunho (passo Record Insert do ATF)",
+            "Impersonar cob.coordenador.demo",
+            "Atualizar estado para publicada",
+            "Validar publicada_por e publicada_em (passo Record Validation)"
+          ]
+        },
+        {
+          "id": "AS-TASK-MOD-F2-003-01-02",
+          "category": "BUSINESS_RULE_VIOLATION",
+          "title": "Alterar versao publicada",
+          "given": "Versao 2 ficticia do criterio publicada com valor_minimo 500000",
+          "when": "Um usuario altera valor_minimo para 400000 e grava",
+          "then": [
+            "A gravacao e cancelada com 'Versao publicada nao pode ser alterada. Crie uma nova versao.'",
+            "valor_minimo continua 500000"
+          ],
+          "testData": {
+            "record": {
+              "table": "x_2326104_cob_criterio",
+              "versao": 2,
+              "estado": "publicada",
+              "valor_minimo": 500000
+            },
+            "update": {
+              "valor_minimo": 400000
+            },
+            "expectedError": "Versao publicada nao pode ser alterada. Crie uma nova versao.",
+            "expectedRecord": {
+              "valor_minimo": 500000
+            },
+            "expectedDatabaseState": {
+              "x_2326104_cob_criterio": "inalterado: versao 2 segue publicada com valor_minimo=500000"
+            }
+          },
+          "verificationSteps": [
+            "Criar o registro de teste ja publicado",
+            "Tentar atualizar valor_minimo para 400000 (passo Record Update, esperando falha)",
+            "Validar que valor_minimo segue 500000"
+          ]
+        }
+      ]
+    }
+  ],
+  "traceability": {
+    "sourceStoryIds": [
+      "STORY-MOD-F2-003"
+    ]
+  }
+}

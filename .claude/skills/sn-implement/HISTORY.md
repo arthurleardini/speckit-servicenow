@@ -1,3 +1,8 @@
+# Histórico herdado da `spec-implement` (Harness Elo 2.6.0)
+
+> A `sn-implement` é cópia adaptada da `spec-implement`, removida no fork (ver `ORIGEM.md`). Este
+> histórico é o da origem: as versões e gates abaixo descrevem a `spec-implement`.
+
 # spec-implement — Histórico
 
 > Extraído do `SKILL.md` para não ser pago em tokens a cada invocação. Nada aqui muda o que

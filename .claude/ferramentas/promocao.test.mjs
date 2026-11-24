@@ -11,6 +11,7 @@ import {
   tabelasCom, lerFatos, lerConsumos, lerConsumosDeRegras, rastreavel, cruzar, formatarTexto,
   idsDoExplore, coletar, relatorioDe, IO_REAL,
   inserirCarimbo, congelar, formatarCongelamento, hojeISO,
+  montarRastreio, rastrear, lerChavesDoKeys, nowIdsNoCodigo, storiesDoBacklog, formatarRastreio,
 } from './promocao.mjs';
 import { montarCarimbo, lerCarimbo } from '../hooks/zonas.mjs';
 import { MARCADOR_CONGELAMENTO, DOCS_EXPLORE } from '../hooks/kit.mjs';
@@ -546,10 +547,12 @@ test('IO_REAL é a leitura MAIS a escrita — e a escrita é o que distingue fer
   // consumidor que chamasse método que o `IO_REAL` não tem, é o par que ela pega.
   assert.deepEqual(
     Object.keys(IO_REAL).sort(),
-    ['criarDiretorio', 'cwd', 'escrever', 'existe', 'lerArquivo'],
+    // `listar` entrou com o `--rastreio` (fork Speckit ServiceNow, item 33): ele anda por `app/src` e
+    // pelos recibos de ATF.
+    ['criarDiretorio', 'cwd', 'escrever', 'existe', 'lerArquivo', 'listar'],
   );
   assert.equal(IO_REAL.cwd(), process.cwd());
-  for (const nome of ['lerArquivo', 'escrever', 'criarDiretorio', 'existe']) {
+  for (const nome of ['lerArquivo', 'escrever', 'criarDiretorio', 'existe', 'listar']) {
     assert.equal(typeof IO_REAL[nome], 'function', nome);
   }
 });
@@ -1670,4 +1673,125 @@ test('D14 — a linha Origem é o site do consumo: fora do bloco de uma RN-NOVO,
   assert.equal(c.has('F-099'), false);
   // O template intocado (`RN-NOVO-[DOMÍNIO]-001`) não consome nada.
   assert.equal(lerConsumosDeRegras('#### RN-NOVO-[DOMÍNIO]-001: [Título]\n| **Origem** | F-001 |\n').size, 0);
+});
+
+// ————————————————————— --rastreio (fork Speckit ServiceNow, item 33) —————————————————————
+
+const BACKLOG = {
+  metadata: { schemaVersion: 'tasks/v5.4' },
+  epics: [{ id: 'EP-1', features: [{ id: 'FT-1' }] }],
+  stories: [
+    {
+      id: 'US-F2-01', featureId: 'FT-1',
+      sourceRefs: [{ document: 'requirements.md', itemId: 'RF-MOD-F2-003' }],
+      uiContext: { tela: 'TEL-007', rota: '/x_2326104_cob_criterio.do' },
+      acceptanceScenarios: [{ id: 'CT-MOD-F2-003', given: 'g', when: 'w', then: 't' }],
+      tasks: [
+        { id: 'TASK-F2-01-1', snArtifact: { kind: 'business_rule', table: 'x_2326104_cob_criterio', fluentFile: 'app/src/fluent/br/publicar.now.ts', nowId: "Now.ID['RF-MOD-F2-003_br_publicar_versao']" } },
+      ],
+    },
+    { id: 'US-F5-01', featureId: 'FT-1', traceability: { requirementIds: ['RF-MOD-F5-001'] }, tasks: [{ id: 'TASK-F5-01-1' }] },
+    { id: 'US-T-01', featureId: 'FT-1', tasks: [{ id: 'TASK-T-01-1', sourceRefs: [{ document: 'requirements.md', itemId: 'RF-MOD-T-001' }] }] },
+  ],
+};
+const REQS = '# Requisitos\n### RF-MOD-F2-003 Publicar versão\n### RF-MOD-F5-001 Dossiê\n### RF-MOD-T-001 Auditoria\n### RF-MOD-F6-002 Painel\n';
+const KEYS = [
+  'explicit: {',
+  "  'RF-MOD-F2-003_br_publicar_versao': {",
+  "    table: 'sys_script'",
+  "    id: '0123456789abcdef0123456789abcdef'",
+  '  }',
+  "  'RF-MOD-F5-001_form_dossie': {",
+  "    table: 'sys_ui_form'",
+  "    id: 'fedcba9876543210fedcba9876543210'",
+  '    deleted: true',
+  '  }',
+  '  acl_caso_read: {',
+  "    table: 'sys_security_acl'",
+  "    id: 'aab12fba8e9c46e9b3afc098d5b12a8d'",
+  '  }',
+  '}',
+].join('\n');
+
+test('rastreio: uma linha por RF, com CT, TEL, story, tasks, nowIds, ATF e nível', () => {
+  const recibos = new Map([['US-T-01', { status: 'success', commit: 'abc', horario: '2026-11-24T10:00:00Z' }]]);
+  const r = montarRastreio({ requisitos: REQS, tasks: BACKLOG, keys: lerChavesDoKeys(KEYS), recibos, nowIdsDoCodigo: ['RF-MOD-F5-001_form_dossie'] });
+  const por = Object.fromEntries(r.linhas.map((l) => [l.rf, l]));
+  assert.deepEqual(Object.keys(por).sort(), ['RF-MOD-F2-003', 'RF-MOD-F5-001', 'RF-MOD-F6-002', 'RF-MOD-T-001']);
+  assert.equal(por['RF-MOD-F2-003'].story, 'US-F2-01');
+  assert.deepEqual(por['RF-MOD-F2-003'].ct, ['CT-MOD-F2-003']);
+  assert.deepEqual(por['RF-MOD-F2-003'].tel, ['TEL-007']);
+  assert.deepEqual(por['RF-MOD-F2-003'].tasks, ['TASK-F2-01-1']);
+  assert.deepEqual(por['RF-MOD-F2-003'].nowIds, ['RF-MOD-F2-003_br_publicar_versao']);
+  assert.equal(por['RF-MOD-F2-003'].nivel, 'N2', 'chave instalada no keys.ts');
+  assert.equal(por['RF-MOD-F5-001'].nivel, 'N1', 'a chave existe, mas está marcada deleted: true');
+  assert.equal(por['RF-MOD-T-001'].nivel, 'N3', 'RF da task conta para a story; recibo verde');
+  assert.deepEqual(por['RF-MOD-T-001'].atf, [{ story: 'US-T-01', status: 'success', commit: 'abc', horario: '2026-11-24T10:00:00Z', verde: true }]);
+  assert.equal(por['RF-MOD-F6-002'].nivel, 'N0');
+  assert.deepEqual(r.orfaos, ['RF-MOD-F6-002']);
+  assert.deepEqual(r.resumo, { total: 4, orfaos: 1, N0: 1, N1: 1, N2: 1, N3: 1 });
+  assert.match(formatarRastreio(r), /RF SEM STORY \(1\)[\s\S]*RF-MOD-F6-002/);
+});
+
+test('rastreio: recibo vermelho não sobe para N3; RF citado só no backlog entra no universo', () => {
+  const recibos = new Map([['US-T-01', { status: 'failure' }]]);
+  const r = montarRastreio({ requisitos: '### RF-MOD-F2-003\n', tasks: BACKLOG, recibos });
+  const por = Object.fromEntries(r.linhas.map((l) => [l.rf, l]));
+  assert.equal(por['RF-MOD-T-001'].nivel, 'N1');
+  assert.ok(por['RF-MOD-F5-001'], 'o RF da traceability entra mesmo fora do requirements.md');
+  assert.equal(r.fonteDoUniverso, 'requirements');
+  assert.equal(montarRastreio({ especificacao: 'RF-MOD-F1-001', tasks: null }).fonteDoUniverso, 'especificacao-funcional');
+});
+
+test('rastreio: leitores do keys.ts, do Now.ID e das stories aninhadas', () => {
+  const k = lerChavesDoKeys(KEYS);
+  assert.equal(k.get('acl_caso_read').apagada, false);
+  assert.equal(k.get('RF-MOD-F5-001_form_dossie').apagada, true);
+  assert.equal(k.get('RF-MOD-F2-003_br_publicar_versao').table, 'sys_script');
+  assert.deepEqual(nowIdsNoCodigo(`Record({ $id: Now.ID["TEL-011_report"] }); x(Now.ID['RF-MOD-F2-003_br_x'])`), ['TEL-011_report', 'RF-MOD-F2-003_br_x']);
+  assert.deepEqual(storiesDoBacklog({ epics: [{ features: [{ stories: [{ id: 'US-A' }] }] }], stories: [{ id: 'US-A' }, { id: 'US-B' }] }).map((s) => s.id), ['US-A', 'US-B']);
+});
+
+test('--rastreio na casca de verdade: grava traceability.json e sai com 2 quando há RF órfão, 0 sem órfão', () => {
+  const raiz = mkdtempSync(join(tmpdir(), 'rastreio-'));
+  mkdirSync(join(raiz, 'outputs', 'spec', 'requirements'), { recursive: true });
+  mkdirSync(join(raiz, 'outputs', 'spec', 'auditorias', 'atf'), { recursive: true });
+  mkdirSync(join(raiz, 'app', 'src', 'fluent', 'generated'), { recursive: true });
+  mkdirSync(join(raiz, 'app', 'src', 'fluent', 'br'), { recursive: true });
+  writeFileSync(join(raiz, 'outputs', 'spec', 'requirements', 'requirements.md'), REQS);
+  writeFileSync(join(raiz, 'outputs', 'spec', 'tasks.json'), JSON.stringify(BACKLOG));
+  writeFileSync(join(raiz, 'app', 'src', 'fluent', 'generated', 'keys.ts'), KEYS);
+  writeFileSync(join(raiz, 'app', 'src', 'fluent', 'br', 'publicar.now.ts'), "BusinessRule({ $id: Now.ID['RF-MOD-F2-003_br_publicar_versao'] })\n");
+  writeFileSync(join(raiz, 'outputs', 'spec', 'auditorias', 'atf', 'US-T-01.json'), JSON.stringify({ status: 'success', commit: 'abc' }));
+
+  let erro = null;
+  try { rodarNa(raiz, ['--rastreio']); } catch (e) { erro = e; }
+  assert.ok(erro, 'com órfão, o comando falha');
+  assert.equal(erro.status, 2);
+  assert.match(erro.stdout, /RF-MOD-F6-002/);
+  const gravado = JSON.parse(readFileSync(join(raiz, 'outputs', 'spec', 'traceability.json'), 'utf8'));
+  assert.equal(gravado.resumo.N0, 1);
+  assert.ok(gravado.geradoEm);
+
+  writeFileSync(join(raiz, 'outputs', 'spec', 'requirements', 'requirements.md'), REQS.replace('### RF-MOD-F6-002 Painel\n', ''));
+  const saida = JSON.parse(rodarNa(raiz, ['--rastreio', '--json']));
+  assert.equal(saida.resumo.orfaos, 0);
+  assert.equal(saida.linhas.find((l) => l.rf === 'RF-MOD-T-001').nivel, 'N3');
+});
+
+test('--rastreio não roda o modo relatório nem o congelamento: sem tasks.json, todo RF é órfão e nada mais é escrito', () => {
+  const raiz = mkdtempSync(join(tmpdir(), 'rastreio-vazio-'));
+  mkdirSync(join(raiz, 'outputs', 'spec', 'requirements'), { recursive: true });
+  writeFileSync(join(raiz, 'outputs', 'spec', 'requirements', 'requirements.md'), '### RF-MOD-F1-001\n');
+  const r = rastrear(raiz, {
+    cwd: () => raiz,
+    lerArquivo: readFileSync,
+    escrever: (c, t) => writeFileSync(c, t, 'utf8'),
+    criarDiretorio: (c) => mkdirSync(c, { recursive: true }),
+    existe: existsSync,
+    listar: () => { const e = new Error('x'); e.code = 'ENOENT'; throw e; },
+  });
+  assert.deepEqual(r.matriz.orfaos, ['RF-MOD-F1-001']);
+  assert.ok(existsSync(join(raiz, 'outputs', 'spec', 'traceability.json')));
+  assert.ok(!existsSync(join(raiz, 'outputs', 'spec', MARCADOR_CONGELAMENTO.replace(/^outputs\/spec\//, ''))));
 });

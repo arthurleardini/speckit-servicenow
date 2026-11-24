@@ -2,7 +2,7 @@
 //
 // Antes de qualquer validador gastar token: os comandos de teste, cobertura e lint do projeto
 // rodam, e cada mensagem de erro documentada nas regras é procurada no código e nos testes. A
-// `spec-implement` diz que uma regra com condição negativa "não está implementada enquanto não
+// `sn-implement` diz que uma regra com condição negativa "não está implementada enquanto não
 // houver teste provando que a violação é rejeitada com aquela mensagem exata" — isso é busca de
 // texto, e busca de texto é trabalho de código, não de modelo.
 

@@ -1,7 +1,7 @@
 ---
 name: spec
 description: >
-  Orquestrador do discovery (Fases 1–6). Começa por um enquadramento opcional (spec-frame, Fase 1) quando o material é pobre ou o problema é difuso, e executa spec-ingest → spec-legacy (sempre roda; sem legado grava apenas o skip) → spec-benchmark, seguido de documentação-primeiro ou protótipo-primeiro (spec-prototype ↔ spec-product) e spec-iterate. Gera até 16 artefatos em outputs/spec/ — do frame e context-map ao product-requirements e flow-map (gate FATAL FLOWMAP_VALID para produtos com UI), incluindo AS-IS de legado (12 dimensões), threat-model (STRIDE), benchmark, gaps + sync-log e, opcionalmente, prototype e spec-report → HTML. Não gera backlog ADO; o escopo termina na definição do produto. Use para /spec, discovery, enquadramento, levantamento, análise de legado, benchmark, threat model, arquitetura AS-IS e especificação de produtos.
+  Orquestrador do discovery (Fases 1–6). Começa por um enquadramento opcional (spec-frame, Fase 1) quando o material é pobre ou o problema é difuso, e executa spec-ingest → spec-legacy (sempre roda; sem legado grava apenas o skip) → spec-benchmark, seguido de documentação-primeiro ou protótipo-primeiro (instância ServiceNow como protótipo, por sn-scaffold e sn-capture ↔ spec-product) e spec-iterate. Gera até 16 artefatos em outputs/spec/ — do frame e context-map ao product-requirements e flow-map (gate FATAL FLOWMAP_VALID para produtos com UI), incluindo AS-IS de legado (12 dimensões), threat-model (STRIDE), benchmark, gaps + sync-log e, opcionalmente, spec-report → HTML. Não gera backlog; o escopo termina na definição do produto. Use para /spec, discovery, enquadramento, levantamento, análise de legado, benchmark, threat model, arquitetura AS-IS e especificação de produtos.
 version: "1.4"
 updated: "2026-10-20"
 ---
@@ -12,7 +12,7 @@ updated: "2026-10-20"
 
 Coordena o processo completo de discovery e especificação de produto, garantindo que cada etapa produz **profundidade de negócio real** — não esqueletos.
 
-**Escopo deste repositório:** definição de produto (até `product-requirements.md`). Planejamento técnico do TO-BE (arquitetura nova, threat-model do TO-BE, deep RNF técnicos, geração de backlog, scaffold e implementação) é **fase posterior** — cadeia técnica Fases 6.5-11 via `spec-tech-rules` → `spec-hld` (desenho TO-BE) → `spec-data-model` … `spec-implement`.
+**Escopo deste repositório:** definição de produto (até `product-requirements.md`). Planejamento técnico do TO-BE (arquitetura nova, threat-model do TO-BE, deep RNF técnicos, geração de backlog, scaffold e implementação) é **fase posterior** — cadeia técnica Fases 6.5-11 via `spec-tech-rules` → `spec-hld` (desenho TO-BE) → `spec-data-model` … `sn-implement`.
 
 **De onde ele parte, neste harness:** quando `outputs/explore/` traz o pré-projeto do Explore, os
 documentos — `hld-funcional.md`, `especificacao-funcional.md`, `especificacao-tecnica.md`,
@@ -107,7 +107,7 @@ Se `inputs/` contiver arquivos, classificar cada um antes de formular as pergunt
 
 | Sinal no arquivo | Classificação | Consequência |
 |-----------------|---------------|--------------|
-| Código React/Vue/Angular sem backend real (sem servidor, sem migrações de DB) | **Protótipo de validação** | → NÃO conta como legado. Usar `spec-prototype` após benchmark. |
+| Código React/Vue/Angular sem backend real (sem servidor, sem migrações de DB) | **Protótipo de validação** | → NÃO conta como legado. Entra como insumo visual do `spec-ingest`; o protótipo deste kit é a instância ServiceNow (`sn-scaffold` + `sn-capture`). |
 | Arquivos `mock*.ts`, `data.json`, seed files, in-memory state, `localStorage` como "banco" | **Protótipo de validação** | → NÃO conta como legado. |
 | Figma exports, screenshots, HTML estático, wireframes | **Insumo visual** | → NÃO conta como legado. Tratar em `spec-ingest` como fonte visual. |
 | Schema SQL / migrações / DDL com dados reais ou histórico de uso | **Sistema legado** | → Conta como legado. Kickoff = Sim. |
@@ -127,8 +127,8 @@ Só depois desta classificação, fazer as três perguntas ao usuário:
    [ ] Parcial — há processos manuais (planilhas, e-mails, WhatsApp) mas sem sistema digital
 
 2. Depois do benchmark, qual ramo?
-   [ ] Documentação primeiro — spec-product → [spec-prototype opcional] → spec-iterate
-   [ ] Protótipo primeiro — spec-prototype → spec-product → spec-iterate
+   [ ] Documentação primeiro — spec-product → [instância como protótipo opcional] → spec-iterate
+   [ ] Protótipo primeiro — instância como protótipo (sn-scaffold + sn-capture) → spec-product → spec-iterate
 
 3. Há arquivos em inputs/ para analisar?
    [ ] Sim — liste ou confirme o que está lá
@@ -137,7 +137,7 @@ Só depois desta classificação, fazer as três perguntas ao usuário:
 
 Apresentar ao usuário a classificação feita antes de aguardar resposta. Exemplo: *"Identifiquei em `inputs/` o seguinte: `src/` = protótipo React (não conta como legado), `norma-exemplo.pdf` = insumo normativo. Com base nisso, sugiro resposta 1 = Não. Confirma?"*
 
-**Protótipo já existente (Figma, URL, src/)** não altera a sequência base: colocar exports/código/links em `inputs/` e usar `spec-ingest` com fontes visuais; depois do benchmark, usar **`spec-prototype`** (modo Documentar / Análise) antes ou depois de `spec-product` conforme o ramo escolhido.
+**Protótipo já existente (Figma, URL, src/)** não altera a sequência base: colocar exports/código/links em `inputs/` e usar `spec-ingest` com fontes visuais; o protótipo deste kit é a instância ServiceNow (`spec-data-model --previa` → `sn-scaffold` → `npm run reinstall` → `sn-capture`), antes ou depois de `spec-product` conforme o ramo escolhido.
 
 ### Enquadramento opcional antes da ingestão — spec-frame (Fase 1)
 
@@ -166,8 +166,8 @@ Plano para este projeto — sequência base + legado:
   Fase 4: spec-benchmark    → outputs/spec/benchmark.md (mercado + concorrentes + pesquisa web)
 
   Depois — ramo escolhido:
-  Ramo A (doc primeiro): spec-product → [spec-prototype opcional + src/] → spec-iterate
-  Ramo B (proto primeiro): spec-prototype [+ src/] → spec-product → spec-iterate
+  Ramo A (doc primeiro): spec-product → [instância como protótipo opcional] → spec-iterate
+  Ramo B (proto primeiro): instância como protótipo (sn-scaffold + sn-capture) → spec-product → spec-iterate
 
   Sempre ao fechar ciclo: spec-iterate → outputs/spec/gaps.md + outputs/spec/sync-log.md
 
@@ -188,8 +188,8 @@ Plano para este projeto — sem inventário AS-IS (spec-legacy):
   Fase 4: spec-benchmark    → outputs/spec/benchmark.md
 
   Depois — ramo escolhido:
-  Ramo A (doc primeiro): spec-product → [spec-prototype opcional + src/] → spec-iterate
-  Ramo B (proto primeiro): spec-prototype [+ src/] → spec-product → spec-iterate
+  Ramo A (doc primeiro): spec-product → [instância como protótipo opcional] → spec-iterate
+  Ramo B (proto primeiro): instância como protótipo (sn-scaffold + sn-capture) → spec-product → spec-iterate
 
   Sempre ao fechar ciclo: spec-iterate → outputs/spec/gaps.md + outputs/spec/sync-log.md
 
@@ -268,11 +268,11 @@ apenas o `legacy.md` de skip e termina (semântica completa em `LEGACY_MODE_RESP
 ## Ramos após a sequência base
 
 Definidos na pergunta 2 do kickoff (e detalhados nos planos acima):
-**Ramo A** — `spec-product → [spec-prototype opcional] → spec-iterate` ·
-**Ramo B** — `spec-prototype → spec-product → spec-iterate`.
+***Ramo A** — `spec-product → [instância como protótipo opcional] → spec-iterate` ·
+***Ramo B** — `instância como protótipo (sn-scaffold + sn-capture) → spec-product → spec-iterate`.
 
 Protótipo já existente **não cria um terceiro ramo**: entra como insumo visual do `spec-ingest`
-e `spec-prototype` roda em modo Documentar/Análise no ponto do ramo escolhido (ver Passo 0).
+e a instância (`sn-scaffold` + `sn-capture`) entra no ponto do ramo escolhido (ver Passo 0).
 
 ---
 
@@ -302,15 +302,15 @@ projeto/
 │       │   └── product-requirements.md (spec-product — PR/UX)
 │       ├── modules.md                (spec-product — catálogo modular canônico)
 │       ├── flow-map.md               (spec-product Passo 4.7 — Fluxos×Etapas×Telas×Transições; gate FATAL FLOWMAP_VALID)
-│       ├── prototype.md              (spec-prototype — opcional)
-│       ├── screens-manifest.json     (spec-prototype — inventário de telas; contrato em tools/references/screens-manifest.md)
-│       ├── screens/<TEL-ID>.png      (spec-prototype — screenshots das telas)
-│       ├── frontend-decisions.md     (spec-prototype — opcional, fallback)
+│       ├── data-model.previa.json    (spec-data-model --previa — modelo preliminar do Explore)
+│       ├── screens-manifest.json     (sn-scaffold — telas TEL- na instância; contrato em tools/references/screens-manifest.md)
+│       ├── screens/<TEL-ID>.png      (sn-capture — prints da instância na visão do papel)
+│       ├── id-map.json               (sn-tasks-github — logical-id → issue)
 │       ├── gaps.md                   (spec-iterate)
 │       ├── sync-log.md               (spec-iterate)
 │       └── report/
 │           └── product-discovery-kit.html  (spec-report — opcional; HTML único)
-└── src/             ← código de protótipo (apenas spec-prototype modo geração)
+└── app/             ← app Fluent (sn-scaffold no Explore; sn-implement no Deliver)
 ```
 
 ---
@@ -326,7 +326,7 @@ Para auditar a saúde da estrutura, executar `python3 ../tools/check-outputs.py`
 | spec-legacy | **Kickoff Não:** só `legacy.md` skipped (template). **Kickoff Sim/Parcial:** `legacy.md` + `architecture.md` + `legacy-analysis.md` + `threat-model.md` conforme skill. **Protótipo não conta como legado.** | `V-LEG-01` kickoff Sim/Parcial sem os 4 artefatos → **FATAL:** não invocar spec-benchmark; listar artefatos faltantes |
 | spec-benchmark | `benchmark.md` com pergunta estratégica, status quo presente como concorrente, fontes A/B/C/D em todas as células, mapa 2x2 com eixos heterogêneos, análise de modelo de negócio dos concorrentes, tendências de mercado, gaps em 3 categorias, recomendações em Pyramid Principle | `V-BEN-01` status quo ausente da matriz de concorrentes → **FATAL:** não invocar ramo A/B; reabrir Passo 3 do benchmark |
 | spec-product | **6 arquivos**: `modules.md` (catálogo modular canônico — código + nome + aliases + status), `product-vision.md` (Moore + OKR/SMART + É/Não É + personas com JTBD + roadmap), `business-rules.md` (**sem legado AS-IS:** seção normativa/ref.; **com legado:** seção AS-IS + novo produto; coluna Módulo nas RNs quando aplicável), `requirements.md` (**índice modular** + cobertura insumo→RF ou GAPs + RF por seção `## Módulo:` com IDs `RF-MOD-XXX-NN`, BDD×3, RNF de negócio com métrica, matriz RF↔RNF — ver `../tools/references/spec-requirements-depth.md`), `product-requirements.md` (PR **agrupados por módulo**, cada um ligado a RF + estados UI + TTFV + WCAG 2.2 AA + campo **Etapa do fluxo** fechado no Passo 4.7), `flow-map.md` (Passo 4.7 — 4 seções em gramática estrita FLX/ETP/TEL/TRS, validado por `python3 ../tools/check-flowmap.py`, métricas coladas em `## Cobertura`) | `V-PRD-01` módulo no índice sem ≥ 1 RF Must nem `QA-NN` de justificativa → **FATAL:** não invocar spec-iterate; completar o módulo · `V-PRD-02` produto com UI sem `flow-map.md` válido (gate `FLOWMAP_VALID`) → **FATAL:** não invocar spec-iterate. Exceções que **não** são falha: `FLOWMAP_SKIPPED` (produto sem UI, justificado no sync-log) e `TOOL_UNAVAILABLE:check-flowmap` (validador ausente → WARNING, flow-map aceito sob revisão humana declarada) |
-| spec-prototype | **Inventário de telas** completo (RF + entidades/CRUD + flow-map + acesso + transversais — o flow-map é o mínimo, não o teto; gate `SCREEN_INVENTORY_COMPLETE`, FATAL em fidelidade Alta: 100% gerado, sem stub); tabela UI → negócio com 7 colunas; `screens-manifest.json` emitido cobrindo todas as rotas (gate WARNING `SCREENS_MANIFEST_EMITTED`, contrato em `../tools/references/screens-manifest.md`); cada rota com 3 estados (erro/vazio/carga); gate de arquitetura (Passo 3.0) + questionário de design (Passo 3.0.1) antes de `src/`; modo Geração só após ler integralmente a rule `frontend.mdc` do projeto; modo Documentar-protótipo: PD-xxx listados com tipo e prioridade de migração; seção "Artefatos que precisam ser criados" preenchida | `V-PRO-01` geração de `src/` sem ler `frontend.mdc` (Passo 3.0) → **FATAL:** interromper geração; acordar arquitetura com o usuário |
+| sn-scaffold + sn-capture (instância como protótipo) | Toda `TEL-` da tabela de telas da `especificacao-funcional.md` existe na instância como form, list ou report da Core UI clássica (rule `harness/servicenow-ui.md`), com dados fictícios do `sn-seed`; `screens-manifest.json` com rota e `screenshot` para toda `TEL-` (contrato em `../tools/references/screens-manifest.md`); último `npm run reinstall` `ok` no `sync-log.md` com o commit de `app/src/fluent`; diferença entre o que o plano pede e o que a Core UI faz registrada como GAP | `V-PRO-01` `TEL-` sem rota ou sem print → **FATAL:** o `fecho-explore` nega; rodar `sn-scaffold`, `npm run reinstall` e `sn-capture` |
 | spec-iterate | `gaps.md` com 13 campos por GAP **priorizando negócio** (ver skill); **não** confundir dívida técnica do protótipo mock com GAP; **colheita do protótipo** quando existe protótipo (manifesto → runtime → estático; `PROTOTYPE_HARVESTED` no sync-log) e **auditoria da amarração técnica** quando `data-model.json`/`api-contracts.yaml` existem (`UI_BINDING_AUDITED`); `sync-log.md` atualizado | `V-ITE-01` GAP sem os 13 campos ou sem propagação a "Afeta" → **FATAL:** não marcar GAP como resolvido; manter `Status: aberto` · `V-ITE-02` protótipo existente sem colheita registrada (`PROTOTYPE_HARVESTED`, inclusive `camada=skipped` justificada) → **WARNING:** rodar a colheita antes de fechar a Etapa A do `spec-iterate` |
 | spec-report | `report/product-discovery-kit.html` único com CSS embutido; sumário executivo na capa; índice lateral com **ordem stakeholder-first** (descoberta e mapa de contexto **por último**, ver `generate-report.py`); todos os `.md` incorporados **exceto** `prototype.md`, `frontend-decisions.md`, `gaps-answers.md` | `V-REP-01` `capa.md` ausente ou com marcador de stub → **WARNING:** `generate-report.py` gera o resumo executivo automaticamente e apenas emite aviso; preencher `capa.md` antes da entrega final |
 
@@ -368,7 +368,7 @@ lista só os validators **transversais**, que não pertencem a uma etapa isolada
 
 ## Sync-log como memória cross-cutting
 
-**Regra obrigatória para TODAS as skills filhas** (`spec-ingest`, `spec-legacy`, `spec-benchmark`, `spec-product`, `spec-prototype`, `spec-iterate`, `spec-report`):
+**Regra obrigatória para TODAS as skills filhas** (`spec-ingest`, `spec-legacy`, `spec-benchmark`, `spec-product`, `sn-scaffold`, `sn-capture`, `spec-iterate`, `spec-report`):
 
 1. **Ao iniciar**, ler `outputs/spec/sync-log.md` Seção A (timeline de execuções). Se o arquivo não existir, criar a partir do template e registrar como primeira execução. As decisões-chave já registradas são contexto — não relitigar sem motivo novo.
 2. **Ao terminar**, adicionar uma linha na Seção A com:
@@ -393,17 +393,17 @@ Esse log é a **única fonte de verdade cronológica** do projeto. Skills consul
 Quando na geração de requirements ou product-requirements surge necessidade de validar visualmente:
 
 1. Registrar estado atual nos artefatos abertos
-2. Invocar spec-prototype (modo Geração) com os artefatos existentes como entrada
+2. Gerar a prévia do modelo (`spec-data-model --previa`), rodar `sn-scaffold`, `npm run reinstall` e `sn-capture`
 3. Após protótipo validado, continuar ou voltar a spec-product para ajustes
 4. Usar spec-iterate para propagar qualquer mudança que o protótipo revelou
 
 ### Protótipo → Documento (regra mal definida encontrada na documentação)
 
-Quando spec-prototype (Análise) ou spec-product detectam inconsistência no protótipo:
+Quando a revisão da instância ou a spec-product detectam inconsistência no protótipo:
 
 1. Registrar a inconsistência em `## Questões em aberto` (`QA-NN`) do artefato afetado (regra de criação de `GAP-XXX` em «O que NÃO faz»)
 2. Corrigir o artefato de negócio (business-rules.md, requirements.md)
-3. Invocar spec-prototype novamente com instrução explícita de atualizar src/ para refletir a decisão
+3. Rodar `sn-scaffold` de novo, `npm run reinstall` e `sn-capture`, para a instância refletir a decisão
 4. Registrar propagação no sync-log.md
 
 ---
@@ -423,7 +423,8 @@ A cadeia técnica pós-discovery é gerida pelas skills abaixo — cada uma tem 
 | `spec-test-plan` | 6c | `test-plan.md` — plano de testes de negócio; fonte dos cenários de aceite que a `spec-tasks` grava nas tasks |
 | `spec-tasks` | 7 | `tasks.json` + `gaps-document.md` |
 | `spec-tasks-html` | 7c | `report/tasks.html` |
-| `spec-tasks-azure` | 8 | Work items no Azure DevOps |
+| `sn-tasks-github` | 8 | Issues e sub-issues no GitHub, com o print da tela (`outputs/spec/id-map.json`) |
+| `sn-implement` | 11 | `.now.ts` em `app/src/fluent/`, `Test()` ATF e recibo em `outputs/spec/auditorias/atf/` |
 
 Documentação completa de cada uma no respectivo `../<skill>/SKILL.md` (ex.:
 [`../spec-tasks/SKILL.md`](../spec-tasks/SKILL.md)); a tabela canônica de **artefato → path**

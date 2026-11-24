@@ -16,7 +16,7 @@ import {
 test('reescrever: as rules do harness mudam de pasta E de extensão; o resto de .claude vira .cursor', () => {
   assert.equal(reescrever('.claude/rules/harness/security.md'), '.cursor/rules/harness/security.mdc');
   assert.equal(reescrever('.claude/rules/harness/explore.md'), '.cursor/rules/harness/explore.mdc');
-  assert.equal(reescrever('.claude/rules/harness/frontend.md'), '.cursor/rules/harness/frontend.mdc');
+  assert.equal(reescrever('.claude/rules/harness/servicenow-ui.md'), '.cursor/rules/harness/servicenow-ui.mdc');
   assert.equal(reescrever('.claude/rules/harness/'), '.cursor/rules/harness/');
   assert.equal(reescrever('raiz de `.claude/rules/`'), 'raiz de `.cursor/rules/`');
   assert.equal(reescrever('.claude/settings.json'), '.cursor/hooks.json');

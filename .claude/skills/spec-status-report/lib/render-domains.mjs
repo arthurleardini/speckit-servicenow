@@ -884,7 +884,7 @@ export function renderCodigo(ctx) {
     }
     if ((dec.specStories || []).length) {
       p.push(h3plain(`Memória de implementação por módulo (${dec.specStories.length})`));
-      p.push(note("Arquivos mantidos pela skill <code>spec-implement</code> durante a codificação: registram o que foi feito e por quê, módulo a módulo."));
+      p.push(note("Arquivos mantidos pela skill <code>sn-implement</code> durante a codificação: registram o que foi feito e por quê, módulo a módulo."));
       p.push(foldActions());
       for (const s of dec.specStories) {
         p.push(fold(`${esc(s.module)} <span class="muted small">· ${esc(s.path)}</span>${s.ids.length ? ` ${pill(`${s.ids.length} IDs`, "neutral")}` : ""}`, mdToHtml(s.markdown || "", { headingOffset: 4 }), { id: `story-${slug(s.path)}` }));

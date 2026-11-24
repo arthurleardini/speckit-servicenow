@@ -43,8 +43,19 @@ o registro, quem pode chamar a rota e que campos ela aceita**.
   em URL.
 - **Segredo no código ou no bundle** (Camadas A e G): chave, token, senha escritos no código; segredo
   em variável `NEXT_PUBLIC_*`.
-- **Frontend** (Camada G): `dangerouslySetInnerHTML`/`innerHTML` com dado do usuário; token em
-  `localStorage`.
+- **App ServiceNow** (Camada G da `security.md`, RN-SN-135 a 150):
+  - **ACL**: tabela nova sem ACL de tabela (`type: 'record'`) por operação; ACL sem role, condição
+    nem script; campo sensível sem ACL de campo; regra "atendente vê só a própria carteira" feita
+    só em filtro de lista, UI Policy ou Client Script — isso é UX, não protege dado (RN-SN-145): ALTO;
+  - **`GlideRecordSecure`** em código chamado pelo cliente (Script Include client-callable, REST,
+    UI Action de cliente): `GlideRecord` puro ali ignora ACL e expõe registro de outro papel: ALTO;
+  - **Script Include `clientCallable: true` sem ACL** de execução, ou `accessibleFrom: 'public'` sem
+    necessidade (RN-SN-71, 72, 147);
+  - **acesso a outro escopo sem `CrossScopePrivilege`** declarado, ou pedindo mais operação que a
+    usada (RN-SN-148);
+  - **role além do mínimo**: role da plataforma (`admin`, `itil`) concedida pelo app, ou role do app
+    sem o prefixo do escopo (RN-SN-135);
+  - **dado de contribuinte real** no seed (todo documento tem que estar em `_documentos.json`).
 - **Erro exposto** (Camada E): stack trace, nome de tabela ou mensagem do banco devolvidos ao usuário.
 
 Severidade pela tabela da `security.md`: CRITICO (CVSS ≥ 9) e ALTO (7 a 8,9) bloqueiam a entrega;

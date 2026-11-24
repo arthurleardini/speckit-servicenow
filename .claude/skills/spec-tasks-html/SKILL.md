@@ -102,7 +102,7 @@ não gravável — corrigir a entrada/caminho e rodar de novo.
 | Skill | Fase | Relação com `spec-tasks-html` |
 |-------|------|--------------------------------|
 | `spec-tasks` | 7 | Produz o `tasks.json` renderizado por esta skill |
-| `spec-tasks-azure` | 8 | Publica o mesmo `tasks.json` no Azure DevOps |
+| `sn-tasks-github` | 9 | Publica o mesmo `tasks.json` em issues do GitHub |
 | `spec-estimate` | 7.5 | Pode ser citado no relatório como contexto de forecast/delivery |
 
 ---
@@ -110,7 +110,7 @@ não gravável — corrigir a entrada/caminho e rodar de novo.
 ## O que NÃO faz
 
 - Não gera `tasks.json` — use `spec-tasks` (Fase 8).
-- Não publica em ferramenta externa — use `spec-tasks-azure` (Fase 9).
+- Não publica em ferramenta externa — use `sn-tasks-github` (Fase 9).
 - Não altera dados do backlog — apenas renderiza o que já existe em `tasks.json`.
 
 ---

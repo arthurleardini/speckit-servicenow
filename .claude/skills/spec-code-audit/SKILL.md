@@ -2,7 +2,7 @@
 name: spec-code-audit
 description: >
   spec-code-audit (Fase 12 — Auditoria Pós-Implementação) — invocar após implementação
-  completa (spec-implement) para auditar o código em 7 dimensões: conformidade com as
+  completa (sn-implement) para auditar o código em 7 dimensões: conformidade com as
   rules do projeto (.cursor/rules/ ou .claude/rules/), segurança (OWASP/STRIDE/CVSS),
   teste de mesa com vetores instanciados no código real, performance, bugs técnicos,
   testes/cobertura e observabilidade. Produz um único artefato: code-audit.md com decisão
@@ -16,7 +16,7 @@ updated: "2026-10-20"
 
 # spec-code-audit — Auditoria Pós-Implementação
 
-> **Posição no pipeline:** roda após `spec-implement` (Fase 11). É a última fase de validação
+> **Posição no pipeline:** roda após `sn-implement` (Fase 11). É a última fase de validação
 > antes do deploy. Não modifica código — audita, reporta e, com o «sim» do usuário, cria a task
 > SEC que faltar no backlog (I.3).
 
@@ -188,7 +188,7 @@ dimensões consomem — ela **não substitui** a análise da IA, e a IA **não s
 | 1 | **opengrep** (SAST; fork LGPL do Semgrep — https://www.opengrep.dev/) | `opengrep scan --json > outputs/spec/audit-signals/sast.json` | `sast.json` | Padrões de vulnerabilidade no código (injeção, XSS, crypto fraca…) |
 | 2 | **gitleaks** (secrets — https://github.com/gitleaks/gitleaks) | `gitleaks detect --report-format json --report-path outputs/spec/audit-signals/secrets.json` | `secrets.json` | Segredos e credenciais no código e no histórico git |
 | 3 | **osv-scanner** (SCA — https://google.github.io/osv-scanner/) | `osv-scanner --format json -r . > outputs/spec/audit-signals/deps.json` | `deps.json` | Vulnerabilidades conhecidas nas dependências (base OSV) |
-| 4 | **motor determinístico do harness** (o mesmo do G3 da `spec-implement` e da `auditoria-de-us` — Decisão 69; sem instalar nada) | `node .claude/ferramentas/varrer-entrega.mjs --tudo --repo <pasta do código> --sem-externas --json > outputs/spec/audit-signals/harness.json` | `harness.json` | Segredo no código, dado pessoal em log, HTML cru, token no storage, SQL/shell montado em texto, erro engolido, I/O em laço — com `arquivo:linha` |
+| 4 | **motor determinístico do harness** (o mesmo do G3 da `sn-implement` e da `auditoria-de-us` — Decisão 69; sem instalar nada) | `node .claude/ferramentas/varrer-entrega.mjs --tudo --repo <pasta do código> --sem-externas --json > outputs/spec/audit-signals/harness.json` | `harness.json` | Segredo no código, dado pessoal em log, HTML cru, token no storage, SQL/shell montado em texto, erro engolido, I/O em laço — com `arquivo:linha` |
 
 **`<pasta do código>`** é o «Diretório raiz» do Kickoff — no harness, a «Pasta local» do repositório
 de papel `codigo` no `workspace.md` (ex.: `codigo/`). Sem `--repo`, o motor varre a pasta corrente,
@@ -375,7 +375,7 @@ Ler todos os arquivos de manifesto e identificar:
 
 ### A.9 — Histórico de implementação (`spec_story.md`)
 
-Ler o `spec_story.md` de cada módulo implementado (mantido pelo `spec-implement`) como
+Ler o `spec_story.md` de cada módulo implementado (mantido pelo `sn-implement`) como
 insumo adicional do inventário: o que foi implementado, decisões tomadas, padrões
 estabelecidos e o que foi deixado para depois, task a task. Isso ajuda a explicar **por que**
 um padrão foi escolhido antes de reportá-lo como bug ou não-conformidade — e a identificar
@@ -1071,7 +1071,7 @@ regulatório, complementar com:
 
 ## O que NÃO faz
 
-- Não modifica código — audita e reporta; correções ficam a cargo dos devs / `spec-implement`.
+- Não modifica código — audita e reporta; correções ficam a cargo dos devs / `sn-implement`.
 - Não executa DAST nem pentest ativo, nem substitui revisão de infraestrutura — ver Nota sobre Limitações.
 - Não gera stories nem contratos. A escrita fora do relatório é só a da Regra de Ouro (I.3): a task SEC que falta — no `tasks.json` e no Azure DevOps, e só com o «sim» do usuário — ou o `GAP-NNN` em `gaps-document.md`.
 - Não decide arquitetura ou requisitos — reporta desvios para correção em fases anteriores (`spec-iterate`, `spec-tech-rules`).
@@ -1081,7 +1081,7 @@ regulatório, complementar com:
 
 | Skill | Fase | Relação com `spec-code-audit` |
 |-------|------|-------------------------------|
-| `spec-implement` | 10 | Gera o código auditado por esta skill e mantém o `spec_story.md` por módulo — histórico de implementação usado como insumo do inventário (A.9) |
+| `sn-implement` | 10 | Gera o código auditado por esta skill e mantém o `spec_story.md` por módulo — histórico de implementação usado como insumo do inventário (A.9) |
 | `spec-security-review` | 7b | Provê `security-review.md` (findings SEC-NNN previstos) e/ou tasks SEC no `tasks.json`, cruzados no Passo G.5 |
 | `spec-tasks` | 7 | Provê `tasks.json` para calibrar severidades e cruzar cobertura de testes |
 | `spec-tech-rules` | 5.5 | Dona das rules (`.cursor/rules/` ou `.claude/rules/`) auditadas no Passo B |

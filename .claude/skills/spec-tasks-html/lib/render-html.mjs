@@ -1,4 +1,4 @@
-// GÊMEO: mantém paridade com ../../spec-tasks-azure/lib/ado-narrative-html.mjs (incl. bloco "Contexto de UI"/uiContext).
+// GÊMEO (histórico): mantinha paridade com spec-tasks-azure/lib/ado-narrative-html.mjs, removida no fork ServiceNow (item 27).
 // Diferença deliberada no screenshot: o ADO anexa como attachment; aqui a imagem é EMBUTIDA em base64
 // (com cache por caminho e cap de tamanho por imagem — ver uiScreenshotDataUri).
 // Ao editar o schema v5.3, atualizar ambos.
@@ -1322,7 +1322,7 @@ function normalizeCriteriaList(criteria, idPrefix = '') {
 
 /**
  * Rótulos legíveis das chaves conhecidas de `traceability`, quando ele vem como OBJETO.
- * GÊMEO de ../../spec-tasks-azure/lib/ado-narrative-html.mjs → traceabilityHtml().
+ * GÊMEO (histórico) de spec-tasks-azure/lib/ado-narrative-html.mjs → traceabilityHtml(), removida no fork.
  */
 const TRACE_LABELS = {
   rf: 'Requisito funcional (RF)',

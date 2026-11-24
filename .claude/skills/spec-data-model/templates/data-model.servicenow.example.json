@@ -1,0 +1,60 @@
+{
+  "scope": "x_0000000_exe",
+  "modules": [
+    { "id": "MOD-F1", "label": "Cadastro de exemplo", "tables": ["x_0000000_exe_cliente", "x_0000000_exe_pedido"] },
+    { "id": "MOD-T", "label": "Integrações simuladas", "tables": ["x_0000000_exe_frete_sim"] }
+  ],
+  "entities": [
+    {
+      "name": "x_0000000_exe_cliente",
+      "label": "Cliente",
+      "display": "nome",
+      "journal": true,
+      "audit": true,
+      "pessoa": true,
+      "rf": ["RF-MOD-F1-001"],
+      "columns": [
+        { "name": "nome", "label": "Nome", "type": "string", "maxLength": 120, "mandatory": true },
+        { "name": "cpf", "label": "CPF", "type": "string", "maxLength": 14, "format": "cpf" },
+        { "name": "responsavel", "label": "Responsável", "type": "reference", "reference": "sys_user" },
+        { "name": "ficticio", "label": "Fictício", "type": "boolean" },
+        { "name": "comentarios", "label": "Comentários", "type": "journal_input" }
+      ]
+    },
+    {
+      "name": "x_0000000_exe_pedido",
+      "label": "Pedido",
+      "auto_number": { "prefix": "PED", "digits": 7 },
+      "rf": ["RF-MOD-F1-002"],
+      "rn": ["RN-MOD-F1-001"],
+      "columns": [
+        { "name": "cliente", "label": "Cliente", "type": "reference", "reference": "x_0000000_exe_cliente", "mandatory": true },
+        {
+          "name": "estado",
+          "label": "Estado",
+          "type": "choice",
+          "mandatory": true,
+          "choices": { "aberto": { "label": "Aberto", "sequence": 10 }, "fechado": { "label": "Fechado", "sequence": 20 } }
+        },
+        { "name": "valor", "label": "Valor", "type": "currency" },
+        { "name": "fechado_em", "label": "Fechado em", "type": "glide_date_time" }
+      ]
+    },
+    {
+      "name": "x_0000000_exe_frete_sim",
+      "label": "Cotação de frete (Simulado)",
+      "simulation": true,
+      "columns": [
+        { "name": "pedido", "label": "Pedido", "type": "reference", "reference": "x_0000000_exe_pedido" },
+        { "name": "valor", "label": "Valor", "type": "decimal" },
+        { "name": "forcar_falha", "label": "Forçar falha", "type": "boolean" }
+      ]
+    }
+  ],
+  "screens": [
+    { "id": "TEL-001", "title": "Clientes", "table": "x_0000000_exe_cliente", "type": "list", "view": "default", "role": "atendente", "module": "MOD-F1", "fields": ["nome", "cpf", "responsavel"], "rf": ["RF-MOD-F1-001"], "demoRecord": "lista: seed fictício (50)" },
+    { "id": "TEL-002", "title": "Cliente", "table": "x_0000000_exe_cliente", "type": "form", "view": "default", "role": "atendente", "module": "MOD-F1", "fields": ["nome", "cpf", "responsavel", "ficticio", "comentarios"], "relatedLists": ["x_0000000_exe_pedido.cliente"], "rf": ["RF-MOD-F1-001"], "demoRecord": "TEL-002_registro_demo: cliente fictício com 2 pedidos" },
+    { "id": "TEL-003", "title": "Pedidos por estado", "table": "x_0000000_exe_pedido", "type": "report", "view": "default", "role": "coordenador", "module": "MOD-F1", "groupBy": "estado", "rf": ["RF-MOD-F1-002"], "demoRecord": "report: seed fictício por estado" }
+  ],
+  "roles": ["coordenador", "atendente", "admin"]
+}

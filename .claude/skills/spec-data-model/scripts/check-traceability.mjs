@@ -28,6 +28,7 @@
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { ehModeloServiceNow } from './lib/servicenow.mjs';
 
 const RE_REQ = /\b(?:RF|RN)(?:-[A-Z0-9]+)+\b/;
 const vazio = (s) => typeof s !== 'string' || s.trim() === '' || s.trim() === '—' || s.trim() === '-';
@@ -36,6 +37,19 @@ const vazio = (s) => typeof s !== 'string' || s.trim() === '' || s.trim() === '�
 export function conferirModelo(modelo) {
   const achados = [];
   let entidades = 0;
+  // Formato ServiceNow (Speckit ServiceNow): o rastreio é `rf[]`/`rn[]` por tabela, e a tabela de
+  // integração simulada (`simulation: true`) fica de fora, como o EXISTING_REF do formato antigo.
+  if (ehModeloServiceNow(modelo)) {
+    for (const e of modelo.entities) {
+      entidades++;
+      if (e?.simulation === true) continue;
+      const ids = [...(Array.isArray(e?.rf) ? e.rf : []), ...(Array.isArray(e?.rn) ? e.rn : [])];
+      if (!ids.some((id) => RE_REQ.test(String(id)))) {
+        achados.push({ code: 'TRACEABILITY_PRESENT', entidade: e?.name ?? '?', mensagem: `${e?.name ?? '?'}: sem \`rf[]\`/\`rn[]\` citando RF ou RN` });
+      }
+    }
+    return { entidades, achados };
+  }
   for (const bc of Array.isArray(modelo?.boundedContexts) ? modelo.boundedContexts : []) {
     for (const e of Array.isArray(bc?.entities) ? bc.entities : []) {
       entidades++;

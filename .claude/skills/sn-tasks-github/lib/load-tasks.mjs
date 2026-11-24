@@ -1,4 +1,4 @@
-// Cópia de ../../spec-tasks-azure/lib/load-tasks.mjs (sn-tasks-github, 2026-11-24): manter em sincronia com a origem.
+// Cópia de spec-tasks-azure/lib/load-tasks.mjs (sn-tasks-github, 2026-11-24; a origem saiu no fork): gêmeo de ../../spec-tasks-html/lib/load-tasks.mjs.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 

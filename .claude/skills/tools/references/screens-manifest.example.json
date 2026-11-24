@@ -1,30 +1,37 @@
 {
   "version": 1,
-  "generatedBy": "spec-prototype/geracao",
-  "generatedAt": "2026-07-28T12:00:00-03:00",
+  "generatedBy": "sn-scaffold",
+  "generatedAt": "2026-11-24T12:00:00-03:00",
   "screens": [
     {
       "id": "TEL-001",
-      "route": "/solicitacoes/nova",
-      "title": "Formulário de solicitação",
-      "fields": [
-        { "name": "nome", "type": "text", "required": true },
-        { "name": "dataNascimento", "type": "date", "required": false },
-        { "name": "tipoSolicitacao", "type": "select", "required": true }
-      ],
-      "actions": ["Salvar rascunho", "Enviar", "Cancelar"],
-      "states": ["padrão", "vazio", "erro", "carregando"],
-      "screenshot": "screens/TEL-001.png"
+      "title": "Versão do critério de qualificação",
+      "route": "/x_2326104_cob_criterio.do?sys_id=0123456789abcdef0123456789abcdef",
+      "type": "form",
+      "role": "x_2326104_cob.coordenador",
+      "table": "x_2326104_cob_criterio",
+      "screenshot": "screens/TEL-001.png",
+      "capturedAt": "2026-11-24T12:30:00-03:00"
     },
     {
-      "route": "/relatorios",
-      "title": "Relatórios gerenciais",
-      "fields": [
-        { "name": "periodo", "type": "date", "required": true }
-      ],
-      "actions": ["Exportar CSV"],
-      "states": ["padrão", "vazio", "carregando"],
-      "screenshot": "screens/relatorios.png"
+      "id": "TEL-002",
+      "title": "Critérios de qualificação",
+      "route": "/x_2326104_cob_criterio_list.do",
+      "type": "list",
+      "role": "x_2326104_cob.coordenador",
+      "table": "x_2326104_cob_criterio",
+      "screenshot": "screens/TEL-002.png",
+      "capturedAt": "2026-11-24T12:30:05-03:00"
+    },
+    {
+      "id": "TEL-003",
+      "title": "Painel de KPIs",
+      "route": "/sys_report_template.do?jvar_report_id=fedcba9876543210fedcba9876543210",
+      "type": "report",
+      "role": "x_2326104_cob.coordenador",
+      "table": "x_2326104_cob_caso",
+      "screenshot": null,
+      "capturedAt": null
     }
   ]
 }

@@ -25,6 +25,55 @@ Lê os requisitos estabilizados (Fase 5/5) e produz um **modelo de dados complet
 que a Fase 8 (`spec-tasks`) consome para popular `persistenceModel` e `asyncInterfaces` em cada task.
 Trata tanto criação de novas estruturas quanto alteração de existentes (brownfield).
 
+## Projeto ServiceNow (Speckit ServiceNow) — formato e dois modos
+
+Neste kit o modelo de dados descreve as **tabelas de um app escopado ServiceNow**, e não um banco
+relacional. O formato é o de `outputs/spec/data-model.previa.json`, validado por
+[`templates/data-model.servicenow.schema.json`](./templates/data-model.servicenow.schema.json), e o
+exemplo é [`templates/data-model.servicenow.example.json`](./templates/data-model.servicenow.example.json):
+
+- raiz: `scope` (o escopo do app, **lido de `app/now.config.json`**, nunca digitado de cabeça),
+  `modules[]` (MOD- → tabelas, vira o menu), `entities[]`, `screens[]` (a tabela de telas `TEL-`)
+  e `roles[]`;
+- tabela (`entities[]`): `name` físico `<escopo>_<sufixo>` com **até 30 caracteres**, `label`,
+  `columns[]`, e opcionais `extends`, `display`, `auto_number`, `journal`, `audit`, `pessoa`,
+  `simulation`, **`rf[]`** e **`rn[]`** (o rastreio da tabela);
+- coluna: `name` **sem prefixo**, `label`, `type` ServiceNow (`string`, `integer`, `decimal`,
+  `boolean`, `reference`, `choice`, `glide_date`, `glide_date_time`, `journal`, `journal_input`,
+  `currency`…), e `maxLength`, `mandatory`, `choices` (`{ valor: { label, sequence } }`),
+  `reference` (tabela do modelo ou OOTB conhecida: `sys_user`, `sys_user_group`, `core_company`…),
+  `format` (`cpf`/`cnpj`, para o seed fictício).
+
+**Modo `--previa` (Explore).** Depois da `especificacao-funcional.md` (tabela de telas) e do
+`modelo-de-dados.md` preliminar, o agente **escreve** `outputs/spec/data-model.previa.json` a partir
+desses dois documentos — a tradução do `.md` em tabelas e colunas é interpretação, não conversão
+mecânica, por isso não há gerador — e roda:
+
+```bash
+node <dir-desta-skill>/scripts/validate-data-model.mjs --previa
+```
+
+Na prévia, `rf[]`/`rn[]` são opcionais. Ela é a **única** escrita de modelo permitida no Explore
+(está na whitelist do Explore) e é o que o `sn-scaffold` lê para instalar o app como protótipo.
+Pré-requisito: `outputs/explore/modelo-de-dados.md`. Os pré-requisitos do Plan (requirements,
+tech-rules) não se aplicam a este modo.
+
+**Modo final (Plan).** Mesmo formato, gravado em `outputs/spec/data-model.json`, agora com `rf[]`
+**obrigatório e não vazio** em toda tabela que não é simulação — é o que liga a tabela ao requisito
+na matriz de rastreio. Valida com `node <dir-desta-skill>/scripts/validate-data-model.mjs` (sem
+flag). O `sn-scaffold` reescreve os `Table()` a partir dele; coluna que some vira DELETE no install
+seguinte pelo `keys.ts` (SDK ≥ 4.14). **Sem diff e sem migração** — o `operationType`/ALTER do
+formato antigo não se aplica.
+
+O validador confere, além do schema: escopo igual ao de `app/now.config.json` (`--now-config=` para
+outro caminho), prefixo e limite de 30 caracteres na tabela, coluna sem prefixo, reference e
+`extends` para tabela existente (RN-SN-03/04), choice com choices, módulos e telas apontando
+tabelas e campos que existem, papel da tela em `roles[]`. Related list que não é reference direta
+sai como aviso (pode ser relacionamento definido). O `check-traceability.mjs`, o `render-er.mjs` e
+o `render-data-model-md.mjs` leem o formato ServiceNow (o rastreio é `rf[]`/`rn[]`; a tabela de
+simulação fica de fora). As seções abaixo sobre bounded contexts, 3FN, `operationType` e DDL valem
+para o formato antigo, que o validador continua aceitando.
+
 ## Linguagem clara — como escrever o que o humano vai ler (OBRIGATÓRIO)
 
 <!-- linguagem-clara:v1 inicio -->
@@ -148,7 +197,7 @@ para o Passo O, citar o `data-model.md` nos `<artefatos>`.
 | `data-model.md` | **Derivado do `data-model.json`** — changelog, entidades, origem e propriedade, diagrama de entidades em Mermaid, enumerações, canais assíncronos, delta do modelo, estado declarado das migrations e questões em aberto. Gerado pelo passo O; nunca editado à mão |
 
 **Fora de escopo:** gerar DDL, código ou migrações. Esta skill produz a **especificação**
-que a implementação (`spec-scaffold` e `spec-implement` — Fases 10-11) usa para escrever DDL/código real.
+que a implementação (`sn-scaffold` e `sn-implement`, no Speckit ServiceNow) usa para escrever os `Table()` e o código real.
 
 > **Regra de idioma:** Em `data-model.json`, todos os valores de string legíveis por humanos
 > (descrições, propósitos, notas) devem estar em **Português do Brasil**. Nomes de propriedades

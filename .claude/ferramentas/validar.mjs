@@ -1,6 +1,6 @@
 // Harness Elo v2 — Validação independente de uma task, com correção e revalidação. Casca de I/O.
 //
-// O passo G3 da `spec-implement`. Este script é uma máquina de estados e é ELE que decide: roda o
+// O passo G3 da `sn-implement`. Este script é uma máquina de estados e é ELE que decide: roda o
 // que é determinístico, escolhe os validadores, confere as evidências, calcula o veredito e diz a
 // próxima ação. O agente que orquestra só executa a ação impressa e chama `avancar` de novo — ele
 // não interpreta achado nenhum, e os recortes de código nunca passam pelo contexto dele.
@@ -44,7 +44,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { parsearDiff, arquivoNovo, linhasAcrescentadas, renderizar, linhasMudadas } from './validacao/diff.mjs';
 import { localizarTask, perguntasDeNegocio, mensagensDeErro, temRegraDeNegocio } from './validacao/task.mjs';
-import { classificar, escolherDimensoes } from './validacao/roteador.mjs';
+import { classificar, escolherDimensoes, ehDoAppServiceNow } from './validacao/roteador.mjs';
 import { rodarComando, checarMensagens, registroDeBase } from './validacao/deterministico.mjs';
 import { conferirEvidencia, validarResultado, MINIMO_TRECHO } from './validacao/conferencia.mjs';
 import { consolidar } from './validacao/consolidar.mjs';
@@ -76,6 +76,14 @@ export const CLASSES_POR_DIMENSAO = {
   performance: ['codigo'],
   observabilidade: ['codigo'],
   'rules-tecnicas': ['codigo', 'estilo'],
+  // Só os arquivos do app escopado (ver `CAMINHOS_POR_DIMENSAO`): metadado Fluent, script de servidor
+  // e o `now.config.json`, que é `outro` para o `classificar`.
+  'escopo-app': ['codigo', 'config', 'outro'],
+};
+
+/** Recorte por caminho, além da classe. A dimensão sem entrada aqui lê todo arquivo da classe. */
+export const CAMINHOS_POR_DIMENSAO = {
+  'escopo-app': ehDoAppServiceNow,
 };
 
 /** As dimensões que respondem uma verificação por pergunta da task. */
@@ -468,7 +476,8 @@ function prepararValidacao(estado, dimensoes, { par, perguntas, mudancas }, { in
   estado.incremental = {};
   for (const dimensao of dimensoes) {
     const classes = CLASSES_POR_DIMENSAO[dimensao];
-    let relevantes = mudancas.filter((m) => !m.removido && classes.includes(classificar(m.arquivo)));
+    const caminhoServe = CAMINHOS_POR_DIMENSAO[dimensao] || (() => true);
+    let relevantes = mudancas.filter((m) => !m.removido && classes.includes(classificar(m.arquivo)) && caminhoServe(m.arquivo));
     let perguntasDaDimensao = DIMENSOES_COM_PERGUNTAS.includes(dimensao) ? perguntas : [];
     let revalidacao = null;
     if (correcao) {
@@ -792,7 +801,7 @@ function alteradosNoCodigo(repo) {
 }
 
 /**
- * `linha-de-base` — roda os comandos do projeto ANTES de a task escrever código (E1 da `spec-implement`)
+ * `linha-de-base` — roda os comandos do projeto ANTES de a task escrever código (E1 da `sn-implement`)
  * e grava status e linhas de falha. É o script que roda, com o mesmo shell e a mesma normalização do
  * G3: um JSON escrito à mão pelo agente não teria a mesma régua.
  *
@@ -869,12 +878,12 @@ function limparTrabalho(trabalho, estado) {
   if (dentroDe(padrao, trabalho) || existsSync(caminhoEstado(trabalho))) rmSync(trabalho, { recursive: true, force: true });
 }
 
-/** A rule de frontend Next.js vale? `--regras-frontend sim|nao` decide; `auto` (padrão) lê as rules. */
+/** A rule de tela do harness (`servicenow-ui.md`) vale? `--regras-frontend sim|nao` decide; `auto` (padrão) lê as rules. */
 function decidirRegrasFrontend(opcao) {
   const o = String(opcao || 'auto').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (o === 'sim' || o === 'nao') return { frontendNext: o === 'sim', regrasFrontend: `${o === 'sim' ? 'em vigor' : 'desligadas'} (--regras-frontend ${o})` };
   const emVigor = regrasFrontendNextEmVigor(DISCO_DO_HARNESS);
-  return { frontendNext: emVigor, regrasFrontend: `${emVigor ? 'em vigor' : 'desligadas'} (auto: ${emVigor ? 'rule de frontend Next.js do harness, sem rule do projeto que a contradiga' : 'sem a rule de frontend Next.js, ou com rule de frontend do projeto que não é Next.js'})` };
+  return { frontendNext: emVigor, regrasFrontend: `${emVigor ? 'em vigor' : 'desligadas'} (auto: ${emVigor ? 'rule de tela ServiceNow do harness, sem rule do projeto que a contradiga' : 'sem a rule de tela ServiceNow do harness, ou com rule de interface do projeto que não é ServiceNow'})` };
 }
 
 export function iniciar(op, raiz) {
@@ -1067,7 +1076,8 @@ function revalidarRodada(estado, ctx = levantar(estado)) {
     ...(estado.ultimoItens || []).flatMap((i) => i.dimensoes || []),
   ]);
   const dimensoes = estado.dimensoes.filter((d) => abertas.has(d)
-    || estado.mudadosNaRodada.some((p) => CLASSES_POR_DIMENSAO[d].includes(classificar(p))));
+    || estado.mudadosNaRodada.some((p) => CLASSES_POR_DIMENSAO[d].includes(classificar(p))
+      && (CAMINHOS_POR_DIMENSAO[d] || (() => true))(p)));
   if (!dimensoes.length) return semValidador();
   return prepararValidacao(estado, dimensoes, ctx, { incremental: true });
 }

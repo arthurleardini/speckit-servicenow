@@ -8,14 +8,14 @@ import { spawnSync } from 'node:child_process';
 
 import { parsearDiff, arquivoNovo, renderizar, linhasAcrescentadas, linhasMudadas, desaspar } from './validacao/diff.mjs';
 import { localizarTask, perguntasDeNegocio, mensagensDeErro } from './validacao/task.mjs';
-import { classificar, escolherDimensoes, DIMENSOES } from './validacao/roteador.mjs';
+import { classificar, escolherDimensoes, DIMENSOES, ehDoAppServiceNow } from './validacao/roteador.mjs';
 import { fragmentos, checarMensagens, rodarComando } from './validacao/deterministico.mjs';
 import { conferirEvidencia, validarResultado, semMoldura, mascarar, trechoSignificativo } from './validacao/conferencia.mjs';
 import { consolidar, agruparParaCorrecao, chaveDe } from './validacao/consolidar.mjs';
 import { violacoes, mudadosEntre } from './validacao/guarda.mjs';
 import { decidir, juntarLotes, resolvidasEntre } from './validacao/ciclo.mjs';
 import { montarLotes, textoParaValidador, textoParaCorretor } from './validacao/entrada.mjs';
-import { secoes, trechosDeRules, LIMITE_TRECHOS, regrasFrontendNextEmVigor } from './validacao/rules.mjs';
+import { secoes, trechosDeRules, LIMITE_TRECHOS, regrasFrontendNextEmVigor, regrasUiEmVigor } from './validacao/rules.mjs';
 import { varrer, lerSemgrep, lerGitleaks, soNasLinhasNovas } from './validacao/varredura.mjs';
 import { iniciar, avancar, lerOpcoes, leitorDoRepo, procurarNoPath, rodarExternas, fotografia } from './validar.mjs';
 import { ZONA_IMUTAVEL } from '../hooks/kit.mjs';
@@ -101,11 +101,38 @@ test('mudança só de estilo roda só rules técnicas, e toda dimensão dispensa
 });
 
 test('código com consulta e rota liga performance e observabilidade', () => {
-  const { rodar } = escolherDimensoes({
+  const { rodar, dispensadas } = escolherDimensoes({
     temRegras: true,
     arquivos: [{ arquivo: 'src/pedido.repository.ts', classe: 'codigo', acrescentadas: 'router.post("/x", h); db.query("select 1")' }],
   });
-  assert.deepEqual(rodar.map((r) => r.dimensao).sort(), [...DIMENSOES].sort());
+  assert.deepEqual(rodar.map((r) => r.dimensao).sort(), DIMENSOES.filter((d) => d !== 'escopo-app').sort());
+  assert.deepEqual(dispensadas.map((d) => d.dimensao), ['escopo-app'], 'fora do app ServiceNow, o validador de escopo não roda');
+});
+
+// Fork Speckit ServiceNow (item 32): Glide e gs.* ligam performance e observabilidade, e o app escopado
+// liga o validador de escopo.
+test('roteador: GlideRecord/GlideAggregate ligam performance, gs.* liga observabilidade, app/src liga escopo-app', () => {
+  const br = (acrescentadas, arquivo = 'app/src/server/qualificar.js') => escolherDimensoes({
+    temRegras: false, arquivos: [{ arquivo, classe: 'codigo', acrescentadas }],
+  }).rodar.map((r) => r.dimensao);
+  assert.ok(br("var gr = new GlideRecord('x_2326104_cob_debito'); gr.query();").includes('performance'));
+  assert.ok(br("var ga = new GlideAggregate('x');").includes('performance'));
+  assert.ok(br('while (gr.next()) {}').includes('performance'));
+  assert.ok(br("gs.error('falha ao publicar versão');").includes('observabilidade'));
+  assert.ok(br("gs.info('x');").includes('observabilidade'));
+  assert.ok(!br('var a = 1;').includes('observabilidade'));
+  assert.ok(br('var a = 1;').includes('escopo-app'));
+  assert.ok(br('var a = 1;', 'src/fluent/tables/debito.now.ts').includes('escopo-app'), '`--repo app`: caminho sem o app/');
+  assert.ok(!br('var a = 1;', 'src/lib/a.ts').includes('escopo-app'));
+  assert.equal(ehDoAppServiceNow('app/now.config.json'), true);
+  assert.equal(ehDoAppServiceNow('app/src/fluent/tests/US-1.now.ts'), true);
+  assert.equal(ehDoAppServiceNow('outputs/spec/tasks.json'), false);
+});
+
+test('G3: o validador de escopo lê só os arquivos do app', () => {
+  assert.deepEqual(V.CAMINHOS_POR_DIMENSAO['escopo-app']('app/src/fluent/acl.now.ts'), true);
+  assert.deepEqual(V.CAMINHOS_POR_DIMENSAO['escopo-app']('src/pedido.ts'), false);
+  assert.ok(V.CLASSES_POR_DIMENSAO['escopo-app'].includes('outro'), 'now.config.json é `outro` para o classificar');
 });
 
 // ————————————————————————————— determinístico —————————————————————————————
@@ -517,12 +544,12 @@ test('fixture: as seis dimensões rodam e o determinístico acha exatamente o qu
   for (const v of acao.agentes) assert.ok(!/defeito|plantad|N\+1|propósito/i.test(readFileSync(v.entrada, 'utf8')), v.tipo);
 });
 
-// A `spec-implement` é skill do kit, e a próxima entrega dele chega por merge de três pontas. Sem este
+// A `sn-implement` é cópia adaptada da `spec-implement` do kit, e a próxima entrega do kit chega por merge de três pontas. Sem este
 // teste, um merge descuidado apaga o G3 em silêncio e a skill volta a mover a task sem validação.
-test('a spec-implement chama o validar.mjs no passo G3, antes do H, com os três códigos', () => {
-  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/spec-implement/SKILL.md', import.meta.url)), 'utf8');
+test('a sn-implement chama o validar.mjs no passo G3, antes do H, com os três códigos', () => {
+  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/sn-implement/SKILL.md', import.meta.url)), 'utf8');
   const g3 = skill.indexOf('## G3 — Validação independente');
-  const h = skill.indexOf('## H — Update Azure DevOps');
+  const h = skill.indexOf('## H —');
   assert.ok(g3 > 0 && g3 < h, 'a seção G3 existe e vem antes do H');
   assert.match(skill, /node \.claude\/ferramentas\/validar\.mjs iniciar/);
   assert.match(skill, /node \.claude\/ferramentas\/validar\.mjs avancar/);
@@ -571,7 +598,7 @@ test('trechosDeRules: rule do maquinário (`harness-*`) na pasta de rules do pro
   // coincide com o `harness-frontend.md` acima, e o conteúdo dele passa a ser este).
   const comHarness = discoFalso({
     '.claude/rules/harness-frontend.md': '## MUST NOT (lista compacta)\nfetch na UI',
-    '.claude/rules/harness/frontend.md': '# F\nNext.js',
+    '.claude/rules/harness/servicenow-ui.md': '# F\nNext.js',
   });
   assert.equal(regrasFrontendNextEmVigor(comHarness), true,
     'a rule de frontend do harness não conta como rule de frontend do projeto');
@@ -581,7 +608,7 @@ test('trechosDeRules: segurança leva os vetores e as camadas A-C, E-G; rules t�
   const disco = discoFalso({
     '.claude/references/seguranca/vetores.md': '# Vetores\nIDOR e afins',
     '.claude/rules/harness/security.md': '## Camada B — Acesso\nfiltra pelo dono\n## Camada D — Cripto\nAES',
-    '.claude/rules/harness/frontend.md': '## MUST NOT (lista compacta)\nfetch na UI\n## Stack\nNext',
+    '.claude/rules/harness/servicenow-ui.md': '## MUST NOT (lista compacta)\nfetch na UI\n## Stack\nNext',
     '.claude/rules/arquitetura.md': '## Visão\nx\n## Anti-patterns\nGod service',
   });
   const seg = trechosDeRules({ dimensoes: ['seguranca'], arquivos: ['src/a.js'], ...disco });
@@ -611,7 +638,8 @@ test('trechosDeRules contra as rules reais do harness: os títulos que o recorte
   assert.ok(!/Camada D —|Camada H —/.test(seg));
   const front = trechosDeRules({ dimensoes: ['rules-tecnicas'], arquivos: ['src/a.tsx'], ...DISCO_REAL });
   assert.match(front, /MUST NOT \(lista compacta\)/);
-  assert.match(front, /AppError/);
+  assert.match(front, /Comportamento do form/);
+  assert.match(front, /Ações de tela/);
   assert.ok(seg.length <= LIMITE_TRECHOS + 200 && front.length <= LIMITE_TRECHOS + 200);
 });
 
@@ -742,14 +770,14 @@ test('ciclo: verificação negativa de segurança é ignorada e o ciclo termina 
 const novo = (arquivo, texto) => arquivoNovo(arquivo, texto);
 const regrasDe = (achados) => achados.map((a) => `${a.regra}@${a.evidencia.arquivo}:${a.evidencia.linha}`).sort();
 
-test('varredura: acha na fixture, sem modelo, os seis problemas que não são de regra de negócio', () => {
+// Fork Speckit ServiceNow: as duas regras de tela Next.js (`fetch-na-tela`, `formato-no-jsx`) saíram com
+// a `frontend.md`; o componente React da fixture deixou de ter achado determinístico.
+test('varredura: acha na fixture, sem modelo, os problemas que não são de regra de negócio', () => {
   const ler = (rel) => readFileSync(join(FIXTURE, 'entrega', rel), 'utf8');
   const achados = varrer(['src/pedidos/pedido.service.js', 'src/components/ResumoPedido.jsx', 'test/pedido.service.test.js']
     .map((rel) => novo(rel, ler(rel))));
   assert.deepEqual(regrasDe(achados), [
     'erro-engolido@src/pedidos/pedido.service.js:13',
-    'fetch-na-tela@src/components/ResumoPedido.jsx:6',
-    'formato-no-jsx@src/components/ResumoPedido.jsx:9',
     'io-no-laco@src/pedidos/pedido.service.js:6',
     'pii-no-log@src/pedidos/pedido.service.js:4',
   ]);
@@ -848,7 +876,7 @@ test('fixture: o iniciar roda a varredura e conta para cada validador o que já 
   cpSync(join(FIXTURE, 'entrega'), dir, { recursive: true });
   const acao = iniciar({ task: 'TASK-FIX-001', repo: dir, 'sem-externas': 'true' }, dir);
   const estado = JSON.parse(readFileSync(join(dir, 'outputs', 'spec', 'validacao', 'TASK-FIX-001', 'estado.json'), 'utf8'));
-  assert.equal(estado.achadosDeterministicos.length, 5);
+  assert.equal(estado.achadosDeterministicos.length, 3, 'as duas regras de tela Next.js saíram do fork');
   const seguranca = readFileSync(acao.agentes.find((a) => a.tipo === 'validador-seguranca').entrada, 'utf8');
   assert.match(seguranca, /## Já achado por código \(não repita\)/);
   assert.match(seguranca, /src\/pedidos\/pedido\.service\.js:4/);
@@ -1368,18 +1396,43 @@ test('varredura, io-no-laco: ler o stream pedaço a pedaço não é consulta por
   assert.deepEqual(regrasEm('src/a.js', ['for (const id of ids) {', '  const p = await buscarPedido(id);', '}'].join('\n')), ['io-no-laco']);
 });
 
-test('varredura: fetch-na-tela e formato-no-jsx desligam quando a rule de frontend Next não está em vigor', () => {
-  const tela = ['export function T() {', "  fetch('/api/x');", '  return <p>{v.toFixed(2)}</p>;', '}'].join('\n');
-  assert.deepEqual(varrer([novo('src/components/T.jsx', tela)]).map((a) => a.regra), ['fetch-na-tela', 'formato-no-jsx']);
-  assert.deepEqual(varrer([novo('src/components/T.jsx', tela)], { frontendNext: false }).map((a) => a.regra), []);
+// Fork Speckit ServiceNow (item 11): as regras de tela da varredura são as da `servicenow-ui.md`, sobre
+// `.now.ts` e `app/src/`. Desligam juntas quando a rule de tela do harness não está em vigor.
+test('varredura: regras de .now.ts (sys_id fixo, URL de instância, fora da Core UI) e o desligamento', () => {
+  const ui = [
+    "export const t = Record({ $id: Now.ID['x'], table: 'sys_user_group', data: { parent: '0123456789abcdef0123456789abcdef' } })",
+    "const url = 'https://dev493801.service-now.com/x_2326104_cob_debito.do'",
+    "Workspace({ $id: Now.ID['ws'], title: 'Cobrança' })",
+  ].join('\n');
+  assert.deepEqual(varrer([novo('app/src/fluent/ui/tela.now.ts', ui)]).map((a) => a.regra),
+    ['now-sysid-fixo', 'now-url-instancia', 'now-fora-da-core-ui']);
+  assert.deepEqual(varrer([novo('app/src/fluent/ui/tela.now.ts', ui)], { frontendNext: false }).map((a) => a.regra), []);
+  // Com `--repo app` os caminhos chegam sem o `app/`.
+  assert.deepEqual(varrer([novo('src/server/x.js', "var u = 'https://x.service-now.com';")]).map((a) => a.regra), ['now-url-instancia']);
+  // O keys.ts é gerado pelo SDK e guarda sys_id por desenho; fora do app, a regra não vale.
+  assert.deepEqual(varrer([novo('app/src/fluent/generated/keys.ts', "a: { table: 't', id: '0123456789abcdef0123456789abcdef' }")]).map((a) => a.regra), []);
+  assert.deepEqual(varrer([novo('src/lib/hash.ts', "const h = '0123456789abcdef0123456789abcdef'")]).map((a) => a.regra), []);
+  // `Now.ID` não é sys_id fixo.
+  assert.deepEqual(varrer([novo('app/src/fluent/seed/a.now.ts', "Record({ $id: Now.ID['TEL-01_registro_demo'], table: 'x_2326104_cob_debito', data: {} })")]), []);
 });
 
-test('regrasFrontendNextEmVigor: em vigor com a rule do harness; desliga com rule de frontend do projeto que não é Next', () => {
-  const harness = { '.claude/rules/harness/frontend.md': '# Frontend — Next.js App Router' };
-  assert.equal(regrasFrontendNextEmVigor(discoFalso(harness)), true);
-  assert.equal(regrasFrontendNextEmVigor(discoFalso({})), false, 'sem a rule, nada a impor');
-  assert.equal(regrasFrontendNextEmVigor(discoFalso({ ...harness, '.claude/rules/frontend.md': '# Frontend\nAngular 18 com NgRx' })), false);
-  assert.equal(regrasFrontendNextEmVigor(discoFalso({ ...harness, '.claude/rules/frontend.mdc': '# Frontend\nNext.js 15, App Router' })), true);
+test('regrasUiEmVigor: em vigor com a rule de tela do harness; desliga com rule de interface do projeto que não é ServiceNow', () => {
+  const harness = { '.claude/rules/harness/servicenow-ui.md': '# Interface ServiceNow — Core UI clássica' };
+  assert.equal(regrasUiEmVigor(discoFalso(harness)), true);
+  assert.equal(regrasFrontendNextEmVigor, regrasUiEmVigor, 'o nome da base continua importável');
+  assert.equal(regrasUiEmVigor(discoFalso({})), false, 'sem a rule, nada a impor');
+  assert.equal(regrasUiEmVigor(discoFalso({ ...harness, '.claude/rules/frontend.md': '# Frontend\nAngular 18 com NgRx' })), false);
+  assert.equal(regrasUiEmVigor(discoFalso({ ...harness, '.claude/rules/frontend.mdc': '# Frontend\nServiceNow Core UI, Fluent' })), true);
+});
+
+test('trechosDeRules: rules técnicas de um .now.ts levam as seções da servicenow-ui.md', () => {
+  const disco = discoFalso({
+    '.claude/rules/harness/servicenow-ui.md': '# I\n## Alvo\nUI16\n## Form\nseções de uma ou duas colunas\n## MUST NOT (lista compacta)\nWorkspace\n## Navegação\nmenu',
+  });
+  const t = trechosDeRules({ dimensoes: ['rules-tecnicas'], arquivos: ['src/fluent/ui/tela.now.ts'], ...disco });
+  assert.match(t, /duas colunas/);
+  assert.match(t, /Workspace/);
+  assert.ok(!/menu/.test(t), 'só as seções de regra entram');
 });
 
 test('ciclo: --regras-frontend nao desliga as duas regras de tela na fixture', () => {
@@ -1534,8 +1587,8 @@ test('13.1 — linha de base de outro commit, de outro repositório ou de outro 
   assert.throws(() => iniciar({ task: 'TASK-1', repo: dir, ...SEM, 'linha-de-base': join(dir, 'nao-existe.json') }, dir), /linha de base/);
 });
 
-test('13.1 e 13.9 — a spec-implement tira a linha de base antes do código e passa build e linha de base ao G3', () => {
-  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/spec-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
+test('13.1 e 13.9 — a sn-implement tira a linha de base antes do código e passa build e linha de base ao G3', () => {
+  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/sn-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
   assert.match(skill, /node \.claude\/ferramentas\/validar\.mjs linha-de-base --task <TASK-ID>/);
   assert.ok(skill.indexOf('validar.mjs linha-de-base') < skill.indexOf('# FASE 3 (passo F)'), 'a linha de base vem antes de qualquer código');
   assert.match(skill, /--linha-de-base <arquivo>/);
@@ -1637,9 +1690,9 @@ test('13.4 — parar: a ação diz o que fazer e lista os arquivos que o correto
   assert.deepEqual(lerRelatorio(dir).editadosPeloCorretor, ['src/log.js']);
 });
 
-test('13.4 — o G3 da spec-implement diz o que fazer em parar: comentário, devolutiva em modo falha, diff do corretor, lote', () => {
-  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/spec-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
-  const g3 = skill.slice(skill.indexOf('## G3 — Validação independente'), skill.indexOf('## H — Update Azure DevOps'));
+test('13.4 — o G3 da sn-implement diz o que fazer em parar: comentário, devolutiva em modo falha, diff do corretor, lote', () => {
+  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/sn-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
+  const g3 = skill.slice(skill.indexOf('## G3 — Validação independente'), skill.indexOf('## H —'));
   const linha = g3.split('\n').find((l) => l.trim().startsWith('| `parar` |')) || '';
   assert.match(linha, /comente no work item/i);
   assert.match(linha, /devolutiva do J em modo falha/);
@@ -1753,13 +1806,10 @@ test('13.6 — io-no-laco: paginação por cursor, retry e laço sem chaves não
   assert.deepEqual(regrasEm('src/x/d.ts', 'for (let i = 0; i < ids.length; i++) {\n  const p = await buscarPedido(ids[i]);\n}'), ['io-no-laco']);
 });
 
-test('13.6 — fetch-na-tela e formato-no-jsx: só em .tsx/.jsx; rota, controller e view model ficam de fora', () => {
+test('13.6 — as regras de tela Next.js saíram do fork: fetch e formatação em .tsx não são achado', () => {
   assert.deepEqual(regrasEm('app/Controllers/Http/PedidosController.ts', 'const r = await axios.get(urlEstoque);'), []);
-  assert.deepEqual(regrasEm('src/app/routes/pedidos.js', 'const r = await fetch(urlEstoque);'), []);
-  assert.deepEqual(regrasEm('app/auth/callback/route.ts', "const tok = await fetch(TOKEN_URL, { method: 'POST' });"), []);
-  assert.deepEqual(regrasEm('src/components/pedido/pedido.viewmodel.ts', "export const toVm = (p: Pedido): Vm<Pedido> => ({ data: new Intl.DateTimeFormat('pt-BR').format(p.data) });"), []);
-  assert.deepEqual(regrasEm('app/pedidos/page.tsx', "const r = await fetch('/api/pedidos');"), ['fetch-na-tela']);
-  assert.deepEqual(regrasEm('src/components/Lista.tsx', '  return <td>{item.preco.toFixed(2)}</td>;'), ['formato-no-jsx']);
+  assert.deepEqual(regrasEm('app/pedidos/page.tsx', "const r = await fetch('/api/pedidos');"), []);
+  assert.deepEqual(regrasEm('src/components/Lista.tsx', '  return <td>{item.preco.toFixed(2)}</td>;'), []);
 });
 
 // 13.7 — a correção que a varredura pede cabe na guarda; dependência é decisão humana
@@ -1826,7 +1876,7 @@ test('13.10 — o relatório e o SKILL dizem que MÉDIO e BAIXO não são avalia
   assert.equal(rel.medioEBaixo.avaliadosNoG3, false);
   assert.match(rel.medioEBaixo.quemCobre, /auditoria-de-us/);
   assert.ok(!('ignorados' in rel), 'nada de contador que parece "zero achados médios"');
-  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/spec-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
+  const skill = readFileSync(fileURLToPath(new URL('../../.claude/skills/sn-implement/SKILL.md', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
   assert.match(skill, /MÉDIO e BAIXO \*\*não são avaliados no G3\*\*/);
 });
 
@@ -1927,4 +1977,22 @@ test('D55 — io-no-laco: script de migração/seed e leitura de arquivo por ite
   // O mesmo laço fora de migração/seed continua pegando, e a leitura do arquivo não esconde a consulta.
   assert.deepEqual(regrasEm('src/pedidos/importar.js', seed), ['io-no-laco']);
   assert.deepEqual(regrasEm('src/pedidos/importar2.js', "for (const nome of nomes) {\n  const sql = await readFile(nome, 'utf8');\n  await db.query(sql);\n}"), ['io-no-laco']);
+});
+
+// Fork Speckit ServiceNow (item 32): o validador de escopo carrega as 21 regras da seção 2.12 do
+// catálogo RN-SN, e os validadores herdados ganham o checklist ServiceNow.
+test('validador-escopo-app traz as 21 regras RN-SN da seção 2.12, e os outros o checklist ServiceNow', { skip: SEM_AGENTES }, () => {
+  const ler = (n) => readFileSync(join(DIR_AGENTES, `${n}.md`), 'utf8');
+  const escopo = ler('validador-escopo-app');
+  for (const n of [12, 20, 21, 23, 25, 27, 30, 31, 42, 43, 45, 61, 62, 63, 66, 67, 70, 71, 72, 75, 84]) {
+    assert.match(escopo, new RegExp(`\\*\\*RN-SN-${n}\\*\\*`), `RN-SN-${n}`);
+  }
+  assert.match(ler('validador-testes'), /positivo e negativo/);
+  assert.match(ler('validador-seguranca'), /GlideRecordSecure/);
+  assert.match(ler('validador-seguranca'), /CrossScopePrivilege/);
+  assert.match(ler('validador-performance'), /getRowCount/);
+  assert.match(ler('validador-performance'), /GlideAggregate/);
+  assert.match(ler('validador-observabilidade'), /gs\.error/);
+  assert.match(ler('validador-rules-tecnicas'), /servicenow-ui\.md/);
+  assert.match(ler('validador-rules-tecnicas'), /\.mdc/);
 });

@@ -56,7 +56,7 @@ Opções:
 Variáveis de ambiente:
   PIPELINE_OUTPUTS_DIR    override do diretório de outputs (padrão: outputs/ relativo ao cwd)
 
-Para publicar no Azure DevOps use spec-tasks-azure (npm run push).
+Para publicar no GitHub use sn-tasks-github (npm run publish, na raiz).
 
 Exemplos:
   npm run report

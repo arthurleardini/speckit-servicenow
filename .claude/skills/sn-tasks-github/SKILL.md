@@ -11,7 +11,7 @@ updated: "2026-11-24"
 
 # sn-tasks-github — Publicação do backlog no GitHub
 
-Extensão do projeto (design v0, decisão A4 e item 28). Segue o contrato do `spec-tasks-azure`:
+Extensão do projeto (design v0, decisão A4 e item 28). Segue o contrato do `spec-tasks-azure` (removida no fork, ver `ORIGEM.md`):
 gate de autossuficiência, `--dry-run`, `--change` e `--id-map`. A IA **não** monta payload nem chama
 a API à mão: quem publica é o `cli.mjs`.
 

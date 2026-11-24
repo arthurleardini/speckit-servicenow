@@ -14,7 +14,7 @@
 
 import {
   RAIZ_EXPLORE, RAIZ_SPEC, ARTEFATOS_DE_CONTRATO, LISTA_DE_ACRESCIMOS, inventariar,
-  MARCADOR_CONGELAMENTO, DIR_AUDITORIAS, ARTEFATOS_PROTOTIPO,
+  MARCADOR_CONGELAMENTO, DIR_AUDITORIAS, SCREENS_MANIFEST,
 } from '../hooks/kit.mjs';
 // `RELATORIO_REVISAO` vem de `fecho-explore.mjs`, não de `kit.mjs`: é onde o `revisao.json` tem
 // nome próprio (ver o JSDoc dele ali — "o relatório que prova que alguém rodou o revisao.mjs").
@@ -27,16 +27,15 @@ import { RELATORIO_REVISAO } from '../hooks/fecho-explore.mjs';
  * DERIVADOS das constantes acima, nunca escritos à mão: fronteira/nome escrito duas vezes diverge
  * (é a lição que `CLASSE_ID` já pagou em `kit.mjs`, quatro rodadas de correção).
  *
- * `screens-manifest.json` não tem constante própria em lugar nenhum — só aparece dentro de
- * `ARTEFATOS_PROTOTIPO`, ao lado de `prototype.md` e `design-system.md`, que SÃO contrato. O
- * filtro abaixo separa os dois: o único item de `ARTEFATOS_PROTOTIPO` que não é contrato é
- * `screens-manifest.json`.
+ * `screens-manifest.json` tem constante própria no `kit.mjs` (`SCREENS_MANIFEST`) desde que o
+ * protótipo HTML saiu (Speckit ServiceNow, decisão A2): o `sn-scaffold` o grava e o fecho do
+ * Explore o lê.
  */
 const semRaizSpec = (c) => (c.startsWith(`${RAIZ_SPEC}/`) ? c.slice(RAIZ_SPEC.length + 1) : c);
 const NOME_MARCADOR_CONGELAMENTO = semRaizSpec(MARCADOR_CONGELAMENTO);
 const NOME_DIR_AUDITORIAS = semRaizSpec(DIR_AUDITORIAS);
 const NOME_RELATORIO_REVISAO = semRaizSpec(RELATORIO_REVISAO);
-const [NOME_SCREENS_MANIFEST] = ARTEFATOS_PROTOTIPO.filter((a) => !ARTEFATOS_DE_CONTRATO.spec.includes(a));
+const NOME_SCREENS_MANIFEST = SCREENS_MANIFEST;
 
 /**
  * Este ignorado é estado de máquina do PRÓPRIO harness ou do gate — não do kit?

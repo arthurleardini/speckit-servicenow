@@ -286,7 +286,7 @@ test('wiring — Write na WHITELIST do Explore, em outputs/spec/, continua liber
   // A contrapartida do teste acima, e o que impede que ele seja lido como "toda escrita em
   // outputs/spec/ agora é negada". A `spec-ingest` do Plan roda ANTES do gate, de propósito:
   // escrever `context-map.md` em delta é não-destrutivo e re-executável.
-  for (const f of ['sync-log.md', 'context-map.md', 'prototype.md', 'screens/login.png']) {
+  for (const f of ['sync-log.md', 'context-map.md', 'data-model.previa.json', 'screens/login.png']) {
     const r = decidir(escrever(`${RAIZ}/outputs/spec/${f}`, 'x'));
     assert.equal(r.acao, 'allow', `${f}: ${r.motivo || ''}`);
     assert.deepEqual(r.falhas, []);
@@ -354,17 +354,17 @@ test('wiring — com a cadeia satisfeita, quem nega o `spec-product` é o fecho'
 test('wiring — a cadeia reconhece a skill servida por plugin', () => {
   // Skill servida por plugin é invocada como `plugin:skill` e chega PREFIXADA — `superpowers:` e
   // `anthropic-skills:` são prefixos vivos nesta máquina. Sem o `nomeDaSkill` do kit na casca do
-  // `cadeia`, `algum-plugin:spec-implement` não casa a tabela e a trava inteira fica decorativa.
-  const r = decidir({ tool_name: 'Skill', tool_input: { skill: 'algum-plugin:spec-implement' } });
+  // `cadeia`, `algum-plugin:sn-implement` não casa a tabela e a trava inteira fica decorativa.
+  const r = decidir({ tool_name: 'Skill', tool_input: { skill: 'algum-plugin:sn-implement' } });
   assert.equal(r.acao, 'deny');
-  assert.match(r.motivo, /Cadeia bloqueada \(CADEIA-DEV-02\)/);
+  assert.match(r.motivo, /Cadeia bloqueada \(CADEIA-SN-04\)/);
   assert.match(r.motivo, /tasks\.json/);
 
   // E a forma NUA, que é a que a vendorização produz. As duas pontas: sem esta, apagar o corte de
   // prefixo continuaria vermelho, mas apagar a ENTRADA da tabela ficaria verde por metade.
-  const nu = decidir({ tool_name: 'Skill', tool_input: { skill: 'spec-implement' } });
+  const nu = decidir({ tool_name: 'Skill', tool_input: { skill: 'sn-implement' } });
   assert.equal(nu.acao, 'deny');
-  assert.match(nu.motivo, /Cadeia bloqueada \(CADEIA-DEV-02\)/);
+  assert.match(nu.motivo, /Cadeia bloqueada \(CADEIA-SN-04\)/);
   assert.match(nu.motivo, /tasks\.json/);
 });
 

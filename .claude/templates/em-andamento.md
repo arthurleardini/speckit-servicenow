@@ -2,7 +2,7 @@
 
 > **Marcador efêmero de US pausada.** Existe **se e somente se** há uma user story no meio.
 > Ausência é o estado normal — não há histórico, nem `us: nenhuma`, nem menção a US fechadas.
-> Quem **cria** é a skill `spec-implement`, na primeira task da US, com
+> Quem **cria** é a skill `sn-implement`, na primeira task da US, com
 > `node .claude/ferramentas/andamento.mjs abrir-us`, que copia este template e preenche o bloco
 > `estado:us` abaixo — não crie à mão.
 > Ao fechar a US (veredito APROVADA / APROVADA COM RESSALVAS), a skill `auditoria-de-us` **apaga**

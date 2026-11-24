@@ -20,8 +20,8 @@ updated: "2026-10-20"
 # spec-security-review — Revisão de Segurança do Backlog
 
 > **Posição no pipeline:** roda imediatamente após `spec-tasks` (Fase 8), antes de `spec-estimate`
-> ou `spec-scaffold`. Modifica `tasks.json` in-place — o arquivo permanece a única fonte de verdade
-> do backlog e pode ser publicado normalmente via `spec-tasks-azure` com as tasks de segurança incluídas.
+> ou `sn-scaffold`. Modifica `tasks.json` in-place — o arquivo permanece a única fonte de verdade
+> do backlog e pode ser publicado normalmente via `sn-tasks-github` com as tasks de segurança incluídas.
 
 ---
 
@@ -562,7 +562,7 @@ O `tasks.json` já contém as tasks SEC — pronto para os passos seguintes **se
 - Não executa ferramentas de DAST/SAST nem pentest ativo.
 - Não revisa código-fonte já implementado — isso é `spec-code-audit` (Fase 12, pós-implementação).
 - Não define o shape de Story/Task do backlog — o schema `tasks/v5.3` é propriedade da `spec-tasks`; esta skill só declara `class: "security"` e preenche os campos.
-- Não publica o backlog em ferramenta externa (`spec-tasks-azure` faz isso).
+- Não publica o backlog em ferramenta externa (`sn-tasks-github` faz isso).
 - Não estima prazo/custo das tasks SEC — apenas fornece `durationEstimatedDays` via `effortEstimate`; o forecast é da `spec-estimate`.
 - Não cria ou numera `GAP-XXX` — gaps de segurança viram tasks SEC-NNN ou entradas em "Findings não injetados", nunca `GAP-XXX`.
 
@@ -576,6 +576,6 @@ O `tasks.json` já contém as tasks SEC — pronto para os passos seguintes **se
 | `spec-data-model` | 6a | Provê `data-model.json` — identifica tabelas com PII para priorização de gaps |
 | `spec-api-contracts` | 6b | Provê `api-contracts.yaml` — mapeia endpoints sem auth/authz declarada |
 | `spec-estimate` | 7.5 | **Consome** o `tasks.json` já com as tasks SEC — esforço entra automaticamente via `durationEstimatedDays` |
-| `spec-tasks-azure` | 8 | Publica o backlog com as tasks SEC-NNN incluídas |
-| `spec-scaffold` | 9 | Considera dependências de segurança sinalizadas nas tasks SEC ao montar o scaffold |
+| `sn-tasks-github` | 9 | Publica o backlog com as tasks SEC-NNN incluídas |
+| `sn-scaffold` | 9 | Considera dependências de segurança sinalizadas nas tasks SEC ao montar o scaffold |
 | `spec-code-audit` | 11 | Verifica pós-implementação se cada task SEC foi efetivamente implementada (`tddTests.green`) |

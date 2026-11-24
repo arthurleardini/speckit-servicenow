@@ -57,10 +57,13 @@ test('Decisão 42: só as duas skills de renderização do upstream têm a varia
   // título «## Linguagem clara…» DENTRO dos marcadores, e não logo acima deles como nas outras. É
   // divergência do upstream, não nossa — o teste a nomeia e prova que, tirado o título, o bloco é o
   // canônico palavra por palavra.
+  //
+  // Fork ServiceNow (item 27): a spec-tasks-azure saiu; sobra uma variante CLI. As skills sn-*
+  // (extensões do projeto) carregam o bloco canônico.
   const canonico = blocoDe(skill('spec/SKILL.md'));
   const divergentes = todasAsSkills().filter((s) => blocoDe(skill(`${s}/SKILL.md`)) !== canonico);
-  assert.deepEqual(divergentes, ['spec-frame', 'spec-tasks-azure', 'spec-tasks-html']);
-  for (const s of ['spec-tasks-azure', 'spec-tasks-html']) {
+  assert.deepEqual(divergentes, ['spec-frame', 'spec-tasks-html']);
+  for (const s of ['spec-tasks-html']) {
     assert.match(blocoDe(skill(`${s}/SKILL.md`)), /variante CLI/);
   }
   const titulo = '## Linguagem clara — como escrever o que o humano vai ler (OBRIGATÓRIO)\n\n';
@@ -203,41 +206,44 @@ test('item 3: a description e o Papel dizem a mesma coisa que o E.0-K — o kern
   assert.match(t, /^description: >[\s\S]*?plano-de-seguranca\.md[\s\S]*?\n---/m);
   assert.match(t, /\*\*A fonte primária é o kernel\.\*\*/);
 });
+// ————————————————————————— Fork ServiceNow (item 27): as skills fora do alvo saíram —————————————————————————
+//
+// Os quatro testes do «item 5» (fidelidade Média da spec-prototype, Decisão 41) prendiam prosa de
+// uma skill que o fork removeu: a instância ServiceNow é o protótipo (design v0, A2). O que se
+// prende agora é a remoção e o substituto de cada uma.
 
+const REMOVIDAS = {
+  'spec-prototype': ['sn-scaffold', 'sn-capture'],
+  'spec-convert-prototype': ['sn-scaffold', 'sn-capture'],
+  'spec-scaffold': ['sn-scaffold'],
+  'spec-implement': ['sn-implement'],
+  'spec-tasks-azure': ['sn-tasks-github'],
+};
 
-// ————————————————————————————— Item 5 da §8: fidelidade Média sem src/ (Decisão 41) —————————————————————————————
-
-test('item 5: a linha Média do Padrão de Qualidade para de exigir rota e passa a exigir presença no Inventário', () => {
-  const t = skill('spec-prototype/SKILL.md');
-  const media = t.split(/\r?\n/).find((l) => /^\| \*\*Média\*\* \| Inventário completo/.test(l));
-  assert.ok(media, 'a linha Média do Padrão de Qualidade sumiu');
-  assert.doesNotMatch(media, /stub navegável/);
-  assert.doesNotMatch(media, /rota \+ título \+ esqueleto/);
-  assert.match(media, /`Status: stub`/);
-  assert.match(media, /sem escrever em `src\/`/);
+test('item 27: as cinco skills fora do alvo não existem, e cada substituta existe com SKILL.md', () => {
+  for (const [velha, novas] of Object.entries(REMOVIDAS)) {
+    assert.ok(!existsSync(join(DIR_SKILLS, velha)), `${velha} devia ter saído`);
+    for (const n of novas) assert.ok(existsSync(join(DIR_SKILLS, n, 'SKILL.md')), `falta ${n}/SKILL.md`);
+  }
 });
 
-test('item 5: a definição de `stub` deixa de prometer rota', () => {
-  const t = skill('spec-prototype/SKILL.md');
-  const def = t.split(/\r?\n/).find((l) => /^- \*\*Status:\*\* `gerada`/.test(l));
-  assert.ok(def);
-  assert.doesNotMatch(def, /rota existe/);
-  assert.match(def, /`stub` \(listada no Inventário, sem código/);
+test('item 27: o ORIGEM.md registra cada remoção', () => {
+  const origem = readFileSync(join(RAIZ, 'ORIGEM.md'), 'utf8');
+  for (const velha of Object.keys(REMOVIDAS)) {
+    assert.match(origem, new RegExp(`\\| \`\\.claude/skills/${velha}/\` \\|`), `${velha} sem linha na tabela de remoções`);
+  }
 });
 
-test('item 5: MEDIA_FIDELITY_NO_STUB cobra presença na tabela, não rota na navegação', () => {
-  const t = skill('spec-prototype/SKILL.md');
-  const v = t.split(/\r?\n/).find((l) => /^\| `MEDIA_FIDELITY_NO_STUB` \|/.test(l));
-  assert.ok(v);
-  assert.doesNotMatch(v, /rota inexistente/);
-  assert.match(v, /ausente da tabela do Inventário/);
-});
-
-test('item 5: o lado que venceu continua lá — Média é "sem src/" nas três linhas originais', () => {
-  const t = skill('spec-prototype/SKILL.md');
-  assert.match(t, /^\| \*\*Média \(Figma \/ mockup\)\*\* \|.*sem `src\/` \|$/m);
-  assert.match(t, /^\[ \] Média — prototype\.md com referências a frames \(Figma\/mockup\); sem código em src\//m);
-  assert.match(t, /^Se \*\*média\*\*:.*sem escrever em `src\/`\.$/m);
+test('item 29: a sn-implement traz o fluxo ServiceNow — explain, reinstall, atf, isenção por story e o G3 do app', () => {
+  const t = skill('sn-implement/SKILL.md');
+  assert.match(t, /now-sdk explain <tópico> --peek/);
+  assert.match(t, /npm run reinstall/);
+  assert.match(t, /npm run atf -- --story <STORY>/);
+  assert.match(t, /outputs\/spec\/auditorias\/_isencoes\/<STORY>-<tipo>\.md/);
+  assert.match(t, /<!-- gate:isencao-story -->/);
+  assert.match(t, /tipo: g3\|atf-form/);
+  assert.match(t, /--repo app --base <ref> --linha-de-base <arquivo> --cmd-build "npx now-sdk build"/);
+  assert.ok(t.indexOf('## G2b') < t.indexOf('## G3 — Validação independente'), 'a tabela por tipo de story vem antes do G3');
 });
 
 // ————————————————————————————— Item 10 da §8: o cabeçalho da Âncora —————————————————————————————

@@ -17,7 +17,7 @@
 | 1 | spec-ingest | context-map.md, discovery-document.md | `outputs/spec/` |
 | 2 | spec-legacy | legacy.md (+ domains/), architecture.md, legacy-analysis.md, threat-model.md, signals/ (sinais determinísticos do Passo 0.7) | `outputs/spec/` |
 | 3 | spec-benchmark | benchmark.md | `outputs/spec/` |
-| 4 | spec-prototype | prototype.md, design-system.md, src/, screens-manifest.json, screens/`<TEL-ID>`.png | `outputs/spec/` |
+| 4 | spec-data-model --previa + sn-scaffold + sn-capture | data-model.previa.json, screens-manifest.json, screens/`<TEL-ID>`.png (a instância é o protótipo) | `outputs/spec/` |
 | 5 | spec-product | modules.md, product-vision.md, business-rules.md, requirements.md, product-requirements.md, **flow-map.md** (gate FATAL `FLOWMAP_VALID`; omitido só em `FLOWMAP_SKIPPED`) | `outputs/spec/` |
 | iter | spec-iterate | gaps.md, gaps-answers.md, sync-log.md, screens-manifest.json + screens/ (só quando a colheita runtime/estático gera o manifesto que o protótipo não emitiu) | `outputs/spec/` |
 | 5.5 | spec-tech-rules | tech-rules/*.mdc (fonte) + cópias em `.cursor/rules/` `.claude/rules/` | `outputs/spec/tech-rules/` |
@@ -30,9 +30,9 @@
 | 7b | spec-security-review | security-review.md (+ injeção in-place em tasks.json) | `outputs/spec/` |
 | 7.5 | spec-estimate | estimate-report.md | `outputs/spec/` |
 | 7c | spec-tasks-html | report HTML das tasks | `outputs/spec/` |
-| 8 | spec-tasks-azure | id-map.json | `outputs/spec/` |
-| 9 | spec-scaffold | código base | repo de implementação |
-| 10 | spec-implement | código + spec_story.md por módulo | repo de implementação |
+| 8 | sn-tasks-github | id-map.json (`{ number, id }` por logical-id) | `outputs/spec/` |
+| 9 | sn-scaffold | app Fluent (`app/src/fluent/`), `screens-manifest.json` | `app/`, `outputs/spec/` |
+| 10 | sn-implement | `.now.ts` + `Test()` ATF + recibo `auditorias/atf/<STORY>.json` + `app/spec_story.md` | `app/`, `outputs/spec/` |
 | 11 | spec-code-audit | code-audit.md | `outputs/spec/` |
 | 12 | spec-status-report | status/status-report.html, status/status-data.json, status/tests-raw/, status/executive-summary.md (opcional), status/azure-snapshot.json (opcional) | `outputs/spec/status/` |
 | doc | spec-report | report/product-discovery-kit.html | `outputs/spec/report/` |

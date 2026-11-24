@@ -1,6 +1,6 @@
 // Harness Elo v2 — Andamento da entrega: dependências e status da task, e o marcador da US. Casca de I/O.
 //
-// Três passos da `spec-implement` que o agente fazia de cabeça — e que o teste ponta a ponta de
+// Três passos da `sn-implement` (antes `spec-implement`) que o agente fazia de cabeça — e que o teste ponta a ponta de
 // 2026-10-21 pegou esquecidos (D48 e D49):
 //
 //   node .claude/ferramentas/andamento.mjs conferir --task TASK-014 [--tasks outputs/spec/tasks.json]

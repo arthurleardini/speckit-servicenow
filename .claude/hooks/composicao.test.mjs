@@ -41,6 +41,7 @@ import { execFileSync } from 'node:child_process';
 import { criarRegistro, despachar, IO_REAL, REGISTRO } from './pretooluse.mjs';
 import {
   RAIZ_EXPLORE, RAIZ_SPEC, DIR_AUDITORIAS, DIR_ISENCOES, MARCADOR_CONGELAMENTO, montarKickoff,
+  montarLinhaSecaoA, CABECALHO_SECAO_A,
 } from './kit.mjs';
 import { montarCarimbo } from './zonas.mjs';
 import { coletar } from './estado.mjs';
@@ -327,16 +328,30 @@ function preProjeto(prefixo, faltando = [], sub = '') {
   for (const [nome, texto] of Object.entries(DOCS_BONS)) {
     por(`${RAIZ_EXPLORE}/${nome}`, texto, 1_700_000_500);
   }
-  por(`${RAIZ_SPEC}/sync-log.md`, '# Sync Log\n\n' + KICKOFF + '\n', 1_700_000_000);
   por(`${RAIZ_SPEC}/context-map.md`, '# Context Map\n\nF-001 — fato ancorado.\n', 1_700_000_000);
   por(`${RAIZ_SPEC}/discovery-document.md`, '# Discovery\n\nProblema central.\n', 1_700_000_000);
-  // A linha `Fidelidade: alta` é o que o fecho confere desde o D9 do teste ponta a ponta: sem ela o
-  // protótipo não declara fidelidade e o `spec-product` deste fixture passaria a ser negado.
-  por(`${RAIZ_SPEC}/prototype.md`, '# Protótipo\n\nFidelidade: alta\n\nSeis estados por tela.\n', 1_700_000_000);
-  por(`${RAIZ_SPEC}/design-system.md`, '# Design System\n\nTokens e componentes.\n', 1_700_000_000);
-  por(`${RAIZ_SPEC}/screens-manifest.json`, '{"telas":[]}', 1_700_000_000);
+  // A INSTÂNCIA É O PROTÓTIPO (Speckit ServiceNow, item 16): manifesto de telas sem telas, um
+  // arquivo Fluent commitado e a linha de install com o SHA desse commit. O git é real — o
+  // `IO_REAL.ultimoCommitDe` roda `git log` na raiz dos artefatos.
+  por(`${RAIZ_SPEC}/screens-manifest.json`, '{"screens":[]}', 1_700_000_000);
+  por('app/src/fluent/tables/boleto.now.ts', "export const t = Table({ name: 'x_cob_boleto' })\n", 1_700_000_000);
   // Mais NOVO que o documento mais recente do Explore — `revisaoFresca` compara idade de verdade.
   por(`${RAIZ_SPEC}/revisao.json`, '{"versao":"1.0"}', 1_700_000_900);
+  const base = sub ? join(raiz, sub) : raiz;
+  let commit = 'sem-commit';
+  if (!pular.has('app/src/fluent')) {
+    const g = (...a) => execFileSync('git', ['-C', base, '-c', 'user.name=teste', '-c', 'user.email=teste@exemplo.invalid', ...a],
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    g('init', '-q');
+    g('add', 'app/src/fluent');
+    g('commit', '-q', '-m', 'app');
+    commit = g('rev-parse', 'HEAD');
+  }
+  const install = montarLinhaSecaoA({
+    numero: 2, data: '2026-11-24', hora: '10:00', skill: 'now-sdk-install', modo: 'dev493801',
+    inputs: 'x_cob', outputs: commit, decisoes: 'ok; 0 registros', decisor: '—', proximo: 'sn-capture',
+  });
+  por(`${RAIZ_SPEC}/sync-log.md`, '# Sync Log\n\n' + KICKOFF + '\n\n' + CABECALHO_SECAO_A + '\n' + install + '\n', 1_700_000_000);
   return raiz;
 }
 

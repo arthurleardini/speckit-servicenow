@@ -81,70 +81,34 @@ export const WHITELIST_EXPLORE = [
   'legacy-analysis.md',
   'threat-model.md',
   'benchmark.md',
-  'prototype.md',
-  'design-system.md',
   'screens-manifest.json',
   'screens/',
+  'data-model.previa.json',
 ];
 
-/** O arquivo da `spec-prototype` que DECLARA a fidelidade, na linha `Fidelidade:` do cabeçalho. */
-export const PROTOTIPO_MD = 'prototype.md';
+// O PROTÓTIPO HTML SAIU (Speckit ServiceNow, decisão A2): a instância é o protótipo. Com ele saíram
+// `prototype.md`, `design-system.md`, `ARTEFATOS_PROTOTIPO`, `PROTOTIPO_MD`, `FIDELIDADE_DO_EXPLORE`,
+// `lerFidelidade` e `nivelDeFidelidade`. O fecho do Explore passou a cobrar as três condições da
+// instância (ver `fecho-explore.mjs`), e os nomes que elas leem moram aqui, abaixo.
 
-/** O que a spec-prototype tem que ter deixado em outputs/spec/ para o fecho passar. */
-export const ARTEFATOS_PROTOTIPO = [PROTOTIPO_MD, 'design-system.md', 'screens-manifest.json'];
+/** O manifesto de telas, escrito pelo `sn-scaffold` depois do build. Relativo a `RAIZ_SPEC`. */
+export const SCREENS_MANIFEST = 'screens-manifest.json';
 
-/**
- * A fidelidade que o Explore exige do protótipo — e a ÚNICA que fecha a fase sem isenção.
- *
- * Existe desde o D9 do teste ponta a ponta da 2.6.0. A `explore.md` sempre exigiu «alta
- * fidelidade», mas o fecho conferia só a PRESENÇA dos três `ARTEFATOS_PROTOTIPO`. E o
- * `design-system.md` só nasce no modo Geração (Passo 3.0.1 da `spec-prototype`), que a fidelidade
- * Média pula: quem escolhia Média tinha de adivinhar que precisava gerar o `design-system.md` por
- * fora — e aí o fecho passava um protótipo que a rule não aceita. Rule e fecho diziam coisas
- * diferentes; agora os dois leem daqui.
- */
-export const FIDELIDADE_DO_EXPLORE = 'alta';
+/** A prévia do modelo de dados — a única escrita de modelo permitida no Explore. Relativo a `RAIZ_SPEC`. */
+export const DATA_MODEL_PREVIA = 'data-model.previa.json';
 
-/**
- * O valor da linha `Fidelidade:` do `prototype.md`, COMO ESCRITO, ou `null` se não há linha (ou ela
- * está vazia). É a linha que o template da `spec-prototype` traz no cabeçalho
- * (`Fidelidade: baixa | média | alta`) e que o gate `MODE_FIDELITY_DECLARED` do kit cobra.
- *
- * A FORMA NÃO É O CONTRATO: ênfase (`**Fidelidade:** Alta`, `**Fidelidade**: alta`), citação (`> `)
- * e marcador de lista (`- `) são aceitos, e a caixa é livre — o que se lê é o valor. Vale a PRIMEIRA
- * linha que casa, que é a do cabeçalho; uma citação posterior («o template diz `Fidelidade: …`»)
- * não muda a declaração. Linha que começa com outra palavra («Escolha de fidelidade: Média») não é
- * declaração — o rótulo tem que abrir a linha.
- *
- * Só LÊ. Quem decide se o valor serve é `nivelDeFidelidade` — o valor como escrito vai para a
- * mensagem de negação, porque é o que o consultor vai procurar no arquivo.
- */
-export function lerFidelidade(texto) {
-  const re = /^[\s>*_-]*fidelidade[\s*_]*:[\s*_]*(.*?)[\s*_]*$/i;
-  for (const linha of String(texto || '').split(/\r?\n/)) {
-    const m = re.exec(linha);
-    if (m) return m[1].trim() ? m[1].trim() : null;
-  }
-  return null;
-}
+/** A pasta do app Fluent cujo último commit o install precisa ter instalado. Relativo à raiz. */
+export const DIR_FLUENT = 'app/src/fluent';
 
-/**
- * O nível que um valor declarado nomeia: `'alta'`, `'media'`, `'baixa'` ou `null`.
- *
- * Insensível a caixa e a acento (`Média` e `media` são o mesmo nível), e a crase/ênfase em volta.
- * Lê a PRIMEIRA palavra — `alta (frontend completo em src/)` é Alta. A linha intocada do template,
- * `baixa | média | alta`, é `null`: ela lista as opções, não escolhe uma — e se valesse a primeira
- * palavra, o template sem editar declararia Baixa, e se valesse a última, declararia Alta e
- * passaria no fecho sem ninguém ter decidido nada.
- */
-export function nivelDeFidelidade(valor) {
-  const v = String(valor == null ? '' : valor)
-    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-    .replace(/[`*_]/g, '').trim().toLowerCase();
-  if (!v || v.includes('|')) return null;
-  const m = /^(alta|media|baixa)\b/.exec(v);
-  return m ? m[1] : null;
-}
+/** A pasta do seed fictício e a lista dos documentos que o `sn-seed` gerou. Relativos à raiz. */
+export const DIR_SEED = 'app/src/fluent/seed';
+export const DOCUMENTOS_DO_SEED = 'app/src/fluent/seed/_documentos.json';
+
+/** O rótulo da linha de install na Seção A do `sync-log` (coluna Skill). Não é skill. */
+export const SKILL_INSTALL = 'now-sdk-install';
+
+/** A pasta dos recibos de ATF, um `<STORY>.json` por story. Relativo à raiz. */
+export const DIR_RECIBOS_ATF = 'outputs/spec/auditorias/atf';
 
 /**
  * Zona imutável — maquinário do template. Espelha harness.json; o teste cruza os dois.
@@ -636,7 +600,7 @@ export function validadorPara(relPath) {
   if (naSpec == null) return null;
   const rel = chave(naSpec);
   if (rel === 'flow-map.md') return 'check-flowmap';
-  if (rel === 'prototype.md' || rel === 'modules.md') return 'check-modules';
+  if (rel === 'modules.md') return 'check-modules';
   return null;
 }
 
@@ -664,7 +628,16 @@ export const ID_PADRAO = Object.freeze({
   RF: 'RF-\\d{3,4}',
   RN: 'RN-\\d{3,4}',
   GAP: 'GAP-\\d{3,4}',
+  // Famílias do Speckit ServiceNow (decisão A7). `SIM-nn` é integração simulada (`inputs/simulacoes.md`)
+  // e `CT-MOD-…-nnn` é critério de aceite no formato nativo do kit, irmão de `RF-MOD-…-nnn`. Ficam
+  // FORA de `FAMILIAS_EXPLORE` de propósito: a promoção percorre aquela lista, e uma simulação não é
+  // ID do Explore que precise ser promovido. Quem as confere é a `gramatica.mjs`, por `FAMILIAS_SN`.
+  SIM: 'SIM-\\d{2}',
+  CT: 'CT-MOD-[A-Z0-9-]*[A-Z0-9]-\\d{2,4}',
 });
+
+/** As famílias do Speckit ServiceNow que a gramática confere além das do Explore. */
+export const FAMILIAS_SN = Object.freeze(['SIM', 'CT']);
 
 /** `F-xxx` é fato atômico da `spec-ingest` e é PROIBIDO em outputs/explore/ (Decisão 8). */
 export const ID_PROIBIDO_NO_EXPLORE = 'F-\\d{3,4}';
@@ -835,8 +808,6 @@ export const ARTEFATOS_DE_CONTRATO = Object.freeze({
     'test-plan.md',
     'plano-de-seguranca.md',
     'estimate/estimate-report.md',
-    'prototype.md',
-    'design-system.md',
     'gaps-document.md',
     'sync-log.md',
     'capa.md',
@@ -1465,6 +1436,34 @@ export function lerLinhasSecaoA(texto) {
     });
   }
   return lidas;
+}
+
+// A LINHA DE INSTALL (Speckit ServiceNow, item 18): mora aqui porque dois gates a leem — o fecho do
+// Explore e o delivery-gate — e escrita duas vezes ela diverge.
+
+/**
+ * A última linha de install da Seção A do `sync-log` (rótulo `now-sdk-install`), ou `null`.
+ * «Última» é a de maior número — o `reinstall.mjs` numera em ordem e insere no topo. O resultado é a
+ * primeira parte da coluna Decisões (`ok; 1056 registros` → `ok`) e o commit é a coluna Outputs.
+ */
+export function ultimoInstall(textoSyncLog) {
+  const linhas = lerLinhasSecaoA(textoSyncLog).filter((l) => chave(l.skill.trim()) === SKILL_INSTALL);
+  if (!linhas.length) return null;
+  const l = linhas.reduce((a, b) => (b.numero > a.numero ? b : a));
+  return {
+    numero: l.numero,
+    quando: `${l.data} ${l.hora}`,
+    resultado: String(l.decisoes || '').split(';')[0].trim().toLowerCase(),
+    commit: String(l.outputs || '').trim(),
+  };
+}
+
+/** Dois SHAs são o mesmo commit? Completo ou abreviado (≥ 7), nunca vazio. */
+export function mesmoCommit(a, b) {
+  const x = String(a || '').trim().toLowerCase();
+  const y = String(b || '').trim().toLowerCase();
+  if (x.length < 7 || y.length < 7) return false;
+  return x.startsWith(y) || y.startsWith(x);
 }
 
 // ————————————————————————————— casca de I/O —————————————————————————————

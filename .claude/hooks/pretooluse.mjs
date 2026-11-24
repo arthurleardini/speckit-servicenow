@@ -340,6 +340,7 @@ export function emitirDeny(motivo) {
 // ————————————————————————————— casca de I/O —————————————————————————————
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 /**
@@ -391,6 +392,20 @@ export const IO_REAL = {
   lerArquivo: readFileSync,
   lerDiretorio: readdirSync,
   statMs: (caminho) => statSync(caminho).mtimeMs,
+
+  // A quarta, do Speckit ServiceNow (item 16 do design v0): o último commit que tocou um caminho,
+  // para o fecho do Explore comparar com o commit da linha de install do `sync-log`. `null` fora de
+  // repositório git ou sem commit — e o fecho nega nesse caso, que é o lado seguro.
+  ultimoCommitDe: (raiz, rel) => {
+    try {
+      const sha = execFileSync('git', ['-C', raiz, 'log', '-1', '--format=%H', '--', rel], {
+        encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+      return sha || null;
+    } catch {
+      return null;
+    }
+  },
 };
 
 /**

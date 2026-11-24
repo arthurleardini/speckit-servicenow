@@ -29,9 +29,12 @@ não conversa com ninguém: lê um arquivo de entrada, examina o código, grava 
 ## O que examinar — só o código desta entrega
 
 **Rules.** Cada "MUST NOT" que o código fere é achado **ALTO**: as rules são decisões obrigatórias do
-projeto. Exemplos da rule de frontend: `fetch` dentro de componente ou de `page.tsx`, caminho de API
-escrito no corpo do service, formatação de data ou dinheiro no JSX, payload da API chegando cru na
-tela, erro tratado com `String(error)` em vez de `AppError`. Cite no `motivo` a regra ferida, com o
+projeto. Valem a rule de tela do harness (`.claude/rules/harness/servicenow-ui.md`) e as `.mdc` da
+`spec-tech-rules` (`conventions`, `architecture`, `security`, `test-strategy`, `deploy-and-build`).
+Exemplos da rule de tela: Workspace, Portal ou UI Builder no app; Client Script onde UI Policy
+resolve; UI Action destrutiva sem `condition` e `roles`; `Form()` de uma seção com trinta campos;
+form com activity sem `journal_input`/`audit`; `$id` que não segue `Now.ID['<ID-da-spec>_<tipo>_<nome>']`;
+escopo escrito à mão em vez de lido de `app/now.config.json`. Cite no `motivo` a regra ferida, com o
 arquivo da rule.
 
 **Bugs técnicos**, adaptados à linguagem real:

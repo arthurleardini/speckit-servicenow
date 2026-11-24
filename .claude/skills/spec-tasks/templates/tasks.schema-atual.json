@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "tasks/v5.3",
+  "title": "tasks/v5.4",
   "description": "Schema canônico do tasks.json v5.3 (compact-prose) produzido por spec-tasks. Versão única: tasks/v5.3 no campo metadata.schemaVersion. Epic/Feature/Story exigem narrativa, regras e critérios de aceite (statement, sem Given/When/Then) para Kanban ADO. Tasks usam formato compact-prose (strings ricas) para apiContracts e persistenceModel. Formatos object-based anteriores foram movidos para definitions/legacy-v5.0 (deprecated).",
   "type": "object",
   "required": [
@@ -19,9 +19,10 @@
         "schemaVersion": {
           "type": "string",
           "enum": [
-            "tasks/v5.3"
+            "tasks/v5.3",
+            "tasks/v5.4"
           ],
-          "description": "Versão canônica única do schema: tasks/v5.3 (compact-prose com negócio obrigatório em Epic/Feature/Story)."
+          "description": "Versão do schema. tasks/v5.4 (Speckit ServiceNow) = v5.3 + o campo opcional Task.snArtifact (artefato ServiceNow que a task produz). tasks/v5.3 continua aceito: o campo novo é opcional, e um arquivo v5.3 é v5.4 válido."
         },
         "outputLanguage": {
           "type": "string",
@@ -1260,6 +1261,9 @@
         "uiContext": {
           "$ref": "#/definitions/UiContext"
         },
+        "snArtifact": {
+          "$ref": "#/definitions/SnArtifact"
+        },
         "generatedBy": {
           "type": "string",
           "description": "Skill que gerou a task (ex.: spec-tasks, spec-security-review, spec-test-plan)."
@@ -1882,11 +1886,43 @@
         },
         "testData": {
           "type": "object",
-          "required": [
-            "request",
-            "expectedResponse"
+          "description": "Dois formatos. HTTP (padrão): request + expectedResponse. ServiceNow (tasks/v5.4, task com snArtifact e kind != simulation): o teste é um Test() ATF sobre registros, sem request HTTP — exige o registro de entrada (record, records, input ou update) e expectedDatabaseState. O validate-tasks-selfsufficiency.mjs (TASK_HAS_CONCRETE_TEST_DATA) escolhe o formato pelo snArtifact da task.",
+          "anyOf": [
+            {
+              "required": [
+                "request",
+                "expectedResponse"
+              ]
+            },
+            {
+              "required": [
+                "expectedDatabaseState"
+              ],
+              "anyOf": [
+                { "required": ["record"] },
+                { "required": ["records"] },
+                { "required": ["input"] },
+                { "required": ["update"] }
+              ]
+            }
           ],
           "properties": {
+            "record": {
+              "type": "object",
+              "description": "tasks/v5.4 (ServiceNow) — registro que o Test() ATF cria antes do passo, com o valor de cada campo."
+            },
+            "records": {
+              "type": "array",
+              "description": "tasks/v5.4 (ServiceNow) — vários registros de entrada."
+            },
+            "input": {
+              "type": "object",
+              "description": "tasks/v5.4 (ServiceNow) — entrada do script/flow testado."
+            },
+            "update": {
+              "type": "object",
+              "description": "tasks/v5.4 (ServiceNow) — campos alterados no registro durante o passo."
+            },
             "request": {
               "type": "object",
               "description": "Requisição concreta do cenário. `body` é exigido apenas quando o método carrega corpo — GET/HEAD/DELETE/OPTIONS legitimamente não têm, e a versão anterior deste schema (body em required) tornava IMPOSSÍVEL representar um cenário de listagem, divergindo de validate-tasks-selfsufficiency.mjs (BODYLESS_METHODS), que é a autoridade FATAL.",
@@ -2127,6 +2163,55 @@
         }
       }
     },
+    "SnArtifact": {
+      "type": "object",
+      "description": "tasks/v5.4 — o artefato ServiceNow (Fluent) que a task produz. OPCIONAL: só existe em projeto ServiceNow. Não substitui Task.type, que não muda. Com snArtifact presente, os validadores exigem kind, fluentFile e nowId; `table` é exigido só para os kinds que têm tabela única (table, form, list, business_rule, client_script, ui_policy, ui_action, acl, seed). A task com snArtifact fica dispensada de apiContracts (exceto kind=simulation) e da checagem de tipo SQL nas colunas do persistenceModel — as colunas são tipos ServiceNow.",
+      "required": [
+        "kind",
+        "fluentFile",
+        "nowId"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "table",
+            "form",
+            "list",
+            "business_rule",
+            "client_script",
+            "ui_policy",
+            "ui_action",
+            "script_include",
+            "acl",
+            "role",
+            "flow",
+            "atf",
+            "notification",
+            "report",
+            "menu",
+            "seed",
+            "simulation"
+          ],
+          "description": "Tipo do objeto ServiceNow."
+        },
+        "table": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,29}$",
+          "description": "Tabela do objeto (nome físico, até 30 caracteres; ex.: x_<escopo>_caso). Obrigatória para table, form, list, business_rule, client_script, ui_policy, ui_action, acl e seed."
+        },
+        "fluentFile": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Arquivo Fluent que define o objeto, relativo à raiz do repositório (ex.: app/src/fluent/business-rules/caso.now.ts)."
+        },
+        "nowId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Chave do Now.ID do registro Fluent, com o ID da spec na frente (ex.: RF-MOD-F2-003_br_publicar_versao). É o elo do rastreio spec → instância."
+        }
+      }
+    },
     "UiContext": {
       "type": "object",
       "description": "Contexto de UI EMBUTIDO a partir do flow-map.md (obtido via check-flowmap.py --json). OPCIONAL — presente apenas em stories/tasks que tocam UI quando o flow-map existe (ausente → modo UI_CONTEXT_SKIPPED). Auto-suficiência: os campos embutem o CONTEÚDO textual (nomes, estados, texto das regras) — nunca instruem a ler o flow-map. Apenas screenshot é referência por caminho.",
@@ -2146,7 +2231,7 @@
         },
         "rota": {
           "type": "string",
-          "description": "Rota da tela, ex.: '/propostas/nova'."
+          "description": "Rota da tela, ex.: '/propostas/nova'. Em projeto ServiceNow (tasks/v5.4), a rota da tela NA INSTÂNCIA, como o screens-manifest.json a grava (ex.: '/x_<escopo>_caso_list.do' ou '/x_<escopo>_caso.do?sys_id=<id>'). Não há campo instanceUrl à parte: seria o mesmo dado duas vezes."
         },
         "fluxo": {
           "type": "string",

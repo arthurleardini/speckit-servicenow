@@ -1,4 +1,4 @@
-// GÊMEO de ../../spec-tasks-azure/lib/load-tasks.mjs — manter em sincronia.
+// GÊMEO de ../../sn-tasks-github/lib/load-tasks.mjs (cópia da spec-tasks-azure, removida no fork) — manter em sincronia.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -26,7 +26,7 @@ export function loadTasksDocument(filePath) {
  * Normalizar na ENTRADA, uma vez, resolve todos os pontos de render de uma só vez. Nada é
  * sobrescrito: só preenche `name` quando está ausente/vazio. Ordem: name → title → id.
  *
- * GÊMEO de ../../spec-tasks-azure/lib/load-tasks.mjs — manter em sincronia.
+ * GÊMEO de ../../sn-tasks-github/lib/load-tasks.mjs — manter em sincronia.
  * @param {Record<string, unknown>} doc
  */
 export function normalizeLabels(doc) {

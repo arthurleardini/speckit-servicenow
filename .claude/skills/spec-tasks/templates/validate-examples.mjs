@@ -1,4 +1,5 @@
-// Regression test — valida os exemplos do spec-tasks contra o schema canônico tasks/v5.3.
+// Regression test — valida os exemplos do spec-tasks contra o schema canônico tasks/v5.4 (= v5.3 +
+// Task.snArtifact opcional, do Speckit ServiceNow).
 // Uso:
 //   npm i ajv ajv-formats --no-save
 //   node validate-examples.mjs
@@ -9,6 +10,7 @@
 //   - tasks.sec-task-example.json       → Task class=security (#/definitions/Task)  [se existir]
 //   - tasks.uat-task-example.json       → Task class=uat      (#/definitions/Task)  [se existir]
 //   - tasks.transversal-story-example.json → Story (#/definitions/Story)            [se existir]
+//   - tasks.sn-story-example.json        → Story com task snArtifact (#/definitions/Story), v5.4
 //
 // E TAMBÉM (regressão de CONTEÚDO, não só de forma):
 //   - #/definitions/UiContext e #/definitions/UiField sobre o uiContext real dos exemplos;
@@ -47,6 +49,7 @@ const cases = [
   { file: 'tasks.uat-task-example.json', ref: 'tasks#/definitions/Task', label: 'Task class=uat', optional: true },
   { file: 'tasks.transversal-story-example.json', ref: 'tasks#/definitions/Story', label: 'Story transversal', optional: true },
   { file: 'tasks.spike-task-example.json', ref: 'tasks#/definitions/Task', label: 'Task class=spike', optional: true },
+  { file: 'tasks.sn-story-example.json', ref: 'tasks#/definitions/Story', label: 'Story ServiceNow (tasks/v5.4, snArtifact)' },
   // `tasks.fixture-compat.json` NÃO entra aqui de propósito: ele existe para exercitar as formas
   // LEGADAS (story só com businessSummary, critério em string, traceability em array), que são
   // por definição não-conformes ao schema atual — é isso que faz dele um teste de
@@ -333,6 +336,8 @@ if (!fs.existsSync(negAbs)) {
     { file: 'tasks.uat-task-example.json', business: 2, selfsufficiency: 2, why: 'fragmento de uma task class=uat' },
     { file: 'tasks.transversal-story-example.json', business: 2, selfsufficiency: 0,
       why: 'fragmento de Story transversal: sem nível de negócio para o business; a task embutida sai limpa' },
+    { file: 'tasks.sn-story-example.json', business: 2, selfsufficiency: 0,
+      why: 'fragmento de Story ServiceNow (tasks/v5.4): a task com snArtifact sai limpa sem apiContracts e com colunas em tipo ServiceNow' },
     { file: 'tasks.fixture-validators.json', business: 1, selfsufficiency: 1, negative: true,
       why: 'fixture NEGATIVO — existe para reprovar; se sair 0 o gate parou de pegar o defeito' },
     { file: 'tasks.fixture-compat.json', business: 1, selfsufficiency: 1, negative: true,

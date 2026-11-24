@@ -74,7 +74,7 @@ export function detectPhase(root, outputsDir, { override = "auto" } = {}) {
   }
   const specStories = probeSpecStories(root);
   if (specStories.length) {
-    signals.push({ stage: "implementation", signal: `${specStories.length} spec_story.md (memória do spec-implement)`, evidence: specStories.slice(0, 3).map((p) => relPosix(root, p)).join(", ") });
+    signals.push({ stage: "implementation", signal: `${specStories.length} spec_story.md (memória do sn-implement)`, evidence: specStories.slice(0, 3).map((p) => relPosix(root, p)).join(", ") });
   }
   const audit = discovery.found["code-audit.md"]?.path || null;
   if (audit) signals.push({ stage: "delivery", signal: "code-audit.md (Fase 12 executada)", evidence: relPosix(root, audit) });

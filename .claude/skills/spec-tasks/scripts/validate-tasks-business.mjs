@@ -1139,8 +1139,11 @@ if (writeMode) {
     suggestedFix: e.suggestedFix
   }));
   doc.metadata = doc.metadata ?? {};
-  const previous = arr(doc.metadata.fatalErrors).filter((e) => isObj(e) && e.code && !e.code.startsWith('TASK_'));
-  const kept = arr(doc.metadata.fatalErrors).filter((e) => isObj(e) && typeof e.code === 'string' && e.code.startsWith('TASK_'));
+  // Códigos de nível TASK são do validador gêmeo (validate-tasks-selfsufficiency.mjs, mesma regex
+  // `TASK_LEVEL_CODE` de lá). Antes este filtro olhava só `TASK_` e apagava UAT_/SPIKE_/NO_EXTERNAL_
+  // e o SN_ARTIFACT_ (tasks/v5.4) gravados pelo outro.
+  const TASK_LEVEL_CODE = /^(TASK_|UAT_|SPIKE_|NO_EXTERNAL_|SN_ARTIFACT_)/;
+  const kept = arr(doc.metadata.fatalErrors).filter((e) => isObj(e) && typeof e.code === 'string' && TASK_LEVEL_CODE.test(e.code));
   if (payload.length || kept.length) doc.metadata.fatalErrors = [...payload, ...kept];
   else delete doc.metadata.fatalErrors;
   doc.metadata.validation = {
@@ -1159,7 +1162,6 @@ if (writeMode) {
   } catch (e) {
     console.error(`AVISO: --write falhou ao gravar ${inputPath}: ${e instanceof Error ? e.message : String(e)}`);
   }
-  void previous;
 }
 
 console.log(

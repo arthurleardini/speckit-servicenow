@@ -13,9 +13,10 @@
  */
 export const REESCRITAS = [
   ['.claude/rules/harness/security.md', '.kiro/steering/harness-security.md'],
-  // A de frontend vai para o STEERING, com `inclusion: fileMatch` (ver `converter`): carrega sozinha
-  // ao tocar arquivo de tela. Em `.kiro/fases/` ela só entrava se o consultor a anexasse à mão.
-  ['.claude/rules/harness/frontend.md', '.kiro/steering/harness-frontend.md'],
+  // A de interface (ServiceNow) vai para o STEERING, com `inclusion: fileMatch` (ver `converter`):
+  // carrega sozinha ao tocar arquivo do app Fluent. Em `.kiro/fases/` ela só entrava se o consultor a
+  // anexasse à mão.
+  ['.claude/rules/harness/servicenow-ui.md', '.kiro/steering/harness-servicenow-ui.md'],
   [/\.claude\/rules\/harness\/(explore|plan|deliver)\.md/g, '.kiro/fases/harness-$1.md'],
   ['.claude/rules/harness/', '.kiro/fases/'],
   ['.claude/rules/harness', '.kiro/fases'],
@@ -135,24 +136,21 @@ export const REMENDOS = [
     // gerado recebe as mesmas três (ver `gerarHarnessJson`), e o `kit.test.mjs` cruza os dois.
     arquivo: '.claude/hooks/kit.mjs',
     de: "  '.claude/skills/',\n];",
-    para: "  '.claude/skills/',\n  '.kiro/steering/harness-security.md',\n  '.kiro/steering/harness-fase.md',\n  '.kiro/steering/harness-frontend.md',\n];",
+    para: "  '.claude/skills/',\n  '.kiro/steering/harness-security.md',\n  '.kiro/steering/harness-fase.md',\n  '.kiro/steering/harness-servicenow-ui.md',\n];",
   },
   {
-    // A rule de frontend chega ao Kiro sem `paths:` — o `converterRule` o troca por `inclusion:
+    // A rule de interface chega ao Kiro sem `paths:` — o `converterRule` o troca por `inclusion:
     // fileMatch` + `fileMatchPattern`, que é o que o Kiro lê. A cópia do teste cobra o formato do Kiro.
     arquivo: '.claude/hooks/estado.test.mjs',
-    de: "  const fe = /^paths:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/rules/harness/frontend.md'));\n"
-      + "  assert.ok(fe, 'frontend.md sem `paths:` entre aspas');\n"
-      + "  const chaves = /^\\*\\*\\/\\*\\.\\{([a-z,]+)\\}$/.exec(fe[1]);\n"
-      + "  assert.ok(chaves, `o paths: deixou de ser um glob só, com chaves: ${fe[1]}`);\n"
-      + "  assert.deepEqual(new Set(chaves[1].split(',')), doPadrao);\n",
+    de: "  const fe = /^paths:\\s*\"([^\"]+)\"\\s*$/m.exec(frontmatter('.claude/rules/harness/servicenow-ui.md'));\n"
+      + "  assert.ok(fe, 'servicenow-ui.md sem `paths:` entre aspas');\n"
+      + "  assert.equal(fe[1], 'app/src/fluent/**');\n",
     para: "  // No Kiro o `paths:` vira `inclusion: fileMatch` + `fileMatchPattern` (converterRule do gerar-kiro).\n"
-      + "  const fm = frontmatter('.claude/rules/harness/frontend.md');\n"
-      + "  assert.match(fm, /^inclusion: fileMatch$/m, 'frontend sem `inclusion: fileMatch`');\n"
+      + "  const fm = frontmatter('.claude/rules/harness/servicenow-ui.md');\n"
+      + "  assert.match(fm, /^inclusion: fileMatch$/m, 'servicenow-ui sem `inclusion: fileMatch`');\n"
       + "  const fe = /^fileMatchPattern:\\s*(\\[.*\\])\\s*$/m.exec(fm);\n"
-      + "  assert.ok(fe, 'frontend sem `fileMatchPattern` em lista');\n"
-      + "  // As mesmas extensões do `frontend-default.mdc`, que ela substitui desde a Decisão 73.\n"
-      + "  assert.deepEqual(new Set(JSON.parse(fe[1]).map((g) => /^\\*\\*\\/\\*\\.([a-z]+)$/.exec(g)?.[1])), doPadrao);\n"
+      + "  assert.ok(fe, 'servicenow-ui sem `fileMatchPattern` em lista');\n"
+      + "  assert.deepEqual(JSON.parse(fe[1]), ['app/src/fluent/**']);\n"
       + "  assert.ok(!/^paths:/m.test(fm), 'o `paths:` não é do Kiro e não pode sobrar');\n",
   },
   {
@@ -289,7 +287,7 @@ export function expandirChaves(glob) {
 /**
  * Rule do harness → arquivo do Kiro. O Kiro não conhece `paths:`:
  *   - steering sempre carregado (`inclusion: always`, a de segurança) — os campos passam como estão;
- *   - steering por arquivo (`inclusion: fileMatch`, a de frontend) — o `paths:` da fonte VIRA o
+ *   - steering por arquivo (`inclusion: fileMatch`, a de interface) — o `paths:` da fonte VIRA o
  *     `fileMatchPattern` em LISTA, com as chaves expandidas (`*.{ts,tsx}` → `*.ts`, `*.tsx`): a
  *     documentação do Kiro mostra glob simples ou lista e não garante expansão de chaves, e uma
  *     chave não expandida faria a rule nunca carregar. Sem `paths:` na fonte é erro: não há o que
@@ -298,7 +296,7 @@ export function expandirChaves(glob) {
  *     fica: inerte ali, e é o que a cópia do `estado.test.mjs` cobra para provar que ela não carrega
  *     sozinha no Claude Code.
  * Atenção conhecida (ver `gerarHarnessFase`; kiro.dev/docs/steering, 2026-10-19): a IDE e a CLI V3
- * honram os quatro modos; a CLI V1/V2 só carrega sozinha a `always` — lá a de frontend precisa ser
+ * honram os quatro modos; a CLI V1/V2 só carrega sozinha a `always` — lá a de interface precisa ser
  * anexada.
  */
 export function converterRule(texto, origem, { inclusion } = {}) {
@@ -341,10 +339,10 @@ export function gerarHarnessFase() {
     '| 📐 Plan | `@.kiro/fases/harness-plan.md` | idem, `harness-plan.md` |',
     '| 🚀 Deliver | `@.kiro/fases/harness-deliver.md` | idem, `harness-deliver.md` |',
     '',
-    'A rule de frontend não é anexo: é `.kiro/steering/harness-frontend.md`, com `inclusion: fileMatch`,',
-    'e entra sozinha quando a sessão toca arquivo de tela (`.ts`, `.tsx`, `.js`, `.jsx`, `.html`, `.css`,',
-    '`.mdx`) — na IDE e na CLI V3. Na CLI V1/V2 só as rules `always` carregam sozinhas: anexe',
-    '`#harness-frontend` quando for mexer em tela.',
+    'A rule de interface não é anexo: é `.kiro/steering/harness-servicenow-ui.md`, com `inclusion: fileMatch`,',
+    'e entra sozinha quando a sessão toca arquivo do app Fluent (`app/src/fluent/**`) — na IDE e na CLI V3.',
+    'Na CLI V1/V2 só as rules `always` carregam sozinhas: anexe `#harness-servicenow-ui` quando for mexer',
+    'em tela.',
     '',
     'Uma fase por sessão. Se você não sabe a fase, olhe `outputs/`: só `outputs/explore/` com conteúdo é',
     'Explore; escrita em `outputs/spec/` além do `sync-log.md` é Plan; `outputs/spec/em-andamento.md` é Deliver.',
@@ -373,7 +371,7 @@ export function gerarHarnessJson(fonte, sha) {
     geradoDe: sha,
     runtime: RUNTIME_KIRO,
     zonaImutavel: [...zonaImutavel, '.kiro/steering/harness-security.md', '.kiro/steering/harness-fase.md',
-      '.kiro/steering/harness-frontend.md'],
+      '.kiro/steering/harness-servicenow-ui.md'],
     zonaMutavel: fonte.zonaMutavel.map(reescrever),
   };
 }
@@ -389,7 +387,7 @@ const ABERTURA = 'Abrir uma sessão do Claude Code na raiz. O `estado` detecta a
 const LINHA_ESTRUTURA_FASES = '| `.kiro/fases/` | as cinco rules do método (zona imutável) |';
 const LINHAS_ESTRUTURA_FASES_KIRO = [
   '| `.kiro/fases/` | as três rules de fase — anexadas por sessão, ver `.kiro/steering/harness-fase.md` (zona imutável) |',
-  '| `.kiro/steering/` | `harness-security.md` e `harness-fase.md`, sempre carregados, e `harness-frontend.md`, carregado ao tocar arquivo de tela (`fileMatch`); o resto da pasta é do projeto (`spec-tech-rules`) |',
+  '| `.kiro/steering/` | `harness-security.md` e `harness-fase.md`, sempre carregados, e `harness-servicenow-ui.md`, carregado ao tocar arquivo do app Fluent (`fileMatch`); o resto da pasta é do projeto (`spec-tech-rules`) |',
 ].join('\n');
 
 const SECAO_KIRO = [
@@ -518,7 +516,7 @@ export function planejar(rel) {
   const r = String(rel).replace(/\\/g, '/');
   if (excluido(r)) return { tipo: 'excluir', destino: null };
   const conversiveis = new Set(['CLAUDE.md', 'harness.json', 'README.md', 'MANUTENCAO.md']);
-  if (conversiveis.has(r) || /^\.claude\/rules\/harness\/[a-z]+\.md$/.test(r)) {
+  if (conversiveis.has(r) || /^\.claude\/rules\/harness\/[a-z-]+\.md$/.test(r)) {
     return { tipo: 'converter', destino: reescrever(r) };
   }
   return { tipo: 'copiar', destino: reescrever(r) };
@@ -536,9 +534,9 @@ function converter(rel, texto, sha) {
   if (rel === 'README.md') return converterReadme(texto);
   if (rel === 'MANUTENCAO.md') return converterManutencao(texto);
   if (rel === 'harness.json') return `${JSON.stringify(gerarHarnessJson(JSON.parse(texto), sha), null, 2)}\n`;
-  const m = /^\.claude\/rules\/harness\/([a-z]+)\.md$/.exec(rel);
+  const m = /^\.claude\/rules\/harness\/([a-z-]+)\.md$/.exec(rel);
   if (m && m[1] === 'security') return converterRule(texto, rel, { inclusion: 'always' });
-  if (m && m[1] === 'frontend') return converterRule(texto, rel, { inclusion: 'fileMatch' });
+  if (m && m[1] === 'servicenow-ui') return converterRule(texto, rel, { inclusion: 'fileMatch' });
   if (m && RULES_DE_FASE.has(m[1])) return converterRule(texto, rel);
   throw new Error(`sem conversor para ${rel}`);
 }

@@ -36,10 +36,10 @@
 // vocabulário compartilhado — e não é reexportada daqui: dois caminhos de import para a mesma
 // constante é a divergência que a mudança fechou.
 import {
-  faltantesExplore, ehWhitelistExplore, ARTEFATOS_PROTOTIPO, RAIZ_SPEC,
+  faltantesExplore, ehWhitelistExplore, RAIZ_SPEC,
   caminhoDaTool, nomeDaSkill, chave as chaveDeComparacao,
   MARCADOR_CONGELAMENTO, DIR_ISENCOES, lerKickoff, montarKickoff,
-  PROTOTIPO_MD, FIDELIDADE_DO_EXPLORE, lerFidelidade, nivelDeFidelidade,
+  SCREENS_MANIFEST, DIR_FLUENT, DIR_SEED, DOCUMENTOS_DO_SEED, SKILL_INSTALL, ultimoInstall, mesmoCommit,
 } from './kit.mjs';
 // A `chave` DO KIT ENTRA COM OUTRO NOME, de propósito: `lerCampo(corpo, chave)`, mais abaixo, já
 // tem um parâmetro chamado `chave` — nome de campo do bloco `gate:isencao`, coisa completamente
@@ -438,6 +438,173 @@ export function montarLinhaDeDispensa({ artefato, motivo, quem, data }) {
   return `| ${artefato} | ${motivo} | ${quem} | ${data} |`;
 }
 
+// ————————————————————— as três condições da instância (item 16 do design v0) —————————————————————
+//
+// Funções PURAS: recebem texto e conjuntos, devolvem fatos. A casca (`avaliar`) lê o disco e o git
+// e entrega o resultado em três campos do contexto — `telas`, `install` e `seed` —, e
+// `problemasDaInstancia` transforma os três em itens da negação.
+
+/** Os `TEL-nnn` citados na especificação funcional, na ordem de aparição e sem repetir. */
+export function telasDaEspecificacao(texto) {
+  const vistas = [];
+  for (const m of String(texto || '').matchAll(/(?<![\p{L}0-9-])TEL-\d{3,4}(?![\p{L}0-9])/gu)) {
+    if (!vistas.includes(m[0])) vistas.push(m[0]);
+  }
+  return vistas;
+}
+
+/**
+ * Condição 1: toda `TEL-` da especificação tem rota e print no `screens-manifest.json`.
+ *
+ * `presentesSpec` é o inventário de `outputs/spec/` (caminhos relativos a ele): o print conta só
+ * se o arquivo que o campo `screenshot` aponta EXISTE — o campo preenchido sem o PNG é a captura que
+ * falhou no meio. Manifesto ilegível conta como ausente, com o detalhe na mensagem.
+ */
+export function avaliarTelas(textoManifesto, telas, presentesSpec) {
+  if (textoManifesto == null || textoManifesto === '') {
+    return { manifestoPresente: false, semRota: [...telas], semPrint: [...telas] };
+  }
+  let manifesto;
+  try {
+    manifesto = JSON.parse(textoManifesto);
+  } catch (erro) {
+    return { manifestoPresente: false, ilegivel: String(erro.message || erro), semRota: [...telas], semPrint: [...telas] };
+  }
+  const lista = Array.isArray(manifesto && manifesto.screens) ? manifesto.screens : [];
+  const porId = new Map(lista.filter((t) => t && t.id).map((t) => [String(t.id).trim(), t]));
+  const presentes = new Set([...(presentesSpec || [])].map((p) => chaveDeComparacao(p)));
+  const semRota = [];
+  const semPrint = [];
+  for (const tel of telas) {
+    const t = porId.get(tel);
+    if (!t || !String(t.route || '').trim()) semRota.push(tel);
+    const print = t ? String(t.screenshot || '').trim().replace(/^\.\//, '') : '';
+    if (!print || !presentes.has(chaveDeComparacao(print))) semPrint.push(tel);
+  }
+  return { manifestoPresente: true, semRota, semPrint };
+}
+
+const RE_CPF = /(?<!\d)\d{3}\.\d{3}\.\d{3}[-.]\d{2}(?!\d)/g;
+const RE_CNPJ = /(?<!\d)\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}(?!\d)/g;
+// Sem máscara, só entre aspas: 11 ou 14 dígitos soltos em código Fluent são documento; fora de
+// aspas o risco de casar número de outra coisa é maior que o ganho.
+const RE_DOC_CRU = /['"`](\d{11}|\d{14})['"`]/g;
+const soDigitos = (v) => String(v || '').replace(/\D/g, '');
+
+/** Os documentos (CPF/CNPJ) que um texto do seed contém, só os dígitos. */
+export function documentosNoTexto(texto) {
+  const t = String(texto || '');
+  const achados = new Set();
+  for (const m of t.matchAll(RE_CPF)) achados.add(soDigitos(m[0]));
+  for (const m of t.matchAll(RE_CNPJ)) achados.add(soDigitos(m[0]));
+  for (const m of t.matchAll(RE_DOC_CRU)) achados.add(m[1]);
+  return achados;
+}
+
+/**
+ * Condição 3: todo documento achado nos arquivos do seed está em `_documentos.json`.
+ * `textos` é um Map caminho → conteúdo (só os arquivos do seed, sem o próprio `_documentos.json`).
+ */
+export function avaliarSeed(textos, textoLista) {
+  const documentos = new Set();
+  for (const texto of (textos || new Map()).values()) for (const d of documentosNoTexto(texto)) documentos.add(d);
+  const temLista = textoLista != null && textoLista !== '';
+  if (!documentos.size) return { documentos: 0, listaPresente: temLista, foraDaLista: [] };
+  if (!temLista) return { documentos: documentos.size, listaPresente: false, foraDaLista: [...documentos] };
+  let lista;
+  try {
+    lista = JSON.parse(textoLista);
+  } catch (erro) {
+    return { documentos: documentos.size, listaPresente: false, ilegivel: String(erro.message || erro), foraDaLista: [...documentos] };
+  }
+  const brutos = Array.isArray(lista) ? lista : (lista && Array.isArray(lista.documentos) ? lista.documentos : []);
+  const conhecidos = new Set(brutos.map((d) => soDigitos(typeof d === 'string' ? d : d && d.valor)).filter(Boolean));
+  return { documentos: documentos.size, listaPresente: true, foraDaLista: [...documentos].filter((d) => !conhecidos.has(d)) };
+}
+
+/** Documento mascarado para a mensagem: nunca se repete um CPF inteiro numa negação. */
+function mascarar(d) {
+  return d.length <= 5 ? '***' : `${d.slice(0, 3)}…${d.slice(-2)}`;
+}
+
+const amostra = (lista, n = 12) => lista.slice(0, n).map((x) => `\`${x}\``).join(', ') + (lista.length > n ? ` e mais ${lista.length - n}` : '');
+
+/** Os itens de negação das três condições. Campo ausente do contexto é falha (fail-closed). */
+export function problemasDaInstancia(c) {
+  const problemas = [];
+
+  // 1. telas
+  const t = c.telas;
+  if (!t || !t.manifestoPresente) {
+    problemas.push(
+      `**Instância sem manifesto de telas (\`${RAIZ_SPEC}/${SCREENS_MANIFEST}\`)**` +
+      (t && t.ilegivel ? ` — o arquivo existe e não é JSON válido (${t.ilegivel})` : '') + '. ' +
+      'No Speckit ServiceNow a instância é o protótipo: rode `spec-data-model --previa`, `sn-scaffold` ' +
+      '(que grava o manifesto depois do build), `npm run reinstall` e `sn-capture`.',
+    );
+  } else {
+    if (t.semRota.length) {
+      problemas.push(
+        `**Telas da especificação sem rota no \`${SCREENS_MANIFEST}\` (${t.semRota.length}):** ${amostra(t.semRota)}. ` +
+        'Toda `TEL-` da tabela de telas da `especificacao-funcional.md` precisa de rota na instância — ' +
+        'rode o `sn-scaffold` de novo depois de acrescentar a tela.',
+      );
+    }
+    if (t.semPrint.length) {
+      problemas.push(
+        `**Telas sem print (${t.semPrint.length}):** ${amostra(t.semPrint)}. O campo \`screenshot\` do ` +
+        `manifesto tem que apontar um PNG que existe em \`${RAIZ_SPEC}/\` — rode \`npm run capture\` (\`sn-capture\`).`,
+      );
+    }
+  }
+
+  // 2. install
+  const i = c.install;
+  if (!i || !i.commitFluent) {
+    problemas.push(
+      `**\`${DIR_FLUENT}\` sem commit.** O fecho compara o último install com o último commit de ` +
+      `\`${DIR_FLUENT}\`; commite o app gerado pelo \`sn-scaffold\` e rode \`npm run reinstall\`.`,
+    );
+  } else if (!i.ultimo) {
+    problemas.push(
+      `**Nenhum install registrado no \`${RAIZ_SPEC}/sync-log.md\`.** O app preliminar precisa estar ` +
+      `instalado na instância: rode \`npm run reinstall\`, que escreve a linha \`${SKILL_INSTALL}\` na Seção A.`,
+    );
+  } else if (i.ultimo.resultado !== 'ok') {
+    problemas.push(
+      `**O último install (linha ${i.ultimo.numero}, ${i.ultimo.quando}) terminou em \`${i.ultimo.resultado || '?'}\`.** ` +
+      'Corrija e rode `npm run reinstall` até a linha sair com `ok`.',
+    );
+  } else if (!mesmoCommit(i.ultimo.commit, i.commitFluent)) {
+    problemas.push(
+      `**A instância não tem o último commit do app.** O último install ok (linha ${i.ultimo.numero}) foi do ` +
+      `commit \`${String(i.ultimo.commit).slice(0, 12) || '?'}\`, e o último commit de \`${DIR_FLUENT}\` é ` +
+      `\`${String(i.commitFluent).slice(0, 12)}\`. Rode \`npm run reinstall\` (e o \`sn-capture\`, se alguma tela mudou).`,
+    );
+  }
+
+  // 3. seed
+  const s = c.seed;
+  if (!s) {
+    problemas.push(`**Seed não conferido.** O fecho não conseguiu ler \`${DIR_SEED}/\`.`);
+  } else if (s.foraDaLista.length && !s.listaPresente) {
+    problemas.push(
+      `**Seed com ${s.documentos} documento(s) e sem lista de fictícios válida (\`${DOCUMENTOS_DO_SEED}\`)**` +
+      (s.ilegivel ? ` — o arquivo não é JSON válido (${s.ilegivel})` : '') + '. ' +
+      'Regere o seed pelo `sn-seed`, que grava a lista junto: CPF e CNPJ fora dela podem ser dado real.',
+    );
+  } else if (s.foraDaLista.length) {
+    problemas.push(
+      `**${s.foraDaLista.length} documento(s) no seed que não estão em \`${DOCUMENTOS_DO_SEED}\`:** ` +
+      `${s.foraDaLista.slice(0, 5).map(mascarar).join(', ')}${s.foraDaLista.length > 5 ? ' …' : ''}. ` +
+      'Todo CPF e CNPJ do seed tem que vir do `sn-seed` (semente fixa, DV válido). Documento escrito à mão ' +
+      'pode ser dado real de contribuinte — remova-o ou regere o seed.',
+    );
+  }
+
+  return problemas;
+}
+
 /**
  * Decide passa/não passa. Puro: recebe fatos, devolve veredito. Não lê disco.
  * Lista TODOS os problemas de uma vez — descobrir um, corrigir, descobrir o próximo é o
@@ -535,7 +702,7 @@ export function decidir(ctx) {
     // satisfaz o gate, pela mesma regra que impede a linha de exemplo do template de declarar.
     problemas.push(
       '**`outputs/spec/sync-log.md` sem linha de kickoff.** Ela é a memória cronológica das três '
-      + 'fases, pré-requisito da `spec-prototype`, e o gate `KICKOFF_PERSISTED` do kit a exige na '
+      + 'fases, pré-requisito do `sn-scaffold`, e o gate `KICKOFF_PERSISTED` do kit a exige na '
       + 'primeira linha da Seção A. Escreva, na célula `Modo / contexto`:\n\n    '
       + montarKickoff({
         legado: '<Sim|Parcial|Não>', ramo: '<A|B>',
@@ -544,48 +711,14 @@ export function decidir(ctx) {
     );
   }
 
-  if (!c.temPrototipo) {
-    const faltamArtefatos = ARTEFATOS_PROTOTIPO.filter((a) => !(c.presentesSpec || new Set()).has(a));
-    problemas.push(
-      '**Protótipo de alta fidelidade ausente ou incompleto.**' +
-      (faltamArtefatos.length ? ` Faltam em \`${RAIZ_SPEC}/\`: ${faltamArtefatos.map((a) => `\`${a}\``).join(', ')}.` : '') +
-      ' Ele é o principal instrumento de revisão do Explore — clicar em tela real encontra erro de entendimento mais rápido que ler documento.',
-    );
-  }
-
-  // A FIDELIDADE DECLARADA (D9). Os três arquivos acima não bastam: o `design-system.md` só nasce no
-  // modo Geração, e quem escolhia Média e o gerava por fora passava com um protótipo que a rule não
-  // aceita. Só se pergunta com o `prototype.md` presente — sem ele, o item acima já diz o que falta,
-  // e «fidelidade não declarada» sobre um arquivo que não existe seria a mesma falta dita duas vezes.
+  // ————— a instância é o protótipo (Speckit ServiceNow, item 16 do design v0) —————
   //
-  // RE-JULGADO DEPOIS DO CONGELAMENTO, como os outros itens: a Decisão 22 dispensa só o frescor. Se
-  // no Plan alguém regerar o protótipo em fidelidade menor, o fecho volta a negar — e a saída é a
-  // mesma isenção que a mensagem aponta. É parte do item do PROTÓTIPO, não uma exigência nova.
-  if ((c.presentesSpec || new Set()).has(PROTOTIPO_MD)) {
-    const declarada = c.fidelidadePrototipo == null ? null : String(c.fidelidadePrototipo);
-    if (declarada == null) {
-      problemas.push(
-        `**Fidelidade do protótipo não declarada no \`${RAIZ_SPEC}/${PROTOTIPO_MD}\`.** O Explore exige ` +
-        `protótipo de fidelidade **Alta**, e o fecho a confere pela linha \`Fidelidade:\` do cabeçalho ` +
-        '— a que a `spec-prototype` escreve e o gate `MODE_FIDELITY_DECLARED` do kit cobra. Se o ' +
-        'protótipo é de fato de alta fidelidade (frontend navegável em `src/`, com o ' +
-        '`design-system.md`), escreva no cabeçalho:\n\n    ' +
-        `Fidelidade: ${FIDELIDADE_DO_EXPLORE}\n\n` +
-        'Se não é, o caminho é gerá-lo em Alta ou declarar a isenção abaixo.',
-      );
-    } else if (nivelDeFidelidade(declarada) !== FIDELIDADE_DO_EXPLORE) {
-      // O valor sai COMO ESCRITO, porque é o que o consultor vai procurar no arquivo — encurtado,
-      // porque é texto livre do documento entrando numa mensagem de negação.
-      const mostrado = declarada.length > 60 ? `${declarada.slice(0, 59)}…` : declarada;
-      problemas.push(
-        `**Protótipo declarado em \`Fidelidade: ${mostrado}\`, e o Explore exige Alta.** ` +
-        'Fidelidade Média ou Baixa não fecha o Explore: o protótipo de alta fidelidade — o frontend ' +
-        'navegável em `src/`, com o `design-system.md` do Passo 3.0.1 — é o principal instrumento de ' +
-        'revisão da fase. Gere-o em Alta (`spec-prototype`, modo Geração). Se o pré-projeto foi ' +
-        'legitimamente reduzido a um protótipo de fidelidade menor, declare a isenção com o bloco abaixo.',
-      );
-    }
-  }
+  // O protótipo HTML de alta fidelidade saiu (decisão A2). No lugar dele o fecho cobra as TRÊS
+  // condições do Technical Plan, «Gate do Explore»: toda `TEL-` com rota e print; o último install
+  // feito sobre o último commit de `app/src/fluent`; e todo documento do seed na lista de fictícios.
+  // Os fatos chegam prontos do `avaliar` (é I/O). Campo ausente é FALHA, não «não medido»: um gate
+  // bloqueante que não recebeu o fato não pode liberar.
+  problemas.push(...problemasDaInstancia(c));
 
   const eg = c.errosGramatica || [];
   if (eg.length) {
@@ -866,6 +999,40 @@ function lerManifestoDaCasca(docsDir, io) {
 }
 
 /**
+ * Os fatos das três condições da instância (item 16 do design v0), lidos do disco e do git.
+ *
+ * `io.ultimoCommitDe(raiz, rel)` devolve o SHA do último commit que tocou `rel`, ou `null`; ele mora
+ * no `IO_REAL` do `pretooluse.mjs` pela mesma restrição 5 de todo o resto desta casca. Um `io` sem a
+ * operação responde `null`, e o gate NEGA ("sem commit") — fail-closed.
+ *
+ * O app mora na RAIZ DOS ARTEFATOS: o Speckit ServiceNow é um repositório só (decisão A3), com a
+ * spec em `outputs/` e o app em `app/`.
+ */
+function fatosDaInstancia(raiz, io, docs, presentesSpec) {
+  const telas = avaliarTelas(
+    lerOuVazio(io, join(raiz, RAIZ_SPEC, SCREENS_MANIFEST)),
+    telasDaEspecificacao(docs.get('especificacao-funcional.md') || ''),
+    presentesSpec,
+  );
+
+  const commitFluent = typeof io.ultimoCommitDe === 'function' ? io.ultimoCommitDe(raiz, DIR_FLUENT) : null;
+  const install = {
+    commitFluent: commitFluent ? String(commitFluent).trim() : null,
+    ultimo: ultimoInstall(lerOuVazio(io, join(raiz, RAIZ_SPEC, 'sync-log.md'))),
+  };
+
+  const textos = new Map();
+  const nomeLista = DOCUMENTOS_DO_SEED.slice(DIR_SEED.length + 1);
+  for (const rel of inventariar(join(raiz, DIR_SEED), io.lerDiretorio)) {
+    if (rel === nomeLista || !/\.(ts|js|mjs|json)$/i.test(rel)) continue;
+    textos.set(rel, lerOuVazio(io, join(raiz, DIR_SEED, rel)));
+  }
+  const seed = avaliarSeed(textos, lerOuVazio(io, join(raiz, DOCUMENTOS_DO_SEED)));
+
+  return { telas, install, seed };
+}
+
+/**
  * Entrada do despachante. `null` quando a ação não atravessa a fronteira.
  *
  * A PERGUNTA "É COMIGO?" VEM PRIMEIRO, e antes de todo I/O. O `avaliar` do plano inventariava
@@ -940,9 +1107,7 @@ export function avaliar(payload, io) {
     presentesSpec,
     kickoff: lerKickoff(lerOuVazio(io, join(raiz, RAIZ_SPEC, 'sync-log.md'))),
     manifestoValido: !manifesto.erro,
-    temPrototipo: ARTEFATOS_PROTOTIPO.every((a) => presentesSpec.has(a)),
-    // O `prototype.md` também já veio do `carregarDocs` (é o `DO_SPEC` do `revisao.mjs`).
-    fidelidadePrototipo: lerFidelidade(docs.get(PROTOTIPO_MD) || ''),
+    ...fatosDaInstancia(raiz, io, docs, presentesSpec),
     dispensasFaltando,
     errosGramatica,
     revisaoPresente: revisao.presente,

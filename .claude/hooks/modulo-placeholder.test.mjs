@@ -26,7 +26,16 @@ import { extrairIds } from './kit.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = join(RAIZ, '.claude', 'skills', 'tools', 'check-modules.py');
-const TEMPLATE = join(RAIZ, '.claude', 'skills', 'spec-prototype', 'templates', 'prototype.md');
+// A `spec-prototype` saiu no fork ServiceNow (item 27), e com ela o template `prototype.md`. Um
+// projeto antigo pode ter um `prototype.md` no disco, e os verificadores continuam lendo-o; o que
+// se prende agora é o cabeçalho do template corrigido, copiado aqui.
+const TEMPLATE_CORRIGIDO = [
+  '| ID | Rota | Nome | Tipo (lista / formulário / detalhe / dashboard / modal / autenticação / configuração / relatório) | Origem (FLX/RF/entidade/perfil/transversal) | Módulo (código do módulo) | Status |',
+  '|----|------|------|------|--------|--------|--------|',
+  '',
+  '| UI (rota / componente) | Domínio (código do módulo) | HU (ou PD-xxx) | RN (ou PD-xxx) | KPI | Ref. (F-xxx / legacy §) | Estados erro/vazio/carga (ou PENDÊNCIA) | Notas *(opcional)* |',
+  '|---|---|---|---|---|---|---|---|',
+].join('\n');
 const PY = process.env.PYTHON_REPORT || 'python';
 
 /** As formas de exemplo que os templates do kit usam para «um código de módulo qualquer». */
@@ -85,15 +94,15 @@ const fantasmas = (proto) => analisar(new Map(Object.entries({
   'prototype.md': proto,
 }))).listas.find((l) => l.chave === 'modulo-fantasma').itens;
 
-test('D10 — o template do protótipo não traz código de módulo nenhum, nem de exemplo', () => {
-  const t = readFileSync(TEMPLATE, 'utf8');
+test('D10 — o cabeçalho do template do protótipo não traz código de módulo nenhum, nem de exemplo', () => {
+  const t = TEMPLATE_CORRIGIDO;
   assert.deepEqual(extrairIds('MOD', t), [], 'o template cita um MOD-* que os verificadores leriam como módulo');
   assert.match(t, /\| Domínio \(código do módulo\) \|/, 'a tabela UI → negócio perdeu a coluna «Domínio (código do módulo)»');
   assert.match(t, /\| Módulo \(código do módulo\) \|/, 'o Inventário de telas perdeu a coluna «Módulo (código do módulo)»');
 });
 
 test('D10 — check-modules.py: o template copiado à risca, com uma linha preenchida, passa (exit 0)', () => {
-  const proto = readFileSync(TEMPLATE, 'utf8') + '\n| /pedidos | MOD-PEDIDOS | RF-001 | RN-001 | — | F-001 | ok |\n';
+  const proto = TEMPLATE_CORRIGIDO + '\n| /pedidos | MOD-PEDIDOS | RF-001 | RN-001 | — | F-001 | ok |\n';
   const { status, rel } = checkModules(proto);
   assert.deepEqual(rel.by_source.prototype.unknown_codes, []);
   assert.equal(status, 0, JSON.stringify(rel.issues));
@@ -130,7 +139,7 @@ test('D10 — check-modules.py: campo estruturado com MOD-XXX é campo não pree
 });
 
 test('D10 — revisao.mjs: o template copiado à risca não cria módulo fantasma', () => {
-  assert.deepEqual(fantasmas(readFileSync(TEMPLATE, 'utf8')), []);
+  assert.deepEqual(fantasmas(TEMPLATE_CORRIGIDO), []);
 });
 
 test('D10 — revisao.mjs: o cabeçalho antigo não cria fantasma; o código não registrado continua na lista', () => {

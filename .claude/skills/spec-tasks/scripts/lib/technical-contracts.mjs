@@ -719,11 +719,14 @@ function columnToSegment(col, primaryKey) {
     name,
     type,
     pk ? 'PK' : null,
-    col?.nullable === false ? 'NOT NULL' : col?.nullable === true ? 'NULL' : null,
+    col?.nullable === false || col?.mandatory === true ? 'NOT NULL' : col?.nullable === true ? 'NULL' : null,
+    // Formato ServiceNow (data-model.json do Speckit ServiceNow): a referência aponta a tabela.
+    isNonEmptyString(col?.reference) ? `→ ${col.reference}` : null,
     col?.unique === true && !pk ? 'UNIQUE' : null,
     col?.operationType ? `[${col.operationType}]` : null
   ].filter(Boolean).join(' ');
-  const desc = col?.notes ?? col?.description ?? col?.comment ?? '';
+  // `label` é a descrição curta do formato ServiceNow; os campos de nota continuam mandando.
+  const desc = col?.notes ?? col?.description ?? col?.comment ?? col?.label ?? '';
   return desc ? `${bits} — ${desc}` : bits;
 }
 
@@ -754,7 +757,7 @@ export function entityToCompactProse(found, opts = {}) {
   const colProse = columns.map((c) => columnToSegment(c, e.primaryKey)).join(' | ');
   // Gate de qualidade: ao menos um segmento com TIPO e descrição. Sem isso, escrever o bloco só
   // trocaria um FATAL de presença por um FATAL de qualidade.
-  if (columns.length && !columns.some((c) => isNonEmptyString(c?.type) && isNonEmptyString(c?.notes ?? c?.description ?? c?.comment))) {
+  if (columns.length && !columns.some((c) => isNonEmptyString(c?.type) && isNonEmptyString(c?.notes ?? c?.description ?? c?.comment ?? c?.label))) {
     missing.push('nenhuma coluna do data-model tem type + notes (o gate de qualidade exige tipo e descrição)');
   }
   if (missing.length) return { entity: null, missing };
@@ -763,7 +766,7 @@ export function entityToCompactProse(found, opts = {}) {
 
   const out = {
     table,
-    ...(isNonEmptyString(e.purpose) ? { purpose: e.purpose } : {}),
+    ...(isNonEmptyString(e.purpose) ? { purpose: e.purpose } : isNonEmptyString(e.label) ? { purpose: e.label } : {}),
     ...(found.bcName ? { boundedContext: found.bcName } : {}),
     ...(e.operationType ? { operationType: e.operationType } : {}),
     ...(e.identifierStrategy ? { identifierStrategy: e.identifierStrategy } : {}),
@@ -774,7 +777,10 @@ export function entityToCompactProse(found, opts = {}) {
     ...(uniqueCols.length ? { uniqueConstraints: uniqueCols.map((c) => `UNIQUE (${c})`).join(' | ') } : {}),
     ...(joinProse(e.checkConstraints) ? { checkConstraints: joinProse(e.checkConstraints) } : {}),
     ...(isNonEmptyString(e.migrationNotes) ? { migrationNotes: e.migrationNotes } : {}),
-    dataModelRef: `${opts.dataModelName ?? 'data-model.json'}#/boundedContexts/${found.bcId ?? '?'}/entities/${table}`
+    // Formato ServiceNow: `entities[]` na raiz, sem bounded context.
+    dataModelRef: found.bcId == null && found.bcName == null
+      ? `${opts.dataModelName ?? 'data-model.json'}#/entities/${table}`
+      : `${opts.dataModelName ?? 'data-model.json'}#/boundedContexts/${found.bcId ?? '?'}/entities/${table}`
   };
   return { entity: out, missing: [] };
 }

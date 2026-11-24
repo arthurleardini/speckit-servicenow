@@ -5,11 +5,11 @@ import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
-  RAIZ_EXPLORE, RAIZ_SPEC, DOCS_EXPLORE, WHITELIST_EXPLORE, ARTEFATOS_PROTOTIPO, ZONA_IMUTAVEL,
+  RAIZ_EXPLORE, RAIZ_SPEC, DOCS_EXPLORE, WHITELIST_EXPLORE, ZONA_IMUTAVEL,
   ehWhitelistExplore, ehZonaImutavel, faltantesExplore, detectarFase, validadorPara, inventariar,
   relativizar, ehDoExplore, podeSerDoExplore, protegidosContidosEm, MARCADOR_CONGELAMENTO,
   CODIGOS_DE_AUSENCIA_DE_DOCUMENTO,
-  PROTOTIPO_MD, FIDELIDADE_DO_EXPLORE, lerFidelidade, nivelDeFidelidade,
+  SCREENS_MANIFEST, DATA_MODEL_PREVIA, FAMILIAS_SN,
 } from './kit.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -169,10 +169,46 @@ test('relativizar: normaliza barra invertida do Windows', () => {
 });
 
 test('WHITELIST_EXPLORE tem os caminhos que o Explore pode escrever em outputs/spec', () => {
-  for (const c of ['sync-log.md', 'context-map.md', 'benchmark.md', 'prototype.md',
-                   'design-system.md', 'screens-manifest.json']) {
+  for (const c of ['sync-log.md', 'context-map.md', 'benchmark.md', 'screens-manifest.json', 'screens/',
+                   'data-model.previa.json']) {
     assert.ok(WHITELIST_EXPLORE.includes(c), c);
   }
+  // O protótipo HTML saiu (Speckit ServiceNow, decisão A2): os dois arquivos dele não são mais do Explore.
+  for (const c of ['prototype.md', 'design-system.md']) assert.ok(!WHITELIST_EXPLORE.includes(c), c);
+});
+
+test('item 15 — a prévia do modelo de dados é do Explore; o modelo final caracteriza o Plan', () => {
+  assert.equal(DATA_MODEL_PREVIA, 'data-model.previa.json');
+  assert.equal(SCREENS_MANIFEST, 'screens-manifest.json');
+  assert.equal(ehWhitelistExplore('outputs/spec/data-model.previa.json'), true);
+  assert.equal(ehWhitelistExplore('outputs/spec/data-model.json'), false);
+  assert.equal(detectarFase(fatos({
+    spec: new Set(['outputs/spec/sync-log.md', 'outputs/spec/data-model.previa.json', 'outputs/spec/screens-manifest.json']),
+  })), 'explore');
+  assert.equal(detectarFase(fatos({
+    spec: new Set(['outputs/spec/sync-log.md', 'outputs/spec/data-model.json']),
+  })), 'plan');
+});
+
+test('item 15 — o kit não exporta mais o maquinário do protótipo HTML', async () => {
+  const kit = await import('./kit.mjs');
+  for (const nome of ['ARTEFATOS_PROTOTIPO', 'PROTOTIPO_MD', 'FIDELIDADE_DO_EXPLORE', 'lerFidelidade', 'nivelDeFidelidade']) {
+    assert.equal(nome in kit, false, nome);
+  }
+});
+
+test('item 15 — SIM-nn e CT-MOD-…-nnn são famílias do kit, fora das do Explore', () => {
+  assert.deepEqual([...FAMILIAS_SN], ['SIM', 'CT']);
+  assert.equal(validarId('SIM', 'SIM-01'), true);
+  assert.equal(validarId('SIM', 'SIM-1'), false);
+  assert.equal(validarId('CT', 'CT-MOD-F2-003'), true);
+  assert.equal(validarId('CT', 'CT-MOD-T-001'), true);
+  assert.equal(validarId('CT', 'CT-MOD-F2-'), false);
+  assert.deepEqual(extrairIds('CT', 'O CT-MOD-F2-003 verifica o RF-MOD-F2-003.'), ['CT-MOD-F2-003']);
+  assert.deepEqual(extrairIds('SIM', 'Score simulado (SIM-01) e canais (SIM-02).'), ['SIM-01', 'SIM-02']);
+  assert.deepEqual(acharMalFormados('SIM', 'a SIM-1 não tem padding'), ['SIM-1']);
+  assert.ok(!FAMILIAS_EXPLORE.includes('SIM') && !FAMILIAS_EXPLORE.includes('CT'));
+  assert.ok(ID_PADRAO.SIM && ID_PADRAO.CT);
 });
 
 test('D1 — a saída da `spec-frame` é do Explore: `frame.md` e `frame/` na whitelist, e a fase fica Explore', () => {
@@ -195,38 +231,10 @@ test('D1 — a saída da `spec-frame` é do Explore: `frame.md` e `frame/` na wh
   assert.equal(ehWhitelistExplore('outputs/spec/frame-v2.md'), false);
 });
 
-test('D9 — lerFidelidade lê a linha `Fidelidade:` do cabeçalho do prototype.md, em qualquer forma', () => {
-  // A forma do template da `spec-prototype` e as variações que um consultor escreve à mão.
-  assert.equal(lerFidelidade('# Protótipo\n\nModo: geração\nFidelidade: alta\n'), 'alta');
-  assert.equal(lerFidelidade('**Fidelidade:** Alta'), 'Alta');
-  assert.equal(lerFidelidade('> **Fidelidade**: média'), 'média');
-  assert.equal(lerFidelidade('- Fidelidade: baixa'), 'baixa');
-  // A primeira declaração vale; citação depois do cabeçalho não muda nada.
-  assert.equal(lerFidelidade('Fidelidade: alta\n\n> o template diz «Fidelidade: baixa | média | alta»'), 'alta');
-  // Sem declaração: linha ausente, linha vazia, e rótulo que não abre a linha.
-  assert.equal(lerFidelidade('# Protótipo\n\nSeis estados.\n'), null);
-  assert.equal(lerFidelidade('Fidelidade:   \n'), null);
-  assert.equal(lerFidelidade('> Escolha de fidelidade do teste: **Média**'), null);
-  assert.equal(lerFidelidade(''), null);
-});
-
-test('D9 — nivelDeFidelidade: caixa e acento livres; o template intocado não escolhe nível', () => {
-  assert.equal(nivelDeFidelidade('alta'), 'alta');
-  assert.equal(nivelDeFidelidade('ALTA (frontend completo em `src/`)'), 'alta');
-  assert.equal(nivelDeFidelidade('Média'), 'media');
-  assert.equal(nivelDeFidelidade('media'), 'media');
-  assert.equal(nivelDeFidelidade('baixa'), 'baixa');
-  // A linha do template lista as opções — nem a primeira (baixa) nem a última (alta) vale.
-  assert.equal(nivelDeFidelidade('baixa | média | alta'), null);
-  assert.equal(nivelDeFidelidade('altíssima'), null);
-  assert.equal(nivelDeFidelidade(null), null);
-  assert.equal(FIDELIDADE_DO_EXPLORE, 'alta');
-  assert.ok(ARTEFATOS_PROTOTIPO.includes(PROTOTIPO_MD));
-});
-
 test('ehWhitelistExplore aceita arquivo whitelistado', () => {
   assert.equal(ehWhitelistExplore('outputs/spec/sync-log.md'), true);
-  assert.equal(ehWhitelistExplore('outputs/spec/prototype.md'), true);
+  assert.equal(ehWhitelistExplore('outputs/spec/screens-manifest.json'), true);
+  assert.equal(ehWhitelistExplore('outputs/spec/prototype.md'), false);
 });
 
 test('ehWhitelistExplore aceita arquivo dentro de diretório whitelistado', () => {
@@ -335,7 +343,7 @@ test('detectarFase: whitelist escrita ainda é explore', () => {
   // com o prefixo outputs/spec/ — igual ao que ehWhitelistExplore exige. A tolerância ao nome
   // nu (sem prefixo) foi removida de propósito; ver detectarFase em kit.mjs.
   assert.equal(detectarFase(fatos({
-    spec: new Set(['outputs/spec/sync-log.md', 'outputs/spec/context-map.md', 'outputs/spec/prototype.md']),
+    spec: new Set(['outputs/spec/sync-log.md', 'outputs/spec/context-map.md', 'outputs/spec/screens-manifest.json']),
   })), 'explore');
 });
 
@@ -384,8 +392,8 @@ test('validadorPara: flow-map usa check-flowmap', () => {
   assert.equal(validadorPara('outputs/spec/flow-map.md'), 'check-flowmap');
 });
 
-test('validadorPara: prototype e modules usam check-modules', () => {
-  assert.equal(validadorPara('outputs/spec/prototype.md'), 'check-modules');
+test('validadorPara: modules usa check-modules; o prototype.md saiu com o protótipo HTML', () => {
+  assert.equal(validadorPara('outputs/spec/prototype.md'), null);
   assert.equal(validadorPara('outputs/spec/modules.md'), 'check-modules');
 });
 
@@ -401,11 +409,6 @@ test('validadorPara: arquivo sem validador dedicado devolve null', () => {
 
 test('validadorPara: normaliza barra invertida do Windows', () => {
   assert.equal(validadorPara('outputs\\spec\\flow-map.md'), 'check-flowmap');
-});
-
-test('ARTEFATOS_PROTOTIPO são os três que a spec-prototype deixa', () => {
-  assert.deepEqual([...ARTEFATOS_PROTOTIPO].sort(),
-    ['design-system.md', 'prototype.md', 'screens-manifest.json']);
 });
 
 test('inventariar lista arquivos recursivamente com barra normal', () => {

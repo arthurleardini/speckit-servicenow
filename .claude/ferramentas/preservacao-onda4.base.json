@@ -427,60 +427,6 @@
         "da7920ded47a64e6"
       ]
     },
-    "spec-implement": {
-      "pastas": [
-        ".claude/skills/spec-implement"
-      ],
-      "codigos": [
-        "ALL_SCENARIOS_TESTED",
-        "BUSINESS_RULE_VIOLATION",
-        "CHAT_HANDOFF_DELIVERED",
-        "COVERAGE_BELOW_THRESHOLD",
-        "CROSS_CHECK_DIVERGENCE",
-        "E2E_SCENARIO_DEFERRED",
-        "EDGE_CASE",
-        "EXTERNAL_SERVICE_FAILURE",
-        "FIX_HAS_RED_GREEN",
-        "HAPPY_PATH",
-        "IMPL_COVERAGE",
-        "INVALID_INPUT",
-        "LOAD_SCENARIO_DEFERRED",
-        "MANUAL_QA_REMAINING",
-        "NEGATIVE_PATHS_COVERED",
-        "NO_STATE_CHANGE_ON_FAILURE",
-        "NO_TEST_STACK_DECLARED",
-        "NO_UAT_BACKLOG",
-        "SCENARIOS_DERIVED_FROM_TEXT",
-        "SCENARIO_ADDED_DURING_IMPLEMENTATION",
-        "SCENARIO_CATEGORY_SKIPPED",
-        "SCOPE_CONFIRMED",
-        "STATE_TRANSITION_FAILED",
-        "TB_PEDIDO",
-        "TESTABILITY_REFACTOR",
-        "TEST_BLUEPRINT_BEFORE_CODE",
-        "TEST_LAYERS_FROM_RULES",
-        "TEST_STACK_MISSING",
-        "VALIDACAO_INDEPENDENTE_APROVADA",
-        "VALIDACAO_INDISPONIVEL",
-        "VALIDACAO_PARADA",
-        "VALIDATIONS_PASSED",
-        "WORK_ITEM_SOURCED"
-      ],
-      "ids": [
-        "RN-012",
-        "TASK-001",
-        "TASK-014",
-        "TC-004"
-      ],
-      "normas": [
-        "093a903c4b75c082",
-        "764c0633fdba5675",
-        "77f4f83318c62b94",
-        "98a92d18ec278830",
-        "9bc36081ecd06879",
-        "a4fca9d86fcad296"
-      ]
-    },
     "spec-status-report": {
       "pastas": [
         ".claude/skills/spec-status-report"
@@ -576,31 +522,6 @@
         "77f4f83318c62b94",
         "89aada36b7dae168",
         "ea3040f471804030"
-      ]
-    },
-    "spec-scaffold": {
-      "pastas": [
-        ".claude/skills/spec-scaffold"
-      ],
-      "codigos": [
-        "BUILD_FAILED",
-        "BUILD_NOT_SPECIFIED",
-        "NO_SPECS_DEGRADED_MODE",
-        "RULES_CONTRADICTION",
-        "RULES_DIR_MISSING",
-        "RULES_ORDER",
-        "TARGET_PATH_MISSING",
-        "TB_PEDIDO"
-      ],
-      "ids": [
-        "RN-012"
-      ],
-      "normas": [
-        "093a903c4b75c082",
-        "250aa749b56c5ef9",
-        "77f4f83318c62b94",
-        "9277772915ab608d",
-        "b1bc9a694fdfb4c5"
       ]
     },
     "spec-product": {

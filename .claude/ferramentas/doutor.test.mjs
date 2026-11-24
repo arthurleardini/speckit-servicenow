@@ -1,40 +1,76 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { ITENS, sondar, avaliarSondagens, formatarTexto, ehPythonReal, IO_REAL, RUNTIME_PADRAO, lerRuntime } from './doutor.mjs';
+import {
+  ITENS, sondar, sondarInstancia, avaliarSondagens, formatarTexto, ehPythonReal, IO_REAL, RUNTIME_PADRAO,
+  lerRuntime, nomesComValor, versaoNaFaixa, ghTemRepo, VARIAVEIS_DA_INSTANCIA, CHECK_SENSIVEL,
+} from './doutor.mjs';
 
-/** Um `io` de memória: respostas fixas por comando. */
-function ioFalso({ comandos = {}, node = 'v22.17.1', ambiente = {} } = {}) {
+/** Um `io` de memória: respostas fixas por comando, arquivos por caminho relativo. */
+function ioFalso({ comandos = {}, node = 'v22.17.1', ambiente = {}, arquivos = {}, modos = {}, existem = [], prefixo } = {}) {
   return {
     rodar: (cmd, args) => {
       const chave = [cmd, ...(args || [])].join(' ');
       if (Object.prototype.hasOwnProperty.call(comandos, chave)) return comandos[chave];
       if (Object.prototype.hasOwnProperty.call(comandos, cmd)) return comandos[cmd];
-      return { ok: false, saida: '', erro: 'ENOENT' };
+      return { ok: false, saida: '', stderr: '', erro: 'ENOENT' };
     },
     versaoDoNode: () => node,
     ambiente: (n) => Boolean(ambiente[n]),
+    lerArquivo: (rel) => (Object.prototype.hasOwnProperty.call(arquivos, rel) ? arquivos[rel] : null),
+    modoArquivo: (rel) => (Object.prototype.hasOwnProperty.call(modos, rel) ? modos[rel] : null),
+    existe: (p) => existem.includes(p),
+    ghBin: () => 'gh',
+    prefixoDaInstancia: async () => (prefixo === undefined ? { ok: false, erro: 'sem dublê' } : prefixo),
   };
 }
 
-test('os sete itens da §11.2 estão todos na tabela, e quatro são obrigatórios', () => {
-  assert.equal(ITENS.length, 7);
-  const obrigatorios = ITENS.filter((i) => i.obrigatorio).map((i) => i.chave);
-  assert.deepEqual(obrigatorios.sort(), ['git', 'node', 'python', 'runtime']);
-});
+const ENV_COMPLETO = 'SN_SDK_NODE_ENV=SN_SDK_CI_INSTALL\nSN_SDK_INSTANCE_URL=https://x.service-now.com\n' +
+  'SN_SDK_USER=admin\nSN_SDK_USER_PWD=segredo-que-nao-pode-vazar\nSN_ALIAS=dev493801\n';
 
-test('máquina completa: nada faltando', () => {
-  const io = ioFalso({
+/** Máquina completa do Speckit ServiceNow. */
+function maquinaCompleta(extra = {}) {
+  return {
     comandos: {
       'claude --version': { ok: true, saida: '1.2.3' },
       'git --version': { ok: true, saida: 'git version 2.45.0' },
-      'python3 -c import sys; print(sys.executable)': { ok: true, saida: 'C:\\Python313\\python.exe' },
+      'python3 -c import sys; print(sys.executable)': { ok: true, saida: '/usr/bin/python3' },
       'npm --version': { ok: true, saida: '10.9.0' },
+      [`${process.execPath} app/node_modules/@servicenow/sdk/bin/index.js --version`]: { ok: true, saida: '4.14.3\n' },
+      'gh auth status': { ok: true, saida: '', stderr: "github.com\n  ✓ Logged in to github.com account x\n  - Token scopes: 'gist', 'read:org', 'repo'\n" },
+      [`${process.execPath} -e import('playwright').then(m=>console.log(m.chromium.executablePath()))`]: { ok: true, saida: '/c/chrome\n' },
     },
-    ambiente: { AZURE_DEVOPS_PAT: 1, AZURE_DEVOPS_ORG: 1, AZURE_DEVOPS_PROJECT: 1 },
-  });
-  const r = avaliarSondagens(sondar(io));
+    node: 'v22.17.1',
+    arquivos: {
+      'package.json': JSON.stringify({ engines: { node: '>=20.18 <27' } }),
+      'app/package.json': JSON.stringify({ devDependencies: { '@servicenow/sdk': '4.14.3' } }),
+      'app/now.config.json': JSON.stringify({ scope: 'x_2326104_cob' }),
+      '.env.instancia': ENV_COMPLETO,
+    },
+    modos: { '.env.instancia': 0o600 },
+    existem: ['/c/chrome', CHECK_SENSIVEL, '.harness-template'],
+    prefixo: { ok: true, valor: '2326104' },
+    ...extra,
+  };
+}
+
+const item = (r, chave) => r.itens.find((i) => i.chave === chave);
+
+test('a tabela de itens do fork: sai o PAT do Azure, entram os do ServiceNow', () => {
+  const chaves = ITENS.map((i) => i.chave);
+  assert.ok(!chaves.includes('pat'), 'Azure DevOps está fora do v0');
+  for (const c of ['nowSdk', 'credencial', 'permissao', 'prefixo', 'gh', 'playwright', 'sensivel', 'modo']) {
+    assert.ok(chaves.includes(c), `falta o item ${c}`);
+  }
+  const obrigatorios = ITENS.filter((i) => i.obrigatorio).map((i) => i.chave).sort();
+  assert.deepEqual(obrigatorios, ['credencial', 'gh', 'git', 'node', 'nowSdk', 'permissao', 'playwright', 'prefixo', 'python', 'runtime', 'sensivel'].sort());
+});
+
+test('máquina completa: nada faltando', async () => {
+  const io = ioFalso(maquinaCompleta());
+  const r = avaliarSondagens(await sondarInstancia(sondar(io), io));
   assert.deepEqual(r.faltandoObrigatorio, []);
+  assert.ok(r.itens.every((i) => i.ok), JSON.stringify(r.itens.filter((i) => !i.ok)));
 });
 
 test('o runtime sondado é parâmetro, e o padrão é o Claude Code', () => {
@@ -117,15 +153,6 @@ test('o registry npm é declarado NÃO SONDADO, com a razão', () => {
   assert.match(t, /rede/i, 'a razão de não sondar tem que estar escrita — não é omissão');
 });
 
-test('o PAT é conferido por PRESENÇA e o valor NUNCA é impresso', () => {
-  // Segredo ecoado no terminal também vai para o log da sessão.
-  const io = ioFalso({ ambiente: { AZURE_DEVOPS_PAT: 1, AZURE_DEVOPS_ORG: 1, AZURE_DEVOPS_PROJECT: 1 } });
-  const sondagens = sondar(io);
-  const serializado = JSON.stringify(sondagens) + formatarTexto(avaliarSondagens(sondagens));
-  assert.ok(!serializado.includes('AZURE_DEVOPS_PAT='), 'vazou a forma nome=valor');
-  assert.match(serializado, /AZURE_DEVOPS_PAT/, 'o nome da variável tem que aparecer');
-});
-
 test('io.ambiente devolve boolean, e é o que impede o valor de circular', () => {
   // A ASSERÇÃO É SOBRE A FORMA DO io, e é ela que fecha o vazamento na origem: um
   // `ambiente(n) => process.env[n]` faria o valor entrar no objeto de sondagem, e daí para o
@@ -154,9 +181,117 @@ test('IO_REAL.ambiente devolve boolean de verdade — não só o io.ambiente fal
   }
 });
 
+
 test('item opcional ausente não entra em faltandoObrigatorio', () => {
   const r = avaliarSondagens(sondar(ioFalso({})));
   assert.ok(!r.faltandoObrigatorio.includes('opcionais'));
-  assert.ok(!r.faltandoObrigatorio.includes('pat'));
   assert.ok(!r.faltandoObrigatorio.includes('npm'));
+  assert.ok(!r.faltandoObrigatorio.includes('modo'));
+});
+
+// ————————————————— os itens do Speckit ServiceNow (design v0, item 8) —————————————————
+
+test('Node fora do `engines` do package.json da raiz é falta', () => {
+  const r = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ node: 'v27.0.0' }))));
+  assert.ok(r.faltandoObrigatorio.includes('node'));
+  assert.match(item(r, 'node').detalhe, />=20\.18 <27/);
+  assert.equal(versaoNaFaixa('v26.2.0', '>=20.18 <27'), true);
+  assert.equal(versaoNaFaixa('v20.17.9', '>=20.18 <27'), false);
+  assert.equal(versaoNaFaixa('v20.18.0', '>=20.18 <27'), true);
+});
+
+test('now-sdk diferente do fixado em app/package.json é falta', () => {
+  const m = maquinaCompleta();
+  m.comandos[`${process.execPath} app/node_modules/@servicenow/sdk/bin/index.js --version`] = { ok: true, saida: '4.15.0' };
+  const r = avaliarSondagens(sondar(ioFalso(m)));
+  assert.ok(r.faltandoObrigatorio.includes('nowSdk'));
+  assert.match(item(r, 'nowSdk').detalhe, /4\.15\.0.*4\.14\.3/);
+});
+
+test('credencial: presença conferida por nome, e o valor NUNCA aparece na saída', async () => {
+  const io = ioFalso(maquinaCompleta());
+  const s = await sondarInstancia(sondar(io), io);
+  const r = avaliarSondagens(s);
+  const tudo = JSON.stringify(s) + JSON.stringify(r) + formatarTexto(r);
+  assert.ok(!tudo.includes('segredo-que-nao-pode-vazar'), 'vazou a senha');
+  assert.ok(!tudo.includes('https://x.service-now.com'), 'vazou a URL');
+  for (const n of VARIAVEIS_DA_INSTANCIA) assert.match(tudo, new RegExp(n));
+});
+
+test('credencial incompleta: lista as variáveis que faltam, e o prefixo nem é sondado', async () => {
+  const m = maquinaCompleta();
+  m.arquivos['.env.instancia'] = 'SN_SDK_INSTANCE_URL=https://x\nSN_SDK_USER=\n';
+  const io = ioFalso(m);
+  const r = avaliarSondagens(await sondarInstancia(sondar(io), io));
+  assert.ok(r.faltandoObrigatorio.includes('credencial'));
+  assert.match(item(r, 'credencial').detalhe, /faltam: SN_SDK_USER, SN_SDK_USER_PWD, SN_ALIAS/);
+  assert.equal(item(r, 'prefixo').pulado, true);
+});
+
+test('nomesComValor devolve só nomes e ignora comentário e valor vazio', () => {
+  const n = nomesComValor('# SN_X=1\nA=1\nB=\nexport C="2"\n');
+  assert.deepEqual([...n].sort(), ['A', 'C']);
+});
+
+test('.env.instancia com permissão diferente de 600 é falta, com o comando de correção', () => {
+  const r = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ modos: { '.env.instancia': 0o644 } }))));
+  assert.ok(r.faltandoObrigatorio.includes('permissao'));
+  assert.match(item(r, 'permissao').detalhe, /644.*chmod 600/);
+});
+
+test('prefixo da instância diferente do escopo de app/now.config.json é falta', async () => {
+  const io = ioFalso(maquinaCompleta({ prefixo: { ok: true, valor: '9999999' } }));
+  const r = avaliarSondagens(await sondarInstancia(sondar(io), io));
+  assert.ok(r.faltandoObrigatorio.includes('prefixo'));
+  assert.match(item(r, 'prefixo').detalhe, /9999999.*x_2326104_cob/);
+});
+
+test('--offline pula a rede: o prefixo sai PULADO e não conta como falta', async () => {
+  let chamou = false;
+  const io = ioFalso(maquinaCompleta());
+  io.prefixoDaInstancia = async () => { chamou = true; return { ok: true, valor: '2326104' }; };
+  const r = avaliarSondagens(await sondarInstancia(sondar(io), io, { offline: true }));
+  assert.equal(chamou, false);
+  assert.equal(item(r, 'prefixo').pulado, true);
+  assert.ok(!r.faltandoObrigatorio.includes('prefixo'));
+  assert.match(formatarTexto(r), /PULADO/);
+});
+
+test('falha de rede no prefixo é falta, com o erro', async () => {
+  const io = ioFalso(maquinaCompleta({ prefixo: { ok: false, erro: 'HTTP 401' } }));
+  const r = avaliarSondagens(await sondarInstancia(sondar(io), io));
+  assert.ok(r.faltandoObrigatorio.includes('prefixo'));
+  assert.match(item(r, 'prefixo').detalhe, /HTTP 401/);
+});
+
+test('gh sem escopo repo é falta', () => {
+  assert.equal(ghTemRepo("Token scopes: 'gist', 'read:org'"), false);
+  assert.equal(ghTemRepo("Token scopes: 'gist', 'repo'"), true);
+  assert.equal(ghTemRepo("Token scopes: 'public_repo'"), false);
+  const m = maquinaCompleta();
+  m.comandos['gh auth status'] = { ok: true, saida: '', stderr: "✓ Logged in to github.com\n- Token scopes: 'gist'\n" };
+  const r = avaliarSondagens(sondar(ioFalso(m)));
+  assert.ok(r.faltandoObrigatorio.includes('gh'));
+  assert.match(item(r, 'gh').detalhe, /refresh -s repo/);
+});
+
+test('Playwright sem Chromium baixado é falta', () => {
+  const r = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ existem: [CHECK_SENSIVEL] }))));
+  assert.ok(r.faltandoObrigatorio.includes('playwright'));
+  assert.match(item(r, 'playwright').detalhe, /playwright install chromium/);
+});
+
+test('check_sensivel.py fora do caminho absoluto é falta', () => {
+  const r = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ existem: ['/c/chrome'] }))));
+  assert.ok(r.faltandoObrigatorio.includes('sensivel'));
+});
+
+test('modo do repositório: template, clone, e marcador num clone é vermelho', () => {
+  const tpl = avaliarSondagens(sondar(ioFalso(maquinaCompleta())));
+  assert.match(item(tpl, 'modo').detalhe, /^template/);
+  const clone = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ existem: ['/c/chrome', CHECK_SENSIVEL, 'harness-zona.lock.json'] }))));
+  assert.match(item(clone, 'modo').detalhe, /^clone/);
+  assert.equal(item(clone, 'modo').ok, true);
+  const ambos = avaliarSondagens(sondar(ioFalso(maquinaCompleta({ existem: ['/c/chrome', CHECK_SENSIVEL, 'harness-zona.lock.json', '.harness-template'] }))));
+  assert.equal(item(ambos, 'modo').ok, false);
 });

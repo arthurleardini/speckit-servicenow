@@ -529,3 +529,18 @@ test('o contrato de cabeçalho está ESCRITO na rule, e não só nas duas regex 
   assert.match(rule, /Changelog/);
   assert.match(rule, /ausência/i, 'a rule tem que dizer o que continua sendo recusado, não só o que é aceito');
 });
+
+// ————— item 18 do design v0: a gramática reconhece SIM- e CT-MOD- —————
+
+test('item 18 — SIM-nn bem escrito passa e SIM-1 é acusado, com a explicação da família', () => {
+  const ok = validarExplore('outputs/explore/hld-funcional.md', BOM + '\n\nO score vem da SIM-01 e os canais da SIM-02.\n');
+  assert.deepEqual(ok.erros, []);
+  const r = validarExplore('outputs/explore/hld-funcional.md', BOM + '\n\nO score vem da SIM-1.\n');
+  assert.equal(r.erros.length, 1, r.erros.join('\n'));
+  assert.match(r.erros[0], /`SIM-1`[\s\S]*família `SIM`[\s\S]*SIM-01/);
+});
+
+test('item 18 — CT-MOD-… passa, e a citação do CT-nn do plano de origem NÃO é acusada', () => {
+  const t = BOM + '\n\nO CT-MOD-F2-003 verifica o RF-MOD-F2-003 (no plano de origem, CT-07).\n';
+  assert.deepEqual(validarExplore('outputs/explore/hld-funcional.md', t).erros, []);
+});

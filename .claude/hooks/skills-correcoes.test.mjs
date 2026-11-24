@@ -81,17 +81,7 @@ test('1.4 — enquanto a spec-tasks proíbe backlog de UAT, nem a rule do Plan n
   assert.match(plan, /`test-plan\.md` é a fonte dos cenários de aceite/);
 });
 
-// ————————————————————————— 1.8 — spec-convert-prototype em português do Brasil —————————————————————————
-
-test('1.8 — a spec-convert-prototype não tem mais português de Portugal na prosa', () => {
-  const t = ler('.claude/skills/spec-convert-prototype/SKILL.md');
-  // O inventário da Onda 0 (65 ocorrências). `COMMANDS_ACTUALLY_EXECUTED` é código de validador e
-  // não casa: as formas abaixo são palavras inteiras da prosa.
-  const ptpt = /Objectivo|projecto|\bexact[ao]|exactamente|correc[çt]|directamente|reflectir|\bregistar\b|\bregisto\b|\bcorr(er|em|ido)\b|intermédi|\brever\b|\baceite\b|\bpartilhad|rebentam|saltada|falhados|género|até ao\b|a meio\b|avançares|\bvais\b|\baceder\b/i;
-  const linhas = t.split('\n').map((l, i) => [i + 1, l]).filter(([, l]) => ptpt.test(l));
-  assert.deepEqual(linhas.map(([n, l]) => `${n}: ${l.match(ptpt)[0]}`), []);
-  assert.match(t, /COMMANDS_ACTUALLY_EXECUTED/, 'o código do validador não pode ter sido tocado');
-});
+// ————————————————————————— 1.8 — saiu com a spec-convert-prototype (fork ServiceNow, item 27) —————————————————————————
 
 // ————————————————————————— 1.10 — o ambiente= do kickoff tem de onde vir —————————————————————————
 
@@ -164,7 +154,7 @@ test('1.5b — a Regra de Ouro da spec-code-audit é cumprível pela própria sk
 
 test('1.7 — WCAG 2.2 AA declarado na rule de frontend do harness e no padrão da spec-tech-rules', () => {
   // O CLAUDE.md diz que a rule de frontend é a dona do nível WCAG; a description dela também. Faltava o corpo.
-  for (const rel of ['.claude/rules/harness/frontend.md', '.claude/skills/spec-tech-rules/templates/frontend-default.mdc']) {
+  for (const rel of ['.claude/skills/spec-tech-rules/templates/frontend-default.mdc'] /* a harness/frontend.md virou servicenow-ui.md (fork, item 11) */) {
     const t = ler(rel);
     const secao = t.slice(t.indexOf('## Acessibilidade'), t.indexOf('## Decisões: dados e mutações'));
     assert.ok(t.includes('## Acessibilidade'), `${rel} sem a seção Acessibilidade`);
@@ -188,28 +178,18 @@ test('1.7 — a pergunta 9.2 da spec-tech-rules virou informação lida da rule 
 
 // ————————————————— revisão de riscos, item 4 — a constituição de frontend chega a quem gera tela —————————————————
 
-test('Revisão de riscos 4 — quem gera tela lê a constituição de frontend do harness explicitamente', () => {
-  // Três mudanças do pacote se somavam: a `harness/frontend.md` ganhou `paths:` (só carrega ao abrir
-  // arquivo de tela da raiz do harness — o código pode estar num repositório irmão, ou ainda não
-  // existir); a Decisão 73 deixou de materializar o `frontend-default.mdc`; e o `frontend` da raiz é
-  // o complemento do projeto, que remetia ao `frontend-default.mdc`. Quem gera tela não pode depender
-  // do carregamento automático. Sem fixar a pasta: as saídas Kiro e Cursor reescrevem o endereço.
-  const constituicao = /`[^`\s]*harness[/-]frontend\.mdc?`/;
+test('Revisão de riscos 4 — quem gera tela lê a constituição de UI do harness explicitamente', () => {
+  // Fork ServiceNow (itens 11 e 27): a constituição de tela do harness passou a ser a
+  // `harness/servicenow-ui.md` (Core UI clássica), e quem gera tela são a `sn-scaffold` e a
+  // `sn-implement` — a `spec-prototype`, a `spec-convert-prototype` e a `spec-implement` saíram. O
+  // princípio continua: quem gera tela não depende do carregamento automático pelo `paths:`.
+  const constituicao = /`[^`\s]*harness[/-]servicenow-ui\.mdc?`/;
   const pipeline = ler('.claude/skills/tools/references/task-pipeline.md');
   const secao3 = pipeline.slice(pipeline.indexOf('## 3. Resolução de rules'), pipeline.indexOf('## 4.'));
   assert.match(secao3, constituicao, 'a resolução de rules do kit não cita a constituição do harness');
-  const prototype = ler('.claude/skills/spec-prototype/SKILL.md');
-  const gate30 = prototype.slice(prototype.indexOf('### 3.0 — Gate de ARQUITETURA'), prototype.indexOf('### 3.0.1'));
-  assert.match(gate30, constituicao, 'o Passo 3.0 da spec-prototype não cita a constituição do harness');
-  const convert = ler('.claude/skills/spec-convert-prototype/SKILL.md');
-  const resolucao = convert.slice(convert.indexOf('## Resolução da rule'), convert.indexOf('## Kickoff'));
-  assert.match(resolucao, constituicao, 'a resolução da spec-convert-prototype não cita a constituição do harness');
-  const implement = ler('.claude/skills/spec-implement/SKILL.md');
-  const resolve = implement.slice(implement.indexOf('## Resolve rules location'), implement.indexOf('## B —'));
-  assert.match(resolve, constituicao, 'o Resolve rules location da spec-implement não cita a constituição do harness');
-  // O complemento do projeto remete à constituição, não só a um arquivo que não está mais lá.
-  const stub = ler('.claude/skills/spec-tech-rules/templates/frontend.mdc');
-  for (const l of stub.split('\n').filter((x) => /frontend-default\.mdc/.test(x))) assert.match(l, constituicao, l);
+  const implement = ler('.claude/skills/sn-implement/SKILL.md');
+  const resolve = implement.slice(implement.indexOf('## Onde estão as rules'), implement.indexOf('## B —'));
+  assert.match(resolve, constituicao, 'o "Onde estão as rules" da sn-implement não cita a constituição do harness');
 });
 
 test('Revisão de riscos 7b — a auditoria-de-us lê o gaps.md vivo do Plan, não o congelado do Explore', () => {

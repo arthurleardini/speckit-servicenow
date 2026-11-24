@@ -61,7 +61,7 @@
 
 - **Arquivo(s):** `outputs/spec/frame/pre-prototype/…`
 - **HIP que ilustra:** HIP-xxx
-- **O que o `spec-prototype` (Fase 5) deve aproveitar:** <!-- telas/fluxos que sobrevivem; o resto é descartável -->
+- **O que a instância como protótipo (`sn-scaffold`, Fase 5) deve aproveitar:** <!-- telas/fluxos que sobrevivem; o resto é descartável -->
 
 <!-- Sem pré-protótipo: «não gerado — o enquadramento em texto foi suficiente». -->
 

@@ -227,14 +227,14 @@ O consultor escolhe quais hipóteses seguem para validação. As descartadas fic
 Só quando **mostrar ajuda mais que descrever** — uma tela, um fluxo, um layout hipotético. Gerar um
 esboço **leve e estático**: um arquivo HTML simples (sem framework, sem build) ou um wireframe em
 texto, salvo em `outputs/spec/frame/pre-prototype/`. Marcar no topo do arquivo:
-`<!-- PRÉ-PROTÓTIPO — esboço de hipótese, NÃO é o protótipo do produto (spec-prototype, Fase 5) -->`.
+`<!-- PRÉ-PROTÓTIPO — esboço de hipótese, NÃO é o protótipo do produto (a instância, sn-scaffold, Fase 5) -->`.
 
 Regras do pré-protótipo:
 
 - Serve para **consolidar a ideia**, não para especificar. É descartável.
 - Cada tela/fluxo esboçado aponta a `HIP-xxx` que ele ilustra.
-- **Ponte com o `spec-prototype`:** o que sobreviver aqui é insumo daquela fase — anotar no
-  `frame.md`, na seção «Pré-protótipo», o que o `spec-prototype` deve aproveitar. O pré-protótipo
+- **Ponte com a instância como protótipo (`sn-scaffold`):** o que sobreviver aqui é insumo daquela fase — anotar no
+  `frame.md`, na seção «Pré-protótipo», o que o `sn-scaffold` deve aproveitar. O pré-protótipo
   **não** compete com o protótipo do produto e **não** conta como legado.
 
 ### Etapa F — Plano de levantamento (PRB)
@@ -273,6 +273,6 @@ O cabeçalho obrigatório (título, `Status`, `Última atualização`, `Fontes`)
   (Fase 6).
 - Não faz benchmark de mercado — isso é o `spec-benchmark` (Fase 4).
 - Não gera o protótipo do produto — o pré-protótipo aqui é um esboço descartável; o protótipo real é
-  o `spec-prototype` (Fase 5).
+  a instância como protótipo (`sn-scaffold`, Fase 5).
 - Não trata protótipo nem mock como legado, e não abre `GAP-XXX` (isso é do `spec-iterate`).
 - Não dispara nenhuma skill da cadeia sem o consultor aprovar o enquadramento (hard-gate).

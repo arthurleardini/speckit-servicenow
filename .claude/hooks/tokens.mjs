@@ -41,8 +41,10 @@ export const TOKENS_POR_TEMPLATE = new Map([
     '<o que o módulo faz>', '<funcionalidade principal do módulo>',
   ]],
   ['especificacao-funcional.md', [
-    '<produto>', '<persona>', '<perfil>', '<o que essa pessoa faz>', '<ação>',
-    '<tela>', '<rota>', '<o que aparece na tela>', '<CODIGO>', '<nome do módulo>',
+    // Speckit ServiceNow (item 34): tabela de telas com TEL-, tabela, tipo, papel e registro demo; matriz
+    // de acesso com as roles `<escopo>.<role>`.
+    '<produto>', '<persona>', '<escopo>', '<role>', '<o que essa pessoa faz>', '<ação>',
+    '<título da tela>', '<tabela>', '<form\\|list\\|report>', '<registro demo da tela>', '<CODIGO>', '<nome do módulo>',
     '<nnn>', '<nome da funcionalidade>', '<o que ela faz>', '<enunciado da regra>',
   ]],
   ['especificacao-tecnica.md', [

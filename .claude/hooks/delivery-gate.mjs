@@ -9,7 +9,10 @@
 // `join(dirAuditorias, DIR_ISENCOES)` duplica o caminho, o diretório de isenções não é
 // encontrado, e o gate NEGA trabalho que tinha autorização humana explícita — o pior modo de
 // falha possível para a única válvula de escape deste gate. Derive sempre da raiz de artefatos.
-import { MARCADOR_US, DIR_AUDITORIAS, DIR_ISENCOES } from './kit.mjs';
+import {
+  MARCADOR_US, DIR_AUDITORIAS, DIR_ISENCOES, DIR_FLUENT, DIR_RECIBOS_ATF, RAIZ_SPEC,
+  ultimoInstall, mesmoCommit,
+} from './kit.mjs';
 
 const MAIN = 'main';
 
@@ -248,6 +251,66 @@ export function parseExemption(text) {
   };
 }
 
+/**
+ * Isenção POR STORY (Speckit ServiceNow, item 19): `<!-- gate:isencao-story -->`, com `story`, `tipo`
+ * (`g3` ou `atf-form`), `autor`, `data` e `motivo`. É OUTRO bloco, de propósito: o `gate:isencao` de
+ * branch isenta o push inteiro, e uma isenção de story não pode isentar a fase nem outra story. A
+ * regex de `readBlock` exige `-->` logo depois do nome, então `gate:isencao` não casa este bloco.
+ */
+export function parseIsencaoStory(text) {
+  const body = readBlock(text, 'gate:isencao-story');
+  if (body == null) return null;
+  const i = {
+    story: fieldLine(body, 'story'),
+    tipo: (fieldLine(body, 'tipo') || '').toLowerCase(),
+    autor: fieldLine(body, 'autor'),
+    data: fieldLine(body, 'data'),
+    motivo: fieldLine(body, 'motivo'),
+  };
+  // Campo com `<…>` é o template colado sem preencher: não vale.
+  const preenchido = (v) => !!v && !/^<.*>$/.test(v.trim());
+  return ['story', 'tipo', 'autor', 'data', 'motivo'].every((k) => preenchido(i[k])) ? i : null;
+}
+
+/** Os dois tipos de isenção por story que o design v0 prevê. Só `atf-form` é lido por este gate. */
+export const TIPOS_DE_ISENCAO_STORY = Object.freeze(['g3', 'atf-form']);
+
+/**
+ * O que o push de um app ServiceNow exige além da auditoria (item 19 do design v0). Puro.
+ *
+ * `sn` vem do `gatherContext`: `{ commitFluent, ultimo, porStory: { [US]: { recibo, reciboCobre,
+ * isencaoAtfForm } } }`. `null` (sem `app/src/fluent` commitado) é repositório sem app ServiceNow, e
+ * nada é exigido. O gate só LÊ: nunca roda `now-sdk` — o install e o ATF já deixaram o registro.
+ */
+export function exigenciasServiceNow(sn, stories) {
+  if (!sn || !sn.commitFluent) return null;
+  const faltas = [];
+  const u = sn.ultimo;
+  if (!u) {
+    faltas.push('nenhum install registrado no `outputs/spec/sync-log.md` — rode `npm run reinstall`');
+  } else if (u.resultado !== 'ok') {
+    faltas.push(`o último install (linha ${u.numero}) terminou em \`${u.resultado || '?'}\` — corrija e rode \`npm run reinstall\``);
+  } else if (!mesmoCommit(u.commit, sn.commitFluent)) {
+    faltas.push(`o último install ok (linha ${u.numero}) é do commit \`${String(u.commit).slice(0, 12)}\`, e o último commit de \`${DIR_FLUENT}\` é \`${String(sn.commitFluent).slice(0, 12)}\` — commite o app e rode \`npm run reinstall\` de novo`);
+  }
+  for (const us of stories) {
+    const st = (sn.porStory || {})[us] || {};
+    if (st.isencaoAtfForm) continue;
+    const recibo = `${DIR_RECIBOS_ATF}/${us}.json`;
+    if (!st.recibo) {
+      faltas.push(`${us}: sem recibo de ATF em \`${recibo}\` — rode \`npm run atf -- --story ${us}\` (com a instância no ar)`);
+    } else if (st.recibo.status !== 'success') {
+      faltas.push(`${us}: o recibo de ATF não está verde (status \`${st.recibo.status || '?'}\`)`);
+    } else if (!st.reciboCobre) {
+      faltas.push(`${us}: o recibo de ATF é do commit \`${String(st.recibo.commit || '?').slice(0, 12)}\`, anterior ao último commit de \`${DIR_FLUENT}\` — rode o ATF de novo depois do \`npm run reinstall\``);
+    }
+  }
+  if (!faltas.length) return null;
+  return 'Delivery gate: o app ServiceNow deste push não está instalado e testado no commit atual.\n'
+    + faltas.map((f) => `  · ${f}`).join('\n')
+    + `\nO gate lê só o registro (sync-log e recibos); ele nunca roda o now-sdk. Se o teste de form da story não pode rodar, registre a isenção em \`${DIR_ISENCOES}/<STORY>-atf-form.md\` com o bloco \`gate:isencao-story\` (story, tipo: atf-form, autor, data, motivo).`;
+}
+
 const OK_VERDICTS = ['APROVADA', 'APROVADA COM RESSALVAS'];
 
 /**
@@ -388,6 +451,11 @@ export function decide(ctx) {
   if (ctx.markerInTree) {
     return { action: 'deny', reason: `Delivery gate: ${MARCADOR_US} ainda está na árvore do repositório de docs. A US está fechando — apague o marcador e commite.` };
   }
+
+  // O APP SERVICENOW (item 19 do design v0): install registrado no commit atual e ATF verde de cada
+  // US auditada. Vale para os dois caminhos de `pass` abaixo — override não dispensa instalar.
+  const faltaSn = exigenciasServiceNow(ctx.servicenow, anchored.map((r) => r.us));
+  if (faltaSn) return { action: 'deny', reason: faltaSn };
 
   if (overridden.length > 0) {
     return {
@@ -540,7 +608,54 @@ function gatherContext(payload, raiz = process.cwd(), lerDiretorio = readdirSync
     }
   } catch { /* leitura best-effort */ }
 
-  return { target, papel, repo, branchIntegracao, motivo, detalhe, outgoingCommits, reports, overrides, exemption, markerInTree };
+  const servicenow = fatosServiceNow(dir, docsRaiz, reports.map((r) => r.us));
+
+  return { target, papel, repo, branchIntegracao, motivo, detalhe, outgoingCommits, reports, overrides, exemption, markerInTree, servicenow };
+}
+
+/**
+ * Os fatos do app ServiceNow para `exigenciasServiceNow`, lidos do git e do disco — nunca da
+ * instância. `null` quando o repositório do push não tem `app/src/fluent` commitado.
+ *
+ * O recibo COBRE o app quando o commit dele (o `HEAD` na hora do `npm run atf`) é o último commit de
+ * `app/src/fluent` ou um descendente dele: o recibo foi tirado depois da última mudança do app. Os
+ * commits seguintes (o próprio recibo, o sync-log) não mexem no app e não o invalidam.
+ */
+function fatosServiceNow(dir, docsRaiz, stories) {
+  if (!dir) return null;
+  let commitFluent = '';
+  try { commitFluent = gitEm(dir, ['log', '-1', '--format=%H', '--', DIR_FLUENT]); } catch { return null; }
+  if (!commitFluent) return null;
+
+  let ultimo = null;
+  try { ultimo = ultimoInstall(readFileSync(join(docsRaiz || '.', RAIZ_SPEC, 'sync-log.md'), 'utf8')); } catch { /* sem sync-log */ }
+
+  const isentas = new Set();
+  try {
+    const isenDir = isencoesDir(docsRaiz);
+    if (existsSync(isenDir)) {
+      for (const f of readdirSync(isenDir)) {
+        if (!/\.md$/i.test(f)) continue;
+        const i = parseIsencaoStory(readFileSync(join(isenDir, f), 'utf8'));
+        if (i && i.tipo === 'atf-form') isentas.add(i.story);
+      }
+    }
+  } catch { /* leitura best-effort: sem isenção, o recibo é exigido */ }
+
+  const porStory = {};
+  for (const us of stories) {
+    let recibo = null;
+    try { recibo = JSON.parse(readFileSync(join(docsRaiz || '.', DIR_RECIBOS_ATF, `${us}.json`), 'utf8')); } catch { /* ausente ou ilegível */ }
+    let reciboCobre = false;
+    if (recibo && recibo.commit) {
+      if (mesmoCommit(recibo.commit, commitFluent)) reciboCobre = true;
+      else {
+        try { gitEm(dir, ['merge-base', '--is-ancestor', commitFluent, String(recibo.commit)]); reciboCobre = true; } catch { /* não descende */ }
+      }
+    }
+    porStory[us] = { recibo, reciboCobre, isencaoAtfForm: isentas.has(us) };
+  }
+  return { commitFluent, ultimo, porStory };
 }
 
 // O `appendLedger` do v1 morava aqui: `mkdirSync` + `appendFileSync` em `_gate-ledger.md`, de

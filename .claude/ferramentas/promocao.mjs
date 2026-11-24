@@ -9,6 +9,10 @@
 // isso ele SEMPRE sai com código 0: transformar contagem de órfãos em exit code criaria limiar, e
 // limiar vira alvo. É a mesma razão pela qual o `revisao.mjs` relata e não trava.
 //
+// EXCEÇÃO DO FORK SPECKIT SERVICENOW (design v0, item 33): o modo `--rastreio` grava
+// `outputs/spec/traceability.json` e sai com 2 quando há RF sem story. Os modos relatório e
+// `--congelar` continuam como estão. Ver o bloco «rastreio», perto do fim do núcleo.
+//
 // E O MODO RELATÓRIO NÃO ESCREVE ARQUIVO NENHUM — imprime no stdout. Quem escreve é o modo
 // `--congelar`, e ele é o outro lado da Decisão 20: verificador não pode produzir arquivo,
 // executável de mão pode. Ele carimba os cinco documentos do Explore, RELÊ o disco para conferir
@@ -1327,9 +1331,179 @@ export function formatarTexto(r) {
   return l.join('\n').replace(/\n+$/, '');
 }
 
+// ————————————————————————————— rastreio (Speckit ServiceNow, item 33) —————————————————————————————
+//
+// `--rastreio` monta a matriz RF → CT → TEL → story → tasks → nowIds → ATF e a grava em
+// `outputs/spec/traceability.json`. É o ÚNICO modo desta ferramenta que bloqueia: sai com 2 quando há
+// RF sem story (órfão). A razão de o modo relatório não bloquear (limiar vira alvo) não vale aqui: o
+// v0 tem uma meta binária, «nenhum RF órfão» (M1), e o `cadeia.mjs` exige o `traceability.json`
+// antes do `sn-tasks-github`. Ninguém consulta a instância: os `nowIds` saem do código (`Now.ID[...]`
+// em `app/src`) e do `keys.ts` gerado no build, e o ATF sai dos recibos do `npm run atf`.
+//
+// UNIVERSO DE RF (decisão do fork): todo `RF-MOD-…` do `requirements/requirements.md` do Plan, mais
+// todo RF citado no `tasks.json` (sourceRefs, traceability, em qualquer nível). Sem o requirements.md,
+// vale o que a especificação funcional do Explore listar no formato do kit. RF fora do formato nativo
+// (`RF-101` do plano original) não entra: o de-para (`inputs/de-para-ids.md`) é que o converte.
+//
+// NÍVEIS: N0 sem story (órfão); N1 tem story; N2 tem story e um `nowId` com o RF no nome (ou o
+// `snArtifact.nowId` de uma task da story) presente e não apagado no `keys.ts`; N3 tem story e recibo
+// de ATF verde de uma story que cobre o RF. N3 não exige N2: o recibo verde é evidência mais forte que
+// o nome da chave.
+
+export const RASTREIO_SAIDA = 'traceability.json';
+export const DIR_RECIBOS_ATF = 'auditorias/atf';
+export const KEYS_TS = 'app/src/fluent/generated/keys.ts';
+
+const RE_RF = /\bRF-MOD-(?:[A-Z0-9]+-)*\d{2,4}\b/g;
+const RE_CT = /\bCT-MOD-(?:[A-Z0-9]+-)*\d{2,4}\b/g;
+const RE_TEL = /\bTEL-\d{2,4}\b/g;
+const RE_NOW_ID = /Now\.ID\[\s*(['"`])([^'"`]+)\1\s*\]/g;
+
+const unicos = (xs) => [...new Set(xs.filter(Boolean))];
+const todos = (re, texto) => unicos(String(texto || '').match(re) || []);
+
+/** As stories do `tasks.json`, achatadas: no topo (`stories[]`) ou dentro de `epics[].features[]`. */
+export function storiesDoBacklog(doc) {
+  if (!doc || typeof doc !== 'object') return [];
+  const saida = [];
+  const visitar = (s) => { if (s && typeof s === 'object' && s.id) saida.push(s); };
+  for (const s of doc.stories || []) visitar(s);
+  for (const e of doc.epics || []) {
+    for (const s of e.stories || []) visitar(s);
+    for (const f of e.features || []) for (const s of f.stories || []) visitar(s);
+  }
+  for (const f of doc.features || []) for (const s of f.stories || []) visitar(s);
+  const vistos = new Set();
+  return saida.filter((s) => (vistos.has(s.id) ? false : vistos.add(s.id)));
+}
+
+/** As tasks de uma story: `story.tasks[]` mais as `tasks[]` do topo com `storyId` igual. */
+function tasksDa(story, doc) {
+  const proprias = Array.isArray(story.tasks) ? story.tasks : [];
+  const soltas = Array.isArray(doc && doc.tasks) ? doc.tasks.filter((t) => t && t.storyId === story.id) : [];
+  return [...proprias, ...soltas].filter((t) => t && t.id);
+}
+
+/** Os RF que uma story cobre: `sourceRefs`, `traceability.requirementIds` e os das tasks dela. */
+function rfsDaStory(story, tasks) {
+  const ids = [];
+  const deRefs = (refs) => { for (const r of refs || []) if (r) ids.push(...todos(RE_RF, `${r.itemId || ''} ${r.section || ''}`)); };
+  const deTrace = (t) => { if (t && Array.isArray(t.requirementIds)) for (const r of t.requirementIds) ids.push(...todos(RE_RF, r)); };
+  deRefs(story.sourceRefs); deTrace(story.traceability);
+  for (const t of tasks) { deRefs(t.sourceRefs); deTrace(t.traceability); }
+  return unicos(ids);
+}
+
+const limparNowId = (v) => {
+  const s = String(v || '').trim();
+  const m = /^Now\.ID\[\s*(['"`])([^'"`]+)\1\s*\]$/.exec(s);
+  return m ? m[2] : s;
+};
+
+/**
+ * As chaves do `keys.ts` gerado pelo SDK: `Map<chave, { table, apagada }>`. A chave pode vir com ou
+ * sem aspas (`'RF-MOD-F2-003_br_x': {` ou `acl_caso_read: {`); `deleted: true` marca o que o próximo
+ * install vai apagar — chave apagada não conta como instalada.
+ */
+export function lerChavesDoKeys(texto) {
+  const mapa = new Map();
+  const re = /^\s*(['"]?)([A-Za-z0-9_.:-]+)\1\s*:\s*\{([^{}]*)\}/gm;
+  for (const m of String(texto || '').matchAll(re)) {
+    if (!/\b(table|id)\s*:/.test(m[3])) continue;
+    mapa.set(m[2], { table: (/table\s*:\s*['"]([^'"]+)['"]/.exec(m[3]) || [])[1] || null, apagada: /deleted\s*:\s*true/.test(m[3]) });
+  }
+  return mapa;
+}
+
+/** As chaves `Now.ID['…']` de um texto de código. */
+export function nowIdsNoCodigo(texto) {
+  return unicos([...String(texto || '').matchAll(RE_NOW_ID)].map((m) => m[2]));
+}
+
+const chaveDoRf = (chave, rf) => chave === rf || chave.startsWith(`${rf}_`);
+const reciboVerde = (r) => Boolean(r) && /^(success|successful|passed|sucesso)$/i.test(String(r.status || ''));
+
+/**
+ * A matriz, núcleo puro.
+ *
+ * @param {{ requisitos?: string, especificacao?: string, tasks?: object|null, nowIdsDoCodigo?: string[],
+ *           keys?: Map<string, {table: string|null, apagada: boolean}>, recibos?: Map<string, object> }} e
+ */
+export function montarRastreio({ requisitos = '', especificacao = '', tasks = null, nowIdsDoCodigo = [], keys = new Map(), recibos = new Map() } = {}) {
+  const stories = storiesDoBacklog(tasks).map((s) => {
+    const ts = tasksDa(s, tasks);
+    return { s, tasks: ts, rfs: rfsDaStory(s, ts) };
+  });
+  const doRequisitos = todos(RE_RF, requisitos);
+  const fonteUniverso = doRequisitos.length ? 'requirements' : 'especificacao-funcional';
+  const universo = unicos([
+    ...(doRequisitos.length ? doRequisitos : todos(RE_RF, especificacao)),
+    ...stories.flatMap((x) => x.rfs),
+  ]).sort();
+  const todasAsChaves = unicos([...nowIdsDoCodigo, ...keys.keys()]);
+  const instalada = (c) => keys.has(c) && !keys.get(c).apagada;
+
+  const linhas = universo.map((rf) => {
+    const cobrem = stories.filter((x) => x.rfs.includes(rf));
+    const textoStories = JSON.stringify(cobrem.map((x) => ({
+      sc: x.s.acceptanceScenarios, ac: x.s.acceptanceCriteria, br: x.s.businessRules, tr: x.s.traceability,
+      tsc: x.tasks.map((t) => [t.acceptanceScenarios, t.businessRules]),
+    })));
+    const tel = unicos(cobrem.flatMap((x) => [
+      ...(x.s.uiContext ? todos(RE_TEL, JSON.stringify(x.s.uiContext)) : []),
+      ...x.tasks.flatMap((t) => (t.uiContext ? todos(RE_TEL, JSON.stringify(t.uiContext)) : [])),
+    ])).sort();
+    const doSnArtifact = cobrem.flatMap((x) => x.tasks.map((t) => (t.snArtifact ? limparNowId(t.snArtifact.nowId) : null)));
+    const nowIds = unicos([...todasAsChaves.filter((c) => chaveDoRf(c, rf)), ...doSnArtifact]).sort();
+    const atf = cobrem.map((x) => x.s.id).filter((id) => recibos.has(id)).map((id) => {
+      const r = recibos.get(id);
+      return { story: id, status: r.status == null ? null : String(r.status), commit: r.commit || null, horario: r.horario || null, verde: reciboVerde(r) };
+    });
+    const temStory = cobrem.length > 0;
+    const nivel = !temStory ? 'N0'
+      : atf.some((a) => a.verde) ? 'N3'
+        : nowIds.some(instalada) ? 'N2' : 'N1';
+    return {
+      rf,
+      ct: todos(RE_CT, textoStories).sort(),
+      tel,
+      story: temStory ? cobrem[0].s.id : null,
+      stories: cobrem.map((x) => x.s.id),
+      tasks: unicos(cobrem.flatMap((x) => x.tasks.map((t) => t.id))),
+      nowIds,
+      nowIdsInstalados: nowIds.filter(instalada),
+      atf,
+      nivel,
+    };
+  });
+
+  const contagem = { N0: 0, N1: 0, N2: 0, N3: 0 };
+  for (const l of linhas) contagem[l.nivel] += 1;
+  return {
+    schemaVersion: 'traceability/v1',
+    fonteDoUniverso: fonteUniverso,
+    resumo: { total: linhas.length, orfaos: contagem.N0, ...contagem },
+    orfaos: linhas.filter((l) => l.nivel === 'N0').map((l) => l.rf),
+    linhas,
+  };
+}
+
+export function formatarRastreio(r, caminho) {
+  const l = [`RASTREIO — ${r.resumo.total} RF (fonte: ${r.fonteDoUniverso})`, ''];
+  l.push(`   N3 (ATF verde) ${r.resumo.N3} · N2 (instalado) ${r.resumo.N2} · N1 (com story) ${r.resumo.N1} · N0 (órfão) ${r.resumo.N0}`);
+  if (!r.resumo.total) l.push('', '   Nenhum RF encontrado: o requirements.md do Plan ainda não existe, ou não usa o formato RF-MOD-….');
+  if (r.orfaos.length) {
+    l.push('', `── RF SEM STORY (${r.orfaos.length}) — o gate do Plan exige zero:`);
+    for (const rf of r.orfaos) l.push(`   · ${rf}`);
+    l.push('', '   Crie a story no tasks.json (sourceRefs ou traceability.requirementIds com o RF) e rode de novo.');
+  }
+  if (caminho) l.push('', `Gravado em ${caminho}.`);
+  return l.join('\n');
+}
+
 // ————————————————————————————— casca de I/O —————————————————————————————
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -1347,6 +1521,8 @@ export const IO_REAL = {
   escrever: (caminho, texto) => writeFileSync(caminho, texto, 'utf8'),
   criarDiretorio: (caminho) => mkdirSync(caminho, { recursive: true }),
   existe: existsSync,
+  /** Nomes de arquivo e subdiretório de uma pasta: `[{ nome, dir }]`. Só o `--rastreio` usa. */
+  listar: (dir) => readdirSync(dir, { withFileTypes: true }).map((d) => ({ nome: d.name, dir: d.isDirectory() })),
 };
 
 /**
@@ -1446,10 +1622,65 @@ export const hojeISO = (agora = new Date()) => {
   return `${agora.getFullYear()}-${dois(agora.getMonth() + 1)}-${dois(agora.getDate())}`;
 };
 
+/** Lista recursiva de arquivos sob `dir` (absoluto), pelo `io.listar`. Pasta ausente é lista vazia. */
+function arquivosSob(io, dir, filtro) {
+  let entradas;
+  try { entradas = io.listar(dir); } catch (erro) { if (ehAusenciaDeDocumento(erro)) return []; throw erro; }
+  const saida = [];
+  for (const e of entradas) {
+    if (e.nome === 'node_modules' || e.nome.startsWith('.')) continue;
+    const abs = join(dir, e.nome);
+    if (e.dir) saida.push(...arquivosSob(io, abs, filtro));
+    else if (filtro(e.nome)) saida.push(abs);
+  }
+  return saida;
+}
+
+/**
+ * O `--rastreio`, casca: lê `tasks.json`, `requirements.md`, a especificação funcional, os `Now.ID`
+ * de `app/src`, o `keys.ts` e os recibos de ATF; monta a matriz e GRAVA `outputs/spec/traceability.json`.
+ * Devolve `{ matriz, caminho }`. `tasks.json` ilegível como JSON relança: matriz sobre backlog
+ * quebrado diria que todo RF é órfão.
+ */
+export function rastrear(raiz, io, agora = new Date()) {
+  const base = raiz || '.';
+  const spec = join(base, RAIZ_SPEC);
+  const textoTasks = lerOuVazio(io, join(spec, 'tasks.json'));
+  const tasks = textoTasks ? JSON.parse(textoTasks) : null;
+  const keysTexto = lerOuVazio(io, join(base, KEYS_TS));
+  const codigo = arquivosSob(io, join(base, 'app', 'src'), (n) => /\.(m?[jt]s)$/.test(n) && n !== 'keys.ts');
+  const nowIdsDoCodigo = unicos(codigo.flatMap((abs) => nowIdsNoCodigo(lerOuVazio(io, abs))));
+  const recibos = new Map();
+  for (const abs of arquivosSob(io, join(spec, DIR_RECIBOS_ATF), (n) => n.endsWith('.json'))) {
+    try { recibos.set(abs.replace(/^.*[\\/]/, '').replace(/\.json$/, ''), JSON.parse(lerOuVazio(io, abs))); } catch { /* recibo ilegível não conta como verde */ }
+  }
+  const matriz = montarRastreio({
+    requisitos: lerOuVazio(io, join(spec, ARTEFATOS_DE_PROMOCAO.requisitos)),
+    especificacao: lerOuVazio(io, join(base, RAIZ_EXPLORE, 'especificacao-funcional.md')),
+    tasks,
+    nowIdsDoCodigo,
+    keys: lerChavesDoKeys(keysTexto),
+    recibos,
+  });
+  const saida = { ...matriz, geradoEm: agora.toISOString() };
+  const caminho = join(spec, RASTREIO_SAIDA);
+  io.criarDiretorio(dirname(caminho));
+  io.escrever(caminho, JSON.stringify(saida, null, 2) + '\n');
+  return { matriz: saida, caminho };
+}
+
 function main(argv) {
   const io = IO_REAL;
   const raiz = io.cwd();
   const json = argv.includes('--json');
+
+  if (argv.includes('--rastreio')) {
+    const { matriz } = rastrear(raiz, io);
+    process.stdout.write((json ? JSON.stringify(matriz, null, 2) : formatarRastreio(matriz, `${RAIZ_SPEC}/${RASTREIO_SAIDA}`)) + '\n');
+    // O ÚNICO EXIT DIFERENTE DE 0 desta ferramenta: RF órfão reprova o gate do Plan (M1). Ver o bloco
+    // do rastreio, acima.
+    return matriz.orfaos.length ? 2 : 0;
+  }
 
   if (argv.includes('--congelar')) {
     const r = congelar(raiz, io, hojeISO());

@@ -12,7 +12,7 @@
 //
 // Escopo da consulta, em ordem de precedência:
 //   a. --azure-wiql <arquivo>            consulta WIQL própria
-//   b. id-map.json (spec-tasks-azure)    exatamente os itens publicados por este projeto
+//   b. id-map.json (publicador do backlog)    exatamente os itens publicados por este projeto
 //   c. tags logical-id                   itens marcados pelo pipeline
 //   d. área/iteração/projeto             varredura ampla com filtro
 

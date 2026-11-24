@@ -11,11 +11,11 @@ Antes do primeiro projeto, a máquina precisa de:
 | # | Dependência | Para quê | Quando morde |
 |---|---|---|---|
 | 1 | **Claude Code** | runtime do agente — rules, skills, verificadores | sempre |
-| 2 | **Node ≥18** (LTS 20 ou 22) | verificadores e CLIs de skill. Ambos usam só módulos `node:` — zero pacotes externos | sempre |
+| 2 | **Node na faixa do `engines`** do `package.json` da raiz (`>=20.18 <27`) | verificadores, CLIs de skill e scripts `sn-*` | sempre |
 | 3 | **Git** | branch por US, gate no push, conexão ao ADO | sempre |
 | 4 | **Python 3** no PATH como `python3` | `tools/*.py` do kit. `check-flowmap.py` é FATAL na `spec-data-model`, `spec-api-contracts` e `spec-iterate` | Plan e Deliver |
 | 5 | **npm com acesso a registry** | **somente o protótipo.** Nenhum CLI do harness tem dependência externa | Explore |
-| 6 | **PAT do Azure DevOps** — `AZURE_DEVOPS_PAT`, `AZURE_DEVOPS_ORG`, `AZURE_DEVOPS_PROJECT` | publicar os work items | marco do Plan |
+| 6 | **Instância ServiceNow e GitHub** — `now-sdk` na versão fixada em `app/package.json`; `.env.instancia` (chmod 600) com `SN_SDK_INSTANCE_URL`, `SN_SDK_USER`, `SN_SDK_USER_PWD` e o prefixo da instância igual ao de `app/now.config.json`; `gh` autenticado com escopo `repo`; Playwright com Chromium; `check_sensivel.py` no caminho absoluto | instalar o app, tirar os prints, publicar as issues, rodar o ATF | Explore (instância como protótipo) |
 | 7 | *opcional:* `pytm`, `scc`, `ast-grep`, `vale` | threat model, hotspots, lint. O kit tem rota degradada para cada um | Plan |
 
 **Confira tudo de uma vez, na pasta recém-extraída:**
@@ -26,7 +26,8 @@ node .claude/ferramentas/doutor.mjs
 
 Ele relata e nunca bloqueia. Duas coisas ele **não** sonda, de propósito: acesso ao registry npm
 (exigiria rede, e sondagem de rede pendura — 2,5 a 42 s medidos numa share fora do ar) e o valor do
-PAT (confere presença das variáveis, nunca imprime o conteúdo).
+da credencial em `.env.instancia` (confere presença e permissão, nunca imprime o conteúdo). Sem
+rede, `npm run doutor -- --offline` pula as checagens que falam com a instância.
 
 **Duas armadilhas conhecidas:**
 
@@ -34,8 +35,8 @@ PAT (confere presença das variáveis, nunca imprime o conteúdo).
   mantém um *App Execution Alias* de `python3.exe` que **abre a Microsoft Store** em vez de falhar.
   O script não roda, o exit code engana e a mensagem não ajuda. Confirme com
   `python3 -c "import sys; print(sys.executable)"` — tem que imprimir um caminho real.
-- **Item 6 é provisionamento com prazo**, não instalação. Quem pedir o PAT na véspera do marco do
-  Plan vai esperar.
+- **Item 6 é provisionamento com prazo**, não instalação. A instância de desenvolvedor é reclamada
+  depois de 10 dias sem login; `npm run reinstall` refaz o app a partir do git.
 
 ## Instalação
 
@@ -132,5 +133,5 @@ latência — ao contrário dos verificadores, elas podem levar um segundo e pod
 | `node .claude/ferramentas/promocao.mjs --congelar` | depois de aceitar o relatório: carimba `outputs/explore/` e liga o congelamento |
 | `node .claude/ferramentas/wiki.mjs --saida <dir>` | quando for publicar a wiki do cliente |
 | `node .claude/ferramentas/bench.mjs` | quando quiser medir o custo da camada |
-| `node .claude/ferramentas/validar.mjs iniciar --task <TASK>` | no Deliver, depois dos testes verdes da `spec-implement`: valida a task com agentes independentes, manda corrigir o que bloqueia e revalida, até zero bloqueantes. Antes de escrever código, `validar.mjs linha-de-base --task <TASK>` guarda como os comandos do projeto saem; passe o arquivo em `--linha-de-base` para que a falha que já existia não bloqueie. Depois de cada ação, `validar.mjs avancar --task <TASK>`. Rode com timeout alto (os testes e o build do projeto rodam dentro; no Windows, no Git Bash). No Kiro, ou sem subagentes, acrescente `--sem-agentes`. Opções no cabeçalho do arquivo |
+| `node .claude/ferramentas/validar.mjs iniciar --task <TASK>` | no Deliver, depois dos testes verdes da `sn-implement`: valida a task com agentes independentes, manda corrigir o que bloqueia e revalida, até zero bloqueantes. Antes de escrever código, `validar.mjs linha-de-base --task <TASK>` guarda como os comandos do projeto saem; passe o arquivo em `--linha-de-base` para que a falha que já existia não bloqueie. Depois de cada ação, `validar.mjs avancar --task <TASK>`. Rode com timeout alto (os testes e o build do projeto rodam dentro; no Windows, no Git Bash). No Kiro, ou sem subagentes, acrescente `--sem-agentes`. Opções no cabeçalho do arquivo |
 | `node .claude/ferramentas/empacotar.mjs --saida <dir>` | **só na cópia do template**, por quem mantém: gera o zip publicável do `HEAD`, com o nome `harness-elo-v2-<versao>.zip`. Procedimento completo em `MANUTENCAO.md`, "Gerar e publicar o zip" |

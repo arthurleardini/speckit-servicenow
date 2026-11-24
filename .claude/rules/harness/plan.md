@@ -1,5 +1,5 @@
 ---
-description: Fase Plan — ingestão do pré-projeto, discovery aprofundado e cadeia técnica até o backlog no ADO.
+description: Fase Plan — ingestão do pré-projeto, discovery aprofundado e cadeia técnica até o backlog publicado em issues do GitHub, com a matriz de rastreio.
 paths: ".claude/rules/harness/plan.md"
 ---
 
@@ -19,8 +19,7 @@ skills `spec-*`, e o vocabulário de `outputs/spec/` vence sem exceção.
 | `spec-legacy` (completo) | As 12 dimensões, `architecture.md` AS-IS, `legacy-analysis.md`, `threat-model.md` |
 | `spec-benchmark` | Se não rodou no Explore |
 | `spec-product` (completo) | **Obrigatório.** `modules.md`, `product-vision.md`, `business-rules.md`, `requirements.md`, `product-requirements.md`, `flow-map.md` |
-| `spec-prototype` (modo Análise) | Colhe o protótipo do Explore |
-| `spec-iterate` | Auditoria, GAPs com os 13 campos, propagação cirúrgica |
+| `spec-iterate` | Auditoria, GAPs com os 13 campos, propagação cirúrgica; colhe as telas da instância pelo `outputs/spec/screens-manifest.json` e pelos prints de `outputs/spec/screens/` |
 | `spec-report` | `product-discovery-kit.html` |
 
 **`outputs/explore/` é o diretório de fontes da `spec-ingest`.** Ela não precisa de edição —
@@ -122,17 +121,42 @@ O congelamento **não** dispara no `fecho-explore`: o Tempo A do Plan ainda lê 
 | 1 | `spec-tech-rules` | 11 rules `.mdc` + `tech-rules-summary.md` |
 | 2 | `spec-hld` | `hld.md` — contexto e containers (C4 1 e 2), RNF → tática, ADRs |
 | 3 | `revisao-de-seguranca` (`plano-geral`) | `plano-de-seguranca.md` — kernel `SEC-###` |
-| 4 | `spec-data-model` | `data-model.json` |
-| 5 | `spec-api-contracts` | `api-contracts.yaml` + suplemento |
+| 4 | `spec-data-model` | `data-model.json` final, no formato da prévia, com tipos ServiceNow e `rf`/`rn` por entidade |
+| 5 | `spec-api-contracts` | **opcional** no v0: `api-contracts.yaml` só se houver API exposta; as integrações são simuladas (`inputs/simulacoes.md`) |
 | 6 | `spec-test-plan` | `test-plan.md` |
-| 7 | `spec-tasks` | `tasks.json` + `gaps-document.md` |
+| 7 | `spec-tasks` | `tasks.json` (`tasks/v5.4`, com `snArtifact` nas tasks ServiceNow) + `gaps-document.md` |
 | 8 | `spec-security-review` | injeta `SEC-NNN` no `tasks.json` |
 | 9 | `spec-estimate` | `estimate-report.md` |
-| 10 | `spec-tasks-html` / `spec-tasks-azure` | `tasks.html` e os work items no ADO |
+| 10 | `promocao.mjs --rastreio` | `traceability.json` — **gate**: sai com erro se algum RF ficar sem story |
+| 11 | `spec-tasks-html` | `report/tasks.html`, com os prints (plano B offline) |
+| 12 | `sn-tasks-github` | issues e sub-issues no GitHub, com o print por permalink; `id-map.json` |
+
+**Depois da `spec-data-model` final, o app acompanha.** O `sn-scaffold` em modo Plan lê o
+`data-model.json` e reescreve os `Table()`; o `sn-seed` regera o seed com os limites das RN e o
+`testData` dos cenários; e o `npm run reinstall` instala. Campo que sumiu da fonte vira DELETE no
+install seguinte, pelo `keys.ts` (`deleted: true`). Não há diff nem migração.
+
+**O gate do rastreio vem antes da publicação.** Rode:
+
+```bash
+node .claude/ferramentas/promocao.mjs --rastreio
+```
+
+Ele monta `outputs/spec/traceability.json` com uma linha por RF (`rf`, `ct[]`, `tel[]`, `story`,
+`tasks[]`, `nowIds[]`, `atf[]`, `nivel`), lendo o `tasks.json`, o `Now.ID[` de `app/src` e o
+`keys.ts`, e os recibos de ATF — ninguém consulta a instância. Nível N1 = tem story; N2 = tem
+`nowId` instalado; N3 = tem recibo de ATF verde. Com RF órfão (sem story), sai com código 2, e o
+`sn-tasks-github` não roda sem o `traceability.json` (`cadeia.mjs`).
+
+**Publicação.** `sn-tasks-github --dry-run` primeiro, depois para valer: épico e funcionalidade
+viram issue, a story vira sub-issue, as tasks ficam em checklist no corpo, e a story de tela leva o
+print por permalink do commit. O publicador falha se faltar print obrigatório ou se o PNG não
+estiver commitado. Rodar de novo atualiza as mesmas issues (`--change`, pelo `id-map.json` e pelo
+marcador `<!-- logical-id -->`).
 
 **A ordem 6 antes de 7 é correção deliberada.** O kit rotula a `spec-test-plan` de forma
 inconsistente. Nós a rotulamos «Fase 7c» na própria skill e em `tools/references/task-pipeline.md`
-(antes da `spec-tasks`, Fase 8); o upstream usa «Fase 8a» ali (inclusive na `spec-implement`) e «7a»
+(antes da `spec-tasks`, Fase 8); o upstream usa «Fase 8a» ali e «7a»
 em outros arquivos. A nossa ordem é deliberada: o `test-plan.md` é a fonte dos cenários de aceite
 (`acceptanceScenarios[]`) que a `spec-tasks` grava nas tasks — homologação não vira item de backlog
 (`NO_UAT_BACKLOG`, FATAL) —, então a dependência real é a inversa.
@@ -141,20 +165,20 @@ em outros arquivos. A nossa ordem é deliberada: o `test-plan.md` é a fonte dos
 
 O `outputs/spec/sync-log.md` é a memória cronológica que atravessa as três fases. O kit já obriga
 as sete skills de discovery a registrar; **neste harness a cadeia técnica registra também** —
-`spec-tech-rules`, `spec-data-model`, `spec-api-contracts`, `spec-test-plan`, `spec-tasks`,
-`spec-security-review`, `spec-scaffold` e `spec-implement`. Todas as oito TÊM `## Sync-log
-(obrigatório)` no próprio `SKILL.md` — mas sem esta regra a memória ainda para na fronteira do
-Plan: quem retomar o projeto não tem como saber o que já rodou, com que insumo, nem que decisão foi
-tomada.
+`spec-tech-rules`, `spec-data-model`, `spec-api-contracts`, `spec-test-plan`, `spec-tasks` e
+`spec-security-review`, e as seis skills ServiceNow do kit — `sn-scaffold`, `sn-seed`,
+`sn-capture`, `sn-tasks-github`, `sn-implement` e `sn-reinstall`. Sem esta regra a memória para na
+fronteira do Plan: quem retomar o projeto não tem como saber o que já rodou, com que insumo, nem
+que decisão foi tomada.
+
+**O install também é linha da Seção A**, escrita pelo `npm run reinstall` (não à mão): Skill
+`now-sdk-install`, `Modo / contexto` = alias da instância, Inputs = escopo, Outputs = commit de
+`app/src/fluent`, Decisões = `ok; N registros`. É ela que o `fecho-explore` e o `delivery-gate`
+leem.
 
 **A `spec-hld` não entra nesta lista.** Ela tem `## Sync-log (obrigatório)` no próprio `SKILL.md`
-(`.claude/skills/spec-hld/SKILL.md`) — assim como as oito acima. O que a tira da lista não é
-contraste com elas (não há: as nove têm a mesma seção); é que listá-la aqui de novo duplicaria a
-fonte da obrigação que o `SKILL.md` dela já carrega, sem acrescentar nada.
-
-**Pendência para o Plano 5, registrada e não resolvida aqui:** se o `SKILL.md` de cada uma das oito
-já se obriga a registrar no `sync-log`, para que serve ainda esta lista, separada da que o kit
-mesmo já obriga?
+(`.claude/skills/spec-hld/SKILL.md`); listá-la aqui de novo duplicaria a fonte da obrigação que o
+`SKILL.md` dela já carrega, sem acrescentar nada.
 
 **Ao terminar a skill**, acrescente uma linha na Seção A. Quando for reexecução, escreva `delta` na
 coluna **`Modo / contexto`** — é ela que carrega o modo, os marcadores de skip e a linha de kickoff.
@@ -172,12 +196,11 @@ registra que *alguém decidiu*, e decisão fabricada por máquina parece evidên
 
 - **Segurança:** o kernel é o `plano-de-seguranca.md`. A `spec-security-review` **consome** esse
   kernel; ela não deriva controles sozinha.
-- **Frontend:** a `spec-tech-rules` escreve `frontend` na raiz de `.claude/rules/` com as decisões
-  do projeto, por cima da constituição `.claude/rules/harness/frontend.md`. Isso é deliberado: a
-  versão do Plan é estritamente mais rica que a constituição que o Explore usou. O
-  `frontend-default.mdc` do kit tem o mesmo corpo da `.claude/rules/harness/frontend.md`, e o
-  `security.mdc` o mesmo da `.claude/rules/harness/security.md`: os dois ficam em
-  `outputs/spec/tech-rules/` e **não** são materializados de novo em `.claude/rules/` —
+- **Interface:** a constituição de tela é `.claude/rules/harness/servicenow-ui.md` (Core UI
+  clássica, carregada ao tocar `app/src/fluent/**`). As rules que a `spec-tech-rules` gera na raiz
+  de `.claude/rules/` trazem as decisões do projeto (convenções, arquitetura, segurança,
+  testes, build e deploy ServiceNow) por cima dela. O `security.mdc` do kit fica em
+  `outputs/spec/tech-rules/` e o `frontend-default.mdc` (Next.js) não se aplica: os dois **não** são materializados de novo em `.claude/rules/` —
   carregariam duas vezes (Decisão 73).
 - **Modelo de dados:** o `data-model.json` é a autoridade. O `modelo-de-dados.md` do Explore é
   ancestral preliminar e o `data-model.md` do Plan é a **renderização** da autoridade — nenhum dos
@@ -194,9 +217,10 @@ propósito: é o nome das coisas que ele precisa destravar. Público diferente, 
 
 ## Marco da fase
 
-Backlog no ADO · estimativa emitida · kernel de segurança fechado · rules materializadas · Kit HTML
-emitido · `promocao.mjs` executado com órfãos justificados · `outputs/explore/` congelado · GAPs
-bloqueantes fechados ou convertidos em Spike.
+Backlog publicado no GitHub (`sn-tasks-github`, com prints) · `traceability.json` sem RF órfão ·
+estimativa emitida · kernel de segurança fechado · rules materializadas · Kit HTML emitido ·
+`promocao.mjs` executado com órfãos justificados · `outputs/explore/` congelado · app reinstalado
+com o modelo final · GAPs bloqueantes fechados ou convertidos em Spike.
 
-**Pré-requisito de prazo:** o PAT do Azure DevOps (`AZURE_DEVOPS_PAT`, `_ORG`, `_PROJECT`) é
-provisionamento com prazo, não instalação. Peça antes de precisar.
+**Pré-requisito:** `gh auth status` com escopo `repo` no repositório privado, conferido pelo
+`npm run doutor`.

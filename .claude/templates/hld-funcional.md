@@ -14,8 +14,8 @@
 <visão geral do produto>
 
 ## 2. Visão geral dos módulos
-<!-- O código MOD-<CODIGO> é obrigatório: a coluna Domínio do prototype.md espera esse código, e
-     ele é o ancestral direto do modules.md que o Plan vai gerar. O código é livre em maiúsculas,
+<!-- O código MOD-<CODIGO> é obrigatório: a coluna Módulo da tabela de telas e o menu do app
+     (sn-scaffold) esperam esse código, e ele é o ancestral direto do modules.md que o Plan vai gerar. O código é livre em maiúsculas,
      dígitos e hífen — MOD-PAGAMENTOS e MOD-ACOMP-CARGA são válidos. -->
 
 | Código | Módulo | Propósito |

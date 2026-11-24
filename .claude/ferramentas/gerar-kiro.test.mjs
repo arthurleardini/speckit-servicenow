@@ -14,9 +14,9 @@ test('reescrever: do mais específico ao mais genérico — a ordem é o que sep
   assert.equal(reescrever('.claude/rules/harness/security.md'), '.kiro/steering/harness-security.md');
   assert.equal(reescrever('.claude/rules/harness/explore.md'), '.kiro/fases/harness-explore.md');
   assert.equal(reescrever('.claude/rules/harness/plan.md'), '.kiro/fases/harness-plan.md');
-  // A de frontend vai para o STEERING (com `fileMatch`), não para `.kiro/fases/`: em `fases/` ela só
+  // A de interface vai para o STEERING (com `fileMatch`), não para `.kiro/fases/`: em `fases/` ela só
   // entrava se o consultor a anexasse à mão.
-  assert.equal(reescrever('.claude/rules/harness/frontend.md'), '.kiro/steering/harness-frontend.md');
+  assert.equal(reescrever('.claude/rules/harness/servicenow-ui.md'), '.kiro/steering/harness-servicenow-ui.md');
   assert.equal(reescrever('.claude/rules/harness/'), '.kiro/fases/');
   assert.equal(reescrever('raiz de `.claude/rules/`'), 'raiz de `.kiro/steering/`');
   assert.equal(reescrever('`.claude/rules` e pronto'), '`.kiro/steering` e pronto');
@@ -181,7 +181,7 @@ test('remendo: kit.mjs — um só remendo (as duas entradas do steering entram n
   assert.throws(() => aplicarRemendos(r.arquivo, 'sem o literal'), /remendo órfão/);
 });
 
-test('remendo: estado.test.mjs — na saída, a rule de frontend é cobrada pelo `fileMatch` do steering', () => {
+test('remendo: estado.test.mjs — na saída, a rule de interface é cobrada pelo `fileMatch` do steering', () => {
   const r = REMENDOS.find((x) => x.arquivo === '.claude/hooks/estado.test.mjs');
   assert.ok(r, 'o remendo do estado.test.mjs existe');
   const fonte = readFileSync(new URL('../hooks/estado.test.mjs', import.meta.url), 'utf8');
@@ -230,7 +230,7 @@ test('converterRule: steering ganha inclusion, fase não; o corpo é idêntico; 
 });
 
 test('converterRule: `paths:` de arquivo vira `inclusion: fileMatch` + `fileMatchPattern` — o Kiro não conhece `paths`', () => {
-  const fe = converterRule('---\ndescription: f\npaths: "**/*.{ts,tsx,js,jsx,html,css,mdx}"\n---\n# F\n', '.claude/rules/harness/frontend.md', { inclusion: 'fileMatch' });
+  const fe = converterRule('---\ndescription: f\npaths: "**/*.{ts,tsx,js,jsx,html,css,mdx}"\n---\n# F\n', '.claude/rules/harness/servicenow-ui.md', { inclusion: 'fileMatch' });
   // Lista explícita, sem chaves: a documentação do Kiro mostra glob simples ou lista, e não garante
   // expansão de `{a,b}` — com chave não expandida a rule de frontend nunca carregaria.
   assert.match(fe, /\ninclusion: fileMatch\nfileMatchPattern: \["\*\*\/\*\.ts", "\*\*\/\*\.tsx", "\*\*\/\*\.js", "\*\*\/\*\.jsx", "\*\*\/\*\.html", "\*\*\/\*\.css", "\*\*\/\*\.mdx"\]\n/);
@@ -250,8 +250,8 @@ test('gerarHarnessFase: sempre incluído, os três anexos, as duas sintaxes, e o
   assert.match(t, /^---\n# gerado de \(sem fonte/);
   assert.match(t, /inclusion: always/);
   for (const f of ['explore', 'plan', 'deliver']) assert.ok(t.includes(`@.kiro/fases/harness-${f}.md`), f);
-  assert.ok(!t.includes('.kiro/fases/harness-frontend.md'), 'a de frontend não é anexo: está no steering');
-  assert.match(t, /`\.kiro\/steering\/harness-frontend\.md`/);
+  assert.ok(!t.includes('.kiro/fases/harness-servicenow-ui.md'), 'a de interface não é anexo: está no steering');
+  assert.match(t, /`\.kiro\/steering\/harness-servicenow-ui\.md`/);
   assert.match(t, /seletor `#`/);
   assert.match(t, /\.kiro\/specs\//);
   assert.match(t, /harness-elo/);
@@ -273,7 +273,7 @@ test('gerarHarnessJson: zonas reescritas + as duas do steering, geradoDe, runtim
   assert.deepEqual(h.zonaImutavel, [
     'AGENTS.md', '.kiro/hooks/', '.kiro/ferramentas/', '.kiro/agents/harness-elo.json', '.kiro/templates/',
     '.kiro/fases/', '.kiro/skills/', '.kiro/steering/harness-security.md', '.kiro/steering/harness-fase.md',
-    '.kiro/steering/harness-frontend.md',
+    '.kiro/steering/harness-servicenow-ui.md',
   ]);
   assert.deepEqual(h.zonaMutavel, ['inputs/', 'outputs/', '.kiro/steering/', '.cursor/rules/']);
 });
@@ -308,7 +308,7 @@ test('converterReadme (revisão final, F3): a linha das rules de fase (Estrutura
   const out = converterReadme(README);
   assert.ok(!out.includes('| `.kiro/fases/` | as cinco rules do método (zona imutável) |'));
   assert.match(out, /\| `\.kiro\/fases\/` \| as três rules de fase — anexadas por sessão, ver `\.kiro\/steering\/harness-fase\.md` \(zona imutável\) \|/);
-  assert.match(out, /\| `\.kiro\/steering\/` \| `harness-security\.md` e `harness-fase\.md`, sempre carregados, e `harness-frontend\.md`, carregado ao tocar arquivo de tela \(`fileMatch`\); o resto da pasta é do projeto \(`spec-tech-rules`\) \|/);
+  assert.match(out, /\| `\.kiro\/steering\/` \| `harness-security\.md` e `harness-fase\.md`, sempre carregados, e `harness-servicenow-ui\.md`, carregado ao tocar arquivo do app Fluent \(`fileMatch`\); o resto da pasta é do projeto \(`spec-tech-rules`\) \|/);
   assert.throws(() => converterReadme(README.split('as cinco rules do método').join('sumiu')), /marcador/);
 });
 
@@ -390,7 +390,7 @@ test('planejar: cada classe de arquivo sabe para onde vai e como', () => {
   assert.deepEqual(planejar('CLAUDE.md'), { tipo: 'converter', destino: 'AGENTS.md' });
   assert.deepEqual(planejar('.claude/rules/harness/security.md'), { tipo: 'converter', destino: '.kiro/steering/harness-security.md' });
   assert.deepEqual(planejar('.claude/rules/harness/plan.md'), { tipo: 'converter', destino: '.kiro/fases/harness-plan.md' });
-  assert.deepEqual(planejar('.claude/rules/harness/frontend.md'), { tipo: 'converter', destino: '.kiro/steering/harness-frontend.md' });
+  assert.deepEqual(planejar('.claude/rules/harness/servicenow-ui.md'), { tipo: 'converter', destino: '.kiro/steering/harness-servicenow-ui.md' });
   assert.deepEqual(planejar('harness.json'), { tipo: 'converter', destino: 'harness.json' });
   assert.deepEqual(planejar('README.md'), { tipo: 'converter', destino: 'README.md' });
   assert.deepEqual(planejar('MANUTENCAO.md'), { tipo: 'converter', destino: 'MANUTENCAO.md' });
@@ -426,7 +426,7 @@ function fonteMinima() {
   w('harness.json', JSON.stringify({ nome: 'harness-elo-v2', versao: '2.0.0', kitVersao: 'k', zonaImutavel: ['CLAUDE.md', '.claude/skills/'], zonaMutavel: ['inputs/'] }));
   w('.claude/rules/harness/security.md', '---\ndescription: s\n---\n\n# S\n');
   w('.claude/rules/harness/explore.md', '---\ndescription: e\n---\n\n# E — veja `.claude/templates/gaps.md`\n');
-  w('.claude/rules/harness/frontend.md', '---\ndescription: f\npaths: "**/*.{ts,tsx}"\n---\n\n# F\n');
+  w('.claude/rules/harness/servicenow-ui.md', '---\ndescription: f\npaths: "**/*.{ts,tsx}"\n---\n\n# F\n');
   w('.claude/skills/spec-x/SKILL.md', '---\nname: spec-x\ndescription: d\n---\n# lê `.claude/rules/` e CLAUDE.md\r\n');
   w('.claude/hooks/kit.mjs', "export const Z = ['CLAUDE.md',\n  '.claude/hooks/',\n  '.claude/skills/',\n];\n");
   w('.claude/hooks/gramatica.test.mjs', "const r = join(RAIZ, '.claude', 'rules', 'harness', 'explore.md');\n");
@@ -471,11 +471,11 @@ test('gerar: a saída inteira, a partir da fonte mínima', () => {
   assert.match(ler('AGENTS.md'), /^<!-- gerado de CLAUDE\.md/);
   assert.match(ler('.kiro/steering/harness-security.md'), /inclusion: always/);
   assert.match(ler('.kiro/fases/harness-explore.md'), /`\.kiro\/templates\/gaps\.md`/);
-  assert.match(ler('.kiro/steering/harness-frontend.md'), /\ninclusion: fileMatch\nfileMatchPattern: \["\*\*\/\*\.ts", "\*\*\/\*\.tsx"\]\n/);
-  assert.ok(!existsSync(join(saida, '.kiro/fases/harness-frontend.md')), 'a de frontend não fica em fases/');
+  assert.match(ler('.kiro/steering/harness-servicenow-ui.md'), /\ninclusion: fileMatch\nfileMatchPattern: \["\*\*\/\*\.ts", "\*\*\/\*\.tsx"\]\n/);
+  assert.ok(!existsSync(join(saida, '.kiro/fases/harness-servicenow-ui.md')), 'a de interface não fica em fases/');
   assert.match(ler('.kiro/steering/harness-fase.md'), /@\.kiro\/fases\/harness-plan\.md/);
   assert.equal(ler('.kiro/skills/spec-x/SKILL.md'), '---\nname: spec-x\ndescription: d\n---\n# lê `.kiro/steering/` e AGENTS.md\r\n', 'reescrito, CRLF preservado');
-  assert.match(ler('.kiro/hooks/kit.mjs'), /'\.kiro\/steering\/harness-frontend\.md',\n\];/, 'remendo do kit aplicado e reescrito');
+  assert.match(ler('.kiro/hooks/kit.mjs'), /'\.kiro\/steering\/harness-servicenow-ui\.md',\n\];/, 'remendo do kit aplicado e reescrito');
   assert.match(ler('.kiro/hooks/gramatica.test.mjs'), /'\.kiro', 'fases', 'harness-explore\.md'/);
   assert.match(ler('.kiro/ferramentas/ferramentas.test.mjs'), /'\.kiro', 'fases'\)/);
   // Revisão final, 2ª rodada (G1): o teste sem settings.json/agente afirma a ausência em vez de
@@ -510,7 +510,7 @@ test('gerar: a saída inteira, a partir da fonte mínima', () => {
   assert.deepEqual([...readFileSync(join(saida, 'bin.dat'))], [0, 1, 2, 255], 'binário passa intacto');
   const h = JSON.parse(ler('harness.json'));
   assert.equal(h.geradoDe, 'deadbee');
-  assert.deepEqual(h.zonaImutavel, ['AGENTS.md', '.kiro/skills/', '.kiro/steering/harness-security.md', '.kiro/steering/harness-fase.md', '.kiro/steering/harness-frontend.md']);
+  assert.deepEqual(h.zonaImutavel, ['AGENTS.md', '.kiro/skills/', '.kiro/steering/harness-security.md', '.kiro/steering/harness-fase.md', '.kiro/steering/harness-servicenow-ui.md']);
 
   assert.deepEqual(r.sobras, [], 'nenhum .claude sobreviveu');
   assert.equal(r.avisos.length, 0);

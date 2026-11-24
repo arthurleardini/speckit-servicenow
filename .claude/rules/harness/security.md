@@ -1,5 +1,5 @@
 ---
-description: Segurança universal — 10 camadas OWASP ASVS 5.0 + LGPD. Aplica em qualquer projeto, qualquer linguagem e qualquer camada. Nunca modificada — validador SECURITY_UNMODIFIED exige byte-identidade com a fonte.
+description: Segurança universal — 10 camadas OWASP ASVS 5.0 + LGPD. Aplica em qualquer projeto, qualquer linguagem e qualquer camada. Fork ServiceNow: a Camada G cobre ACL, escopo e privilégio da plataforma (RN-SN-135 a 150); saem os itens de cabeçalho HTTP e npm.
 ---
 
 # Segurança Universal — SecureOps
@@ -85,14 +85,12 @@ Todo finding CRÍTICO (CVSS ≥ 9.0) ou ALTO (CVSS ≥ 7.0) exige **três entreg
 
 ## Camada E — APIs e Superfície de Ataque
 
-> **ASVS 5.0:** V4 API and Web Service (estrutura da mensagem HTTP, REST/GraphQL/WebSocket, anti-automação e rate limiting) · V3 Web Frontend Security (security headers, HSTS, CSP) · V5 File Handling (validação de MIME real, tamanho e isolamento de upload) · V13 Configuration (vazamento de informação: stack trace, versão de servidor/framework) · V16 Security Logging and Error Handling (erro genérico ao usuário, detalhe só no log interno).
+> **ASVS 5.0:** V4 API and Web Service (estrutura da mensagem HTTP, REST/GraphQL/WebSocket, anti-automação e rate limiting) · V5 File Handling (validação de MIME real, tamanho e isolamento de upload) · V13 Configuration (vazamento de informação: stack trace, versão de servidor/framework) · V16 Security Logging and Error Handling (erro genérico ao usuário, detalhe só no log interno).
 
 | Regra | ❌ Proibido | ✅ Obrigatório |
 |-------|------------|---------------|
 | Rate limiting | Sem limite em autenticação, reset de senha, OTP | Limite por IP e por usuário em todos os endpoints de auth |
-| Security headers | Sem headers de segurança | `HSTS`, `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options` |
 | Erros ao usuário | Stack trace, nome de framework, versão de DB | Mensagem genérica ao usuário; detalhe técnico apenas em logs internos |
-| Versão exposta | Headers `Server: nginx/1.18`, `X-Powered-By: Express` | Remover headers que expõem tecnologia |
 | SSRF | Aceitar URL arbitrária de usuário sem validação | Allowlist de domínios; bloquear IPs privados (10.x, 172.16.x, 169.254.x) |
 | Upload de arquivo | Aceitar qualquer tipo/tamanho | Validar MIME real (magic bytes), limitar tamanho, isolar em storage separado |
 
@@ -112,17 +110,20 @@ Todo finding CRÍTICO (CVSS ≥ 9.0) ou ALTO (CVSS ≥ 7.0) exige **três entreg
 
 ---
 
-## Camada G — Frontend
+## Camada G — Plataforma ServiceNow: ACL, escopo e privilégio
 
-> **ASVS 5.0:** V3 Web Frontend Security (sanitização de conteúdo, atributos de cookie, CSP, interpretação de conteúdo) · V1 Encoding and Sanitization (escape no contexto de saída) · V14 Data Protection (proteção de dados no lado cliente — nada de secret no bundle) · V2 Validation and Business Logic (validação autoritativa no servidor, não no cliente).
+> **ASVS 5.0:** V8 Authorization (ACL por tabela, campo e operação; privilégio mínimo) · V2 Validation and Business Logic (regra autoritativa no servidor, não no form) · V15 Secure Coding and Architecture (isolamento de escopo, privilégio cross-scope declarado). **Referência:** RN-SN-135 a RN-SN-150 (`referencias/32-servicenow-boas-praticas-oficiais.md`, seção 2.13).
 
 | Regra | ❌ Proibido | ✅ Obrigatório |
 |-------|------------|---------------|
-| Renderização | Injetar HTML/SVG de usuário sem sanitizar (`innerHTML`, `dangerouslySetInnerHTML` sem sanitização) | Sanitizar com biblioteca adequada (DOMPurify ou equivalente); frameworks escapam por padrão — não contornar |
-| Armazenamento de auth | Token de auth em `localStorage` / `sessionStorage` / cookie sem `httpOnly` | Cookie `httpOnly; Secure; SameSite=Strict` configurado pelo backend |
-| Credenciais no bundle | API keys, secrets no código JavaScript enviado ao browser | Secrets apenas no backend; variáveis de ambiente com prefixo público explícito (ex.: `NEXT_PUBLIC_`, `VITE_`) somente para dados não-sensíveis |
-| Validação só no frontend | Verificação de acesso/regra de negócio apenas no cliente | Validação replicada e autoritativa no backend — nunca confiar no que o cliente enviar |
-| Supabase / BaaS | `service_role` key no frontend; RLS desabilitada | `anon` key no frontend + RLS ativa em 100% das tabelas com `auth.uid()` nas policies |
+| ACL por tabela, campo e operação | Tabela do escopo sem ACL; ACL sem role, condição nem script; depender da ACL da tabela pai | ACL `record` por operação (read, write, create, delete) em toda tabela custom, mais ACL de campo no dado sensível; roles e condição antes de script; criar exige também write (RN-SN-136 a 141) |
+| Código chamado pelo cliente | `GlideRecord` em script alcançável pelo cliente (GlideAjax, REST, widget) sem checar acesso | `GlideRecordSecure`, ou `canRead/canWrite/canCreate/canDelete` antes de ler ou gravar; `glide.script.secure.ajaxgliderecord = true` (RN-SN-146, 147) |
+| Script Include client-callable | `client_callable` sem ACL própria | Script Include chamado por GlideAjax só com ACL de `client_callable_script_include` e role mínima (RN-SN-147) |
+| Cross-scope | Acesso a tabela ou Script Include de outro escopo sem registro | `CrossScopePrivilege` declarado, um por operação por alvo, pedindo só o necessário (RN-SN-148); Web Service Access compatível (RN-SN-149) |
+| Role mínima | Usar `admin` ou role da plataforma no lugar de role do app; role por `sys_id` | Roles `<escopo>.<nome>` (coordenador, atendente, admin do app), herança por `containsRoles`, role existente referenciada por nome (RN-SN-135) |
+| Segurança na UI | Proteger dado com UI Policy, Client Script ou filtro de lista | UI é só UX (RN-SN-145); quem protege é ACL, Data Filter com Deny (RN-SN-144) e Business Rule |
+| Consulta cega | Coluna sensível consultável por faixa ou igualdade sem ACL | ACL `query_range` e `query_match` na coluna sensível (RN-SN-140) |
+| Ordem de construção | Segurança no fim, depois de interface e lógica | ACL e roles desde o primeiro scaffold (RN-SN-150) |
 
 ---
 
@@ -150,7 +151,7 @@ Todo finding CRÍTICO (CVSS ≥ 9.0) ou ALTO (CVSS ≥ 7.0) exige **três entreg
 |------|-------------|
 | Secrets scanning | Em cada commit (Gitleaks ou equivalente) — bloquear push se secret detectado |
 | SAST | No CI — bloquear merge com vulnerabilidades críticas/altas abertas |
-| Auditoria de dependências | `osv-scanner`, `npm audit`, `pip-audit`, `trivy`, `govulncheck` ou equivalente — falhar CI em HIGH/CRITICAL; priorizar por EPSS + KEV (ver "Severidade e bloqueio") |
+| Auditoria de dependências | `osv-scanner` ou equivalente sobre as dependências do build (`app/package.json`, com o `@servicenow/sdk` fixado) e os plugins/apps da Store usados pelo escopo — falhar CI em HIGH/CRITICAL; priorizar por EPSS + KEV (ver "Severidade e bloqueio") |
 | SBOM | Gerar antes de cada deploy em produção (Syft + Cosign ou equivalente) |
 | Aprovação de deploy em produção | Gate de aprovação humana antes de qualquer deploy em produção |
 | Quality gate | 0 vulnerabilidades críticas/altas para merge em branch principal |
@@ -220,7 +221,7 @@ no finding. Registrar EPSS e presença no KEV no campo **EPSS/KEV** do finding.
 □ Autorização: toda query de recurso filtra por owner — IDOR testado
 □ Input: parametrização em 100% das queries ao banco e comandos externos
 □ Dependências: audit sem HIGH/CRITICAL; pacotes verificados
-□ Headers de segurança: HSTS, CSP, X-Content-Type-Options configurados
+□ ACL: toda tabela do escopo com ACL de record por operação; campo sensível com ACL de campo
 □ Erros: sem stack trace ou info técnica ao usuário
 □ Logs: sem PII em claro; logs de acesso e operações sensíveis ativos
 □ Rate limiting: ativo em endpoints de autenticação e operações críticas

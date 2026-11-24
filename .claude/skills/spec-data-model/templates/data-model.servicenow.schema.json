@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "data-model (ServiceNow)",
+  "description": "Modelo de dados de um app escopado ServiceNow (Speckit ServiceNow). Mesmo formato na prévia do Explore (outputs/spec/data-model.previa.json, gravada por `spec-data-model --previa`) e no modelo final do Plan (outputs/spec/data-model.json). O sn-scaffold lê este arquivo para gerar Table(), Form(), List(), menu e roles. As regras que o schema não alcança (prefixo de escopo lido de app/now.config.json, nome de tabela até 30 caracteres, reference para tabela existente, campos das telas, rf obrigatório no modo final) ficam em scripts/validate-data-model.mjs. Só usa keywords que o validador reduzido embutido verifica (sem oneOf/allOf/$ref).",
+  "type": "object",
+  "required": ["scope", "modules", "entities"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "pattern": "^x_[a-z0-9]+_[a-z0-9_]+$",
+      "description": "Escopo do app, igual ao `scope` de app/now.config.json (ex.: x_2326104_cob). O validador confere a igualdade."
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Módulos do HLD funcional e as tabelas de cada um. Viram o menu do app.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "tables"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^MOD-[A-Z0-9-]+$" },
+          "label": { "type": "string", "minLength": 1 },
+          "tables": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Tabelas do app. `name` é o nome físico, com o prefixo do escopo.",
+      "items": {
+        "type": "object",
+        "required": ["name", "label", "columns"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "maxLength": 30,
+            "description": "Nome físico da tabela: <escopo>_<sufixo>, até 30 caracteres (limite da plataforma)."
+          },
+          "label": { "type": "string", "minLength": 1 },
+          "extends": {
+            "type": "string",
+            "description": "Tabela pai (ex.: task). Tabela OOTB extensível ou outra tabela deste modelo."
+          },
+          "display": {
+            "type": "string",
+            "description": "Coluna de exibição da tabela (o valor mostrado nas references). Precisa existir em columns."
+          },
+          "auto_number": {
+            "type": "object",
+            "required": ["prefix"],
+            "additionalProperties": false,
+            "properties": {
+              "prefix": { "type": "string", "pattern": "^[A-Z]{2,6}$" },
+              "number": { "type": "integer", "minimum": 0 },
+              "digits": { "type": "integer", "minimum": 4, "maximum": 12 }
+            },
+            "description": "Numeração automática (campo number), ex.: { prefix: 'CASO', digits: 7 }."
+          },
+          "journal": { "type": "boolean", "description": "Liga journal_input + activity stream no form." },
+          "audit": { "type": "boolean", "description": "Liga a auditoria (histórico) da tabela." },
+          "pessoa": { "type": "boolean", "description": "Tabela com dado de pessoa: o seed grava ficticio = true e os documentos vão para _documentos.json." },
+          "simulation": { "type": "boolean", "description": "Tabela de integração simulada (SIM-nn), com rótulo 'Simulado'." },
+          "rf": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^RF-[A-Z0-9-]+$" },
+            "uniqueItems": true,
+            "description": "RF que a tabela atende. Opcional na prévia; no modelo final é obrigatório (não vazio) em toda tabela que não é simulação."
+          },
+          "rn": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^RN-[A-Z0-9-]+$" },
+            "uniqueItems": true,
+            "description": "RN que a tabela implementa (restrições, estados, imutabilidade). Opcional."
+          },
+          "columns": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "label", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "maxLength": 80,
+                  "description": "Nome da coluna SEM prefixo (coluna de tabela do próprio escopo não leva x_<escopo>_ nem u_)."
+                },
+                "label": { "type": "string", "minLength": 1 },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "string",
+                    "integer",
+                    "decimal",
+                    "float",
+                    "boolean",
+                    "reference",
+                    "choice",
+                    "glide_date",
+                    "glide_date_time",
+                    "journal",
+                    "journal_input",
+                    "currency",
+                    "email",
+                    "url",
+                    "html"
+                  ]
+                },
+                "maxLength": { "type": "integer", "minimum": 1, "maximum": 4000 },
+                "mandatory": { "type": "boolean" },
+                "readOnly": { "type": "boolean" },
+                "unique": { "type": "boolean" },
+                "default": {},
+                "reference": {
+                  "type": "string",
+                  "description": "Tabela alvo da reference: outra tabela deste modelo ou tabela OOTB conhecida (sys_user, sys_user_group...)."
+                },
+                "choices": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "description": "Valores do choice: { valor: { label, sequence } }.",
+                  "additionalProperties": {
+                    "type": "object",
+                    "required": ["label"],
+                    "properties": {
+                      "label": { "type": "string", "minLength": 1 },
+                      "sequence": { "type": "integer" }
+                    }
+                  }
+                },
+                "format": {
+                  "type": "string",
+                  "enum": ["cpf", "cnpj"],
+                  "description": "Documento fictício gerado pelo sn-seed com DV válido."
+                },
+                "rn": {
+                  "type": "array",
+                  "items": { "type": "string", "pattern": "^RN-[A-Z0-9-]+$" },
+                  "description": "RN que originou a coluna."
+                },
+                "notes": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "screens": {
+      "type": "array",
+      "description": "Tabela de telas (TEL-) da especificação funcional. O sn-scaffold gera Form()/List() e o screens-manifest.json a partir daqui.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "table", "type", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^TEL-\\d{3}$" },
+          "title": { "type": "string", "minLength": 1 },
+          "table": { "type": "string" },
+          "type": { "type": "string", "enum": ["form", "list", "report"] },
+          "view": { "type": "string" },
+          "role": { "type": "string" },
+          "module": { "type": "string" },
+          "fields": { "type": "array", "items": { "type": "string" } },
+          "relatedLists": { "type": "array", "items": { "type": "string" } },
+          "groupBy": { "type": "string" },
+          "rf": { "type": "array", "items": { "type": "string" } },
+          "demoRecord": { "type": "string" }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+      "uniqueItems": true,
+      "description": "Sufixos das roles do app; a role completa é <escopo>.<sufixo>."
+    }
+  }
+}

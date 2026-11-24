@@ -360,7 +360,7 @@ Item sem validator próprio: suposições sem fonte (nível D) e decisões pende
 |-------|------|-------------------------------|
 | `spec-ingest` | 1 | Provê `discovery-document.md` e `context-map.md` (`F-xxx`) consumidos aqui |
 | `spec-legacy` | 2 | Provê `legacy.md` (quando há legado) — status quo, domínios, KPIs do AS-IS |
-| `spec-prototype` | 4 | Consome a pergunta estratégica e o posicionamento recomendado (ramo protótipo-primeiro) |
+| `sn-scaffold` | 5 | Instância como protótipo — consome a pergunta estratégica e o posicionamento recomendado (ramo protótipo-primeiro) |
 | `spec-product` | 5 | Consome recomendações para RF/RNF/Visão (ramo documentação-primeiro) |
 | `spec-iterate` | (cross) | Converte `## Questões em aberto` em `GAP-XXX`; reabre o benchmark se o posicionamento mudar |
 
@@ -370,7 +370,7 @@ Item sem validator próprio: suposições sem fonte (nível D) e decisões pende
 - Não cria IDs `GAP-XXX` — apenas referencia GAPs existentes ou registra em `## Questões em aberto`
 - Não decide requisitos funcionais/não funcionais — apenas recomenda insumos para RF/RNF em `spec-product`
 - Não substitui `spec-legacy` — usa o AS-IS já produzido, não analisa o legado
-- Não gera protótipo ou UI — isso é `spec-prototype`
+- Não gera protótipo ou UI — isso é a instância (`sn-scaffold` + `sn-capture`)
 - Não define arquitetura ou stack técnica
 - Não persiste pesquisa fora de `benchmark.md` — capturas avulsas (prints, PDFs) ficam em `inputs/`
 
@@ -378,4 +378,4 @@ Item sem validator próprio: suposições sem fonte (nível D) e decisões pende
 
 ## Próxima etapa
 
-→ **`spec-product`** (ramo doc-first) ou **`spec-prototype`** (ramo proto-first).
+→ **`spec-product`** (ramo doc-first) ou a **instância como protótipo** (`sn-scaffold`, ramo proto-first).

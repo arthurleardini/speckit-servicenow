@@ -56,22 +56,25 @@ const escrever = (rel) => ({ tool_name: 'Write', tool_input: { file_path: `${RAI
 
 // ————————————————————————— a tabela —————————————————————————
 
-test('SKILLS_QUE_REGISTRAM são as 7 do kit MAIS as 8 nossas, e as duas metades ficam separadas', () => {
+test('SKILLS_QUE_REGISTRAM são as 6 do kit MAIS as 12 nossas, e as duas metades ficam separadas', () => {
   // O kit obriga sete, nominalmente (`spec/SKILL.md:334`, «Sync-log como memória cross-cutting»).
   // A cadeia técnica não está nessa lista — o kit não a nomeia —, e é a rule do Plan deste
   // harness que estende a obrigação a ela. Daqui a seis meses ninguém lembra qual metade é kit e
   // qual é política nossa.
+  // Speckit ServiceNow: a `spec-prototype` saiu da metade do kit, e `spec-scaffold`/`spec-implement`
+  // deram lugar às seis `sn-*` (item 18 do design v0).
   assert.deepEqual([...SKILLS_DO_KIT].sort(), [
     'spec-benchmark', 'spec-ingest', 'spec-iterate', 'spec-legacy',
-    'spec-product', 'spec-prototype', 'spec-report',
+    'spec-product', 'spec-report',
   ]);
   assert.deepEqual([...SKILLS_NOSSAS].sort(), [
-    'spec-api-contracts', 'spec-data-model', 'spec-implement', 'spec-scaffold',
+    'sn-capture', 'sn-implement', 'sn-reinstall', 'sn-scaffold', 'sn-seed', 'sn-tasks-github',
+    'spec-api-contracts', 'spec-data-model',
     'spec-security-review', 'spec-tasks', 'spec-tech-rules', 'spec-test-plan',
   ]);
-  assert.equal(SKILLS_DO_KIT.size, 7);
-  assert.equal(SKILLS_NOSSAS.size, 8);
-  assert.equal(SKILLS_QUE_REGISTRAM.size, 15);
+  assert.equal(SKILLS_DO_KIT.size, 6);
+  assert.equal(SKILLS_NOSSAS.size, 12);
+  assert.equal(SKILLS_QUE_REGISTRAM.size, 18);
   for (const s of [...SKILLS_DO_KIT, ...SKILLS_NOSSAS]) assert.ok(SKILLS_QUE_REGISTRAM.has(s), s);
   // As duas metades não se sobrepõem: uma skill em ambas seria a tabela mentindo sobre a fonte.
   for (const s of SKILLS_DO_KIT) assert.ok(!SKILLS_NOSSAS.has(s), s);
@@ -107,7 +110,7 @@ test('ARTEFATO_TERMINAL traz os obrigatórios do kit e NÃO traz os opcionais', 
   // A cadeia técnica vem da nossa `PRE_REQUISITOS`: o que a seguinte exige, a anterior produziu.
   assert.equal(ARTEFATO_TERMINAL.get('tech-rules/tech-rules-summary.md'), 'spec-tech-rules');
   assert.equal(ARTEFATO_TERMINAL.get('data-model.json'), 'spec-data-model');
-  assert.equal(ARTEFATO_TERMINAL.get('api-contracts.yaml'), 'spec-api-contracts');
+  assert.equal(ARTEFATO_TERMINAL.has('api-contracts.yaml'), false, 'sem consumidor desde o item 17 do design v0');
   assert.equal(ARTEFATO_TERMINAL.get('test-plan.md'), 'spec-test-plan');
 });
 
@@ -181,11 +184,15 @@ const FORA_POR_DECISAO = new Map([
 const EXIGIDO_SEM_ANCORA = new Map([
   ['modules.md', 'OPTIONAL no kit — opcional não marca conclusão de nada'],
   ['plano-de-seguranca.md', 'produzido pela `revisao-de-seguranca`, que não é uma `spec-*`'],
+  ['traceability.json', 'produzido por script (`promocao.mjs --rastreio`), não por Write de skill'],
+  ['id-map.json', 'produzido pelo script do `sn-tasks-github` na publicação, não por Write de skill'],
 ]);
 
 test('ARTEFATO_TERMINAL: a tabela inteira cruzada com o kit e com a nossa PRE_REQUISITOS', () => {
   const exigidos = new Set();
-  for (const { exige } of PRE_REQUISITOS.values()) for (const a of exige || []) exigidos.add(a);
+  for (const { exige, exigeNoExploreNaSpec } of PRE_REQUISITOS.values()) {
+    for (const a of [...(exige || []), ...(exigeNoExploreNaSpec || [])]) exigidos.add(a);
+  }
 
   // 1. NADA INVENTADO: cada entrada é justificada por uma das duas fontes. É o que faz
   //    `capa.md → spec-report` — OPTIONAL no kit e exigido por ninguém — dar vermelho.
@@ -224,8 +231,10 @@ test('ARTEFATO_TERMINAL: a tabela inteira cruzada com o kit e com a nossa PRE_RE
   }
 
   // 5. E o tamanho fecha, para entrada acrescentada em silêncio não passar por descuido dos quatro
-  //    laços acima: dez REQUIRED do kit menos a ausência decidida, mais as quatro da cadeia técnica.
-  assert.equal(ARTEFATO_TERMINAL.size, KIT_REQUIRED.size - FORA_POR_DECISAO.size + 4);
+  //    laços acima: dez REQUIRED do kit menos a ausência decidida, mais as quatro da cadeia técnica
+  //    e as duas do Speckit ServiceNow (`data-model.previa.json` e `screens-manifest.json`), menos o
+  //    `api-contracts.yaml`, que ficou sem consumidor (a `spec-tasks` não o exige mais — item 17).
+  assert.equal(ARTEFATO_TERMINAL.size, KIT_REQUIRED.size - FORA_POR_DECISAO.size + 5);
 });
 
 // ————————————————————————— a âncora de artefato —————————————————————————

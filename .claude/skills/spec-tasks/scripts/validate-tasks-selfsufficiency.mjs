@@ -281,6 +281,29 @@ const DESCRIPTION_SEPARATOR = /\s[—–]\s|\s-\s/;
 const SQL_TYPE_PATTERN =
   /\b(BIGINT|INTEGER|INT|SMALLINT|TINYINT|SERIAL|BIGSERIAL|VARCHAR2|VARCHAR|NVARCHAR2|NVARCHAR|CHAR|TEXT|NCLOB|CLOB|TIMESTAMPTZ|TIMESTAMP|DATETIME|DATE|TIME|INTERVAL|BOOLEAN|BOOL|NUMERIC|NUMBER|DECIMAL|FLOAT|DOUBLE|REAL|MONEY|BINARY_FLOAT|BINARY_DOUBLE|UUID|JSONB|JSON|XML|BLOB|BYTEA|RAW|LONG|ENUM|ARRAY)\b(\s*\(\s*\d+(\s*,\s*\d+)?\s*\))?/;
 
+/**
+ * tasks/v5.4 (Speckit ServiceNow) — tipos de coluna do ServiceNow. Numa task com `snArtifact`, a
+ * coluna do persistenceModel é do tipo da plataforma (`string`, `reference`, `glide_date_time`…), e
+ * exigir palavra-chave SQL em maiúsculas reprovaria toda task ServiceNow em
+ * TASK_HAS_COMPLETE_DATA_MODEL. Vale só quando a task declara `snArtifact`.
+ */
+const SN_COLUMN_TYPE_PATTERN =
+  /\b(string|integer|decimal|float|boolean|reference|choice|glide_date_time|glide_date|glide_duration|journal_input|journal_list|journal|currency|price|html|url|email|phone_number_e164|translated_text|sys_class_name|document_id|table_name|script|conditions|user_image|list)\b/;
+
+/** tasks/v5.4 — os 17 kinds de `Task.snArtifact` (espelho do enum do schema). */
+const SN_ARTIFACT_KINDS = new Set([
+  'table', 'form', 'list', 'business_rule', 'client_script', 'ui_policy', 'ui_action',
+  'script_include', 'acl', 'role', 'flow', 'atf', 'notification', 'report', 'menu', 'seed', 'simulation'
+]);
+
+/** Kinds que têm UMA tabela — só neles `snArtifact.table` é obrigatório. */
+const SN_KINDS_WITH_TABLE = new Set([
+  'table', 'form', 'list', 'business_rule', 'client_script', 'ui_policy', 'ui_action', 'acl', 'seed'
+]);
+
+/** A task declara artefato ServiceNow (tasks/v5.4)? */
+const hasSnArtifact = (task) => typeof task?.snArtifact === 'object' && task.snArtifact !== null && !Array.isArray(task.snArtifact);
+
 /** Tipos de campo de UI que exigem lista de opções (a lacuna do caso real). */
 const OPTION_BEARING_FIELD_TYPES = new Set([
   'select',
@@ -736,8 +759,9 @@ function checkDataModel(scope, task) {
         'Converter TODAS as colunas do data-model.json para a string rica pipe-separated (ver tasks.format-reference.md § columns).');
       return;
     }
+    const sn = hasSnArtifact(task);
     const qualified = segs.filter((s) => {
-      const hasType = SQL_TYPE_PATTERN.test(s);
+      const hasType = SQL_TYPE_PATTERN.test(s) || (sn && SN_COLUMN_TYPE_PATTERN.test(s));
       // O format-reference especifica «—», mas os exemplos canônicos usam «-». Aceitar
       // travessão, meia-risca ou hífen cercado de espaços: reprovar por separador
       // cosmético geraria FATAL falso e desacreditaria o gate.
@@ -839,8 +863,17 @@ function checkContractPresence(scope, task, exemptTechnical, parentStory) {
   // continua FATAL para todas, como sempre foi.
   const report = (context) => (context && resolveTaskClass(task) === 'security' ? warn : fail);
 
+  // tasks/v5.4: a task ServiceNow implementa metadado Fluent, não endpoint REST. Ela fica dispensada
+  // de apiContracts — exceto kind=simulation, que é a integração simulada e pode expor contrato.
+  // O persistenceModel ausente vira AVISO: a tabela está em `snArtifact.table` e as colunas no
+  // data-model.json, que o agente lê junto com o Fluent (`app/src/fluent/tables/`).
+  const sn = hasSnArtifact(task);
+  const snKind = sn ? String(task.snArtifact.kind ?? '') : '';
+  const snSkipsApi = sn && snKind !== 'simulation';
+  const reportPm = (context) => (sn ? warn : report(context));
+
   // --- API ------------------------------------------------------------------
-  if (!hasApi) {
+  if (!hasApi && !snSkipsApi) {
     const body = serializeExcept(task, ['apiContracts', 'apiContract']);
     const cited = citedRoute(body);
     if (cited) {
@@ -865,7 +898,7 @@ function checkContractPresence(scope, task, exemptTechnical, parentStory) {
     const cited = citedTable(body);
     if (cited) {
       const { table, context } = cited;
-      report(context)('TASK_MISSING_PERSISTENCE_MODEL', scope, 'persistenceModel.entities',
+      reportPm(context)('TASK_MISSING_PERSISTENCE_MODEL', scope, 'persistenceModel.entities',
         `a task cita a tabela física «${table}»${context ? ` (${context})` : ''} e não tem persistenceModel.entities[] — quem implementa não recebe colunas, tipos, chaves nem índices`,
         `Embutir a entidade «${table}» do data-model.json em persistenceModel.entities[], completa: table, purpose, boundedContext, operationType, identifierStrategy, primaryKey, columns (nome TIPO constraints [operationType] — descrição, TODAS as colunas), relationships, indexes, uniqueConstraints, checkConstraints, migrationNotes e dataModelRef. Vale também para task de frontend que só EXIBE o dado.`);
     } else if (isCodeBearing && parentStory) {
@@ -877,6 +910,41 @@ function checkContractPresence(scope, task, exemptTechnical, parentStory) {
           'Confirmar se esta task lê ou escreve na tabela da story. Se lê ou escreve, embutir a entidade completa em persistenceModel.entities[]. Se não toca dados, ignorar este aviso.');
       }
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 3c. SN_ARTIFACT_COMPLETE (tasks/v5.4 — Speckit ServiceNow)
+//
+// `snArtifact` é opcional; presente, ele é o elo spec → instância (o `nowId` vai para o rastreio e
+// o `fluentFile` é onde o agente escreve). Pela metade, o elo quebra em silêncio — FATAL.
+// ---------------------------------------------------------------------------
+
+function checkSnArtifact(scope, task) {
+  if (task?.snArtifact === undefined) return;
+  const a = task.snArtifact;
+  if (!hasSnArtifact(task)) {
+    fail('SN_ARTIFACT_COMPLETE', scope, 'snArtifact', 'snArtifact presente mas não é objeto',
+      'Declarar { kind, table?, fluentFile, nowId } ou remover o campo.');
+    return;
+  }
+  const kind = String(a.kind ?? '');
+  if (!SN_ARTIFACT_KINDS.has(kind)) {
+    fail('SN_ARTIFACT_COMPLETE', scope, 'snArtifact.kind',
+      kind ? `kind «${kind}» desconhecido` : 'kind ausente',
+      `Usar um de: ${[...SN_ARTIFACT_KINDS].join(', ')}.`);
+  }
+  for (const campo of ['fluentFile', 'nowId']) {
+    if (!isNonEmptyString(a[campo])) {
+      fail('SN_ARTIFACT_COMPLETE', scope, `snArtifact.${campo}`, `${campo} ausente ou vazio`,
+        campo === 'fluentFile'
+          ? 'Informar o arquivo Fluent do objeto (ex.: app/src/fluent/business-rules/caso.now.ts).'
+          : 'Informar a chave do Now.ID com o ID da spec na frente (ex.: RF-MOD-F2-003_br_publicar_versao).');
+    }
+  }
+  if (SN_KINDS_WITH_TABLE.has(kind) && !isNonEmptyString(a.table)) {
+    fail('SN_ARTIFACT_COMPLETE', scope, 'snArtifact.table', `kind «${kind}» exige a tabela do objeto`,
+      'Informar o nome físico da tabela (ex.: x_<escopo>_caso).');
   }
 }
 
@@ -998,6 +1066,25 @@ function checkConcreteTestData(scope, task, exemptTechnical, klass) {
       fail('TASK_HAS_CONCRETE_TEST_DATA', scope, `${field}.testData`,
         `cenário ${sid}: testData ausente`,
         'Adicionar request (method, path, headers, body), expectedResponse (statusCode, body) e expectedDatabaseState.');
+      return;
+    }
+
+    // tasks/v5.4 — task ServiceNow (snArtifact, kind != simulation) não tem request HTTP: o teste é
+    // um Test() ATF sobre registros. O dado concreto é o registro de entrada (`record`/`records`/
+    // `input`/`update`) e o estado esperado das tabelas (`expectedDatabaseState`), que continua
+    // obrigatório. `request`/`expectedResponse` não se aplicam e não são cobrados.
+    if (hasSnArtifact(task) && String(task.snArtifact.kind ?? '') !== 'simulation') {
+      const filled = (v) => (isObj(v) ? Object.keys(v).length > 0 : Array.isArray(v) ? v.length > 0 : isNonEmptyString(v));
+      if (!['record', 'records', 'input', 'update'].some((k) => filled(td[k]))) {
+        fail('TASK_HAS_CONCRETE_TEST_DATA', scope, `${field}.testData.record`,
+          `cenário ${sid}: sem registro de entrada concreto (record, records, input ou update)`,
+          'Declarar o registro que o Test() ATF cria ou altera, com os valores de cada campo — nunca placeholders.');
+      }
+      if (!filled(td.expectedDatabaseState)) {
+        fail('TASK_HAS_CONCRETE_TEST_DATA', scope, `${field}.testData.expectedDatabaseState`,
+          `cenário ${sid}: expectedDatabaseState ausente`,
+          'Estado esperado de TODAS as tabelas afetadas depois do cenário. Para cenário sem escrita, declarar explicitamente "inalterado".');
+      }
       return;
     }
 
@@ -1618,6 +1705,7 @@ for (const { task, storyId, story } of allTasks) {
   checkApiSchemas(scope, task);
   checkDataModel(scope, task);
   checkContractPresence(scope, task, exemptTechnical, story);
+  checkSnArtifact(scope, task);
   checkExpandedBusinessRules(scope, task);
   checkConcreteTestData(scope, task, exemptTechnical, klass);
   checkImplementationGuidance(scope, task, exemptTechnical);
@@ -1665,10 +1753,10 @@ const result = {
  * `--write` — grava os FATAL de nível TASK em `metadata.fatalErrors[]`, no mesmo formato do
  * gêmeo de negócio ({code, message, scope, affectedField, suggestedFix}). Os dois validadores
  * escrevem no MESMO array e cada um só substitui as suas próprias entradas: os códigos de task
- * começam por `TASK_`/`UAT_`/`SPIKE_`/`NO_EXTERNAL_`, os de negócio não. Assim rodar um não apaga
+ * começam por `TASK_`/`UAT_`/`SPIKE_`/`NO_EXTERNAL_`/`SN_ARTIFACT_`, os de negócio não. Assim rodar um não apaga
  * o resultado do outro, e a ausência do campo passa a significar "validado e limpo".
  */
-const TASK_LEVEL_CODE = /^(TASK_|UAT_|SPIKE_|NO_EXTERNAL_)/;
+const TASK_LEVEL_CODE = /^(TASK_|UAT_|SPIKE_|NO_EXTERNAL_|SN_ARTIFACT_)/;
 if (writeMode) {
   const payload = errors.map((e) => ({
     code: e.code,

@@ -34,7 +34,15 @@ ninguém: lê um arquivo de entrada, examina o código, grava um JSON e termina.
 - **Lista sem limite**: consulta ou rota que devolve todos os registros, sem paginação.
 - **Filtro na memória**: busca tudo do banco e filtra ou ordena no código.
 - **Chamada externa sem tempo limite** (timeout).
-- **Tela** (React): busca de dados a cada renderização; lista grande renderizada inteira.
+- **App ServiceNow** (script de servidor, Business Rule, Script Include, ACL):
+  - `GlideRecord` **dentro de laço** (`while (gr.next())` que abre outra `GlideRecord` por linha) em
+    vez de uma consulta com `addEncodedQuery` / `IN`;
+  - **`getRowCount()` para contar**: usar `GlideAggregate` com `COUNT` (RN-SN-20);
+  - checar existência sem `setLimit(1)` antes do `query()` (RN-SN-21);
+  - `GlideRecord`/`GlideAggregate` em **script de ACL de read**: roda por registro em toda lista
+    (RN-SN-142);
+  - Business Rule síncrona fazendo trabalho pesado que cabia em async; laço de Flow acima de 1.000
+    iterações (RN-SN-154).
 
 Severidade: **ALTO** quando o defeito fica num caminho de requisição e piora com o volume de dados
 (N+1 numa rota de lista, lista sem paginação). O que custa, mas não cresce com os dados, não entra.

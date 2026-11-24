@@ -165,7 +165,7 @@ cujo `id` corresponde à US; (2) a branch/diff que contém o delta; (3) contexto
    entidades **compartilhadas** que o delta encosta (ex.: um schema alterado consumido por outro
    módulo, uma entidade com FK, um contrato de API reusado). Só o necessário para detectar
    regressão — não o projeto inteiro.
-4. **Varredura determinística do delta** — o mesmo motor do passo G3 da `spec-implement`, sem
+4. **Varredura determinística do delta** — o mesmo motor do passo G3 da `sn-implement`, sem
    modelo: segredo no código, dado pessoal em log, HTML cru, token no storage, injeção montada em
    texto, erro engolido, I/O dentro de laço (e Semgrep/gitleaks, quando instalados). Só linhas
    acrescentadas pela US:

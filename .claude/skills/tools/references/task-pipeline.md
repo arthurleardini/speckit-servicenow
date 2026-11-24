@@ -11,7 +11,7 @@
 | 2 | spec-ingest | Ingestão de insumos → context-map + discovery-document |
 | 3 | spec-legacy | AS-IS do legado (quando há legado) |
 | 4 | spec-benchmark | Análise de mercado |
-| 5 | spec-prototype | Protótipo e UI ancorados em negócio |
+| 5 | sn-scaffold | Instância como protótipo: tabelas, forms, lists, menu, roles e seed (sn-seed) no app Fluent; prints pelo sn-capture |
 | 6 | spec-product | Definição de negócio do novo produto |
 | iter | spec-iterate | Reconciliação + ciclo de GAPs (cross-fase) |
 | 6.5 | spec-tech-rules | Regras técnicas de implementação |
@@ -24,13 +24,12 @@
 | 8b | spec-security-review | Revisão de segurança do backlog |
 | 8.5 | spec-estimate | Estimativa preditiva & engenharia de delivery |
 | 8c | spec-tasks-html | Relatório HTML das tasks |
-| 9 | spec-tasks-azure | Publicação no Azure DevOps |
-| 10 | spec-scaffold | Scaffold do código |
-| 10-C | spec-convert-prototype | Conversão de protótipo HTML/JS → Next.js (apoio à Fase 10, quando há protótipo a migrar) |
-| 11 | spec-implement | Implementação dos work items |
+| 9 | sn-tasks-github | Publicação do backlog em issues e sub-issues do GitHub, com o print da tela |
+| 10 | sn-reinstall | Build e install do app na instância (`npm run reinstall`) — roda desde o Explore |
+| 11 | sn-implement | Implementação das stories no app ServiceNow (Fluent + ATF) |
 | 11c | spec-debug-fix | Debug baseado em evidência & correção (evento, não etapa) |
 | 12 | spec-code-audit | Auditoria pós-implementação |
-| 13 | spec-status-report | Relatório de status/conclusão para o cliente (executa os testes; lê o ADO) |
+| 13 | spec-status-report | Relatório de status/conclusão para o cliente (executa os testes; lê os recibos de ATF) |
 | doc | spec-report | Compilação HTML dos documentos (só documentação) |
 | doc | spec-estimate-report | Relatório HTML consolidado do pipeline (7 abas, após 8.5) |
 
@@ -41,7 +40,7 @@
 O número de fase identifica a **skill** no pipeline — nunca uma etapa interna dela. Etapas
 internas de uma skill usam **letras**: `## Etapa A`, `## Etapa B`, … (ou `## Passo N`, quando a
 skill já usa essa forma). Motivo: enquanto `spec-debug-fix` (Fase 11c) numerava as próprias etapas
-de 0 a 9, «Fase 10» significava ao mesmo tempo *spec-scaffold* e *o fechamento do debug* — e o
+de 0 a 9, «Fase 10» significava ao mesmo tempo *o scaffold* e *o fechamento do debug* — e o
 mesmo arquivo citava as duas coisas. Sub-etapas seguem a letra do pai (`Etapa F.6`).
 
 ## 2. Vocabulário de IDs
@@ -53,7 +52,7 @@ mesmo arquivo citava as duas coisas. Sub-etapas seguem a letra do pai (`Etapa F.
 | F-xxx | Fato atômico com âncora na fonte | spec-ingest |
 | INF-xxx | Inferência | spec-ingest |
 | NCR | Item não classificado (revisar) | spec-ingest |
-| PD-NNN | Decisão implícita extraída de protótipo | spec-prototype |
+| PD-NNN | Decisão implícita extraída de protótipo | spec-ingest (protótipo recebido como insumo) |
 | MOD-XXX | Módulo do catálogo modular | spec-product |
 | BC | Bounded context | spec-product / data-model |
 | RF-MOD-XXX-NN | Requisito funcional por módulo | spec-product |
@@ -86,9 +85,9 @@ Ao precisar das rules técnicas do projeto (frontend, security, etc.):
 3. Se ausente em ambos, perguntar ao usuário onde estão / gerar via spec-tech-rules.
 
 **Projeto com o harness Elo.** As rules que o harness traz moram numa subpasta e valem junto com as
-da raiz: a `security` e a constituição de frontend (`.claude/rules/harness/security.md` e
-`.claude/rules/harness/frontend.md`). Elas não são copiadas para a raiz (Decisão 73 do harness), e a
-de frontend só carrega sozinha quando se abre um arquivo de tela da raiz do harness — o código pode
+da raiz: a `security` e a constituição de UI ServiceNow (`.claude/rules/harness/security.md` e
+`.claude/rules/harness/servicenow-ui.md`). Elas não são copiadas para a raiz (Decisão 73 do harness), e a
+de UI só carrega sozinha quando se abre um arquivo de tela da raiz do harness — o código pode
 estar noutro repositório, ou ainda nem existir. Por isso quem gera ou altera tela lê a constituição
 **explicitamente**. O `frontend` da raiz, quando existe, é o complemento do projeto e remete a ela.
 

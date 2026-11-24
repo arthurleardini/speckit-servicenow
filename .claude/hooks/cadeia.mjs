@@ -25,8 +25,15 @@ import { RAIZ_SPEC, RAIZ_EXPLORE, chave } from './kit.mjs';
  * A ordem de `exige` é a ordem em que aparecem na mensagem de erro: do mais fundamental ao
  * mais derivado, porque é a ordem em que o usuário vai resolver.
  *
- * `exigeNoExplore` existe só para a spec-prototype, que no pré-projeto roda sobre o de-para da
- * rule `explore.md` em vez dos artefatos do kit.
+ * `exigeNoExplore` (relativo a `outputs/explore/`) e `exigeNoExploreNaSpec` (relativo a
+ * `outputs/spec/`) valem quando a skill roda no Explore — ou com `--previa` nos argumentos. No
+ * Speckit ServiceNow (item 17 do design v0) são três skills: a `spec-data-model --previa` lê o
+ * `modelo-de-dados.md`, o `sn-scaffold` lê a prévia do modelo e o `sn-capture` lê o manifesto de
+ * telas que o `sn-scaffold` gravou. Uma entrada com uma das duas listas e sem a outra exige só a
+ * que tem.
+ *
+ * SÓ EXISTÊNCIA DE ARQUIVO. Conteúdo (install `ok`, issue no `id-map.json`, `tasks.json` válido)
+ * fica no script da própria skill, que sai com erro e mensagem.
  *
  * DUAS AUSÊNCIAS SÃO DECIDIDAS, NÃO ESQUECIDAS, e estão escritas aqui para que ninguém precise
  * redescobrir por que:
@@ -67,16 +74,6 @@ export const PRE_REQUISITOS = new Map([
     exige: ['context-map.md', 'discovery-document.md'],
     validador: 'V-PRD-01',
   }],
-  ['spec-prototype', {
-    exige: [
-      'modules.md',
-      'requirements/requirements.md',
-      'business-rules.md',
-      'product-requirements/product-requirements.md',
-    ],
-    exigeNoExplore: ['hld-funcional.md', 'especificacao-funcional.md'],
-    validador: 'V-PRD-02',
-  }],
   ['spec-tech-rules', {
     exige: ['requirements/requirements.md', 'product-requirements/product-requirements.md'],
     validador: 'CADEIA-TEC-00',
@@ -87,6 +84,8 @@ export const PRE_REQUISITOS = new Map([
   }],
   ['spec-data-model', {
     exige: ['tech-rules/tech-rules-summary.md'],
+    // A prévia (`--previa`, Explore) sai do modelo de dados preliminar, não das tech-rules do Plan.
+    exigeNoExplore: ['modelo-de-dados.md'],
     validador: 'CADEIA-TEC-01',
   }],
   ['spec-api-contracts', {
@@ -94,7 +93,9 @@ export const PRE_REQUISITOS = new Map([
     validador: 'CADEIA-TEC-02',
   }],
   ['spec-tasks', {
-    exige: ['data-model.json', 'api-contracts.yaml', 'test-plan.md'],
+    // Sem `api-contracts.yaml`: no Speckit ServiceNow a etapa de contratos de API é opcional
+    // (item 31), e as simulações moram no modelo de dados (decisão A8).
+    exige: ['data-model.json', 'test-plan.md'],
     validador: 'CADEIA-TEC-03',
   }],
   ['spec-security-review', {
@@ -105,13 +106,24 @@ export const PRE_REQUISITOS = new Map([
     exige: ['tasks.json'],
     validador: 'CADEIA-TEC-04',
   }],
-  ['spec-scaffold', {
-    exige: ['tech-rules/tech-rules-summary.md', 'data-model.json', 'api-contracts.yaml'],
-    validador: 'CADEIA-DEV-01',
+  // — Speckit ServiceNow (item 17 do design v0) —
+  ['sn-scaffold', {
+    exige: ['data-model.json'],
+    exigeNoExploreNaSpec: ['data-model.previa.json'],
+    validador: 'CADEIA-SN-01',
   }],
-  ['spec-implement', {
-    exige: ['tasks.json'],
-    validador: 'CADEIA-DEV-02',
+  ['sn-capture', {
+    exige: ['screens-manifest.json'],
+    exigeNoExploreNaSpec: ['screens-manifest.json'],
+    validador: 'CADEIA-SN-02',
+  }],
+  ['sn-tasks-github', {
+    exige: ['tasks.json', 'traceability.json'],
+    validador: 'CADEIA-SN-03',
+  }],
+  ['sn-implement', {
+    exige: ['tasks.json', 'id-map.json'],
+    validador: 'CADEIA-SN-04',
   }],
 ]);
 
@@ -128,9 +140,15 @@ export const RAZAO_EXTRA = new Map([
   ['spec-security-review',
     'Neste harness a `spec-security-review` **consome** o kernel `plano-de-seguranca.md` em vez ' +
     'de derivar controles sozinha. Rode a `revisao-de-seguranca` no modo `plano-geral` primeiro.'],
-  ['spec-prototype',
-    'O modo Geração para sem esses artefatos de produto — o bloqueio aqui só antecipa a mensagem ' +
-    'que a skill daria depois de já ter lido meio projeto.'],
+  ['sn-tasks-github',
+    'O `traceability.json` é o gate do Plan: gere com `node .claude/ferramentas/promocao.mjs ' +
+    '--rastreio` e confira que nenhum RF ficou sem story antes de publicar o backlog.'],
+  ['sn-implement',
+    'O `id-map.json` é escrito pelo `sn-tasks-github` na publicação: a story só entra no Deliver ' +
+    'depois de virar issue, porque o resultado é comentado nela.'],
+  ['sn-scaffold',
+    'No Explore o scaffold lê a prévia (`spec-data-model --previa`); no Plan, o modelo final ' +
+    '(`spec-data-model`).'],
 ]);
 
 /**
@@ -140,7 +158,8 @@ export const RAZAO_EXTRA = new Map([
  * kit.mjs — a regra de qual campo do payload significa o quê mora lá, e escrita duas vezes ela
  * diverge.
  *
- * `contexto.fase` e `contexto.presentesExplore` só importam para a spec-prototype no Explore.
+ * `contexto.fase`, `contexto.previa` e `contexto.presentesExplore` só importam para as entradas com
+ * lista do Explore (`spec-data-model`, `sn-scaffold`, `sn-capture`).
  * Sem contexto, vale a semântica do Plan — que é o caso da esmagadora maioria das skills.
  *
  * `contexto.repoDocs` é o NOME da subpasta que é o repo de docs, e só existe em workspace
@@ -165,9 +184,16 @@ export function avaliarSkill(skill, presentes, contexto = {}) {
   const def = PRE_REQUISITOS.get(nomeChave);
   if (!def) return null;
 
-  const noExplore = contexto.fase === 'explore' && def.exigeNoExplore;
-  const exigidos = noExplore ? def.exigeNoExplore : def.exige;
-  const disponiveis = noExplore ? (contexto.presentesExplore || new Set()) : (presentes || new Set());
+  // NO EXPLORE (ou com `--previa`) valem as listas do Explore, cada uma contra a sua raiz. Entrada
+  // sem nenhuma das duas listas usa a `exige` do Plan em qualquer fase, como sempre.
+  const temListaDoExplore = !!(def.exigeNoExplore || def.exigeNoExploreNaSpec);
+  const noExplore = (contexto.fase === 'explore' || contexto.previa === true) && temListaDoExplore;
+  const grupos = noExplore
+    ? [
+      { raiz: RAIZ_EXPLORE, exigidos: def.exigeNoExplore || [], disponiveis: contexto.presentesExplore || new Set() },
+      { raiz: RAIZ_SPEC, exigidos: def.exigeNoExploreNaSpec || [], disponiveis: presentes || new Set() },
+    ].filter((g) => g.exigidos.length)
+    : [{ raiz: RAIZ_SPEC, exigidos: def.exige || [], disponiveis: presentes || new Set() }];
 
   // PREFIXO DO REPO DE DOCS. Num workspace multi-repo o consultor está na raiz do workspace e os
   // artefatos moram em `<cwd>/<repo-docs>/outputs/…`; imprimir `outputs/spec/` cru manda olhar num
@@ -182,17 +208,18 @@ export function avaliarSkill(skill, presentes, contexto = {}) {
   // possível, e o gatilho de remoção estava declarado no `CLAUDE.md`. Manter o fallback agora seria
   // manter caminho morto numa trava bloqueante — e, pior aqui, mandar o consultor procurar num
   // lugar que não existe, que é falso positivo disfarçado de ajuda.
-  const raizes = (noExplore ? [RAIZ_EXPLORE] : [RAIZ_SPEC]).map((r) => `${prefixo}${r}/`);
-  const ondeProcurar = raizes.map((r) => `\`${r}\``).join(' ou ');
+  const raizes = grupos.map((g) => `${prefixo}${g.raiz}/`);
 
   // COMPARAÇÃO POR `chave`, e não `Set.has` cru. O `kit.mjs` compara caminho assim em toda parte,
   // com a justificativa escrita no JSDoc de `chave` — e esta trava era a exceção. Medido: o FS do
   // Windows, onde este harness roda, é insensível a caixa, então `outputs/spec/Data-Model.json`
   // existe, o SO o encontra, e o `Set.has` respondia que faltava `data-model.json`. Falso positivo
   // em cima de trabalho legítimo, que é o erro caro do modelo de ameaça desta camada.
-  const presentesPorChave = new Set([...disponiveis].map((c) => chave(c)));
-  const faltando = exigidos.filter((c) => !presentesPorChave.has(chave(c)));
-  if (!faltando.length) return null;
+  const faltas = grupos.map((g, i) => {
+    const presentesPorChave = new Set([...g.disponiveis].map((c) => chave(c)));
+    return { onde: raizes[i], faltando: g.exigidos.filter((c) => !presentesPorChave.has(chave(c))) };
+  }).filter((f) => f.faltando.length);
+  if (!faltas.length) return null;
 
   // Pela MESMA chave da `PRE_REQUISITOS`, e não pelo nome cru: consertar só a tabela de cima
   // bloquearia certo mas sem a explicação de POR QUÊ — perda silenciosa, sem teste vermelho.
@@ -202,7 +229,7 @@ export function avaliarSkill(skill, presentes, contexto = {}) {
     motivo: [
       `Cadeia bloqueada (${def.validador}): \`${nome}\` depende de artefatos que ainda não existem.`,
       '',
-      `Faltam em ${ondeProcurar}: ${faltando.map((c) => `\`${c}\``).join(', ')}.`,
+      ...faltas.map((f) => `Faltam em \`${f.onde}\`: ${f.faltando.map((c) => `\`${c}\``).join(', ')}.`),
       ...(extra ? ['', extra] : []),
       '',
       'Produza o que falta e invoque de novo.',
@@ -219,7 +246,7 @@ export function avaliarSkill(skill, presentes, contexto = {}) {
       // saída concreta — pôr o arquivo onde ela olha, que é literalmente o caso de uso —, e
       // escopo reduzido não tem saída nenhuma, e a mensagem admite em vez de insinuar. Não há
       // válvula de isenção aqui de propósito: criar uma é decisão de spec, não de implementação.
-      `Artefato **herdado** de outro fornecedor tem saída: coloque o arquivo em \`${raizes[0]}\` ` +
+      `Artefato **herdado** de outro fornecedor tem saída: coloque o arquivo em \`${faltas[0].onde}\` ` +
       'com o nome acima e registre a origem no `sync-log.md` — esta trava só pergunta se o ' +
       'artefato existe, não quem o produziu.',
       '',
@@ -323,5 +350,9 @@ export function avaliar(payload, io) {
   // e reenvolvê-lo em `new Set(...)` seria cópia decorativa. Medido chamando a função: `avaliarSkill`
   // não muta o conjunto que recebe (ele só o espalha num `Set` novo para comparar por `chave`), então
   // compartilhá-lo com o `detectarFase` acima é seguro.
-  return avaliarSkill(skill, noKit, { fase, presentesExplore, repoDocs });
+  // `--previa` nos argumentos da skill (`spec-data-model --previa`) pede a lista do Explore mesmo
+  // fora dele: a prévia sai do `modelo-de-dados.md`, não das tech-rules.
+  const previa = /(^|\s)--previa(\s|=|$)/.test(String(input.args || ''));
+
+  return avaliarSkill(skill, noKit, { fase, presentesExplore, repoDocs, previa });
 }

@@ -21,6 +21,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import { comoBoundedContexts } from './lib/servicenow.mjs';
 
 const CARDINALIDADE_MERMAID = {
   ONE_TO_ONE: '||--||',
@@ -112,7 +113,8 @@ if (outDirSegments.some((seg) => seg.toLowerCase() === 'skills')) {
 
 let model;
 try {
-  model = JSON.parse(readFileSync(dataPath, 'utf8'));
+  // Formato ServiceNow (scope + entities[]) é lido pela visão boundedContexts — lib/servicenow.mjs.
+  model = comoBoundedContexts(JSON.parse(readFileSync(dataPath, 'utf8')));
 } catch (e) {
   console.error(`ERRO: não foi possível ler/parsear "${dataPath}": ${e.message}`);
   process.exit(1);

@@ -1099,3 +1099,163 @@ test('âncora: piso vale também na forma multi-repo `Repo@sha`', () => {
   assert.equal(r.action, 'deny');
   assert.match(r.reason, /curta demais/);
 });
+
+// ————————————————— item 19 do design v0: install registrado + recibo de ATF —————————————————
+//
+// O push de um app ServiceNow exige, além da auditoria: a última linha de install `ok` com o commit
+// atual de `app/src/fluent`, e o recibo de ATF verde de cada US auditada (ou a isenção `atf-form`
+// da story). O gate só LÊ o registro: nunca roda o `now-sdk`. Um teste de bloqueio por condição.
+
+import { exigenciasServiceNow, parseIsencaoStory } from './delivery-gate.mjs';
+import { montarLinhaSecaoA, CABECALHO_SECAO_A } from './kit.mjs';
+
+const SHA_APP = '1111111111111111111111111111111111111111';
+const snOk = (extra = {}) => ({
+  commitFluent: SHA_APP,
+  ultimo: { numero: 3, resultado: 'ok', commit: SHA_APP },
+  porStory: { 'US-042': { recibo: { status: 'success', commit: SHA_APP }, reciboCobre: true, isencaoAtfForm: false } },
+  ...extra,
+});
+const aprovada = { us: 'US-042', verdict: 'APROVADA', auditedCommit: 'abc1234', blockingFindings: [] };
+
+test('item 19 — repositório sem app ServiceNow não é cobrado (servicenow null)', () => {
+  assert.equal(exigenciasServiceNow(null, ['US-042']), null);
+  assert.equal(decide({ ...base, reports: [aprovada], servicenow: null }).action, 'pass');
+});
+
+test('item 19 — tudo registrado: install ok no commit do app e recibo verde → pass', () => {
+  assert.equal(decide({ ...base, reports: [aprovada], servicenow: snOk() }).action, 'pass');
+});
+
+test('item 19 — sem linha de install → deny', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ ultimo: null }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /nenhum install registrado/);
+  assert.match(r.reason, /nunca roda o now-sdk/);
+});
+
+test('item 19 — último install com falha → deny', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ ultimo: { numero: 4, resultado: 'falha-install', commit: SHA_APP } }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /linha 4\) terminou em `falha-install`/);
+});
+
+test('item 19 — install ok de outro commit do app → deny', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ ultimo: { numero: 3, resultado: 'ok', commit: '2222222222222222222222222222222222222222' } }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /é do commit `222222222222`/);
+});
+
+test('item 19 — sem recibo de ATF da US → deny, ensinando o comando', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ porStory: {} }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /US-042: sem recibo de ATF em `outputs\/spec\/auditorias\/atf\/US-042\.json`/);
+  assert.match(r.reason, /npm run atf -- --story US-042/);
+});
+
+test('item 19 — recibo vermelho → deny', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ porStory: { 'US-042': { recibo: { status: 'failure', commit: SHA_APP }, reciboCobre: true } } }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /não está verde \(status `failure`\)/);
+});
+
+test('item 19 — recibo anterior ao último commit do app → deny', () => {
+  const r = decide({ ...base, reports: [aprovada], servicenow: snOk({ porStory: { 'US-042': { recibo: { status: 'success', commit: '3333333' }, reciboCobre: false } } }) });
+  assert.equal(r.action, 'deny');
+  assert.match(r.reason, /anterior ao último commit/);
+});
+
+test('item 19 — isenção atf-form da story substitui o recibo; a de outra story não', () => {
+  const isenta = snOk({ porStory: { 'US-042': { recibo: null, reciboCobre: false, isencaoAtfForm: true } } });
+  assert.equal(decide({ ...base, reports: [aprovada], servicenow: isenta }).action, 'pass');
+  const outra = snOk({ porStory: { 'US-099': { isencaoAtfForm: true } } });
+  assert.equal(decide({ ...base, reports: [aprovada], servicenow: outra }).action, 'deny');
+});
+
+test('item 19 — override de falso positivo NÃO dispensa instalar e testar', () => {
+  const bloq = { us: 'US-042', verdict: 'BLOQUEADA', auditedCommit: 'abc1234', blockingFindings: ['SEC-1'] };
+  const ov = { us: 'US-042', auditedCommit: 'abc1234', falsePositiveIds: ['SEC-1'] };
+  const r = decide({ ...base, reports: [bloq], overrides: [ov], servicenow: snOk({ ultimo: null }) });
+  assert.equal(r.action, 'deny');
+});
+
+test('item 19 — parseIsencaoStory: lê o bloco próprio, recusa o template e não confunde com gate:isencao', () => {
+  const bloco = (campos) => `<!-- gate:isencao-story -->\n${campos}\n<!-- /gate:isencao-story -->\n`;
+  const ok = parseIsencaoStory(bloco('story: US-042\ntipo: atf-form\nautor: Fulana\ndata: 2026-11-24\nmotivo: runner sem tela'));
+  assert.deepEqual(ok, { story: 'US-042', tipo: 'atf-form', autor: 'Fulana', data: '2026-11-24', motivo: 'runner sem tela' });
+  assert.equal(parseIsencaoStory(bloco('story: <ID>\ntipo: atf-form\nautor: x\ndata: y\nmotivo: z')), null);
+  assert.equal(parseIsencaoStory(bloco('story: US-042\ntipo: atf-form\nautor: x\ndata: y')), null);
+  // O bloco de story não é lido como isenção de branch, e o de branch não é lido como de story.
+  assert.equal(parseExemption(bloco('story: US-042\ntipo: atf-form\nautor: x\ndata: y\nmotivo: z\nbranch: feat-x')), null);
+  assert.equal(parseIsencaoStory('<!-- gate:isencao -->\nbranch: feat-x\nmotivo: z\n<!-- /gate:isencao -->'), null);
+});
+
+// — ponta a ponta, mono-repo com git de verdade (o layout do Speckit ServiceNow, decisão A3) —
+
+function repoServiceNow() {
+  const dir = mkdtempSync(join(tmpdir(), 'gate-sn-'));
+  const g = (...a) => execFileSync('git', a, { cwd: dir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  g('init', '-q', '-b', 'main');
+  g('config', 'user.email', 't@t');
+  g('config', 'user.name', 'T');
+  mkdirSync(join(dir, 'outputs', 'explore'), { recursive: true });
+  mkdirSync(join(dir, 'outputs', 'spec', 'auditorias', 'atf'), { recursive: true });
+  writeFileSync(join(dir, 'README.md'), '# app\n');
+  g('add', '.');
+  g('commit', '-q', '-m', 'inicial');
+  g('checkout', '-q', '-b', 'feat-us-042');
+  mkdirSync(join(dir, 'app', 'src', 'fluent', 'tables'), { recursive: true });
+  writeFileSync(join(dir, 'app', 'src', 'fluent', 'tables', 'caso.now.ts'), "Table({ name: 'x_cob_caso' })\n");
+  g('add', '.');
+  g('commit', '-q', '-m', 'US-042: tabela');
+  const shaApp = g('rev-parse', 'HEAD');
+  const curto = g('rev-parse', '--short=8', 'HEAD');
+  writeFileSync(join(dir, 'outputs', 'spec', 'auditorias', 'US-042.md'),
+    `<!-- gate:status -->\nveredito: APROVADA\ncommit-auditado: ${curto}\nachados-bloqueantes: nenhum\n<!-- /gate:status -->\n`);
+  const syncLog = (commit, resultado = 'ok') => writeFileSync(join(dir, 'outputs', 'spec', 'sync-log.md'),
+    `# Sync Log\n\n${CABECALHO_SECAO_A}\n${montarLinhaSecaoA({
+      numero: 1, data: '2026-11-24', hora: '10:00', skill: 'now-sdk-install', modo: 'dev493801',
+      inputs: 'x_cob', outputs: commit, decisoes: `${resultado}; 5 registros`, decisor: '—', proximo: 'sn-capture',
+    })}\n`);
+  const recibo = (status, commit) => writeFileSync(join(dir, 'outputs', 'spec', 'auditorias', 'atf', 'US-042.json'),
+    JSON.stringify({ sys_id: 'x', status, horario: '2026-11-24T10:05:00Z', commit }));
+  return { dir, g, shaApp, syncLog, recibo };
+}
+
+const pushDaUs = { tool_name: 'Bash', tool_input: { command: 'git push origin feat-us-042' } };
+const negou = (r) => r.out.trim() && JSON.parse(r.out).hookSpecificOutput.permissionDecision === 'deny';
+
+test('item 19 — ponta a ponta: sem recibo nega; com recibo verde do commit do app libera', () => {
+  const { dir, shaApp, syncLog, recibo } = repoServiceNow();
+  syncLog(shaApp);
+  let r = runHook(pushDaUs, dir);
+  assert.ok(negou(r), r.out);
+  assert.match(JSON.parse(r.out).hookSpecificOutput.permissionDecisionReason, /sem recibo de ATF/);
+  recibo('success', shaApp);
+  r = runHook(pushDaUs, dir);
+  assert.equal(r.out.trim(), '', r.out);
+});
+
+test('item 19 — ponta a ponta: recibo tirado DEPOIS (commit descendente) cobre; install de outro commit nega', () => {
+  const { dir, g, shaApp, syncLog, recibo } = repoServiceNow();
+  // O recibo e o sync-log entram num commit seguinte, que não mexe no app: o recibo continua cobrindo.
+  syncLog(shaApp);
+  writeFileSync(join(dir, 'notas.md'), 'x\n');
+  g('add', 'notas.md');
+  g('commit', '-q', '-m', 'notas');
+  recibo('success', g('rev-parse', 'HEAD'));
+  assert.equal(runHook(pushDaUs, dir).out.trim(), '');
+  syncLog('9999999999999999999999999999999999999999');
+  const r = runHook(pushDaUs, dir);
+  assert.ok(negou(r), r.out);
+  assert.match(JSON.parse(r.out).hookSpecificOutput.permissionDecisionReason, /último install ok/);
+});
+
+test('item 19 — ponta a ponta: a isenção atf-form da story libera sem recibo', () => {
+  const { dir, shaApp, syncLog } = repoServiceNow();
+  syncLog(shaApp);
+  mkdirSync(join(dir, 'outputs', 'spec', 'auditorias', '_isencoes'), { recursive: true });
+  writeFileSync(join(dir, 'outputs', 'spec', 'auditorias', '_isencoes', 'US-042-atf-form.md'),
+    '<!-- gate:isencao-story -->\nstory: US-042\ntipo: atf-form\nautor: Fulana\ndata: 2026-11-24\nmotivo: teste de form rodado à mão no Client Test Runner\n<!-- /gate:isencao-story -->\n');
+  assert.equal(runHook(pushDaUs, dir).out.trim(), '');
+});

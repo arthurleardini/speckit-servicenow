@@ -15,8 +15,16 @@ Template até o fim do estágio 2: sem lock e com o marcador `.harness-template`
 | Arquivo | Motivo |
 |---|---|
 | `harness-zona.lock.json` | o modo template permite alterar o kit até o endurecimento (A1) |
+| `.claude/skills/spec-prototype/` | a instância é o protótipo (A2): as telas saem do `sn-scaffold` e os prints do `sn-capture` |
+| `.claude/skills/spec-convert-prototype/` | não há protótipo HTML para converter (A2) |
+| `.claude/skills/spec-scaffold/` | o esqueleto do app é o projeto Fluent em `app/`, gerado pelo `sn-scaffold` |
+| `.claude/skills/spec-implement/` | substituída pela `sn-implement` (item 29), copiada dela e adaptada a Fluent, ATF e `npm run reinstall` |
+| `.claude/skills/spec-tasks-azure/` | o backlog vai para issues do GitHub (A4) pelo `sn-tasks-github`, que levou o `lib/load-tasks.mjs` |
+| `.claude/hooks/tasks-azure-dry-run.test.mjs` | testava o publicador do Azure DevOps removido |
 
-O item 27 do design ainda vai acrescentar mais remoções a esta tabela.
+As referências às skills removidas nas skills `spec-ingest`, `spec-product`, `spec-tech-rules`,
+`spec-hld`, `revisao-de-seguranca`, `spec-test-plan` e `spec-iterate` ficam para o item 31, que muda
+o conteúdo delas.
 
 ## Estágio 0: teste de viabilidade (item 9), 2026-11-24
 

@@ -17,7 +17,6 @@ test('a cadeia spec-* foi vendorizada, com os validadores Python', () => {
     'spec/SKILL.md',
     'spec-ingest/templates/context-map.md',
     'spec-product/templates/requirements-functional.md',
-    'spec-prototype/SKILL.md',
     'spec-tech-rules/templates/frontend-default.mdc',
     'tools/check-flowmap.py',
     'tools/check-modules.py',
@@ -44,6 +43,15 @@ test('a spec-hld que produz o hld.md esta vendorizada, com o validador dela', ()
   // `arquitetura-solucao.md` registrava, e que o Plano 4 vem encerrar.
   for (const rel of ['spec-hld/SKILL.md', 'spec-hld/templates/hld.md', 'tools/check-hld.py']) {
     assert.ok(existsSync(join(DIR_SKILLS, rel)), `falta .claude/skills/${rel}`);
+  }
+});
+
+test('fork ServiceNow (item 27): as skills fora do alvo não estão, e as seis sn-* estão como extensão', () => {
+  for (const velha of ['spec-prototype', 'spec-convert-prototype', 'spec-scaffold', 'spec-implement', 'spec-tasks-azure']) {
+    assert.ok(!existsSync(join(DIR_SKILLS, velha)), `${velha} devia ter saído (ORIGEM.md)`);
+  }
+  for (const nova of ['sn-scaffold', 'sn-seed', 'sn-capture', 'sn-tasks-github', 'sn-implement', 'sn-reinstall']) {
+    assert.ok(existsSync(join(DIR_SKILLS, nova, 'SKILL.md')), `falta .claude/skills/${nova}/SKILL.md`);
   }
 });
 

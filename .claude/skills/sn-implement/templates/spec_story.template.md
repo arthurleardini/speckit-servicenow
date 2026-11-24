@@ -1,6 +1,6 @@
 # spec_story — <NomeDoModulo>
 
-> Memória de implementação deste módulo. Lida pelo spec-implement antes de cada task.
+> Memória de implementação deste módulo. Lida pelo sn-implement antes de cada task.
 > Atualizada automaticamente ao final de cada task concluída.
 
 ---
@@ -14,7 +14,7 @@
 ---
 
 ## Estratégia de testes do módulo
-> Como se prova algo neste módulo. Lida na Fase 1 (E1) do spec-implement, antes de
+> Como se prova algo neste módulo. Lida na Fase 1 (E1) do sn-implement, antes de
 > redescobrir o stack. Preencher/complementar sempre que uma task fixar algo novo.
 
 | Camada | Ferramenta | Localização | Comando |

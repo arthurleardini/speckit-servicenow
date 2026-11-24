@@ -30,7 +30,7 @@
 // As ferramentas externas (Semgrep, gitleaks), quando instaladas, entram pela casca do `validar.mjs`;
 // os leitores da saída delas moram aqui, puros, para serem testados sem a ferramenta.
 
-import { classificar } from './roteador.mjs';
+import { classificar, ehDoAppServiceNow } from './roteador.mjs';
 import { evidenciaMascarada } from './conferencia.mjs';
 
 // `logger.x(`, `_logger.LogInformation(` (C#), `log.info(` (SLF4J), `logging.info(` (Python).
@@ -263,8 +263,8 @@ function sqlMontadoNaLinha(linha, { seguintes = [] } = {}) {
  * As regras de LINHA. `quando(arquivo)` restringe o tipo de arquivo; `padrao` casa na linha
  * acrescentada; `e(linha, contexto)` é uma condição a mais (o contexto traz o `arquivo`, até 20 linhas
  * `anteriores` e 15 `seguintes` do mesmo trecho); `exceto` desarma o caso legítimo conhecido.
- * `segredo: true` mascara o valor na evidência (ver `evidenciaMascarada`); `soFrontendNext: true` só
- * vale quando a rule de frontend Next está em vigor no projeto (ver `regrasFrontendNextEmVigor`).
+ * `segredo: true` mascara o valor na evidência (ver `evidenciaMascarada`); `soRegraDeUi: true` só
+ * vale quando a rule de tela do harness (`servicenow-ui.md`) está em vigor (ver `regrasUiEmVigor`).
  */
 export const REGRAS = [
   {
@@ -393,23 +393,37 @@ export const REGRAS = [
     motivo: 'um valor vindo do usuário vira comando executado no servidor.',
     correcao: 'passar os argumentos como lista (`execFile`/`spawn` sem shell) e validar contra uma allowlist.',
   },
+  // Fork Speckit ServiceNow (design v0, item 11): as duas regras de tela Next.js (`fetch-na-tela`,
+  // `formato-no-jsx`) saíram com a `frontend.md`. No lugar, três regras da `servicenow-ui.md` que se
+  // decidem por linha num `.now.ts` (ou em `app/src/`), sem modelo. `keys.ts` é gerado pelo SDK e
+  // guarda sys_id por desenho — fica de fora.
   {
-    id: 'fetch-na-tela', dimensoes: ['rules-tecnicas'], severidade: 'ALTO', soFrontendNext: true,
-    titulo: '`fetch` dentro de componente',
-    padrao: /\bfetch\s*\(|\baxios\.(get|post|put|patch|delete)\s*\(/,
-    quando: (a) => ehTela(a),
-    motivo: 'a rule de frontend proíbe HTTP na UI: o pedido tem que passar por um `*.service.ts` e um data hook (`.claude/rules/harness/frontend.md`, "Serviços e HTTP").',
-    correcao: 'mover a chamada para um service com o path em `*.paths.ts` e consumir por um hook do React Query.',
+    id: 'now-sysid-fixo', dimensoes: ['rules-tecnicas'], severidade: 'ALTO', soRegraDeUi: true,
+    titulo: '`sys_id` fixo no código do app',
+    padrao: /['"`][0-9a-f]{32}['"`]/,
+    quando: (a) => ehDoAppServiceNow(a) && !/(^|\/)generated\/keys\.ts$/.test(normalizar(a)),
+    motivo: 'sys_id muda entre instâncias, e o registro some no install seguinte ou na instância zerada (RN-SN-31; `.claude/rules/harness/servicenow-ui.md`, "Identificadores").',
+    correcao: "referenciar o registro por `Now.ID['<ID-da-spec>_<tipo>_<nome>']` ou buscar por campo de negócio.",
   },
   {
-    id: 'formato-no-jsx', dimensoes: ['rules-tecnicas'], severidade: 'ALTO', soFrontendNext: true,
-    titulo: 'formatação de valor dentro do JSX',
-    padrao: /<[A-Za-z][^>]*>[^<]*\{[^}]*(\.toFixed\s*\(|\.toLocaleString\s*\(|Intl\.(NumberFormat|DateTimeFormat)|\bformat\s*\()/,
-    quando: (a) => ehTela(a),
-    motivo: 'a rule de frontend proíbe formatação no JSX: o valor tem que chegar pronto no View Model (`.claude/rules/harness/frontend.md`, "View Model e derivação na UI").',
-    correcao: 'formatar no mapper (`to<Nome>ViewModel`) e renderizar o campo já formatado.',
+    id: 'now-url-instancia', dimensoes: ['rules-tecnicas'], severidade: 'ALTO', soRegraDeUi: true,
+    titulo: 'URL de instância fixa no código do app',
+    padrao: /https?:\/\/[\w-]+\.service-now\.com/i,
+    quando: (a) => ehDoAppServiceNow(a),
+    motivo: 'o app é reinstalado em outra instância (CUJ 4), e a URL fixa aponta para a instância velha (`.claude/rules/harness/servicenow-ui.md`, "MUST NOT").',
+    correcao: 'usar caminho relativo (`/<tabela>.do`, `/<tabela>_list.do`) ou `gs.getProperty(\'glide.servlet.uri\')`.',
+  },
+  {
+    id: 'now-fora-da-core-ui', dimensoes: ['rules-tecnicas'], severidade: 'ALTO', soRegraDeUi: true,
+    titulo: 'Workspace, Service Portal ou UI Builder no app',
+    padrao: /\b(Workspace|UxPage|ServicePortal|SPWidget|SpWidget)\s*\(|['"`](sp_widget|sp_page|sys_ux_[a-z_]+|sys_aw_[a-z_]+)['"`]/,
+    quando: (a) => ehDoAppServiceNow(a),
+    motivo: 'o alvo do kit é a Core UI clássica (UI16); Workspace, Portal e UI Builder estão fora (`.claude/rules/harness/servicenow-ui.md`, "Alvo").',
+    correcao: 'fazer a tela como `Form()`/`List()` com related lists e UI Actions, ou report simples; registrar a diferença como GAP.',
   },
 ];
+
+const normalizar = (a) => String(a).replace(/\\/g, '/');
 
 /**
  * Arquivo de tela: componente ou página React — `.tsx` ou `.jsx` —, fora de service, hook e teste. Era
@@ -653,13 +667,13 @@ function regrasDeBloco(arquivo, linhas) {
  * Itens do diff (`parsearDiff`/`arquivoNovo`) → achados determinísticos. Arquivo removido ou binário
  * fica de fora: não há linha nova para citar.
  *
- * `frontendNext: false` desliga as regras que só a rule de frontend Next.js sustenta (`fetch-na-tela`,
- * `formato-no-jsx`): num projeto Angular, ou com rule de frontend própria que não é Next, elas seriam
- * falso positivo bloqueante. Quem decide é a casca (`--regras-frontend`, ou `regrasFrontendNextEmVigor`).
+ * `frontendNext: false` desliga as regras que só a rule de tela do harness sustenta (`soRegraDeUi`:
+ * hoje a `servicenow-ui.md`). O nome da opção ficou o da base porque o estado do ciclo G3 o grava.
+ * Quem decide é a casca (`--regras-frontend`, ou `regrasUiEmVigor`).
  */
 export function varrer(mudancas, { frontendNext = true } = {}) {
   const saida = [];
-  const regras = REGRAS.filter((r) => frontendNext || !r.soFrontendNext);
+  const regras = REGRAS.filter((r) => frontendNext || !(r.soRegraDeUi || r.soFrontendNext));
   for (const m of mudancas) {
     if (m.removido || m.binario) continue;
     for (const t of m.trechos) {

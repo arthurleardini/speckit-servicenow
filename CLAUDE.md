@@ -1,6 +1,23 @@
-# Harness Elo v2 — regras base
+# Speckit ServiceNow — regras base
 
-Protocolo de trabalho deste repositório. Vale para toda sessão, em qualquer fase.
+Protocolo de trabalho deste repositório. Vale para toda sessão, em qualquer fase. É um fork do
+Harness Elo v2 2.6.0 (`ORIGEM.md`): o método é o mesmo, e o destino é um app escopado ServiceNow.
+
+## Stack-alvo: ServiceNow
+
+- **App escopado** em `app/`, escrito em **Fluent** (ServiceNow SDK, `@servicenow/sdk` fixado em
+  `app/package.json`), com a interface na **Core UI clássica** (UI16) —
+  `.claude/rules/harness/servicenow-ui.md`. Workspace, Service Portal e UI Builder ficam fora.
+- **Escopo sempre lido de `app/now.config.json`.** Nunca escreva o prefixo à mão.
+- **Consulte o SDK antes de escrever cada tipo de objeto:** `now-sdk explain <tópico> --peek`
+  (`Table`, `Form`, `List`, `BusinessRule`, `Acl`, `Test`…).
+- **Nunca apague `Table()`, `BusinessRule()` ou `Record()` sem confirmar com o usuário.** O que some
+  da fonte vira DELETE na instância no install seguinte (`keys.ts` com `deleted: true`).
+- **Instalação só por `npm run reinstall`.** Nunca `now-sdk install` direto. O reinstall confere o
+  prefixo de escopo da instância e registra o install no `outputs/spec/sync-log.md`.
+- **Credencial da instância** fica em `.env.instancia`, que o agente não lê.
+- **Insumos do piloto:** `inputs/premissas-ficticias.md` (valores adotados onde o plano deixa em
+  aberto, todos "premissa") e `inputs/fio-condutor.md` (RF com lógica completa e G3).
 
 ## Protocolo de fases
 
@@ -11,9 +28,9 @@ arquivo no prompt.
 
 | Fase | Soberano | Loop humano | Entrega |
 |---|---|---|---|
-| 🔍 Explore | rules + verificadores | *in the loop* | quatro documentos, `gaps.md`, manifesto, protótipo alta fidelidade |
-| 📐 Plan | Elo-Spec-Kit | *in the loop* | backlog no ADO, estimativa, kernel de segurança, Kit HTML |
-| 🚀 Deliver | Elo-Spec-Kit | *on the loop* | código auditado por US, gate no push, PR |
+| 🔍 Explore | rules + verificadores | *in the loop* | quatro documentos, `gaps.md`, manifesto, app preliminar na instância com prints (`spec-data-model --previa`, `sn-scaffold`, `npm run reinstall`, `sn-capture`) |
+| 📐 Plan | Elo-Spec-Kit | *in the loop* | modelo final, `tasks.json`, `traceability.json`, backlog em issues do GitHub (`sn-tasks-github`), kernel de segurança, Kit HTML |
+| 🚀 Deliver | Elo-Spec-Kit | *on the loop* | story implementada pela `sn-implement`, install registrado, recibo de ATF, auditoria por US, gate no push, PR |
 
 Avançar de fase é decisão do usuário. Os verificadores impedem avançar **incompleto**; eles não
 decidem quando avançar.
@@ -68,12 +85,15 @@ com âncora de evidência, e a `spec-ingest` vai gerar `F-xxx` **a partir** dest
 **Nos artefatos do kit** — `outputs/spec/`, que é a raiz única — o vocabulário do kit vence sem
 exceção: `F-xxx` · `RF-MOD-CODIGO-NNN` ·
 `RN` / `RN-NOVO` · `GAP` · `SEC` · `MOD` · `FLX` / `ETP` / `TEL` / `TRS` · `PD` · `QA` · `CHG` · `DS`.
+Neste kit, os critérios de aceite são `CT-MOD-F<n>-<nnn>` e as integrações simuladas `SIM-<nn>`. O
+`$id` dos registros Fluent carrega o ID da spec: `Now.ID['RF-MOD-F2-003_br_publicar_versao']`.
 
 ## Autoridade técnica
 
-- **Segurança:** `.claude/rules/harness/security.md` — 10 camadas OWASP + LGPD. Nunca modificada.
-- **Frontend:** `.claude/rules/harness/frontend.md` — a constituição padrão de empresa. É a dona
-  dos seis estados de UI, do TTFV e do nível WCAG. Nenhum outro documento os redefine.
+- **Segurança:** `.claude/rules/harness/security.md` — 10 camadas OWASP + LGPD; a Camada G cobre
+  ACL, escopo e privilégio ServiceNow.
+- **Interface:** `.claude/rules/harness/servicenow-ui.md` — Core UI clássica: form, list, related
+  list, activity, UI Action e UI Policy. Nenhum outro documento a redefine.
 - **Rules geradas pelo projeto:** raiz de `.claude/rules/`, escritas pela `spec-tech-rules` no Plan.
 
 ## Zonas do projeto
@@ -95,7 +115,7 @@ Se algo do maquinário precisa mudar, muda no template.
 | Nível | Pergunta | Autoridade |
 |---|---|---|
 | Ready da US | posso começar? | ficha do work item em `tasks.json` |
-| Pronto da US | posso abrir PR? | `auditoria-de-us` + `delivery-gate`; a aprovação do PR é do revisor humano |
+| Pronto da US | posso abrir PR? | install registrado + recibo de ATF (ou isenção da story) + `auditoria-de-us`, conferidos pelo `delivery-gate`; a aprovação do PR é do revisor humano |
 | Pronto da fase | posso avançar? | `fecho-explore` na fronteira Explore→Plan; marco declarado na rule para Plan→Deliver |
 
 ## Guardrails
@@ -105,10 +125,11 @@ Se algo do maquinário precisa mudar, muda no template.
 - **Português do Brasil** em todo conteúdo humano: documentos, mensagens de erro, comentários.
 - **Disciplina de git.** Um branch é uma user story no Deliver. No Explore, push direto na `main`
   é aceitável. Nunca use `--no-verify` nem `--force` sem pedido explícito.
-- **LGPD.** Dado pessoal real nunca entra em `inputs/`, `outputs/` nem em prompt. Use dado
-  sintético. Se um insumo recebido contém dado real, anonimize antes de versionar.
+- **LGPD e sigilo fiscal.** Dado pessoal ou de contribuinte real nunca entra em `inputs/`,
+  `outputs/`, na instância, nas issues nem em prompt. O seed é fictício: CPF e CNPJ de semente fixa,
+  listados em `app/src/fluent/seed/_documentos.json`, e `ficticio = true` nos registros de pessoa.
 - **A spec é contrato.** Se a implementação diverge da spec, ou a spec muda com changelog, ou a
   implementação se corrige. Divergência silenciosa não existe.
 - **O gate local não substitui a política de branch.** O `delivery-gate` intercepta o push emitido
   pelo agente. Push do terminal ou da IDE não passa por ele. A garantia autoritativa é o PR e a
-  política de branch do Azure DevOps.
+  proteção de branch do GitHub.

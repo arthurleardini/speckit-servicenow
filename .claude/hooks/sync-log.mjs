@@ -41,8 +41,10 @@ import {
  */
 export const SKILLS_DO_KIT = new Set([
   'spec-ingest', 'spec-legacy', 'spec-benchmark', 'spec-product',
-  'spec-prototype', 'spec-iterate', 'spec-report',
+  'spec-iterate', 'spec-report',
 ]);
+// O KIT NOMEIA SETE, E AQUI FICAM SEIS: a `spec-prototype` saiu do Speckit ServiceNow (decisão A2, a
+// instância é o protótipo) e a obrigação dela passou para as `sn-*` de `SKILLS_NOSSAS`.
 
 /**
  * As OITO da cadeia técnica, que são POLÍTICA NOSSA — e a distinção importa daqui a seis meses.
@@ -64,7 +66,11 @@ export const SKILLS_DO_KIT = new Set([
  */
 export const SKILLS_NOSSAS = new Set([
   'spec-tech-rules', 'spec-data-model', 'spec-api-contracts', 'spec-test-plan',
-  'spec-tasks', 'spec-security-review', 'spec-scaffold', 'spec-implement',
+  'spec-tasks', 'spec-security-review',
+  // As seis do Speckit ServiceNow (item 18 do design v0). Substituem `spec-scaffold` e
+  // `spec-implement`, que saíram. O install em si não é skill: entra na Seção A com o rótulo
+  // `now-sdk-install` (`SKILL_INSTALL`, no `kit.mjs`), escrito pelo `reinstall.mjs`.
+  'sn-scaffold', 'sn-seed', 'sn-capture', 'sn-tasks-github', 'sn-implement', 'sn-reinstall',
 ]);
 
 export const SKILLS_QUE_REGISTRAM = new Set([...SKILLS_DO_KIT, ...SKILLS_NOSSAS]);
@@ -137,8 +143,12 @@ export const ARTEFATO_TERMINAL = new Map([
   // — a nossa PRE_REQUISITOS: o que a seguinte exige, a anterior produziu —
   ['tech-rules/tech-rules-summary.md', 'spec-tech-rules'],
   ['data-model.json', 'spec-data-model'],
-  ['api-contracts.yaml', 'spec-api-contracts'],
+  // `api-contracts.yaml` SAIU: no Speckit ServiceNow a etapa de contratos é opcional (item 31) e a
+  // `spec-tasks` deixou de exigi-lo (item 17). Sem consumidor, ele não marca o fim de nada.
   ['test-plan.md', 'spec-test-plan'],
+  // — Speckit ServiceNow: a prévia do modelo (Explore) e o manifesto de telas do scaffold —
+  ['data-model.previa.json', 'spec-data-model'],
+  ['screens-manifest.json', 'sn-scaffold'],
 ]);
 
 /**
