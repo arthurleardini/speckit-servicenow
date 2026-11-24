@@ -24,7 +24,7 @@ O item 27 do design ainda vai acrescentar mais remoções a esta tabela.
 |---|---|---|
 | 1 | ATF pela linha de comando | **Desfecho A, os dois rodam.** O teste de servidor passou com `now-sdk cicd test run --test-sys-id <id> -o json`. O de form passou com um Client Test Runner sem tela aberto via Playwright em `/atf_test_runner.do?sysparm_nostack=true&sysparm_scheduled_tests_only=true`. Testes disparados por `cicd` são "agendados", e o runner precisa aceitar agendados. Antes, foi preciso ligar `sn_atf.runner.enabled = true` na instância, porque a PDI vem com `false` e o `cicd` devolve 400 "Start ATF test Failed" |
 | 2 | `sys_report` via `Record()` aparece na UI clássica | **Aprovada.** O report de barras agrupado por choice renderiza em `/sys_report_template.do?jvar_report_id=<id>` |
-| 3 | PNG por permalink visível numa issue de repositório privado | ver abaixo |
+| 3 | PNG por permalink visível numa issue de repositório privado | **Parcial.** A issue #1 do repositório privado renderiza `<img src="…/blob/<sha>/docs/viabilidade/form-ui.png?raw=1">`. Falta a confirmação visual de quem vai assistir à demo, logado no GitHub com acesso ao repositório |
 | 4 | Maior nome de tabela cabe em 30 caracteres | **Aprovada por regra.** `x_2326104_cob_` tem 14 caracteres, e sobram 16 para o sufixo, conferidos pelo validador do modelo (item 23) |
 
 O app de teste foi removido depois da checagem. O install com `keys.ts` (`deleted: true`) removeu os testes e os registros, e a tabela foi removida por `now-sdk exec` no escopo global.
