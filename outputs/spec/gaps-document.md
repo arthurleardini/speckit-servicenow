@@ -242,6 +242,99 @@ Os testes provam os lados positivo e negativo, mas a saída RED de antes da corr
 **Opções identificadas:**
 1. Guardar a saída RED nas próximas regras.
 
+### GAP-117 — Contribuinte entra no grupo de controle sem sorteio (SEC-022 proposto; absorve o GAP-113)
+
+**Área:** MOD-F2, `STORY-MOD-F2-004`
+**Impacto:** Média
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** SEC-010
+
+**Descrição:**
+A auditoria da US-MOD-F2-004 (`outputs/spec/auditorias/US-MOD-F2-004.md`, SEC-022) aponta três caminhos: marcar «controle» com o ciclo em prévia (a publicação mantém e soma), incluir ou excluir linha da segmentação depois de publicado, e incluir o ciclo já publicado.
+
+**Opções identificadas:**
+1. Recusar «controle» pré-existente na publicação, business rule before insert/delete na segmentação de ciclo publicado e ciclo nascendo em prévia (task SEC-022).
+2. Aceitar o risco no piloto.
+
+### GAP-118 — Semente do sorteio gerada com Math.random() (CONF-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** TASK-MOD-F2-004-01
+
+**Descrição:**
+A regra de segurança do projeto pede gerador criptográfico; a semente é gerada no servidor, na publicação, e gravada.
+
+**Opções identificadas:**
+1. `GlideSecureRandomUtil` na semente.
+
+### GAP-119 — Sorteio grava um contribuinte por vez (PERF-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-004-01
+
+**Descrição:**
+Cada sorteado é gravado num update próprio, com a consulta da business rule da segmentação.
+
+**Opções identificadas:**
+1. `updateMultiple()` por lista de contribuintes.
+
+### GAP-120 — Contribuinte repetido no mesmo ciclo conta duas vezes (BUG-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-004-01
+
+**Descrição:**
+Sem índice único ciclo + contribuinte, uma linha repetida entra duas vezes nos elegíveis.
+
+**Opções identificadas:**
+1. Índice único no `data-model.json`.
+2. Contar elegíveis distintos.
+
+### GAP-121 — Comunicação ou caso sem ciclo e ciclo encerrado (BUG-002)
+
+**Área:** MOD-F2, MOD-F4, MOD-F5
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-004-01
+
+**Descrição:**
+Sem ciclo informado, a recusa olha qualquer ciclo publicado; depois de encerrado o ciclo, a recusa deixa de valer.
+
+**Opções identificadas:**
+1. Decidir com o PO se o ciclo é obrigatório na comunicação e no caso, e o que vale após o encerramento.
+
+### GAP-122 — Suíte cob-regressao sem recibo verde no commit da US (TEST-001)
+
+**Área:** Deliver
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** —
+
+**Descrição:**
+Os installs por story rodaram com `--sem-atf` e o ATF por story; a suíte inteira roda no `npm run reinstall` completo do fim do fio condutor.
+
+**Opções identificadas:**
+1. Rodar o reinstall completo ao fim do fio condutor e guardar o recibo da suíte.
+
+### GAP-123 — Mensagens ao usuário em texto fixo (CONF-003)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-004-01, TASK-MOD-F2-004-02
+
+**Descrição:**
+As mensagens das regras estão em texto fixo, sem `gs.getMessage`.
+
+**Opções identificadas:**
+1. Mensagens traduzíveis por `gs.getMessage`.
+
 ---
 
 ## Respostas
@@ -337,6 +430,48 @@ Os testes provam os lados positivo e negativo, mas a saída RED de antes da corr
 **Impacto na task:** _(a preencher)_
 
 ### GAP-116
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-117
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-118
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-119
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-120
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-121
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-122
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-123
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

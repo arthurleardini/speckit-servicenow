@@ -45232,7 +45232,7 @@
           "description": "Implementar o controle SEC-010 (MÉDIO): Sorteio do grupo de controle reproduzível e não manipulável (fio condutor 2). O sorteio roda só no servidor, na publicação do ciclo; semente_sorteio, qtd_elegiveis, publicado_em e publicado_por ficam somente leitura depois de gravados; segmento «controle» não muda após a publicação; o mesmo sorteio refeito com a semente dá o mesmo grupo; comunicação e caso para contribuinte e",
           "effortEstimate": "S",
           "durationEstimatedDays": 0.5,
-          "status": "PENDING",
+          "status": "DONE",
           "security": {
             "severity": "MÉDIO",
             "cvss": 5.5,
@@ -45369,7 +45369,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Script include que sorteia o grupo de controle do ciclo com semente registrada",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Script include que sorteia o grupo de controle do ciclo com semente registrada. Entrega o comportamento do requisito RF-MOD-F2-004 (Sorteio do grupo de controle por ciclo) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "script_include",
@@ -45891,7 +45891,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "UI Action «Publicar ciclo» que sorteia o grupo e congela a versão aplicada",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "UI Action «Publicar ciclo» que sorteia o grupo e congela a versão aplicada. Entrega o comportamento do requisito RF-MOD-F2-004 (Sorteio do grupo de controle por ciclo) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "ui_action",

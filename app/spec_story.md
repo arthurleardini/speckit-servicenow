@@ -54,6 +54,23 @@
 
 ## Histórico de tasks
 
+### US-MOD-F2-004 — sorteio do grupo de controle por ciclo (TASK-MOD-F2-004-01..02, SEC-010)
+**Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 3 tasks)
+
+**Implementado:**
+- `src/server/qualificacao/QualificacaoCiclo.server.js` + `script-includes/segmentacao-sortear-grupo-controle.now.ts` — sorteio (Fisher-Yates + Park-Miller pela semente), tamanho = teto(n × %), publicação
+- `business-rules/grupo-controle.now.ts` — sortear ao publicar por qualquer caminho; recusar comunicação e caso de contribuinte em controle; controle imutável após publicar
+- `ui-actions/ciclo.now.ts` — «Publicar ciclo»; `security/ciclo.now.ts` — ACL de gravação do ciclo em prévia
+
+**Testes:**
+- Cenários: 10 | Verdes: 9 testes ATF (10 cenários) | Vermelhos: 0 | Não cobertos: 3 critérios do RF-MOD-F6-004 no nó (efeito incremental) — são da STORY-MOD-F6-004
+- Por categoria: HAPPY_PATH 2/2 · BUSINESS_RULE_VIOLATION 4/4 · AUTHORIZATION 2/2 · EDGE_CASE 2/2 · INVALID_INPUT n/a · EXTERNAL_SERVICE_FAILURE n/a
+- Arquivo: `src/fluent/tests/US-MOD-F2-004.now.ts`
+
+**Decisões:**
+- O sorteio roda na business rule do ciclo (antes de gravar «publicado»), não só no botão; a semente é sempre gerada pelo servidor.
+- Script Include `QualificacaoCiclo` (nome da arquitetura) só com a publicação e o sorteio; o fallback de score fica num Script Include próprio (task do RF-MOD-F2-005).
+
 ### US-MOD-F2-002 — versão do critério imutável (TASK-MOD-F2-002-01..03, SEC-009)
 **Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 4 tasks)
 
