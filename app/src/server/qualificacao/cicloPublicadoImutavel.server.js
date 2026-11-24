@@ -2,6 +2,7 @@
 (function executeRule(current, previous) {
     var msg = new CriterioVersao().motivoRecusaAlteracaoCiclo(current, previous);
     if (msg) {
+        gs.warn('RF-MOD-F2-002: alteração recusada ' + current.getUniqueValue() + ' — ' + msg);
         gs.addErrorMessage(msg);
         current.setAbortAction(true);
     }

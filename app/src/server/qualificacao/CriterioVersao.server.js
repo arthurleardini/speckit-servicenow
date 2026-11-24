@@ -19,6 +19,8 @@ CriterioVersao.MSG_SO_PUBLICADA = 'Só a versão publicada gera uma nova versão
 CriterioVersao.MSG_MOTIVO = 'Informe o motivo da nova versão antes de publicar.';
 CriterioVersao.MSG_NASCE_RASCUNHO = 'Versão nova nasce em rascunho. Publique com «Publicar versão».';
 CriterioVersao.MSG_DUPLICADA = 'Já existe esta versão para o código do critério.';
+CriterioVersao.MSG_NOME = 'Nome é obrigatório';
+CriterioVersao.MSG_NAO_PUBLICOU = 'A versão não foi publicada. Confira a mensagem acima e tente de novo.';
 
 /** Campos de parâmetro que não mudam depois de publicada a versão (RN-NOVO-F2-001). */
 CriterioVersao.CAMPOS_PROTEGIDOS = [
@@ -69,16 +71,38 @@ CriterioVersao.prototype = {
         if (this._algumMudou(current, previous, CriterioVersao.CAMPOS_CICLO_PROTEGIDOS)) {
             return CriterioVersao.MSG_CICLO_PUBLICADO;
         }
+        // Estado só anda para a frente: publicado → encerrado; não volta para prévia (SEC-010).
+        var depois = this._valor(current, 'estado');
+        if (depois != antes && !(antes == 'publicado' && depois == 'encerrado')) {
+            return CriterioVersao.MSG_CICLO_PUBLICADO;
+        }
         return '';
     },
 
     /**
-     * Confere a gravação de uma versão: nasce em rascunho e não repete código + versão.
+     * Confere a gravação de uma versão: nome obrigatório, nasce em rascunho, não repete código +
+     * versão e — por qualquer caminho (botão, form, lista, API) — só o coordenador publica, com motivo
+     * quando há versão anterior. Ao publicar, completa data e autor (SEC-009).
+     * @param {GlideRecord} current registro sendo gravado (pode receber data e autor da publicação)
+     * @param {GlideRecord} previous como estava gravado (null na inclusão)
      * @returns {string} a mensagem de recusa, ou '' quando a gravação segue
      */
-    motivoRecusaGravacao: function (current) {
+    motivoRecusaGravacao: function (current, previous) {
+        if (!this._valor(current, 'nome')) {
+            return CriterioVersao.MSG_NOME;
+        }
         if (current.isNewRecord() && this._valor(current, 'estado') != 'rascunho') {
             return CriterioVersao.MSG_NASCE_RASCUNHO;
+        }
+        if (previous && this._valor(previous, 'estado') == 'rascunho' && this._valor(current, 'estado') == 'publicada') {
+            if (!this._ehCoordenador()) {
+                return CriterioVersao.MSG_SO_COORDENADOR;
+            }
+            if (this._valor(current, 'versao_anterior') && !this._valor(current, 'motivo_alteracao')) {
+                return CriterioVersao.MSG_MOTIVO;
+            }
+            current.setValue('publicada_em', new GlideDateTime());
+            current.setValue('publicada_por', gs.getUserID());
         }
         var codigo = this._valor(current, 'codigo');
         var versao = this._valor(current, 'versao');
@@ -95,7 +119,9 @@ CriterioVersao.prototype = {
     },
 
     /**
-     * Publica a versão em rascunho: grava estado, data e autor, e substitui a versão anterior.
+     * Publica a versão em rascunho. As regras da publicação (papel, motivo, data e autor) ficam na
+     * business rule de gravação, que vale por qualquer caminho; a substituição da versão anterior fica
+     * na business rule depois de gravar. Aqui ficam só as mensagens do botão.
      * @param {GlideRecord} criterio a versão a publicar
      * @returns {{ok: boolean, mensagem: string}}
      */
@@ -106,25 +132,40 @@ CriterioVersao.prototype = {
         if (this._valor(criterio, 'estado') != 'rascunho') {
             return { ok: false, mensagem: CriterioVersao.MSG_SO_RASCUNHO };
         }
-        var anterior = this._valor(criterio, 'versao_anterior');
-        if (anterior && !this._valor(criterio, 'motivo_alteracao')) {
+        if (this._valor(criterio, 'versao_anterior') && !this._valor(criterio, 'motivo_alteracao')) {
             return { ok: false, mensagem: CriterioVersao.MSG_MOTIVO };
         }
         criterio.setValue('estado', 'publicada');
-        criterio.setValue('publicada_em', new GlideDateTime());
-        criterio.setValue('publicada_por', gs.getUserID());
         if (!criterio.update()) {
-            return { ok: false, mensagem: CriterioVersao.MSG_VERSAO_PUBLICADA };
-        }
-        if (anterior) {
-            var ant = new GlideRecord(CriterioVersao.TABELA);
-            if (ant.get(anterior) && ant.getValue('estado') == 'publicada') {
-                ant.setValue('estado', 'substituida');
-                ant.update();
-            }
+            gs.warn('RF-MOD-F2-002: publicação recusada ' + criterio.getUniqueValue());
+            return { ok: false, mensagem: CriterioVersao.MSG_NAO_PUBLICOU };
         }
         gs.info('RF-MOD-F2-002: versão publicada ' + criterio.getUniqueValue());
         return { ok: true, mensagem: 'Versão ' + this._valor(criterio, 'versao') + ' publicada.' };
+    },
+
+    /**
+     * Depois de publicar uma versão, as outras versões publicadas do mesmo código ficam «Substituídas»:
+     * há uma só versão publicada por código (RN-NOVO-F2-001).
+     * @param {GlideRecord} publicada a versão que acabou de ser publicada
+     * @returns {number} quantas versões foram substituídas
+     */
+    substituirAnteriores: function (publicada) {
+        var n = 0;
+        var outras = new GlideRecord(CriterioVersao.TABELA);
+        outras.addQuery('codigo', publicada.getValue('codigo'));
+        outras.addQuery('estado', 'publicada');
+        outras.addQuery('sys_id', '!=', publicada.getUniqueValue());
+        outras.query();
+        while (outras.next()) {
+            outras.setValue('estado', 'substituida');
+            if (outras.update()) {
+                n++;
+            } else {
+                gs.warn('RF-MOD-F2-002: não substituiu a versão ' + outras.getUniqueValue());
+            }
+        }
+        return n;
     },
 
     /**

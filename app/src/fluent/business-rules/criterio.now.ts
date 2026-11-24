@@ -30,10 +30,23 @@ export const br_bloquear_exclusao_publicada = BusinessRule({
     script: Now.include('../../server/qualificacao/bloquearExclusaoPublicada.server.js'),
 })
 
+export const br_substituir_versao_anterior = BusinessRule({
+    $id: Now.ID['RF-MOD-F2-002_br_substituir_versao_anterior'],
+    name: 'Substituir versão anterior ao publicar',
+    description: 'Ao publicar uma versão, as outras versões publicadas do mesmo código ficam «Substituídas» (RN-NOVO-F2-001).',
+    table: 'x_2326104_cob_criterio',
+    when: 'after',
+    action: ['update'],
+    order: 100,
+    active: true,
+    filterCondition: 'estadoCHANGESTOpublicada^EQ',
+    script: Now.include('../../server/qualificacao/substituirVersaoAnterior.server.js'),
+})
+
 export const br_conferir_gravacao_criterio = BusinessRule({
     $id: Now.ID['RF-MOD-F2-002_br_conferir_gravacao_criterio'],
     name: 'Conferir gravação de versão do critério',
-    description: 'Versão nova nasce em rascunho (versão 1 quando vazia) e código + versão não se repetem (SEC-009).',
+    description: 'Nome obrigatório; versão nova nasce em rascunho (versão 1 quando vazia); código + versão não se repetem; só o coordenador publica, com motivo quando há versão anterior, e a publicação grava data e autor por qualquer caminho (RF-MOD-F2-001, SEC-009).',
     table: 'x_2326104_cob_criterio',
     when: 'before',
     action: ['insert', 'update'],

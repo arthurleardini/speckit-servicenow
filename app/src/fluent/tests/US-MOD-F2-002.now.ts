@@ -45,6 +45,7 @@ export const t_f2002_publicar_pos = Test({
             var d = new GlideRecordSecure('x_2326104_cob_criterio');
             expect(d.get(c.getUniqueValue())).toBe(true);
             expect(d.getValue('estado')).toBe('publicada');
+            expect(d.getDisplayValue('estado')).toBe('Publicada');
             expect(d.getValue('publicada_por')).toBe(gs.getUserID());
             expect(d.publicada_em.nil()).toBe(false);
             expect(d.canWrite()).toBe(false);
@@ -152,6 +153,7 @@ export const t_f2002_imutavel_neg = Test({
             lida.get(antes.getUniqueValue());
             expect(lida.getValue('atraso_minimo_dias')).toBe('90');
             expect(lida.getValue('estado')).toBe('publicada');
+            expect(lida.getDisplayValue('estado')).toBe('Publicada');
         });
     });
 })(outputs, steps, params, stepResult, assertEqual);
@@ -358,6 +360,23 @@ export const t_f2002_ciclo_neg = Test({
             lido.get(antes.getUniqueValue());
             expect(lido.getValue('criterio')).toBe(original);
             expect(lido.getValue('qtd_controle')).toBe('20');
+            var aplicado = new GlideRecord('x_2326104_cob_criterio');
+            aplicado.get(original);
+            expect(aplicado.getDisplayValue('estado')).toBe('Publicada');
+        });
+        it('recusa voltar o ciclo publicado para prévia', function() {
+            var ci = new GlideRecord('x_2326104_cob_ciclo');
+            ci.addQuery('nome', 'ATF ciclo publicado F2-002 (fictício)');
+            ci.query();
+            ci.next();
+            var antes = new GlideRecord('x_2326104_cob_ciclo');
+            antes.get(ci.getUniqueValue());
+            ci.setValue('estado', 'previa');
+            expect(new CriterioVersao().motivoRecusaAlteracaoCiclo(ci, antes)).toBe('Ciclo publicado não pode trocar o critério aplicado nem os totais.');
+            ci.update();
+            var lido = new GlideRecord('x_2326104_cob_ciclo');
+            lido.get(antes.getUniqueValue());
+            expect(lido.getValue('estado')).toBe('publicado');
         });
         it('aceita o comentário, que não é parâmetro do ciclo', function() {
             var ci = new GlideRecord('x_2326104_cob_ciclo');
@@ -481,4 +500,138 @@ export const t_f2002_ui_neg = Test({
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_31'], table: 'x_2326104_cob_criterio', recordId: rascunho.record_id })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_32'], table: 'x_2326104_cob_criterio', notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao'), Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')] })
     atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_33'], table: 'x_2326104_cob_criterio', notReadOnly: ['valor_minimo'] })
+})
+
+export const t_f2002_outro_caminho_neg = Test({
+    $id: Now.ID['US-MOD-F2-002_atf_publicacao_outro_caminho_negativo'],
+    name: 'RF-MOD-F2-002 — publicar trocando o «Estado» à mão segue as mesmas regras do botão',
+    description: 'Cria a versão 1 publicada e as versões 2 e 3 em rascunho com motivo, ligadas à 1. O admin do app troca o «Estado» da 2 para publicada por script (sem ACL, como a Table API ou uma importação) e a business rule recusa; o coordenador faz o mesmo e a versão fica publicada com data e autor e a 1 «Substituída»; depois publica a 3 e a 2 fica «Substituída» — há uma só versão publicada por código (SEC-009, lados negativo e positivo).',
+    failOnServerError: true,
+}, (atf) => {
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-F2-002_test_36'],
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    var a = new GlideRecord('x_2326104_cob_criterio');
+    a.initialize();
+    a.setWorkflow(false);
+    a.setValue('nome', 'ICMS alto valor (fictício)');
+    a.setValue('codigo', 'ATF-F2002-CAM');
+    a.setValue('versao', 1);
+    a.setValue('estado', 'publicada');
+    var v1 = a.insert();
+    for (var v = 2; v <= 3; v++) {
+        var b = new GlideRecord('x_2326104_cob_criterio');
+        b.initialize();
+        b.setValue('nome', 'ICMS alto valor (fictício)');
+        b.setValue('codigo', 'ATF-F2002-CAM');
+        b.setValue('versao', v);
+        b.setValue('estado', 'rascunho');
+        b.setValue('versao_anterior', v1);
+        b.setValue('motivo_alteracao', 'Ajuste fictício ' + v);
+        b.insert();
+    }
+    return !!v1;
+})(outputs, steps, params, stepResult, assertEqual);`,
+    })
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_37'], firstName: 'ATF', lastName: 'Admin app F2-002 caminho', roles: [role_admin] })
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-F2-002_test_38'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    describe('Publicar pelo campo Estado (admin do app)', function() {
+        it('é recusado', function() {
+            var b = new GlideRecord('x_2326104_cob_criterio');
+            b.addQuery('codigo', 'ATF-F2002-CAM');
+            b.addQuery('versao', 2);
+            b.query();
+            expect(b.next()).toBe(true);
+            b.setValue('estado', 'publicada');
+            b.update();
+            var lida = new GlideRecord('x_2326104_cob_criterio');
+            lida.get(b.getUniqueValue());
+            expect(lida.getValue('estado')).toBe('rascunho');
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
+    })
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_39'], firstName: 'ATF', lastName: 'Coordenador F2-002 caminho', roles: [role_coordenador] })
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-F2-002_test_40'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    function versao(n) {
+        var g = new GlideRecord('x_2326104_cob_criterio');
+        g.addQuery('codigo', 'ATF-F2002-CAM');
+        g.addQuery('versao', n);
+        g.query();
+        g.next();
+        return g;
+    }
+    describe('Publicar pelo campo Estado (coordenador)', function() {
+        it('publica com data e autor e deixa uma só versão publicada', function() {
+            var b = new GlideRecord('x_2326104_cob_criterio');
+            b.get(versao(2).getUniqueValue());
+            b.setValue('estado', 'publicada');
+            expect(!!b.update()).toBe(true);
+            var v2 = versao(2);
+            expect(v2.getValue('estado')).toBe('publicada');
+            expect(v2.getValue('publicada_por')).toBe(gs.getUserID());
+            expect(v2.publicada_em.nil()).toBe(false);
+            expect(versao(1).getValue('estado')).toBe('substituida');
+            expect(new CriterioVersao().publicar(versao(3)).ok).toBe(true);
+            expect(versao(2).getValue('estado')).toBe('substituida');
+            var agg = new GlideAggregate('x_2326104_cob_criterio');
+            agg.addQuery('codigo', 'ATF-F2002-CAM');
+            agg.addQuery('estado', 'publicada');
+            agg.addAggregate('COUNT');
+            agg.query();
+            agg.next();
+            expect(agg.getAggregate('COUNT')).toBe('1');
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
+    })
+})
+
+export const t_f2002_nome_neg = Test({
+    $id: Now.ID['US-MOD-F2-002_atf_nome_obrigatorio_negativo'],
+    name: 'RF-MOD-F2-002 — salvar critério sem nome é recusado com «Nome é obrigatório»',
+    description: 'Como coordenador, grava por script (sem passar pelo form) uma versão em rascunho sem nome: a business rule recusa com «Nome é obrigatório» e nada é gravado; com nome, a mesma gravação segue (RF-MOD-F2-001, entrada inválida, lados negativo e positivo).',
+    failOnServerError: true,
+}, (atf) => {
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_41'], firstName: 'ATF', lastName: 'Coordenador F2-002 nome', roles: [role_coordenador] })
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-F2-002_test_42'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    describe('Nome obrigatório', function() {
+        it('recusa sem nome e aceita com nome', function() {
+            var c = new GlideRecord('x_2326104_cob_criterio');
+            c.initialize();
+            c.setValue('codigo', 'ATF-F2002-NOM');
+            c.setValue('estado', 'rascunho');
+            expect(new CriterioVersao().motivoRecusaGravacao(c, null)).toBe('Nome é obrigatório');
+            expect(!!c.insert()).toBe(false);
+            c.setValue('nome', 'ICMS alto valor (fictício)');
+            expect(!!c.insert()).toBe(true);
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
+    })
+})
+
+export const t_f2002_ui_threshold = Test({
+    $id: Now.ID['US-MOD-F2-002_atf_ui_threshold_sem_score'],
+    name: 'RF-MOD-F2-002 — «Threshold do score» desabilitado sem «Usar score de liquidez»',
+    description: 'Abre o form de critério novo (TEL-008) como coordenador: com «Usar score de liquidez» desmarcado o «Threshold do score» fica somente leitura; ao marcar, o campo libera (UI Policy, lados positivo e negativo; nada é gravado).',
+    failOnServerError: true,
+}, (atf) => {
+    atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_43'], firstName: 'ATF', lastName: 'Coordenador F2-002 threshold', roles: [role_coordenador] })
+    atf.form.openNewForm({ $id: Now.ID['US-MOD-F2-002_test_44'], table: 'x_2326104_cob_criterio' })
+    atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_45'], table: 'x_2326104_cob_criterio', readOnly: ['threshold_score'] })
+    atf.form.setFieldValue({ $id: Now.ID['US-MOD-F2-002_test_46'], table: 'x_2326104_cob_criterio', fieldValues: { usar_score: true } })
+    atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_47'], table: 'x_2326104_cob_criterio', notReadOnly: ['threshold_score'] })
 })
