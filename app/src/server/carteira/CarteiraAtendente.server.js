@@ -21,6 +21,24 @@ CarteiraAtendente.prototype = {
         return this.podeVer(gr, campos) ? '' : CarteiraAtendente.MSG_RECUSA;
     },
 
+    /**
+     * Restringe a consulta de quem só tem o papel de atendente à própria carteira (business rule de
+     * consulta). Assim a lista, o report e as contagens nem chegam a trazer linhas de outra carteira —
+     * sem o aviso «linhas removidas por segurança», que revelaria quantas são (RN-NOVO-F5-007).
+     * @param {GlideRecord} consulta a consulta em montagem
+     * @param {string[]} campos campos de dono; basta um deles ser o usuário logado
+     */
+    restringirConsulta: function (consulta, campos) {
+        if (this.veTudo() || !gs.hasRole(gs.getCurrentScopeName() + '.atendente')) {
+            return;
+        }
+        var eu = gs.getUserID();
+        var cond = consulta.addQuery(campos[0], eu);
+        for (var i = 1; i < campos.length; i++) {
+            cond.addOrCondition(campos[i], eu);
+        }
+    },
+
     /** Coordenador e admin do app veem a carteira inteira. */
     veTudo: function () {
         var escopo = gs.getCurrentScopeName();

@@ -27,3 +27,114 @@ export const br_caso_carteira = BusinessRule({
     active: true,
     script: Now.include('../../server/carteira/recusarCasoForaDaCarteira.server.js'),
 })
+
+// Consulta: quem só tem o papel de atendente nem recebe nem conta linhas de outra carteira (o papel do
+// Data Filter com Deny do SEC-002). A ACL de linha continua como segunda barreira.
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_caso'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_caso',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_contribuinte'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_contribuinte',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_interacao'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_interacao',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_regularizacao'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_regularizacao',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_debito'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_debito',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_parcelamento'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_parcelamento',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_comunicacao'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_comunicacao',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_consentimento'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_consentimento',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F5-007_br_consulta_carteira_score_sim'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só as linhas da própria carteira (RN-NOVO-F5-007, SEC-002).',
+    table: 'x_2326104_cob_score_sim',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})

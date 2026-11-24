@@ -88,7 +88,7 @@ jasmine.getEnv().execute();`,
 export const t_f5007_outro_neg = Test({
     $id: Now.ID['US-MOD-F5-007_atf_carteira_outro_atendente_negativo'],
     name: 'RF-MOD-F5-007 — atendente não vê nem grava a carteira de outro atendente',
-    description: 'Cria caso, contribuinte, interação, débito e parcelamento fictícios da carteira de demo.atendente e um caso de demo.atendente2; impersonado como demo.atendente2, a lista não traz o caso do outro, abrir os registros do outro retorna vazio registrar interação ou encerrar o caso do outro — pela tela ou por script — é recusado com «Operação recusada: atendente vê só a própria carteira.», e o próprio caso continua visível (ACL de carteira e business rule, lado negativo).',
+    description: 'Cria caso, contribuinte, interação, débito e parcelamento fictícios da carteira de demo.atendente e um caso de demo.atendente2; impersonado como demo.atendente2, a lista e a contagem não trazem nem contam o caso do outro (sem o aviso de linhas removidas), abrir os registros do outro retorna vazio, registrar interação ou encerrar o caso do outro — pela tela ou por script — é recusado com «Operação recusada: atendente vê só a própria carteira.», ele não troca o dono do próprio caso, e o próprio caso continua visível (ACL de carteira e business rule, lado negativo).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -138,6 +138,7 @@ export const t_f5007_outro_neg = Test({
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
     function idDe(tabela, campo, valor) {
         var g = new GlideRecord(tabela);
+        g.setWorkflow(false); // só para achar o id do registro do outro atendente: a consulta normal já não o traz
         g.addQuery(campo, valor);
         g.query();
         return g.next() ? g.getUniqueValue() : '';
@@ -173,12 +174,44 @@ export const t_f5007_outro_neg = Test({
         });
         it('não altera o caso do outro nem por script', function() {
             var g = new GlideRecord('x_2326104_cob_caso');
-            g.get(cA);
+            g.setWorkflow(false);
+            expect(g.get(cA)).toBe(true);
+            g.setWorkflow(true);
             g.setValue('estagio', 'encerrado');
             g.update();
             var lido = new GlideRecord('x_2326104_cob_caso');
+            lido.setWorkflow(false);
             lido.get(cA);
             expect(lido.getValue('estagio')).not.toBe('encerrado');
+        });
+        it('a consulta e a contagem não trazem linhas de outra carteira', function() {
+            var agg = new GlideAggregate('x_2326104_cob_caso');
+            agg.addQuery('contribuinte.nome', 'STARTSWITH', 'Contribuinte fictício carteira ');
+            agg.addQuery('contribuinte.nome', 'ENDSWITH', 'neg F5-007');
+            agg.addAggregate('COUNT');
+            agg.query();
+            agg.next();
+            expect(agg.getAggregate('COUNT')).toBe('1');
+            var semAcl = new GlideRecord('x_2326104_cob_debito');
+            semAcl.addQuery('contribuinte', pA);
+            semAcl.query();
+            expect(semAcl.hasNext()).toBe(false);
+        });
+        it('não troca o dono do próprio caso', function() {
+            var pB = idDe('x_2326104_cob_contribuinte', 'nome', 'Contribuinte fictício carteira B neg F5-007');
+            var meu = new GlideRecord('x_2326104_cob_caso');
+            meu.addQuery('contribuinte', pB);
+            meu.query();
+            expect(meu.next()).toBe(true);
+            var outro = new GlideRecord('x_2326104_cob_caso');
+            outro.setWorkflow(false);
+            outro.get(cA);
+            meu.setValue('atendente', outro.getValue('atendente'));
+            meu.update();
+            var lido = new GlideRecord('x_2326104_cob_caso');
+            lido.setWorkflow(false);
+            lido.get(meu.getUniqueValue());
+            expect(lido.getValue('atendente')).toBe(gs.getUserID());
         });
         it('continua vendo o próprio caso', function() {
             var pB = idDe('x_2326104_cob_contribuinte', 'nome', 'Contribuinte fictício carteira B neg F5-007');

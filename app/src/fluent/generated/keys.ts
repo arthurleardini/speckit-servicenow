@@ -438,6 +438,42 @@ declare global {
                         table: 'sys_script'
                         id: '75d7f611da6145989d6eaa9c12c6ef12'
                     }
+                    'RF-MOD-F5-007_br_consulta_carteira_caso': {
+                        table: 'sys_script'
+                        id: '45d62e2aff9244328a73452460f571ba'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_comunicacao': {
+                        table: 'sys_script'
+                        id: 'c8cad95bfd0f436bbeaf8780e87d8dfa'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_consentimento': {
+                        table: 'sys_script'
+                        id: 'c72f4e023d674c04965fc7049b199935'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_contribuinte': {
+                        table: 'sys_script'
+                        id: '228877d6674744b9ae4e239160a7b24f'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_debito': {
+                        table: 'sys_script'
+                        id: 'ea47c7d2f0b6431fadebafc313099bd1'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_interacao': {
+                        table: 'sys_script'
+                        id: '257ea57cde7948ac8de650b7f12592d0'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_parcelamento': {
+                        table: 'sys_script'
+                        id: '988c5278157c4ca09b5c4eac9b551d1a'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_regularizacao': {
+                        table: 'sys_script'
+                        id: 'a83f630610324cb29e0ac75ace01b257'
+                    }
+                    'RF-MOD-F5-007_br_consulta_carteira_score_sim': {
+                        table: 'sys_script'
+                        id: '431d2f17680f47a9b3ba0fed125a8c7f'
+                    }
                     'RF-MOD-F5-007_br_interacao_carteira': {
                         table: 'sys_script'
                         id: '92ab2a0ace7b4be39eaa8c5a27520bd3'
@@ -4657,6 +4693,10 @@ declare global {
                     src_server_carteira_recusarInteracaoForaDaCarteira_server_js: {
                         table: 'sys_module'
                         id: 'dbf4f61dd4c54f4283db2439eb34fab5'
+                    }
+                    src_server_carteira_restringirConsultaCarteira_server_js: {
+                        table: 'sys_module'
+                        id: '3cc0cb5af71c4d93a925993db705271c'
                     }
                     src_server_qualificacao_bloquearExclusaoPublicada_server_js: {
                         table: 'sys_module'
