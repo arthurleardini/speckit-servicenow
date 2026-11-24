@@ -52,6 +52,196 @@ O ordenador do backlog avisa (BACKLOG_ORDER_ACYCLIC) e deixa os épicos na ordem
 1. Manter: a ordem que importa é a das stories, que não tem ciclo.
 2. Rever a dependência do score no dossiê (RF-MOD-F3-003 → RF-MOD-F5-003), que é a que cruza de volta.
 
+### GAP-103 — Campos de controle da versão editáveis no rascunho (SEC-021 proposto)
+
+**Área:** MOD-F2, `STORY-MOD-F2-002`
+**Impacto:** Média
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** SEC-009
+
+**Descrição:**
+A auditoria da US-MOD-F2-002 (`outputs/spec/auditorias/US-MOD-F2-002.md`, achado SEC-021) aponta que, no rascunho, coordenador e admin do app ainda gravam campos de controle (estado, versão anterior, publicada em/por) pelo form ou pela API; o servidor já recusa a publicação fora do coordenador e completa data e autor.
+
+**Opções identificadas:**
+1. ACL de campo sem gravação por usuário nos campos de controle e transições de estado só rascunho → publicada → substituída.
+2. Manter: a business rule de gravação já cobre papel, motivo, data e autor.
+
+### GAP-104 — Critério sem código substitui versões de outros critérios (BUG-001)
+
+**Área:** MOD-F2, `STORY-MOD-F2-002`
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+`CriterioVersao.substituirAnteriores` consulta por código; com código vazio, a consulta pega outras versões sem código (auditoria US-MOD-F2-002, BUG-001).
+
+**Opções identificadas:**
+1. Tornar `codigo` obrigatório no `data-model.json`.
+2. Não substituir quando o código está vazio.
+
+### GAP-105 — «Nome é obrigatório» no form mostra a mensagem da plataforma (CONF-001)
+
+**Área:** MOD-F2, TEL-008
+**Impacto:** Média
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+O texto do critério de aceite aparece por script, API e importação; no form o dicionário barra antes com a mensagem padrão de campo obrigatório.
+
+**Opções identificadas:**
+1. Aceitar a mensagem da plataforma no form.
+2. Mensagem de campo por UI Policy ou Client Script de envio.
+
+### GAP-106 — Atendente vê o módulo e os critérios de qualificação (CONF-002)
+
+**Área:** MOD-F2, menu e ACL gerados
+**Impacto:** Média
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** STORY-SEC-TRANSVERSAL
+
+**Descrição:**
+O cenário AS-TASK-MOD-F2-002-02-01 pede o menu sem os 3 módulos para o atendente; o menu e a ACL de leitura são gerados pelo `sn-scaffold`.
+
+**Opções identificadas:**
+1. Tirar o papel atendente dos módulos e da ACL de leitura de critério/ciclo/segmentação pelo `data-model.json` + `sn-scaffold`.
+2. Tratar na story de segurança transversal.
+
+### GAP-107 — G3 do fio condutor rodou sem validadores de LLM (CONF-005)
+
+**Área:** Deliver, fio condutor
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01..03, SEC-009
+
+**Descrição:**
+Os agentes validadores de `.claude/agents/` não estavam carregados na sessão; o G3 rodou com `--sem-agentes` (parte determinística: build, ATF, varredura e mensagens), como a `sn-implement` prevê.
+
+**Opções identificadas:**
+1. Rodar o G3 com validadores numa sessão com os agentes carregados.
+2. Registrar a isenção de G3 por story.
+
+### GAP-108 — Código + versão únicos por consulta, sem índice (BUG-002, PERF-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+A unicidade é conferida por consulta na business rule, sujeita a corrida e sem índice.
+
+**Opções identificadas:**
+1. Índice único `codigo`+`versao` no `data-model.json`.
+2. Manter a consulta.
+
+### GAP-109 — Mensagem de duplicado para qualquer falha ao criar versão (BUG-003)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-03
+
+**Descrição:**
+`criarNovaVersao` devolve a mensagem de duplicado para qualquer falha de gravação.
+
+**Opções identificadas:**
+1. Mensagem neutra e `gs.warn`.
+
+### GAP-110 — Comentário barrado em versão publicada (BUG-004)
+
+**Área:** MOD-F2, TEL-008
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+A ACL de gravação por estado também bloqueia o campo de comentários na versão publicada.
+
+**Opções identificadas:**
+1. ACL de campo para `comentarios` sem condição de estado.
+2. Manter: versão publicada sem comentário novo.
+
+### GAP-111 — Log de recusa sem usuário e operação (OBS-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+As recusas geram `gs.warn` com sys_id do registro e a mensagem, sem o usuário e a operação.
+
+**Opções identificadas:**
+1. Incluir usuário, tabela, operação e SEC-009 no log.
+
+### GAP-112 — Gravação do botão com GlideRecord e conferência de papel (CONF-007)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** TASK-MOD-F2-002-02, TASK-MOD-F2-002-03
+
+**Descrição:**
+`publicar` e `criarNovaVersao` conferem o papel e gravam com `GlideRecord`; `security.mdc` pede `GlideRecordSecure` ou `canWrite/canCreate` no código chamado pelo usuário.
+
+**Opções identificadas:**
+1. `canWrite/canCreate` antes de gravar.
+
+### GAP-113 — Ciclo incluído já publicado ou com critério em rascunho (CONF-004)
+
+**Área:** MOD-F2, ciclo
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F2-004-02, SEC-010
+
+**Descrição:**
+A regra do ciclo olha só alteração; inclusão já publicada não é recusada.
+
+**Opções identificadas:**
+1. Tratar na US-MOD-F2-004 (publicação do ciclo).
+
+### GAP-114 — Data Policy do SEC-009 não criada (CONF-003)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** SEC-009
+
+**Descrição:**
+A business rule cobre importação que roda business rules; transform map configurado para não rodá-las passaria.
+
+**Opções identificadas:**
+1. Criar a Data Policy.
+2. Registrar no plano de segurança a troca pela business rule.
+
+### GAP-115 — Estado e versão padrão por business rule, não pelo dicionário (CONF-006)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+O padrão «rascunho» e versão 1 vêm da business rule; o form começa com «Estado» vazio.
+
+**Opções identificadas:**
+1. Valor padrão no `data-model.json` e regerar.
+
+### GAP-116 — Sem evidência RED guardada; padrão e mensagem no form sem teste (TEST-001)
+
+**Área:** MOD-F2
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F2-002-01
+
+**Descrição:**
+Os testes provam os lados positivo e negativo, mas a saída RED de antes da correção não foi guardada.
+
+**Opções identificadas:**
+1. Guardar a saída RED nas próximas regras.
+
 ---
 
 ## Respostas
@@ -63,6 +253,90 @@ O ordenador do backlog avisa (BACKLOG_ORDER_ACYCLIC) e deixa os épicos na ordem
 **Impacto na task:** _(a preencher)_
 
 ### GAP-102
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-103
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-104
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-105
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-106
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-107
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-108
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-109
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-110
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-111
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-112
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-113
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-114
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-115
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-116
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_
