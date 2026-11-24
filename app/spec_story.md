@@ -54,6 +54,23 @@
 
 ## Histórico de tasks
 
+### US-MOD-F5-007 — atendente vê só a própria carteira (TASK-MOD-F5-007-01..03, SEC-002)
+**Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 4 tasks)
+
+**Implementado:**
+- `src/server/carteira/CarteiraAtendente.server.js` + `script-includes/carteira-atendente.now.ts` — quem vê o quê; restrição de consulta
+- `security/carteira.now.ts` — ACL deny-unless de leitura nas 9 tabelas da carteira; gravação de caso e interação
+- `business-rules/carteira.now.ts` — regra de consulta (papel do Data Filter) nas 9 tabelas; recusa de gravação fora da carteira e de troca de dono
+
+**Testes:**
+- Cenários: 9 | Verdes: 9 (3 testes ATF de servidor, demo.atendente/demo.atendente2 impersonados) | Vermelhos: 0
+- Por categoria: HAPPY_PATH 2/2 · AUTHORIZATION 5/5 · BUSINESS_RULE_VIOLATION 2/2 · EDGE_CASE n/a · INVALID_INPUT n/a · EXTERNAL_SERVICE_FAILURE n/a
+- Arquivo: `src/fluent/tests/US-MOD-F5-007.now.ts`
+
+**Decisões:**
+- Business rule de consulta no lugar do Data Filter: a lista e o report não trazem nem contam linhas de outra carteira (a 1ª auditoria bloqueou pelo aviso «linhas removidas por segurança»). Teste que precisa achar registro de outro atendente usa `setWorkflow(false)` só para a busca do id.
+- Padrão: lógica de servidor que roda na sessão do atendente só enxerga a carteira dele (GAP-143).
+
 ### US-MOD-F2-005 — score como critério com fallback «sem score» (TASK-MOD-F2-005-01..02)
 **Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 2 tasks)
 

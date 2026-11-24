@@ -481,6 +481,126 @@ Score igual ao threshold, threshold vazio, débito não aberto, alteração e ex
 **Opções identificadas:**
 1. Acrescentar os testes de borda.
 
+### GAP-135 — Atendente grava qualquer campo do próprio caso e o autor da interação (SEC-023 proposto)
+
+**Área:** MOD-F5, `STORY-MOD-F5-007`
+**Impacto:** Média
+**Tipo:** SEGURANÇA
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+A auditoria da US-MOD-F5-007 (`outputs/spec/auditorias/US-MOD-F5-007.md`, SEC-023) aponta que a ACL de campo `*` deixa o atendente gravar prioridade, score e sinalização do próprio caso e o autor da interação; a troca do dono do caso já é recusada.
+
+**Opções identificadas:**
+1. ACL de campo só nos campos de encerramento e de interação; `interacao.atendente` preenchido no servidor (task SEC-023).
+2. Aceitar no piloto.
+
+### GAP-136 — Dono do caso diverge do dono do contribuinte no seed (BUG-001)
+
+**Área:** MOD-F5, seed
+**Impacto:** Média
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F5-007-01, TASK-MOD-F5-007-02
+
+**Descrição:**
+Em 22 dos 51 casos do seed o atendente do caso é outro que o do contribuinte; nesses casos o atendente vê o caso, mas não o contribuinte nem os débitos dele.
+
+**Opções identificadas:**
+1. Dono único: o caso herda o atendente do contribuinte; seed coerente.
+2. ACL do contribuinte também pelo caso.
+
+### GAP-137 — Lacunas de teste da carteira (TEST-001)
+
+**Área:** MOD-F5
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+Sem ATF de form na TEL-023/TEL-024 desta story; sem teste de regularização, comunicação, consentimento, score, admin do app, «Meus indicadores» e campo não gravável.
+
+**Opções identificadas:**
+1. Acrescentar os testes (o form do dossiê é testado na US-MOD-F5-003).
+2. Registrar a isenção de ATF de form.
+
+### GAP-138 — ACL de negação da carteira só com script (CONF-002)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+As ACL «nega, a menos que» usam só o script do `CarteiraAtendente`, sem role do app.
+
+**Opções identificadas:**
+1. Acrescentar as roles do app nas ACL de negação.
+
+### GAP-139 — Troca do Data Filter por regra de consulta não está na spec (CONF-003)
+
+**Área:** MOD-F5, spec
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+O SEC-002 pede Data Filter com Deny; a entrega usa business rule de consulta nas 9 tabelas, com o mesmo efeito (a lista não traz nem conta linha de outra carteira).
+
+**Opções identificadas:**
+1. Atualizar o SEC-002 no `plano-de-seguranca.md` e a tabela da carteira no `security.mdc`.
+
+### GAP-140 — ACL de leitura lê o registro referenciado a cada linha (PERF-001)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+O script da ACL faz dot-walk por linha; a regra de consulta já reduz as linhas.
+
+**Opções identificadas:**
+1. Condição de ACL no lugar do script.
+
+### GAP-141 — «Nova interação» em branco negada ao atendente (BUG-002, a confirmar)
+
+**Área:** MOD-F5, TEL-025
+**Impacto:** Baixa
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F5-007-03
+
+**Descrição:**
+A ACL de criação confere o caso; com o caso vazio (form novo fora da related list), a criação é negada.
+
+**Opções identificadas:**
+1. Conferir o botão «Novo» na related list do dossiê; deixar passar com caso vazio e conferir na gravação.
+
+### GAP-142 — Abertura de registro de outra carteira sem log (OBS-001)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+A leitura negada pela ACL ou pela regra de consulta não gera log nem contagem.
+
+**Opções identificadas:**
+1. Log quando a abertura de registro único volta vazia.
+
+### GAP-143 — Regra de consulta também filtra lógica de servidor na sessão do atendente (BUG-003)
+
+**Área:** MOD-F5
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** SEC-002
+
+**Descrição:**
+Business rule e Script Include que rodam na sessão do atendente só enxergam a carteira dele.
+
+**Opções identificadas:**
+1. Registrar no `architecture.mdc` e testar a primeira lógica de sistema que rodar como atendente.
+
 ---
 
 ## Respostas
@@ -684,6 +804,60 @@ Score igual ao threshold, threshold vazio, débito não aberto, alteração e ex
 **Impacto na task:** _(a preencher)_
 
 ### GAP-134
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-135
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-136
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-137
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-138
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-139
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-140
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-141
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-142
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-143
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

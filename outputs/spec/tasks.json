@@ -50976,7 +50976,7 @@
           "description": "Implementar o controle SEC-002 (CRÍTICO): Atendente vê só a própria carteira (fio condutor 5). Usuário só com a role atendente lê apenas registros da própria carteira: caso.atendente, contribuinte.atendente, interacao.atendente e regularizacao.atendente iguais ao usuário logado; débito, parcelamento, comunicação, consentimento e score por contribuinte.atendente. Vale em form, list, related li",
           "effortEstimate": "M",
           "durationEstimatedDays": 1,
-          "status": "PENDING",
+          "status": "DONE",
           "security": {
             "severity": "CRÍTICO",
             "cvss": 8.8,
@@ -51115,7 +51115,7 @@
           "class": "functional",
           "type": "backend",
           "title": "ACL de linha: atendente lê só os casos da própria carteira",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "ACL de linha: atendente lê só os casos da própria carteira. Entrega o comportamento do requisito RF-MOD-F5-007 (Visão restrita do atendente) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "acl",
@@ -51518,7 +51518,7 @@
           "class": "functional",
           "type": "backend",
           "title": "ACL de linha: atendente lê só os contribuintes da própria carteira",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "ACL de linha: atendente lê só os contribuintes da própria carteira. Entrega o comportamento do requisito RF-MOD-F5-007 (Visão restrita do atendente) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "acl",
@@ -51921,7 +51921,7 @@
           "class": "functional",
           "type": "backend",
           "title": "ACL de linha: atendente lê e grava só interações dos próprios casos",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "ACL de linha: atendente lê e grava só interações dos próprios casos. Entrega o comportamento do requisito RF-MOD-F5-007 (Visão restrita do atendente) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "acl",

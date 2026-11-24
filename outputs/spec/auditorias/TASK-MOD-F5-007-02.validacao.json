@@ -1,0 +1,107 @@
+{
+  "task": "TASK-MOD-F5-007-02",
+  "veredito": "APROVADO",
+  "motivo": null,
+  "rodada": 1,
+  "modo": "sem-agentes",
+  "dimensoes": [
+    "regras-negocio",
+    "testes",
+    "seguranca",
+    "performance",
+    "observabilidade",
+    "rules-tecnicas",
+    "escopo-app"
+  ],
+  "dispensadas": [],
+  "dimensoesSemValidador": [
+    "regras-negocio",
+    "testes",
+    "seguranca",
+    "performance",
+    "observabilidade",
+    "rules-tecnicas",
+    "escopo-app"
+  ],
+  "bloqueantes": [],
+  "incertos": [],
+  "preExistentes": [],
+  "descartados": [],
+  "dimensoesIncertas": [],
+  "comandos": [
+    {
+      "id": "CMD-testes",
+      "dimensao": "testes",
+      "comando": "npm --prefix .. run atf -- --story US-MOD-F5-007",
+      "ok": true,
+      "codigo": 0,
+      "saida": ""
+    },
+    {
+      "id": "CMD-build",
+      "dimensao": "rules-tecnicas",
+      "comando": "npx now-sdk build",
+      "ok": true,
+      "codigo": 0,
+      "saida": ""
+    }
+  ],
+  "naoInformados": [
+    "cobertura",
+    "lint"
+  ],
+  "shell": {
+    "nome": "sh",
+    "comando": null,
+    "motivo": "padrão do sistema (/bin/sh)"
+  },
+  "linhaDeBase": {
+    "arquivo": "/config/workspace/10-elogroup/deliversuiteServiceNow/speckit-servicenow/.claude/worktrees/v0/outputs/spec/validacao/TASK-MOD-F5-007-02.linha-de-base.json",
+    "criadaEm": "2026-11-24T20:12:51.799Z",
+    "head": "3111eebc2074f96548dc2c30528349b3c0f77cf9",
+    "usada": true,
+    "motivo": "falha de comando igual à da linha de base não bloqueia",
+    "arquivosDaEntregaJaAlterados": [],
+    "comandos": {
+      "testes": {
+        "comando": "npm --prefix .. run atf -- --story US-MOD-F5-007",
+        "codigo": 2,
+        "linhasDeFalha": 0
+      },
+      "build": {
+        "comando": "npx now-sdk build",
+        "codigo": 0,
+        "linhasDeFalha": 0
+      }
+    }
+  },
+  "naoCorrigidos": [],
+  "editadosPeloCorretor": [],
+  "medioEBaixo": {
+    "avaliadosNoG3": false,
+    "quemCobre": "auditoria-de-us (Passo I: veredito APROVADA COM RESSALVAS, débito em gaps-document.md)",
+    "nota": "MÉDIO e BAIXO não são avaliados no G3: os validadores não os reportam, e o que vier é descartado sem lista. Ausência de achado médio aqui não diz nada sobre o código.",
+    "descartadosSemLista": 0
+  },
+  "ferramentas": {
+    "varredura": "rodou",
+    "regrasFrontend": "em vigor (auto: rule de tela ServiceNow do harness, sem rule do projeto que a contradiga)",
+    "semgrep": "não instalado",
+    "gitleaks": "não instalado"
+  },
+  "chamadas": 0,
+  "tokens": {},
+  "historico": [
+    {
+      "rodada": 1,
+      "veredito": "APROVADO",
+      "acao": "fim",
+      "motivo": null,
+      "bloqueantes": 0,
+      "incertos": 0,
+      "preExistentes": 0,
+      "descartados": 0,
+      "chamadas": 0
+    }
+  ]
+}
