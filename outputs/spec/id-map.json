@@ -1,0 +1,338 @@
+{
+  "EPIC-001": {
+    "number": 7,
+    "id": 6586968577
+  },
+  "EPIC-002": {
+    "number": 10,
+    "id": 6586969448
+  },
+  "EPIC-003": {
+    "number": 13,
+    "id": 6586970241
+  },
+  "EPIC-004": {
+    "number": 8,
+    "id": 6586968926
+  },
+  "EPIC-005": {
+    "number": 11,
+    "id": 6586969701
+  },
+  "EPIC-006": {
+    "number": 12,
+    "id": 6586969942
+  },
+  "EPIC-007": {
+    "number": 9,
+    "id": 6586969216
+  },
+  "FEAT-F1-CARTEIRA": {
+    "number": 16,
+    "id": 6586970952
+  },
+  "FEAT-F1-CONSOLIDACAO": {
+    "number": 15,
+    "id": 6586970763
+  },
+  "FEAT-F1-ESTRUTURA": {
+    "number": 14,
+    "id": 6586970481
+  },
+  "FEAT-F2-CICLO": {
+    "number": 31,
+    "id": 6586974913
+  },
+  "FEAT-F2-CRITERIO": {
+    "number": 26,
+    "id": 6586973580
+  },
+  "FEAT-F2-ESTRUTURA": {
+    "number": 25,
+    "id": 6586973357
+  },
+  "FEAT-F3-ESTRUTURA": {
+    "number": 29,
+    "id": 6586974388
+  },
+  "FEAT-F3-INGESTAO": {
+    "number": 30,
+    "id": 6586974683
+  },
+  "FEAT-F3-USO": {
+    "number": 36,
+    "id": 6586976279
+  },
+  "FEAT-F4-CANAIS": {
+    "number": 19,
+    "id": 6586971823
+  },
+  "FEAT-F4-EFETIVIDADE": {
+    "number": 20,
+    "id": 6586972091
+  },
+  "FEAT-F4-ESTRUTURA": {
+    "number": 17,
+    "id": 6586971215
+  },
+  "FEAT-F4-REGUA": {
+    "number": 18,
+    "id": 6586971520
+  },
+  "FEAT-F5-ATENDIMENTO": {
+    "number": 33,
+    "id": 6586975393
+  },
+  "FEAT-F5-DISTRIBUICAO": {
+    "number": 32,
+    "id": 6586975121
+  },
+  "FEAT-F5-ESTRUTURA": {
+    "number": 27,
+    "id": 6586973825
+  },
+  "FEAT-F6-EFEITO": {
+    "number": 35,
+    "id": 6586976095
+  },
+  "FEAT-F6-ESTRUTURA": {
+    "number": 28,
+    "id": 6586974152
+  },
+  "FEAT-F6-FUNIL": {
+    "number": 34,
+    "id": 6586975756
+  },
+  "FEAT-T-ACESSO": {
+    "number": 22,
+    "id": 6586972515
+  },
+  "FEAT-T-ESTRUTURA": {
+    "number": 21,
+    "id": 6586972330
+  },
+  "FEAT-T-SEGURANCA": {
+    "number": 24,
+    "id": 6586973118
+  },
+  "FEAT-T-VISAO": {
+    "number": 23,
+    "id": 6586972856
+  },
+  "STORY-F1-ESTRUTURA": {
+    "number": 38,
+    "id": 6586976817
+  },
+  "STORY-F2-ESTRUTURA": {
+    "number": 61,
+    "id": 6586982833
+  },
+  "STORY-F3-ESTRUTURA": {
+    "number": 83,
+    "id": 6586988716
+  },
+  "STORY-F4-ESTRUTURA": {
+    "number": 46,
+    "id": 6586978886
+  },
+  "STORY-F5-ESTRUTURA": {
+    "number": 67,
+    "id": 6586984394
+  },
+  "STORY-F6-ESTRUTURA": {
+    "number": 75,
+    "id": 6586986535
+  },
+  "STORY-MOD-F1-001": {
+    "number": 39,
+    "id": 6586977120
+  },
+  "STORY-MOD-F1-002": {
+    "number": 42,
+    "id": 6586977827
+  },
+  "STORY-MOD-F1-003": {
+    "number": 43,
+    "id": 6586978108
+  },
+  "STORY-MOD-F1-004": {
+    "number": 44,
+    "id": 6586978338
+  },
+  "STORY-MOD-F1-005": {
+    "number": 45,
+    "id": 6586978590
+  },
+  "STORY-MOD-F1-006": {
+    "number": 40,
+    "id": 6586977346
+  },
+  "STORY-MOD-F1-007": {
+    "number": 41,
+    "id": 6586977580
+  },
+  "STORY-MOD-F2-001": {
+    "number": 62,
+    "id": 6586983078
+  },
+  "STORY-MOD-F2-002": {
+    "number": 63,
+    "id": 6586983295
+  },
+  "STORY-MOD-F2-003": {
+    "number": 64,
+    "id": 6586983616
+  },
+  "STORY-MOD-F2-004": {
+    "number": 65,
+    "id": 6586983876
+  },
+  "STORY-MOD-F2-005": {
+    "number": 85,
+    "id": 6586989258
+  },
+  "STORY-MOD-F2-006": {
+    "number": 66,
+    "id": 6586984130
+  },
+  "STORY-MOD-F3-001": {
+    "number": 84,
+    "id": 6586989040
+  },
+  "STORY-MOD-F3-002": {
+    "number": 89,
+    "id": 6586990231
+  },
+  "STORY-MOD-F3-003": {
+    "number": 90,
+    "id": 6586990541
+  },
+  "STORY-MOD-F3-004": {
+    "number": 87,
+    "id": 6586989751
+  },
+  "STORY-MOD-F3-005": {
+    "number": 88,
+    "id": 6586990000
+  },
+  "STORY-MOD-F3-006": {
+    "number": 86,
+    "id": 6586989488
+  },
+  "STORY-MOD-F4-001": {
+    "number": 47,
+    "id": 6586979153
+  },
+  "STORY-MOD-F4-002": {
+    "number": 48,
+    "id": 6586979527
+  },
+  "STORY-MOD-F4-003": {
+    "number": 49,
+    "id": 6586979827
+  },
+  "STORY-MOD-F4-004": {
+    "number": 51,
+    "id": 6586980289
+  },
+  "STORY-MOD-F4-005": {
+    "number": 52,
+    "id": 6586980545
+  },
+  "STORY-MOD-F4-006": {
+    "number": 53,
+    "id": 6586980784
+  },
+  "STORY-MOD-F4-007": {
+    "number": 54,
+    "id": 6586981033
+  },
+  "STORY-MOD-F4-008": {
+    "number": 55,
+    "id": 6586981259
+  },
+  "STORY-MOD-F4-009": {
+    "number": 50,
+    "id": 6586980066
+  },
+  "STORY-MOD-F5-001": {
+    "number": 69,
+    "id": 6586984902
+  },
+  "STORY-MOD-F5-002": {
+    "number": 70,
+    "id": 6586985140
+  },
+  "STORY-MOD-F5-003": {
+    "number": 71,
+    "id": 6586985367
+  },
+  "STORY-MOD-F5-004": {
+    "number": 74,
+    "id": 6586986180
+  },
+  "STORY-MOD-F5-005": {
+    "number": 72,
+    "id": 6586985644
+  },
+  "STORY-MOD-F5-006": {
+    "number": 73,
+    "id": 6586985929
+  },
+  "STORY-MOD-F5-007": {
+    "number": 68,
+    "id": 6586984625
+  },
+  "STORY-MOD-F6-001": {
+    "number": 77,
+    "id": 6586987038
+  },
+  "STORY-MOD-F6-002": {
+    "number": 78,
+    "id": 6586987317
+  },
+  "STORY-MOD-F6-003": {
+    "number": 82,
+    "id": 6586988390
+  },
+  "STORY-MOD-F6-004": {
+    "number": 80,
+    "id": 6586987885
+  },
+  "STORY-MOD-F6-005": {
+    "number": 79,
+    "id": 6586987592
+  },
+  "STORY-MOD-F6-006": {
+    "number": 76,
+    "id": 6586986806
+  },
+  "STORY-MOD-F6-007": {
+    "number": 81,
+    "id": 6586988141
+  },
+  "STORY-MOD-T-001": {
+    "number": 57,
+    "id": 6586981822
+  },
+  "STORY-MOD-T-002": {
+    "number": 58,
+    "id": 6586982051
+  },
+  "STORY-MOD-T-003": {
+    "number": 60,
+    "id": 6586982595
+  },
+  "STORY-MOD-T-004": {
+    "number": 59,
+    "id": 6586982331
+  },
+  "STORY-SEC-TRANSVERSAL": {
+    "number": 37,
+    "id": 6586976572
+  },
+  "STORY-T-ESTRUTURA": {
+    "number": 56,
+    "id": 6586981544
+  }
+}
