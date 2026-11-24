@@ -42284,7 +42284,7 @@
           "description": "Implementar o controle SEC-009 (ALTO): Versão publicada do critério imutável, inclusive para admin (fio condutor 1). Business Rule before update recusa qualquer alteração de parâmetro em critério com estado «publicada» ou «substituída», para todas as roles, com mensagem; ACL de write e delete negada nesses estados; ciclo publicado não troca a versão aplicada (criterio) nem os totais; codigo + versao únicos; nova v",
           "effortEstimate": "S",
           "durationEstimatedDays": 0.5,
-          "status": "PENDING",
+          "status": "DONE",
           "security": {
             "severity": "ALTO",
             "cvss": 6.5,
@@ -42421,7 +42421,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Business rule que bloqueia alteração de versão publicada do critério",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Business rule que bloqueia alteração de versão publicada do critério. Entrega o comportamento do requisito RF-MOD-F2-002 (Versionamento imutável do critério) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "business_rule",
@@ -42865,7 +42865,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "UI Action «Publicar versão» do critério",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "UI Action «Publicar versão» do critério. Entrega o comportamento do requisito RF-MOD-F2-002 (Versionamento imutável do critério) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "ui_action",
@@ -43299,7 +43299,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "UI Action «Criar nova versão» a partir da versão publicada",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "UI Action «Criar nova versão» a partir da versão publicada. Entrega o comportamento do requisito RF-MOD-F2-002 (Versionamento imutável do critério) na instância, com teste ATF positivo e negativo de cada regra.",
           "snArtifact": {
             "kind": "ui_action",

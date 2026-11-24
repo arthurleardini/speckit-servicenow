@@ -14,6 +14,9 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 32 | 2026-11-24 16:36 | sn-implement | US-MOD-F2-002 (STORY-MOD-F2-002, fio condutor 1) · tasks TASK-MOD-F2-002-01..03 + SEC-009 | outputs/spec/tasks.json, tech-rules, plano-de-seguranca.md | app/src/fluent (business-rules, script-includes, ui-actions, ui-policies, security, tests), app/src/server/qualificacao, outputs/spec/auditorias/atf/US-MOD-F2-002.json, auditorias/*.validacao.json, screens/deliver/US-MOD-F2-002-TEL-007/008.png | ATF 13/13 verde; G3 APROVADO (sem agentes) nas 4 tasks; tasks DONE | IMPL_COVERAGE: cenários=14 (verdes=13, vermelhos=0, não cobertos=1) | camadas=atf-servidor/atf-form | fonte=mista · DEPENDENCY_PENDING (STORY-MOD-F2-001, STORY-SEC-TRANSVERSAL) | auditoria-de-us |
+| 31 | 2026-11-24 16:04 | now-sdk-install | dev493801 | x_2326104_cob | 0fbe5084dba82c1b673b37d92c8d86f097d55963 | ok; 1056 registros | — | sn-capture |
+| 30 | 2026-11-24 15:57 | now-sdk-install | dev493801 | x_2326104_cob | cf737f49cc8901211304edabbce541ce553ec669 | ok; 1056 registros | — | sn-capture |
 | 29 | 2026-11-24 15:29 | now-sdk-install | dev493801 | x_2326104_cob | cbda6cf09b2586c69d1d1b066e884f3f05ff50e4 | ok; 1056 registros | — | sn-capture |
 | 28 | 2026-11-24 15:12 | now-sdk-install | dev493801 | x_2326104_cob | cd03ed7e709a1a2eac4558f73ad1663030170812 | ok; 1056 registros | — | sn-capture |
 | 27 | 2026-11-24 14:59 | now-sdk-install | dev493801 | x_2326104_cob | 6d5888a0b28faecd2c5b1fe0f390f576c8646f4e | ok; 1056 registros | — | sn-capture |
