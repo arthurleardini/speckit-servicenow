@@ -440,8 +440,8 @@ export const t_f2002_ui_pos = Test({
 // Um form por teste: o segundo openExistingRecord no mesmo teste ficou esperando até o timeout.
 export const t_f2002_ui_publicada = Test({
     $id: Now.ID['US-MOD-F2-002_atf_ui_versao_publicada_positivo'],
-    name: 'RF-MOD-F2-002 — versão publicada mostra «Criar nova versão» e fica somente leitura',
-    description: 'Abre no form (TEL-008) uma versão publicada como coordenador: aparece «Criar nova versão», não aparece «Publicar versão», e o valor mínimo e o atraso ficam somente leitura (UI Action e ACL de escrita por estado, RN-NOVO-F2-001).',
+    name: 'RF-MOD-F2-002 — versão publicada mostra «Criar nova versão» e não «Publicar versão»',
+    description: 'Abre no form (TEL-008) uma versão publicada como coordenador: aparece «Criar nova versão» e não aparece «Publicar versão» (UI Action por estado, RN-NOVO-F2-001). O somente leitura da versão publicada é provado no servidor (canWrite falso pela ACL), porque a checagem de campo somente leitura por ACL fica esperando no Client Test Runner.',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -465,7 +465,6 @@ export const t_f2002_ui_publicada = Test({
     atf.server.createUser({ $id: Now.ID['US-MOD-F2-002_test_35'], firstName: 'ATF', lastName: 'Coordenador F2-002 UI publicada', roles: [role_coordenador] })
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-F2-002_test_26'], table: 'x_2326104_cob_criterio', recordId: publicada.first_record })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-F2-002_test_27'], table: 'x_2326104_cob_criterio', visible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_criar_nova_versao')], notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-002_ua_publicar_versao')] })
-    atf.form.fieldStateValidation({ $id: Now.ID['US-MOD-F2-002_test_28'], table: 'x_2326104_cob_criterio', readOnly: ['valor_minimo', 'atraso_minimo_dias'] })
 })
 
 export const t_f2002_ui_neg = Test({
