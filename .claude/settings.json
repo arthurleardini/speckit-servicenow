@@ -1,4 +1,28 @@
 {
+  "enabledPlugins": {
+    "servicenow-sdk@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npx now-sdk explain:*)",
+      "Bash(npx now-sdk query:*)",
+      "Bash(npx now-sdk build:*)",
+      "Bash(npm run reinstall)",
+      "Bash(npm run atf:*)",
+      "Bash(npm run capture:*)",
+      "Bash(npm run doutor:*)"
+    ],
+    "ask": [
+      "Bash(npx now-sdk install:*)",
+      "Bash(npm run reinstall -- --zerar:*)"
+    ],
+    "deny": [
+      "Read(./.env.instancia)",
+      "Read(./.env)",
+      "Bash(cat .env*)",
+      "Bash(*.env.instancia*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       { "hooks": [{ "type": "command", "command": "node .claude/hooks/estado.mjs" }] }
