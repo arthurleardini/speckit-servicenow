@@ -32,3 +32,13 @@ outputs/spec/validacao/
 # carregam o conteúdo antigo dos exemplos, inclusive o que a revisão de riscos de 2026-10-21 tirou.
 docs/execucao/**/*.patch
 docs/execucao/**/*.tgz
+
+# speckit-servicenow
+.env*
+!.env.example
+app/dist/
+app/node_modules/
+app/target/
+app/.now/
+outputs/spec/_tmp/
+.claude/worktrees/

@@ -1,0 +1,17 @@
+{
+  "name": "speckit-servicenow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fork do Harness Elo 2.6.0 para gerar apps ServiceNow (Fluent) a partir da spec.",
+  "type": "module",
+  "engines": { "node": ">=20.18 <27" },
+  "scripts": {
+    "test": "node --test \".claude/**/*.test.mjs\"",
+    "doutor": "node .claude/ferramentas/doutor.mjs",
+    "capture": "node .claude/skills/sn-capture/scripts/capture.mjs",
+    "publish": "node .claude/skills/sn-tasks-github/cli.mjs",
+    "reinstall": "node .claude/skills/sn-reinstall/scripts/reinstall.mjs",
+    "atf": "node .claude/skills/sn-implement/scripts/atf.mjs"
+  },
+  "devDependencies": { "playwright": "1.65.1" }
+}
