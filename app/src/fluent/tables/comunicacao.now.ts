@@ -12,6 +12,7 @@ export const x_2326104_cob_comunicacao = Table({
         contribuinte: ReferenceColumn({ label: "Contribuinte", mandatory: true, referenceTable: "x_2326104_cob_contribuinte" }),
         regua: ReferenceColumn({ label: "Régua", referenceTable: "x_2326104_cob_regua" }),
         etapa: ReferenceColumn({ label: "Etapa", referenceTable: "x_2326104_cob_regua_etapa" }),
+        ciclo: ReferenceColumn({ label: "Ciclo", referenceTable: "x_2326104_cob_ciclo" }),
         canal: ChoiceColumn({ label: "Canal", choices: {
             "email": { label: "E-mail", sequence: 0 },
             "sms": { label: "SMS", sequence: 1 },

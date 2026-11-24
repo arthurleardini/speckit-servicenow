@@ -67,3 +67,25 @@ Record({
         role: Now.ref("sys_user_role", {"name":"x_2326104_cob.admin"}),
     },
 })
+
+Record({
+    $id: Now.ID["usuario_demo_atendente2"],
+    $meta: { installMethod: 'demo' },
+    table: "sys_user",
+    data: {
+        user_name: "demo.atendente2",
+        first_name: "Demo",
+        last_name: "Atendente B",
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID["usuario_demo_atendente2_role"],
+    $meta: { installMethod: 'demo' },
+    table: "sys_user_has_role",
+    data: {
+        user: Now.ref("sys_user", "usuario_demo_atendente2"),
+        role: Now.ref("sys_user_role", {"name":"x_2326104_cob.atendente"}),
+    },
+})

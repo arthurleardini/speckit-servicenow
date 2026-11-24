@@ -5,5 +5,5 @@ import { List, default_view } from '@servicenow/sdk/core'
 List({
     table: "x_2326104_cob_comunicacao",
     view: default_view,
-    columns: ["contribuinte","regua","etapa","canal","status","motivo","enviada_em","tentativas"],
+    columns: ["contribuinte","regua","etapa","ciclo","canal","status","motivo","enviada_em","tentativas"],
 })

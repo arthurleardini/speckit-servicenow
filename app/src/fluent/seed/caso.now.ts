@@ -8,7 +8,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_017"),
         estagio: "selecionado",
         prioridade: 916,
@@ -28,7 +28,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_027"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_028"),
         estagio: "selecionado",
         prioridade: 198,
@@ -68,7 +68,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_020"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_030"),
         estagio: "em_selecao",
         prioridade: 217,
@@ -108,7 +108,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_018"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_008"),
         estagio: "dossie_gerado",
         prioridade: 400,
@@ -128,7 +128,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_013"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_028"),
         estagio: "dossie_gerado",
         prioridade: 486,
@@ -148,7 +148,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_034"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_040"),
         estagio: "selecionado",
         prioridade: 432,
@@ -188,7 +188,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_016"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_013"),
         estagio: "em_selecao",
         prioridade: 450,
@@ -228,7 +228,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_017"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_049"),
         estagio: "selecionado",
         prioridade: 580,
@@ -248,7 +248,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_032"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_037"),
         estagio: "dossie_gerado",
         prioridade: 883,
@@ -268,7 +268,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_046"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_018"),
         estagio: "encerrado",
         prioridade: 498,
@@ -308,7 +308,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_026"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_014"),
         estagio: "conducao",
         prioridade: 693,
@@ -348,7 +348,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_016"),
         estagio: "dossie_gerado",
         prioridade: 105,
@@ -388,7 +388,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_007"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_011"),
         estagio: "selecionado",
         prioridade: 103,
@@ -408,7 +408,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_017"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_003"),
         estagio: "dossie_gerado",
         prioridade: 74,
@@ -428,7 +428,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_016"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_015"),
         estagio: "dossie_gerado",
         prioridade: 868,
@@ -468,7 +468,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_045"),
         estagio: "selecionado",
         prioridade: 32,
@@ -488,7 +488,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_035"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_007"),
         estagio: "encerrado",
         prioridade: 528,
@@ -508,7 +508,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_042"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_041"),
         estagio: "dossie_gerado",
         prioridade: 45,
@@ -528,7 +528,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_020"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_046"),
         estagio: "dossie_gerado",
         prioridade: 493,
@@ -548,7 +548,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_032"),
         estagio: "em_selecao",
         prioridade: 704,
@@ -568,7 +568,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_003"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_040"),
         estagio: "dossie_gerado",
         prioridade: 497,
@@ -588,7 +588,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_049"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_049"),
         estagio: "encerrado",
         prioridade: 867,
@@ -608,7 +608,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_010"),
         estagio: "encerrado",
         prioridade: 891,
@@ -628,7 +628,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_030"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_039"),
         estagio: "encerrado",
         prioridade: 774,
@@ -668,7 +668,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_041"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_046"),
         estagio: "selecionado",
         prioridade: 329,
@@ -688,7 +688,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_019"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_048"),
         estagio: "em_selecao",
         prioridade: 560,
@@ -708,7 +708,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_002"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_017"),
         estagio: "em_selecao",
         prioridade: 40,
@@ -748,7 +748,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_034"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_048"),
         estagio: "encerrado",
         prioridade: 342,
@@ -768,7 +768,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_032"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_033"),
         estagio: "conducao",
         prioridade: 729,
@@ -788,7 +788,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_023"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_011"),
         estagio: "selecionado",
         prioridade: 674,
@@ -828,7 +828,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_006"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_029"),
         estagio: "selecionado",
         prioridade: 132,
@@ -848,7 +848,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_010"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_033"),
         estagio: "selecionado",
         prioridade: 233,
@@ -868,7 +868,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_038"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_016"),
         estagio: "selecionado",
         prioridade: 957,
@@ -888,7 +888,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_050"),
         estagio: "conducao",
         prioridade: 818,
@@ -908,7 +908,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "TEL-004_registro_demo"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_036"),
         estagio: "selecionado",
         prioridade: 473,
@@ -928,7 +928,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_038"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_002"),
         estagio: "dossie_gerado",
         prioridade: 396,
@@ -948,7 +948,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_024"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_026"),
         estagio: "em_selecao",
         prioridade: 159,
@@ -988,7 +988,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_045"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_011"),
         estagio: "encerrado",
         prioridade: 29,
@@ -1008,7 +1008,7 @@ Record({
     table: "x_2326104_cob_caso",
     data: {
         contribuinte: Now.ref("x_2326104_cob_contribuinte", "seed_contribuinte_012"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "seed_ciclo_009"),
         estagio: "selecionado",
         prioridade: 350,

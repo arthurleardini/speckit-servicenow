@@ -8,7 +8,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "telefone",
         resultado: "promessa_pagamento",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -22,7 +22,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_046"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -36,7 +36,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "sem_contato",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -50,7 +50,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_017"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -64,7 +64,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "recusa",
         descricao: "Retorno agendado para a próxima semana.",
@@ -78,7 +78,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_023"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -92,7 +92,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_014"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -106,7 +106,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "sem_contato",
         descricao: "Retorno agendado para a próxima semana.",
@@ -120,7 +120,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
         resultado: "recusa",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -134,7 +134,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_044"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "contato_efetivo",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -148,7 +148,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_040"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "promessa_pagamento",
         descricao: "Retorno agendado para a próxima semana.",
@@ -162,7 +162,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_007"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -176,7 +176,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_038"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "promessa_pagamento",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -190,7 +190,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_035"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
         descricao: "Retorno agendado para a próxima semana.",
@@ -204,7 +204,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_018"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "telefone",
         resultado: "recusa",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -218,7 +218,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_032"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "sem_contato",
         descricao: "Retorno agendado para a próxima semana.",
@@ -232,7 +232,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_045"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "recusa",
         descricao: "Contato registrado com o contribuinte fictício.",
@@ -246,7 +246,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_038"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -260,7 +260,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_019"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "telefone",
         resultado: "recusa",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -274,7 +274,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_046"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "contato_efetivo",
         descricao: "Contato registrado com o contribuinte fictício.",
@@ -288,7 +288,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_037"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -302,7 +302,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_020"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -316,7 +316,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_011"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -330,7 +330,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_013"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "telefone",
         resultado: "sem_contato",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -358,7 +358,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_010"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "telefone",
         resultado: "recusa",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -372,7 +372,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_049"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -386,7 +386,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_035"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -400,7 +400,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "sem_contato",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -414,7 +414,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_021"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "recusa",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -428,7 +428,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
         resultado: "sem_contato",
         descricao: "Retorno agendado para a próxima semana.",
@@ -442,7 +442,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_017"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "telefone",
         resultado: "promessa_pagamento",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -456,7 +456,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_031"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "contato_efetivo",
         descricao: "Retorno agendado para a próxima semana.",
@@ -470,7 +470,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_009"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "sem_contato",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -484,7 +484,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -498,7 +498,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -526,7 +526,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_027"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "recusa",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -554,7 +554,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_042"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
         resultado: "promessa_pagamento",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -568,7 +568,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "presencial",
         resultado: "recusa",
         descricao: "Contato registrado com o contribuinte fictício.",
@@ -582,7 +582,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "recusa",
         descricao: "Retorno agendado para a próxima semana.",
@@ -610,7 +610,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_003"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Documentação conferida pela equipe de atendimento.",
@@ -638,7 +638,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_021"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Contato registrado com o contribuinte fictício.",
@@ -652,7 +652,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
@@ -666,7 +666,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_047"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
         descricao: "Pendência encaminhada para análise da coordenação.",
@@ -680,7 +680,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "contato_efetivo",
         descricao: "Retorno agendado para a próxima semana.",
@@ -694,7 +694,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "dte",
         resultado: "recusa",
         descricao: "Contato registrado com o contribuinte fictício.",
@@ -708,7 +708,7 @@ Record({
     table: "x_2326104_cob_interacao",
     data: {
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_009"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
         resultado: "promessa_pagamento",
         descricao: "Registro demo TEL-025",

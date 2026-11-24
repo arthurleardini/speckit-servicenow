@@ -4600,6 +4600,14 @@ declare global {
                         id: '336861d0d80c4062b9981d23b3d4379e'
                         deleted: false
                     }
+                    usuario_demo_atendente2: {
+                        table: 'sys_user'
+                        id: 'eee61b012108483080ea282f25ac4eec'
+                    }
+                    usuario_demo_atendente2_role: {
+                        table: 'sys_user_has_role'
+                        id: 'bf65df0206114b93a151bf82e2ace626'
+                    }
                     usuario_demo_coordenador: {
                         table: 'sys_user'
                         id: 'cdc46f79b3c8463c9d4c3aad67de52f9'
@@ -4683,6 +4691,28 @@ declare global {
                             value: 'entregue'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '017f05eb7338462793915a0b259f1209'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicado_por'
+                            position: '16'
                         }
                     },
                     {
@@ -4795,6 +4825,28 @@ declare global {
                             value: 'ipva'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '026569eeb6a14698a1c850e3b7ffdb60'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'usar_score'
+                            position: '11'
                         }
                     },
                     {
@@ -4920,6 +4972,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '039be5652ed64f0fb515cf0eff846c56'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -5041,6 +5094,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '0545b114331f4601a3723ae87c5f4b80'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -5677,6 +5731,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '0b6c08cace524ccc8a04062dbea614c4'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '10'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '0bb1a104835248d1b766590c95f94321'
                         key: {
@@ -6240,6 +6316,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '142325004ce04842bdaf50259507f60b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -6320,6 +6397,15 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_score_sim'
                             element: 'score'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '154a7fde39df433397b87ea1a3d6d41a'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'publicado_em'
+                            language: 'en'
                         }
                     },
                     {
@@ -6478,6 +6564,28 @@ declare global {
                             value: 'todos'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '184063fc87784b71b548d46a8e42241d'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicado_em'
+                            position: '15'
                         }
                     },
                     {
@@ -6737,6 +6845,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '1cda42a0e9a14f198b80c5097f9ed9b6'
+                        key: {
+                            name: 'x_2326104_cob_criterio'
+                            element: 'motivo_alteracao'
+                        }
+                    },
+                    {
                         table: 'sys_ui_form_section'
                         id: '1cf14b6dd3f042a18358fcfcf05946cd'
                         key: {
@@ -6957,6 +7073,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '1fd7587ea19b4d1d9dfe361143b61e5f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -7138,6 +7255,29 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list_element'
+                        id: '2255b722b0bc4a85a14e4810d01e4e6f'
+                        key: {
+                            list_id: {
+                                id: '5d1c7d8b3d9443e598b910c36d54b299'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'codigo'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '226ce14bcfea48d8ae72610f237bf4c5'
                         key: {
@@ -7292,6 +7432,14 @@ declare global {
                                     name: 'x_2326104_cob.atendente'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '24755b8511ed4cfa8ee891b05557644b'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'semente_sorteio'
                         }
                     },
                     {
@@ -7549,6 +7697,28 @@ declare global {
                                 }
                             }
                             element: 'efeito_incremental'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '2858c54bc9c749718950d73fa148ad99'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_massificada'
+                            position: '7'
                         }
                     },
                     {
@@ -7894,6 +8064,28 @@ declare global {
                             name: 'x_2326104_cob_exportacao'
                             element: 'NULL'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '2efea606277e4cc8a16c467a582fb9c3'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '20'
                         }
                     },
                     {
@@ -8287,6 +8479,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '34cd37baed04416cbda1bce9c145390f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -8419,6 +8612,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '35f8649638b3413fb6faa2fc40b43e34'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -8458,6 +8652,15 @@ declare global {
                             }
                             element: 'comunicacao'
                             position: '1'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '371102dc52fa4b95899a03543cedd3b6'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'semente_sorteio'
+                            language: 'en'
                         }
                     },
                     {
@@ -8558,6 +8761,14 @@ declare global {
                             name: 'x_2326104_cob_regua'
                             element: 'nome'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '387aa826c6934e77883cedcd82819f40'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'publicado_por'
                         }
                     },
                     {
@@ -8668,6 +8879,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3b719f4052dd4420b6681aa100f551ef'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -8730,6 +8942,14 @@ declare global {
                                 }
                             }
                             element: 'atendente'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '3c2196ca3cbe44da9ce35bf782ff693e'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'publicado_em'
                         }
                     },
                     {
@@ -8891,6 +9111,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3d39d0d7c8d24eb78076b2c1b7d88766'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -8913,6 +9134,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3d85683258ca491987284eddaab03495'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -9398,6 +9620,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '439247047e3144638cf925ab36a14eed'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'motivo'
+                            position: '11'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '439618131cf4457ea49821c5d4ea817e'
                         key: {
@@ -9548,6 +9792,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '45792da37fc44f4c941c05abd8f44cd8'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -9605,6 +9850,28 @@ declare global {
                             element: 'NULL'
                             relationship: 'NULL'
                             parent: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '45e548f1937b47799a3ac98d92b0b1aa'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '18'
                         }
                     },
                     {
@@ -9913,6 +10180,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '4a4ce1348e064c98b595388058c7b326'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -10489,6 +10757,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '51271a35ab584b359966b4dc6fb3576c'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -10614,6 +10883,28 @@ declare global {
                             name: 'x_2326104_cob_contribuinte'
                             element: 'atendente'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '52925096009c43edb7d4aadfc863da41'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'threshold_score'
+                            position: '12'
                         }
                     },
                     {
@@ -11394,6 +11685,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '5eadfc0c083d48d9ad68db534457e471'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'taxa_cobrada'
+                            position: '12'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '5ed589c4c9684be8bc7a4aa58d17e753'
                         key: {
@@ -11520,6 +11833,50 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_caso'
                             element: 'encerrado_em'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '6056146193fa478d9ca2cdd192092fbc'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_qualificada'
+                            position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '6095d1ae158a49169fcc73253462dfca'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'canal'
+                            position: '6'
                         }
                     },
                     {
@@ -11698,6 +12055,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '62683bc1289f42d3b08975dfda102463'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -11929,6 +12287,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '65bca72f19f3467fad179d017e1493ed'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -11968,6 +12327,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '67d23dcf3ff2428fad565c61072bbbdb'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -12107,6 +12467,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '69067baff06b494eb9d8b3cd58ae9722'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'versao_anterior'
+                            position: '15'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '69213c94dfd54386ad3fba5999e7450c'
                         key: {
@@ -12170,6 +12552,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '6a0047419a884b5095c7eee12b5b1d49'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -12295,6 +12678,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '6ad69740c3544d4590625f98bcc15edc'
+                        key: {
+                            name: 'x_2326104_cob_criterio'
+                            element: 'motivo_alteracao'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '6add704d1a244b5a9555ea66633b9ccc'
                         key: {
@@ -12303,6 +12695,28 @@ declare global {
                             value: 'itcd'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '6b126d6e454d4f2db7c90359148e0011'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'atraso_minimo_dias'
+                            position: '7'
                         }
                     },
                     {
@@ -12689,6 +13103,37 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '70baf96f7ea44d03965381e0bf82e0e1'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicada_em'
+                            position: '16'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '7129787a88cf4b2680e73de9957decd6'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'qtd_elegiveis'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '716d23e9fc2943e7a702be96aa23dbfd'
                         key: {
                             sys_ui_section: {
@@ -12926,6 +13371,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_contribuinte'
                             element: 'cpf'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '739715c5485543928a6afff3f0e95b5f'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '9'
                         }
                     },
                     {
@@ -13195,6 +13662,29 @@ declare global {
                             value: 'icms_normal'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '778af90661004fee94670f796315a33a'
+                        key: {
+                            list_id: {
+                                id: 'ae0f07020cb1497695c916dd1ded541c'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'ciclo'
                         }
                     },
                     {
@@ -13673,6 +14163,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '7cac7149a2cb48a28a5de35244b48788'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -13789,6 +14280,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '7f2db7654b654105823f2d463ff39d80'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -13851,6 +14343,15 @@ declare global {
                             }
                             element: 'descricao'
                             position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '7f3decd972234433b227624f39410a0d'
+                        key: {
+                            name: 'x_2326104_cob_criterio'
+                            element: 'codigo'
+                            language: 'en'
                         }
                     },
                     {
@@ -14259,6 +14760,28 @@ declare global {
                             }
                             element: 'carteira'
                             position: '2'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '85a9f91fda794380a41e43697da3ebf0'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'instrumento'
+                            position: '8'
                         }
                     },
                     {
@@ -14706,6 +15229,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '8b047f098b3f4af28ba667cdc178d416'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'taxa_controle'
+                            position: '13'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '8b2fb8a7f9984e84ae0ac33c2652f1d2'
                         key: {
                             sys_ui_section: {
@@ -15067,6 +15612,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '9056a9ae48b4411ca7856e077dfae18e'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '17'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '90c8bc4c465b467f89c8d93142e7af6b'
                         key: {
@@ -15186,6 +15753,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '92165273f8ed41d9a4a39469bdcd2f18'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -16063,6 +16631,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'a27c4aec65c841f98b9716c09b736454'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -16200,6 +16769,28 @@ declare global {
                             }
                             element: '.split'
                             position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'a315ce959e3047ea80daaa7aa4c8d680'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'semente_sorteio'
+                            position: '6'
                         }
                     },
                     {
@@ -16414,6 +17005,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'a555b01fac4a40079be53f67c99383e1'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '84b5ece4aca24671bb37596f8a79ba8b'
@@ -16994,6 +17586,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'af55b9fcf0c048dfb24ef74808dce75e'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tributo'
+                            position: '5'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'af6602173dee42efb9fdf408ca321609'
                         key: {
@@ -17313,6 +17927,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'b337d9fe5807415f943ee42779d64c52'
+                        key: {
+                            name: 'x_2326104_cob_comunicacao'
+                            element: 'ciclo'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'b34205c51a0c477185826cca6d2f6d80'
                         key: {
@@ -17339,6 +17961,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'b3b246f970a945578380c947dc11db01'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'desempate'
+                            position: '14'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'b3ce575a630a4fb1952fbba58e8b1180'
                         key: {
@@ -17354,6 +17998,28 @@ declare global {
                         id: 'b3ef8d688a57492bb12eda764969ec2d'
                         key: {
                             name: 'x_2326104_cob_consentimento'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'b40e0a3a5a24492da1373476ee9ca943'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'excluir_contumaz'
+                            position: '10'
                         }
                     },
                     {
@@ -17771,6 +18437,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'b91d158a8bdf40e6b1ee60d6f0983188'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'valor_minimo'
+                            position: '6'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: 'b9445093866c446081180d6207ef99a5'
                         key: {
@@ -17863,6 +18551,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'ba021e12224d4db2b761012d7eb859ac'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -17893,6 +18582,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'ba45ca603d664003b8f75d88a75a1e55'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -17913,8 +18603,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'ba50303604974735a7e8ad85a9d39cbb'
+                        key: {
+                            name: 'x_2326104_cob_criterio'
+                            element: 'codigo'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'bad22470f4a84b2988a89c4203874195'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -18074,6 +18773,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'bcd921b763ca4d7684bbceed5b787561'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -18224,7 +18924,30 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: 'be52da5e62074cb6a17fba37e224a85e'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'efeito_incremental'
+                            position: '14'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: 'be9ffa22f5564a97a267b35fea46465c'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -18315,6 +19038,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'bf9dcb652d8e47068dbafb255738ca43'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -18357,6 +19081,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_comunicacao'
                             element: 'regua'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'c0647d51fc0149b18034e3c07cf99df8'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'codigo'
+                            position: '2'
                         }
                     },
                     {
@@ -18421,6 +19167,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_rejeicao'
                             element: 'detalhe'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'c192d9a8d70449dfba8bb9e5c14e4c87'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'motivo_alteracao'
+                            position: '19'
                         }
                     },
                     {
@@ -18660,6 +19428,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'c564eba377474826bb7e332c2dc96732'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_controle'
+                            position: '10'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'c5662a330ea141c5bff41f069f8643d3'
                         key: {
@@ -18745,6 +19535,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'c642ef2628f44dcd9734e07e3507ddc6'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -19200,6 +19991,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'ce2389f53d804e049508e3d858195d2d'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'enviada_em'
+                            position: '8'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'ce64eeee29b9485288a842c3b1967046'
                         key: {
@@ -19245,6 +20058,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'cea85593276b4c0a8171745c286f1b50'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -19373,6 +20187,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'cf948819ebf947aba7305481b137fdbe'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicada_por'
+                            position: '17'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: 'd021c4cd5ffd4d37b308227f5d35bff0'
                         key: {
@@ -19477,6 +20313,28 @@ declare global {
                             name: 'x_2326104_cob_criterio'
                             element: 'comentarios'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd1ccf7e65e254f3c9f025c17d8a099c1'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'status'
+                            position: '7'
                         }
                     },
                     {
@@ -19865,6 +20723,28 @@ declare global {
                                     name: 'x_2326104_cob.atendente'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd6f45c3916d9466ba4b539842b0f3af0'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tentativas'
+                            position: '9'
                         }
                     },
                     {
@@ -20292,6 +21172,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'db6000f43f10412d9ec4ad8748283cbc'
+                        key: {
+                            sys_ui_section: {
+                                id: '84b5ece4aca24671bb37596f8a79ba8b'
+                                key: {
+                                    name: 'x_2326104_cob_comunicacao'
+                                    caption: 'Comunicação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ciclo'
+                            position: '4'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'db67100a457243019d251fdd69520487'
                         key: {
@@ -20635,6 +21537,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'dfe8baf785ad4e10a4fa27f7edbfa11e'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: 'e798be035f464aaeb760238c580a8d6b'
@@ -20664,7 +21567,30 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: 'e049d476b28f4fdebbff2407ee76ac55'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'pct_grupo_controle'
+                            position: '13'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: 'e06d1a7531044cc5a80b34f812d08b06'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -21312,6 +22238,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: 'ea316d5bfbd14fae99d76a76d7442600'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'versao'
+                            position: '3'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: 'ea583d710c794b41ab6566f556ff0045'
                         key: {
                             sys_ui_section: {
@@ -21373,6 +22321,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'ebb924d367134e578968b346251775df'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'publicado_por'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'ec022fd72fae470a8705df1fd7ad771e'
                         key: {
@@ -21422,6 +22379,28 @@ declare global {
                             name: 'x_2326104_cob_debito_stg'
                             element: 'falhar'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ed5185d13cf7481890c91c1c8ca355a0'
+                        key: {
+                            sys_ui_section: {
+                                id: 'e798be035f464aaeb760238c580a8d6b'
+                                key: {
+                                    name: 'x_2326104_cob_criterio'
+                                    caption: 'Versão do critério de qualificação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'estado'
+                            position: '4'
                         }
                     },
                     {
@@ -21789,6 +22768,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'f2d87024241d46cdb4fd4710117076cc'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '18'
+                        }
+                    },
+                    {
                         table: 'sys_ui_section'
                         id: 'f2e21c47d12840079f9ef5d9d74cd5d7'
                         key: {
@@ -21861,6 +22862,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'f3f506e365744eeb9ff6e2726d0cc617'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_elegiveis'
+                            position: '5'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'f434ee0365804e6f8e6724602e660645'
                         key: {
@@ -21876,6 +22899,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f493e89ff2f24464aca277932a663aac'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -21901,6 +22925,15 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_segmentacao'
                             element: 'segmento'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'f5516a0ff119443ebcd5ecf928826d62'
+                        key: {
+                            name: 'x_2326104_cob_comunicacao'
+                            element: 'ciclo'
+                            language: 'en'
                         }
                     },
                     {
@@ -22134,6 +23167,14 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'f987f0fd86b348808662dfcb272933ce'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'qtd_elegiveis'
                         }
                     },
                     {
@@ -22643,6 +23684,28 @@ declare global {
                                 }
                             }
                             element: 'comunicacao'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'fddaf1b12558463e97e974db0f5d849b'
+                        key: {
+                            sys_ui_section: {
+                                id: '862e50358817424cbe1b033aadea8c1e'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo de qualificação (prévia)'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_sem_score'
+                            position: '11'
                         }
                     },
                     {

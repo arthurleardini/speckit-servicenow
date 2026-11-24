@@ -211,6 +211,19 @@ export function normalizarModelo(modelo, escopo) {
     if (t.role) t.role = roles.find((r) => r.short === t.role || r.name === t.role)?.short ?? t.role;
   }
 
+  // Usuários demo: 1 por role (demo.<role>) mais a lista opcional `demoUsers: [{ user, role }]`.
+  const usuarios = roles.map((r) => ({ user: `demo.${r.short}`, chave: `usuario_demo_${r.short}`, role: r.short, label: r.label }));
+  for (const [i, u] of (Array.isArray(modelo.demoUsers) ? modelo.demoUsers : []).entries()) {
+    const user = String(u?.user ?? '');
+    const role = roles.find((r) => r.short === u?.role || r.name === u?.role);
+    if (!/^demo\.[a-z0-9_.]+$/.test(user)) { erros.push(`demoUsers[${i}]: user "${user}" fora do padrão demo.<nome>`); continue; }
+    if (!role) { erros.push(`demoUsers[${i}] (${user}): role "${u?.role}" não está em roles`); continue; }
+    if (usuarios.some((x) => x.user === user)) { erros.push(`demoUsers[${i}]: usuário ${user} repetido`); continue; }
+    const short = user.slice('demo.'.length).replace(/\./g, '_');
+    const n = usuarios.filter((x) => x.role === role.short).length + 1;
+    usuarios.push({ user, chave: `usuario_demo_${short}`, role: role.short, label: u.label ?? `${role.label} ${n}` });
+  }
+
   // Tabelas com tela de form ganham journal_input e audit.
   const comForm = new Set(telas.filter((t) => t.type === 'form').map((t) => t.table));
   for (const { ent } of entidades) {
@@ -225,7 +238,7 @@ export function normalizarModelo(modelo, escopo) {
 
   if (erros.length) throw new Error(`modelo inválido:\n  - ${erros.join('\n  - ')}`);
   const modules = Array.isArray(modelo.modules) ? modelo.modules : null;
-  return { escopo, entidades: entidades.map((x) => x.ent), telas, roles, modules };
+  return { escopo, entidades: entidades.map((x) => x.ent), telas, roles, usuarios, modules };
 }
 
 // ——— Valores fictícios ———
@@ -274,7 +287,7 @@ function corta(valor, col) {
 const ref = (tabela, chave) => ({ __ref: [tabela, chave] });
 
 function valorColuna(ctx, ent, col, n) {
-  const { rng, usados, documentos, chavesPorTabela, roles } = ctx;
+  const { rng, usados, documentos, chavesPorTabela, usuarios } = ctx;
   switch (col.type) {
     case 'journal':
     case 'journal_input':
@@ -294,7 +307,15 @@ function valorColuna(ctx, ent, col, n) {
       return `${data(rng)} ${String(rng.int(8, 18)).padStart(2, '0')}:${String(rng.int(0, 59)).padStart(2, '0')}:00`;
     case 'reference': {
       if (chavesPorTabela.has(col.reference)) return ref(col.reference, rng.pick(chavesPorTabela.get(col.reference)));
-      if (col.reference === 'sys_user') return ref('sys_user', `usuario_demo_${rng.pick(roles).short}`);
+      if (col.reference === 'sys_user') {
+        // Coluna com nome de role (ex.: `atendente`) distribui os registros entre os usuários demo desse
+        // role, em rodízio pelo número do registro: é a carteira de cada um.
+        // O sorteio acontece sempre, para não deslocar os valores das colunas seguintes.
+        const sorteado = rng.pick(ctx.roles).short;
+        const doRole = usuarios.filter((u) => u.role === col.name);
+        if (doRole.length) return ref('sys_user', doRole[(n - 1) % doRole.length].chave);
+        return ref('sys_user', usuarios.find((u) => u.role === sorteado).chave);
+      }
       return undefined;
     }
     default: {
@@ -353,6 +374,7 @@ export function gerarSeed(modeloNorm, { porTabela = POR_TABELA_PADRAO, semente =
     throw new Error(`--por-tabela precisa estar entre 1 e ${POR_TABELA_MAX}`);
   }
   const { entidades, telas, roles } = modeloNorm;
+  const usuariosDemo = modeloNorm.usuarios ?? roles.map((r) => ({ user: `demo.${r.short}`, chave: `usuario_demo_${r.short}`, role: r.short, label: r.label }));
   const documentos = [];
   const usados = new Set();
   const contagem = { tabelas: {}, extras: [] };
@@ -369,7 +391,7 @@ export function gerarSeed(modeloNorm, { porTabela = POR_TABELA_PADRAO, semente =
   const journal = [];
   for (const ent of entidades) {
     const rng = criarPrng(hash32(`${semente}:${ent.name}`));
-    const ctx = { rng, usados, documentos, chavesPorTabela, roles, chaveAtual: null };
+    const ctx = { rng, usados, documentos, chavesPorTabela, roles, usuarios: usuariosDemo, chaveAtual: null };
     const registros = [];
     const preferida = colPreferida(ent);
     const gerar = (chave, n, demoTel) => {
@@ -400,25 +422,26 @@ export function gerarSeed(modeloNorm, { porTabela = POR_TABELA_PADRAO, semente =
     contagem.tabelas[ent.name] = registros.length;
   }
 
-  // Usuários demo, um por role, sem senha.
+  // Usuários demo: um por role, mais os de `demoUsers`, todos sem senha.
   const usuarios = [];
-  for (const r of roles) {
+  for (const u of usuariosDemo) {
+    const r = roles.find((x) => x.short === u.role);
     usuarios.push({
-      chave: `usuario_demo_${r.short}`,
+      chave: u.chave,
       tabela: 'sys_user',
-      dados: { user_name: `demo.${r.short}`, first_name: 'Demo', last_name: r.label, active: true },
+      dados: { user_name: u.user, first_name: 'Demo', last_name: u.label, active: true },
     });
     usuarios.push({
-      chave: `usuario_demo_${r.short}_role`,
+      chave: `${u.chave}_role`,
       tabela: 'sys_user_has_role',
-      dados: { user: ref('sys_user', `usuario_demo_${r.short}`), role: { __ref: ['sys_user_role', { name: r.name }] } },
+      dados: { user: ref('sys_user', u.chave), role: { __ref: ['sys_user_role', { name: r.name }] } },
     });
   }
   arquivos['_usuarios.now.ts'] = arquivoTs(usuarios);
   contagem.extras.push({
     tabela: 'sys_user',
-    query: `user_nameIN${roles.map((r) => `demo.${r.short}`).join(',')}`,
-    esperado: roles.length,
+    query: `user_nameIN${usuariosDemo.map((u) => u.user).join(',')}`,
+    esperado: usuariosDemo.length,
   });
 
   if (journal.length) {

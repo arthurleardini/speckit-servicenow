@@ -138,13 +138,14 @@ padrão).
 | `choices` | lista de `{ value, label }`, lista de strings ou objeto `{ valor: rótulo }` |
 | `screens[]` | `id` no padrão `TEL-`, `table` do modelo, `type` `form`, `list` ou `report`, `role` de `roles` |
 | `roles` | sufixos; viram `<escopo>.<sufixo>`. Sem o campo, `coordenador`, `atendente` e `admin` |
+| `demoUsers` | opcional. `[{ "user": "demo.atendente2", "role": "atendente", "label": "Atendente B" }]`: usuário demo a mais, além do `demo.<role>`. `user` começa com `demo.`; `role` está em `roles` |
 
 ## O que é gerado (`app/src/fluent/seed/`)
 
 | Arquivo | Conteúdo |
 |---|---|
 | `<sufixo>.now.ts` | N registros `seed_<sufixo>_<nnn>` + 1 registro `Now.ID['<TEL>_registro_demo']` por tela de form da tabela |
-| `_usuarios.now.ts` | `sys_user` `demo.<role>` (sem senha) e o `sys_user_has_role` de cada um |
+| `_usuarios.now.ts` | `sys_user` `demo.<role>` e os de `demoUsers` (sem senha), e o `sys_user_has_role` de cada um |
 | `_journal.now.ts` | 2 ou 3 linhas em `sys_journal_field` por registro demo, na primeira coluna `journal_input` |
 | `_documentos.json` | todo CPF e CNPJ gerado, com tabela, coluna e `$id` |
 | `_contagem.json` | contagem esperada por tabela e os extras (usuários demo; journal como mínimo) |
@@ -155,7 +156,8 @@ Regras dos valores:
 - coluna de nome em tabela com CNPJ recebe razão social fictícia; nas demais, nome de pessoa fictício;
 - e-mail em `@exemplo.invalid`, telefone com DDD `00`;
 - referência a tabela do modelo aponta para um registro do seed (`Now.ref(tabela, chave)`);
-  referência a `sys_user` aponta para um usuário demo;
+  referência a `sys_user` aponta para um usuário demo; se a coluna tem o nome de um role (ex.: `atendente`),
+  os registros se distribuem em rodízio entre os usuários demo desse role (a carteira de cada um);
 - tabela com tela de form recebe, na normalização, a coluna `comentarios` (`journal_input`) e `audit`,
   como o `sn-scaffold` gera.
 

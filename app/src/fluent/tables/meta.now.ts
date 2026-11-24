@@ -29,6 +29,6 @@ export const x_2326104_cob_meta = Table({
             "atendimento": { label: "Atendimento", sequence: 5 },
         }, dropdown: 'dropdown_with_none' }),
         periodo: DateColumn({ label: "Período" }),
-        valor_meta: DecimalColumn({ label: "Valor da meta" }),
+        valor_meta: DecimalColumn({ label: "Valor da meta", mandatory: true }),
     },
 })

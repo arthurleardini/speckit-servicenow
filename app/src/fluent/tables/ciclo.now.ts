@@ -1,6 +1,6 @@
 // gerado por sn-scaffold — regerar com scaffold.mjs; mudança à mão se perde
 import '@servicenow/sdk/global'
-import { ChoiceColumn, DateColumn, DecimalColumn, GenericColumn, IntegerColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
+import { ChoiceColumn, DateColumn, DateTimeColumn, DecimalColumn, GenericColumn, IntegerColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 
 export const x_2326104_cob_ciclo = Table({
     name: "x_2326104_cob_ciclo",
@@ -17,6 +17,8 @@ export const x_2326104_cob_ciclo = Table({
             "publicado": { label: "Publicado", sequence: 1 },
             "encerrado": { label: "Encerrado", sequence: 2 },
         }, dropdown: 'dropdown_with_none' }),
+        qtd_elegiveis: IntegerColumn({ label: "Elegíveis" }),
+        semente_sorteio: IntegerColumn({ label: "Semente do sorteio" }),
         qtd_massificada: IntegerColumn({ label: "Massificada" }),
         qtd_qualificada: IntegerColumn({ label: "Qualificada" }),
         qtd_controle: IntegerColumn({ label: "Grupo de controle" }),
@@ -24,6 +26,8 @@ export const x_2326104_cob_ciclo = Table({
         taxa_cobrada: DecimalColumn({ label: "Taxa da carteira cobrada (%)" }),
         taxa_controle: DecimalColumn({ label: "Taxa do grupo de controle (%)" }),
         efeito_incremental: DecimalColumn({ label: "Efeito incremental (p.p.)" }),
+        publicado_em: DateTimeColumn({ label: "Publicado em" }),
+        publicado_por: ReferenceColumn({ label: "Publicado por", referenceTable: "sys_user" }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

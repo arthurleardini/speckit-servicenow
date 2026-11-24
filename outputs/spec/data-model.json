@@ -3032,5 +3032,12 @@
     "coordenador",
     "atendente",
     "admin"
+  ],
+  "demoUsers": [
+    {
+      "user": "demo.atendente2",
+      "role": "atendente",
+      "label": "Atendente B"
+    }
   ]
 }

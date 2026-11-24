@@ -17,7 +17,7 @@ export const x_2326104_cob_interacao = Table({
             "presencial": { label: "Presencial", sequence: 2 },
             "dte": { label: "DT-e", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        resultado: ChoiceColumn({ label: "Resultado", choices: {
+        resultado: ChoiceColumn({ label: "Resultado", mandatory: true, choices: {
             "contato_efetivo": { label: "Contato efetivo", sequence: 0 },
             "sem_contato": { label: "Sem contato", sequence: 1 },
             "promessa_pagamento": { label: "Promessa de pagamento", sequence: 2 },

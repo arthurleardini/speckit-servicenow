@@ -114,3 +114,29 @@ test('gravarSeed grava os .now.ts e os dois JSON, e remove arquivo gerado que sa
   assert.ok(nomes.includes('manual.now.ts'));
   assert.equal(JSON.parse(readFileSync(join(dir, '_contagem.json'), 'utf8')).porTabela, 3);
 });
+
+test('demoUsers: usuário extra por role e carteira distribuída em rodízio entre os usuários do role', () => {
+  const modelo = { ...MODELO, demoUsers: [{ user: 'demo.atendente2', role: 'atendente' }] };
+  const r = gerarSeed(normalizarModelo(modelo, ESCOPO), { porTabela: 10 });
+  const users = r.arquivos['_usuarios.now.ts'];
+  assert.match(users, /user_name: "demo\.atendente2"/);
+  assert.match(users, /Now\.ID\["usuario_demo_atendente2_role"\]/);
+  const extra = r.contagem.extras.find((e) => e.tabela === 'sys_user');
+  assert.equal(extra.esperado, 3);
+  assert.match(extra.query, /demo\.atendente2/);
+  const empresa = r.arquivos['empresa.now.ts'];
+  const a1 = (empresa.match(/atendente: Now\.ref\("sys_user", "usuario_demo_atendente"\)/g) ?? []).length;
+  const a2 = (empresa.match(/atendente: Now\.ref\("sys_user", "usuario_demo_atendente2"\)/g) ?? []).length;
+  assert.equal(a1 + a2, 11);
+  assert.ok(a1 >= 5 && a2 >= 5, `${a1}/${a2}`);
+  // Sem demoUsers, a coluna com nome de role aponta sempre para o único usuário do role.
+  const sem = gerarSeed(normalizarModelo(MODELO, ESCOPO), { porTabela: 10 }).arquivos['empresa.now.ts'];
+  assert.doesNotMatch(sem, /usuario_demo_atendente2/);
+});
+
+test('demoUsers inválido: role desconhecido, nome fora do padrão ou repetido', () => {
+  const com = (demoUsers) => ({ ...MODELO, demoUsers });
+  assert.throws(() => normalizarModelo(com([{ user: 'demo.x', role: 'gerente' }]), ESCOPO), /não está em roles/);
+  assert.throws(() => normalizarModelo(com([{ user: 'fulano', role: 'atendente' }]), ESCOPO), /fora do padrão/);
+  assert.throws(() => normalizarModelo(com([{ user: 'demo.atendente', role: 'atendente' }]), ESCOPO), /repetido/);
+});

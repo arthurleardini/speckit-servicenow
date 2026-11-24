@@ -19,7 +19,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_020"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_027"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -40,7 +40,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_014"),
         caso: Now.ref("x_2326104_cob_caso", "TEL-024_registro_demo"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -82,7 +82,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_044"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_015"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -103,7 +103,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_050"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_042"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -124,7 +124,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_045"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_001"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -166,7 +166,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_003"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_009"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -187,7 +187,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_014"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -208,7 +208,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_026"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_037"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -229,7 +229,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_005"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_037"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -250,7 +250,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_001"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_019"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -271,7 +271,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_026"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_050"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -292,7 +292,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_034"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -313,7 +313,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_032"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -334,7 +334,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_044"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_050"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -376,7 +376,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_011"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_022"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -397,7 +397,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_033"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_024"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -418,7 +418,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_015"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_013"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -439,7 +439,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_006"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_015"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -460,7 +460,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_013"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_045"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -481,7 +481,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_048"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_046"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -502,7 +502,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_042"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -523,7 +523,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_007"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_039"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -544,7 +544,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_027"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_023"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -586,7 +586,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_042"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_010"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -607,7 +607,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_014"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_004"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -628,7 +628,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_025"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_002"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -670,7 +670,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_050"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_007"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -691,7 +691,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_020"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_021"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -712,7 +712,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_035"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_002"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -733,7 +733,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_007"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_032"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -754,7 +754,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_003"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_032"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -775,7 +775,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_044"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_049"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -796,7 +796,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_004"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_025"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -817,7 +817,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_023"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_014"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -838,7 +838,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_035"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_014"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -859,7 +859,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_035"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_003"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -880,7 +880,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_010"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -922,7 +922,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_034"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_019"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -964,7 +964,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_038"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_050"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -985,7 +985,7 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_036"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_010"),
-        atendente: Now.ref("sys_user", "usuario_demo_coordenador"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
     },
 })
 
@@ -1006,7 +1006,7 @@ Record({
         grupo_controle: true,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_014"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
-        atendente: Now.ref("sys_user", "usuario_demo_atendente"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })
 
@@ -1048,6 +1048,6 @@ Record({
         grupo_controle: false,
         comunicacao: Now.ref("x_2326104_cob_comunicacao", "seed_comunicacao_008"),
         caso: Now.ref("x_2326104_cob_caso", "seed_caso_042"),
-        atendente: Now.ref("sys_user", "usuario_demo_admin"),
+        atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
     },
 })

@@ -28,8 +28,8 @@
   "extras": [
     {
       "tabela": "sys_user",
-      "query": "user_nameINdemo.coordenador,demo.atendente,demo.admin",
-      "esperado": 3
+      "query": "user_nameINdemo.coordenador,demo.atendente,demo.admin,demo.atendente2",
+      "esperado": 4
     },
     {
       "tabela": "sys_journal_field",

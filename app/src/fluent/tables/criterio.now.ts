@@ -10,6 +10,7 @@ export const x_2326104_cob_criterio = Table({
     allowWebServiceAccess: true,
     schema: {
         nome: StringColumn({ label: "Nome", mandatory: true, maxLength: 100 }),
+        codigo: StringColumn({ label: "Código do critério", maxLength: 40 }),
         versao: IntegerColumn({ label: "Versão" }),
         estado: ChoiceColumn({ label: "Estado", mandatory: true, choices: {
             "rascunho": { label: "Rascunho", sequence: 0 },
@@ -34,6 +35,7 @@ export const x_2326104_cob_criterio = Table({
             "maior_debito_mais_antigo": { label: "Maior débito, depois o mais antigo", sequence: 0 },
         }, dropdown: 'dropdown_with_none' }),
         versao_anterior: ReferenceColumn({ label: "Versão anterior", referenceTable: "x_2326104_cob_criterio" }),
+        motivo_alteracao: StringColumn({ label: "Motivo da nova versão", maxLength: 255 }),
         publicada_em: DateTimeColumn({ label: "Publicada em" }),
         publicada_por: ReferenceColumn({ label: "Publicada por", referenceTable: "sys_user" }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),

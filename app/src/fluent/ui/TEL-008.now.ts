@@ -9,8 +9,8 @@ Form({
         {
             caption: "Versão do critério de qualificação",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "nome", type: 'table_field' }, { field: "versao", type: 'table_field' }, { field: "estado", type: 'table_field' }, { field: "tributo", type: 'table_field' }, { field: "valor_minimo", type: 'table_field' }, { field: "atraso_minimo_dias", type: 'table_field' }, { field: "instrumento", type: 'table_field' }, { field: "excluir_contumaz", type: 'table_field' }], rightElements: [{ field: "usar_score", type: 'table_field' }, { field: "threshold_score", type: 'table_field' }, { field: "pct_grupo_controle", type: 'table_field' }, { field: "desempate", type: 'table_field' }, { field: "versao_anterior", type: 'table_field' }, { field: "publicada_em", type: 'table_field' }, { field: "publicada_por", type: 'table_field' }] },
-                { layout: 'one-column', elements: [{ field: "comentarios", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "nome", type: 'table_field' }, { field: "codigo", type: 'table_field' }, { field: "versao", type: 'table_field' }, { field: "estado", type: 'table_field' }, { field: "tributo", type: 'table_field' }, { field: "valor_minimo", type: 'table_field' }, { field: "atraso_minimo_dias", type: 'table_field' }, { field: "instrumento", type: 'table_field' }], rightElements: [{ field: "excluir_contumaz", type: 'table_field' }, { field: "usar_score", type: 'table_field' }, { field: "threshold_score", type: 'table_field' }, { field: "pct_grupo_controle", type: 'table_field' }, { field: "desempate", type: 'table_field' }, { field: "versao_anterior", type: 'table_field' }, { field: "publicada_em", type: 'table_field' }, { field: "publicada_por", type: 'table_field' }] },
+                { layout: 'one-column', elements: [{ field: "motivo_alteracao", type: 'table_field' }, { field: "comentarios", type: 'table_field' }] },
             ],
         },
         {
