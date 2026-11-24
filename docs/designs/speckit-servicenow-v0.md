@@ -1,7 +1,7 @@
 # Speckit ServiceNow v0
 
 *   **Author:** arthurleardini
-*   **Status:** Proposed (v0.2, revisão EGM aplicada)
+*   **Status:** Implementado (v0.2) — branch `feat/v0`, ver `ORIGEM.md` e `outputs/spec/demo/roteiro.md`
 *   **Date:** 2026-11-24
 
 --------------------------------------------------------------------------------

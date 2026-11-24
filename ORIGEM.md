@@ -8,7 +8,7 @@
 
 ## Modo do repositório
 
-Template até o fim do estágio 2: sem lock e com o marcador `.harness-template`, que não vai para o git e é criado no terminal. No fim do estágio 2, o manifesto é gerado uma vez (item 35) e o marcador sai.
+Clone desde 2026-11-24, depois do Deliver do fio condutor: o manifesto `harness-zona.lock.json` foi gerado uma vez (item 35, `montarManifesto` sobre os arquivos versionados, 406 arquivos na zona) e o marcador `.harness-template` saiu. `node .claude/ferramentas/verificar-zona.mjs` confere a zona. Para alterar o kit de novo, recriar `.harness-template` no terminal, alterar, regerar o manifesto e remover o marcador.
 
 ## Remoções
 
