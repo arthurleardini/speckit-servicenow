@@ -141,19 +141,16 @@ export async function executar(args) {
 
   let nav = null;
   let usouRunner = false;
-  // Story: um runner novo por teste. O runner agendado que fica minutos ocioso enquanto os testes de
-  // servidor rodam deixa o primeiro teste de form pendurado até o timeout de 600 s (Deliver, 2026-11-24).
+  // Story: um runner só, aberto no primeiro Test() com passo de UI e mantido até o fim. Fechar e abrir
+  // um runner por teste deixava o teste seguinte atribuído ao agente recém-fechado, que a instância
+  // ainda via online — e o teste esperava até o timeout de 600 s (Deliver, 2026-11-24).
   if (precisaRunner && alvo.tipo !== 'story') { nav = await abrirRunner(); usouRunner = true; }
   try {
     if (alvo.tipo === 'story') {
       for (const t of testes) {
-        if (precisaRunner && (args['com-runner'] || temPassoUi(fonteStory, t.chave))) { nav = await abrirRunner(); usouRunner = true; }
-        try {
-          console.log(`atf: rodando ${t.chave} (${t.sysId})`);
-          execucoes.push({ chave: t.chave, sys_id: t.sysId, ...await rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
-        } finally {
-          if (nav) { await nav.close(); nav = null; }
-        }
+        if (!nav && precisaRunner && (args['com-runner'] || temPassoUi(fonteStory, t.chave))) { nav = await abrirRunner(); usouRunner = true; }
+        console.log(`atf: rodando ${t.chave} (${t.sysId})`);
+        execucoes.push({ chave: t.chave, sys_id: t.sysId, ...await rodar(['cicd', 'test', 'run', '--test-sys-id', t.sysId]) });
       }
     } else if (alvo.tipo === 'suite') {
       const [s] = await buscar('sys_atf_test_suite', `name=${alvo.nome}`, 'sys_id,name', 2);
