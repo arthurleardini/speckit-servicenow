@@ -184,15 +184,18 @@ export const t_ux004_neg = Test({
         return p.getUniqueValue();
     }
     describe('Distribuição recusada', function() {
+        // Os dois cliques rodam antes dos casos (o Jasmine embaralha a ordem dos it).
         var c = ciclo('UX-004 neg');
+        var primeiro = new QualificacaoCiclo().distribuir(c);
+        var lido = new GlideRecord('x_2326104_cob_ciclo');
+        lido.get(c.getUniqueValue());
+        var segundo = new QualificacaoCiclo().distribuir(lido);
+        var depois = contatos(c.getUniqueValue(), '');
         it('segundo clique não duplica', function() {
-            expect(new QualificacaoCiclo().distribuir(c).ok).toBe(true);
-            var lido = new GlideRecord('x_2326104_cob_ciclo');
-            lido.get(c.getUniqueValue());
-            var r = new QualificacaoCiclo().distribuir(lido);
-            expect(r.ok).toBe(false);
-            expect(r.mensagem).toBe('Operação recusada: ciclo já distribuído ou não publicado.');
-            expect(contatos(c.getUniqueValue(), '')).toBe(3);
+            expect(primeiro.ok).toBe(true);
+            expect(segundo.ok).toBe(false);
+            expect(segundo.mensagem).toBe('Operação recusada: ciclo já distribuído ou não publicado.');
+            expect(depois).toBe(3);
         });
         it('contato para contribuinte do grupo de controle é recusado; da massificada, gravado', function() {
             var k = new GlideRecord('x_2326104_cob_contato');
