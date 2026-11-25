@@ -33,7 +33,7 @@ ContatoLigacao.MSG_NAO_GRAVOU = 'A ligação não foi registrada. Confira a mens
 ContatoLigacao.MSG_NAO_ENCERROU = 'O contato não foi encerrado. Confira a mensagem acima e tente de novo.';
 ContatoLigacao.MSG_SEM_MOTIVO = 'Operação recusada: informe o motivo de encerramento.';
 ContatoLigacao.MOTIVOS = { regularizado: 'Regularizado', contato_realizado: 'Contato realizado', sem_contato: 'Sem contato', recusa: 'Recusa', outro: 'Outro' };
-ContatoLigacao.ROTULO_STATUS ={ a_ligar: 'A ligar', ligado: 'Ligado', retornar: 'Retornar', encerrado: 'Encerrado' };
+ContatoLigacao.ROTULO_STATUS = { a_ligar: 'A ligar', ligado: 'Ligado', retornar: 'Retornar', encerrado: 'Encerrado' };
 
 ContatoLigacao.prototype = {
     initialize: function () {},
@@ -115,11 +115,11 @@ ContatoLigacao.prototype = {
     encerrar: function (contato, motivo) {
         var recusa = this._recusaBasica(contato);
         if (recusa) {
-            return this._recusar(contato, recusa);
+            return this._recusar(contato, recusa, 'RF-MOD-UX-003_ua_encerrar_contato');
         }
         motivo = String(motivo || '');
-        if (!ContatoLigacao.MOTIVOS[motivo]) {
-            return this._recusar(contato, ContatoLigacao.MSG_SEM_MOTIVO);
+        if (!ContatoLigacao.MOTIVOS.hasOwnProperty(motivo)) {
+            return this._recusar(contato, ContatoLigacao.MSG_SEM_MOTIVO, 'RF-MOD-UX-003_ua_encerrar_contato');
         }
         contato.setValue('status', 'encerrado');
         contato.setValue('motivo_encerramento', motivo);
@@ -200,8 +200,8 @@ ContatoLigacao.prototype = {
         return gs.hasRole(escopo + '.atendente') || gs.hasRole(escopo + '.coordenador') || gs.hasRole(escopo + '.admin');
     },
 
-    _recusar: function (contato, mensagem) {
-        gs.warn('RF-MOD-UX-002: verbo do contato recusado; contato ' + (contato ? contato.getUniqueValue() : '') + ', usuário ' + gs.getUserID() + ' — ' + mensagem);
+    _recusar: function (contato, mensagem, origem) {
+        gs.warn((origem || 'RF-MOD-UX-002_ua_registrar_ligacao') + ': verbo do contato recusado; contato ' + (contato ? contato.getUniqueValue() : '') + ', usuário ' + gs.getUserID() + ' — ' + mensagem);
         return { ok: false, mensagem: mensagem };
     },
 
