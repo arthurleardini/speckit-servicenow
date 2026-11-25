@@ -6,12 +6,12 @@
     "66ca04ef1bfa469e98fed2e267b0976f"
   ],
   "resultId": [
-    "3e71758d93b017107a57f7c4b503d6e8",
-    "f081798d93b017107a57f7c4b503d62b"
+    "6309fd0593b417107a57f7c4b503d640",
+    "1119f14593b417107a57f7c4b503d607"
   ],
   "status": "success",
-  "horario": "2026-11-25T03:00:25.737Z",
-  "commit": "b4e03b3cdccee0105c690002ab0841a55f1abe0f",
+  "horario": "2026-11-25T03:33:31.606Z",
+  "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
   "runner": false,
   "testes": [
     {
@@ -20,9 +20,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "3e71758d93b017107a57f7c4b503d6e8",
+      "resultId": "6309fd0593b417107a57f7c4b503d640",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=3e71758d93b017107a57f7c4b503d6e8"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=6309fd0593b417107a57f7c4b503d640"
     },
     {
       "chave": "US-MOD-UX-003_atf_encerrar_negativo",
@@ -30,9 +30,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "f081798d93b017107a57f7c4b503d62b",
+      "resultId": "1119f14593b417107a57f7c4b503d607",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f081798d93b017107a57f7c4b503d62b"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1119f14593b417107a57f7c4b503d607"
     }
   ]
 }

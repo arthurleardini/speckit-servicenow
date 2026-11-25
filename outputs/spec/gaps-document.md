@@ -667,6 +667,73 @@ As mensagens «Operação recusada: dossiê em 3 níveis (premissa).» e «… v
 **Opções identificadas:**
 1. Reescrever as mensagens na spec e no código.
 
+### GAP-149 — Moeda em R$ nos campos currency (polimento UX v1)
+
+**Área:** MOD-UX
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-001-01
+
+**Descrição:**
+Os campos `currency` mostram US$: a instância tem `glide.i18n.single_currency.code = USD` e o BRL inativo em `fx_currency`. O Fluent não fixa a moeda por campo; o código da moeda vai no valor (`BRL;1234,56`) e exige o BRL ativo. As duas saídas mexem em configuração global da instância.
+
+**Opções identificadas:**
+1. Ativar o BRL em `fx_currency` e gravar os valores do seed como `BRL;<valor>`.
+2. Trocar `currency` por `decimal` com rótulo «(R$)» no data-model (os rótulos já trazem «(R$)»).
+
+### GAP-150 — «Registrar ligação» lê o resultado do campo «Último resultado» (BUG-001 da US-MOD-UX-002)
+
+**Área:** MOD-UX
+**Impacto:** Média
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-UX-002-01
+
+**Descrição:**
+O form traz o resultado da ligação anterior; se o atendente não trocar, o verbo usa o resultado antigo. Repetir o mesmo resultado (sem contato duas vezes) é o caso comum, então recusar valor inalterado também não serve.
+
+**Opções identificadas:**
+1. Campo próprio «Resultado desta ligação» no contato, limpo depois de cada registro.
+2. Diálogo do botão com o resultado e a anotação.
+
+### GAP-151 — ATF não clica os botões cliente + servidor (TEST-001 das US-MOD-UX-002, 003 e 005)
+
+**Área:** MOD-UX
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-002-01, TASK-MOD-UX-003-01, TASK-MOD-UX-005-02
+
+**Descrição:**
+As regras estão provadas no Script Include e a visibilidade dos botões no form; o clique (setMandatory, leitura de Comentários, retorno por `proxima_acao_em.changes()`) foi exercido só pelo script de prints `outputs/spec/screens/ux-v1/acoes.mjs`.
+
+**Opções identificadas:**
+1. Teste de form com `clickUIAction` e validação do registro.
+
+### GAP-152 — Encerrar caso e ordem das etapas valem só nos botões (SEC-001 da US-MOD-UX-005)
+
+**Área:** MOD-UX
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-005-02
+
+**Descrição:**
+O coordenador grava `estagio=encerrado` sem motivo, ou pula etapa, pelo form, lista ou API. O contato já recusa encerramento sem motivo por business rule.
+
+**Opções identificadas:**
+1. Business rule before update no caso: encerrado exige motivo; estágio só anda uma etapa por vez.
+
+### GAP-153 — Ressalvas baixas das auditorias UX-002..006
+
+**Área:** MOD-UX
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-002..006
+
+**Descrição:**
+Itens baixos registrados nos relatórios `outputs/spec/auditorias/US-MOD-UX-00{2..6}.md`: retorno no passado aceito; dois cliques simultâneos em «Distribuir lista» ou «Registrar ligação»; rodízio sem considerar carga; laço síncrono na distribuição; logs de recusa por papel; dono da interação conferido pelo valor novo; autoria (`interacao.atendente`) livre na criação por lista/API; motivo exigido em todo update de contato encerrado; troca manual do atendente do contato sem acompanhar o contribuinte; ACL de delete do contato implícita; mapa de etapa_ordem repetido no seed; caso grava o `current` do form nos botões.
+
+**Opções identificadas:**
+1. Tratar em lote numa story de endurecimento antes da demo.
+
 ---
 
 ## Respostas
@@ -954,6 +1021,36 @@ As mensagens «Operação recusada: dossiê em 3 níveis (premissa).» e «… v
 **Impacto na task:** _(a preencher)_
 
 ### GAP-148
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-149
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-150
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-151
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-152
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-153
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

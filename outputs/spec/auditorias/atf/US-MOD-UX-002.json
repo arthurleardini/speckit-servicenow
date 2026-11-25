@@ -10,16 +10,16 @@
     "5e49bda29b4e40cb90bdaddb07701ae0"
   ],
   "resultId": [
-    "8300bd4593b017107a57f7c4b503d608",
-    "4910fd4593b017107a57f7c4b503d6e5",
-    "ae10b18593b017107a57f7c4b503d675",
-    "8820f58593b017107a57f7c4b503d6f4",
-    "91203d8593b017107a57f7c4b503d654",
-    "4f3039c593b017107a57f7c4b503d6aa"
+    "e1c831c193b417107a57f7c4b503d666",
+    "b6c871c193b417107a57f7c4b503d650",
+    "84d835c193b417107a57f7c4b503d69e",
+    "65d8b9c193b417107a57f7c4b503d615",
+    "1bd8710593b417107a57f7c4b503d683",
+    "40f8390593b417107a57f7c4b503d6ae"
   ],
   "status": "success",
-  "horario": "2026-11-25T02:55:17.504Z",
-  "commit": "62dbed8a3d992bebd7ed68288954bc1b5a8c2d1b",
+  "horario": "2026-11-25T03:33:17.063Z",
+  "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
   "runner": true,
   "testes": [
     {
@@ -28,9 +28,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "8300bd4593b017107a57f7c4b503d608",
+      "resultId": "e1c831c193b417107a57f7c4b503d666",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=8300bd4593b017107a57f7c4b503d608"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=e1c831c193b417107a57f7c4b503d666"
     },
     {
       "chave": "US-MOD-UX-002_atf_sem_contato_positivo",
@@ -38,9 +38,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "4910fd4593b017107a57f7c4b503d6e5",
+      "resultId": "b6c871c193b417107a57f7c4b503d650",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4910fd4593b017107a57f7c4b503d6e5"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=b6c871c193b417107a57f7c4b503d650"
     },
     {
       "chave": "US-MOD-UX-002_atf_recusa_contato_efetivo_positivo",
@@ -48,9 +48,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "ae10b18593b017107a57f7c4b503d675",
+      "resultId": "84d835c193b417107a57f7c4b503d69e",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=ae10b18593b017107a57f7c4b503d675"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=84d835c193b417107a57f7c4b503d69e"
     },
     {
       "chave": "US-MOD-UX-002_atf_registrar_negativo",
@@ -58,9 +58,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "8820f58593b017107a57f7c4b503d6f4",
+      "resultId": "65d8b9c193b417107a57f7c4b503d615",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=8820f58593b017107a57f7c4b503d6f4"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=65d8b9c193b417107a57f7c4b503d615"
     },
     {
       "chave": "US-MOD-UX-002_atf_interacao_um_pai_negativo",
@@ -68,9 +68,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "91203d8593b017107a57f7c4b503d654",
+      "resultId": "1bd8710593b417107a57f7c4b503d683",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=91203d8593b017107a57f7c4b503d654"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1bd8710593b417107a57f7c4b503d683"
     },
     {
       "chave": "US-MOD-UX-002_atf_ui_registrar_ligacao",
@@ -78,9 +78,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "4f3039c593b017107a57f7c4b503d6aa",
+      "resultId": "40f8390593b417107a57f7c4b503d6ae",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4f3039c593b017107a57f7c4b503d6aa"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=40f8390593b417107a57f7c4b503d6ae"
     }
   ]
 }

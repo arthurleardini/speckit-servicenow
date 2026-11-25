@@ -1,0 +1,49 @@
+{
+  "verificadoEm": "2026-11-25T03:37:42.863Z",
+  "acoes": [
+    {
+      "acao": "Registrar ligação",
+      "usuario": "demo.atendente",
+      "antes": {
+        "motivo_encerramento": "",
+        "proxima_acao_em": "2026-11-24",
+        "tentativas": "0",
+        "ultimo_resultado": "",
+        "status": "a_ligar"
+      },
+      "depois": {
+        "proxima_acao_em": "2026-12-01",
+        "tentativas": "1",
+        "status": "ligado"
+      },
+      "mensagens": [
+        "Ligação registrada. Status: Ligado; próxima ação em 01/12/2026."
+      ]
+    },
+    {
+      "acao": "Distribuir lista",
+      "usuario": "demo.coordenador",
+      "depois": {
+        "distribuido_em": "2026-11-25 03:38:01",
+        "qtd_contatos": "3"
+      },
+      "mensagens": [
+        "Lista distribuída: 3 contatos — Demo Atendente B: 1; Demo Atendente: 2."
+      ]
+    },
+    {
+      "acao": "Avançar etapa",
+      "usuario": "demo.coordenador",
+      "antes": {
+        "estagio": "em_selecao"
+      },
+      "depois": {
+        "estagio": "selecionado",
+        "etapa_ordem": "2"
+      },
+      "mensagens": [
+        "Caso avançou para «Caso selecionado»."
+      ]
+    }
+  ]
+}

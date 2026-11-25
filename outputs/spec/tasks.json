@@ -75884,7 +75884,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Ação «Registrar ligação» no contato (cliente + servidor) com tabela de decisão",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Ação «Registrar ligação» no contato (cliente + servidor) com tabela de decisão. O atendente registra a ligação no próprio contato; a interação nasce ligada ao contato e o contato anda sozinho pela trilha de etapas. Entrega o comportamento do requisito RF-MOD-UX-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -76293,7 +76293,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Regra «exatamente um entre contato e caso» na interação",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Regra «exatamente um entre contato e caso» na interação. A interação passa a servir à lista ativa e ao caso qualificado; cada uma aponta para um dos dois, nunca para nenhum nem para ambos. Entrega o comportamento do requisito RF-MOD-UX-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "business_rule",
@@ -76914,7 +76914,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Ação «Encerrar» no contato com motivo obrigatório",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Ação «Encerrar» no contato com motivo obrigatório. O atendente tira da lista o contato resolvido, registrando o motivo para a coordenação. Entrega o comportamento do requisito RF-MOD-UX-003 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -77579,7 +77579,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Ação «Distribuir lista» no ciclo publicado",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Ação «Distribuir lista» no ciclo publicado. Depois de Publicar (que já sorteia o grupo de controle e grava os totais), o coordenador distribui a lista; sem estado novo: o ciclo fica publicado e ganha distribuido_em e qtd_contatos (R1). «Gerar prévia» foi cortada (R2). Entrega o comportamento do requisito RF-MOD-UX-004 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -77907,7 +77907,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Recusar contato de contribuinte do grupo de controle",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Recusar contato de contribuinte do grupo de controle. O grupo de controle não recebe nenhuma ação de cobrança no ciclo; isso vale também para a lista ativa, por qualquer caminho. Entrega o comportamento do requisito RF-MOD-UX-004 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "business_rule",
@@ -78443,7 +78443,7 @@
           "class": "functional",
           "type": "database",
           "title": "Coluna «Responsável» (caso.coordenador) no lugar de caso.atendente, com migração das referências",
-          "status": "IN_PROGRESS",
+          "status": "DONE",
           "description": "Coluna «Responsável» (caso.coordenador) no lugar de caso.atendente, com migração das referências. O dono do caso qualificado passa a ser o coordenador; o seed distribui os casos entre os usuários demo do papel coordenador. Entrega o comportamento do requisito RF-MOD-UX-005 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "table",
@@ -78799,7 +78799,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Ação «Avançar etapa» e «Encerrar caso» com motivo",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Ação «Avançar etapa» e «Encerrar caso» com motivo. O coordenador conduz o caso pela trilha sem editar o campo de estágio à mão. Entrega o comportamento do requisito RF-MOD-UX-005 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -79417,7 +79417,7 @@
           "class": "security",
           "type": "backend",
           "title": "ACL de contato (dono) e deny do caso para o atendente; dono da interação e da regularização",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "ACL de contato (dono) e deny do caso para o atendente; dono da interação e da regularização. A carteira do atendente passa a ser a lista ativa e os contribuintes dele; o caso qualificado é só da coordenação. Entrega o comportamento do requisito RF-MOD-UX-006 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "acl",
@@ -79807,7 +79807,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Reescrita dos testes F5-003 e F5-007 para o novo dono do caso",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Reescrita dos testes F5-003 e F5-007 para o novo dono do caso. Os testes que provavam a carteira pelo caso passam a provar pelo contato e pelo coordenador; a suíte cob-regressao volta a rodar inteira. Entrega o comportamento do requisito RF-MOD-UX-006 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "atf",

@@ -54,6 +54,24 @@
 
 ## Histórico de tasks
 
+### US-MOD-UX-002..006 — verbos da lista, distribuição, caso do coordenador e acesso por papel (design UX v1, F3/F4)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3: fora do fio condutor; auditoria-de-us por story)
+
+**Implementado:**
+- `src/server/contato/ContatoLigacao.server.js` + `script-includes/contato-ligacao.now.ts` — «Registrar ligação» (tabela de decisão do design v1.1) e «Encerrar» (motivo obrigatório); dono, status e tentativas lidos como gravados; grava num registro lido por ele (campos do sistema têm ACL de campo)
+- `ui-actions/contato.now.ts` — UI Actions cliente+servidor (`setMandatory` + `gsftSubmit` + guard `typeof window`); a anotação vai em «Comentários»
+- `business-rules/interacao.now.ts` — interação com exatamente um entre contato e caso
+- `QualificacaoCiclo.distribuir` + `ui-actions/ciclo.now.ts` «Distribuir lista» — só massificada, dono = atendente do contribuinte (rodízio grava nos dois), prioridade 1–5 pelo valor, idempotente; BR do grupo de controle no contato (`grupo-controle.now.ts`)
+- `src/server/atendimento/CasoConducao.server.js` + `ui-actions/caso.now.ts` — «Avançar etapa» e «Encerrar caso»; `business-rules/caso.now.ts` grava `etapa_ordem` (lista por sequência das etapas)
+- `security/contato.now.ts`, `security/carteira.now.ts`, `security/caso-sem-atendente.now.ts` (deny à mão), `business-rules/carteira.now.ts` — dono do contato, interação = contato.atendente ou caso.coordenador, coordenador cria interação no caso (R4), atendente sem acesso ao caso
+- Testes F5-003 e F5-007 migrados para o novo dono e reativados
+
+**Decisões:**
+- O Fluent não aceita função nem laço em arquivo `.now.ts`: massa de ATF repetida é escrita por macro e expandida para literal antes do build (script de apoio fora do repo).
+- O Jasmine do ATF embaralha a ordem dos `it`: ação com efeito colateral vai no corpo do `describe`, antes dos casos.
+- Teste de form às vezes fica `waiting` até o timeout de 600 s quando o runner não pega o agendamento; rodar a story de novo resolveu.
+- Moeda R$: o BRL está inativo em `fx_currency`; exibir R$ exige mexer em configuração global — fica GAP.
+
 ### US-MOD-F5-003 — dossiê consolidado do caso (TASK-MOD-F5-003-01..02)
 **Data:** 2026-11-24 | **State:** DONE (G3 APROVADO sem agentes nas 2 tasks)
 

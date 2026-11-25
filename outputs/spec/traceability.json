@@ -2,12 +2,12 @@
   "schemaVersion": "traceability/v1",
   "fonteDoUniverso": "requirements",
   "resumo": {
-    "total": 46,
+    "total": 54,
     "orfaos": 0,
     "N0": 0,
     "N1": 36,
-    "N2": 0,
-    "N3": 10
+    "N2": 3,
+    "N3": 15
   },
   "orfaos": [],
   "linhas": [
@@ -161,8 +161,8 @@
         {
           "story": "STORY-MOD-F5-007",
           "status": "success",
-          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
-          "horario": "2026-11-24T20:33:40.947Z",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:37:38.470Z",
           "verde": true
         }
       ],
@@ -966,8 +966,8 @@
         {
           "story": "STORY-MOD-F5-003",
           "status": "success",
-          "commit": "9c571894f432019ff354476d3cc51acff464f536",
-          "horario": "2026-11-24T20:51:44.112Z",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:37:21.544Z",
           "verde": true
         }
       ],
@@ -1134,8 +1134,8 @@
         {
           "story": "STORY-MOD-F5-007",
           "status": "success",
-          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
-          "horario": "2026-11-24T20:33:40.947Z",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:37:38.470Z",
           "verde": true
         }
       ],
@@ -1342,8 +1342,8 @@
         {
           "story": "STORY-MOD-F5-007",
           "status": "success",
-          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
-          "horario": "2026-11-24T20:33:40.947Z",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:37:38.470Z",
           "verde": true
         }
       ],
@@ -1417,8 +1417,8 @@
         {
           "story": "STORY-MOD-F5-007",
           "status": "success",
-          "commit": "5a0e1f70e0c919fbdff7aa82fd4dd1072a1ab959",
-          "horario": "2026-11-24T20:33:40.947Z",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:37:38.470Z",
           "verde": true
         }
       ],
@@ -1498,7 +1498,300 @@
       "nowIdsInstalados": [],
       "atf": [],
       "nivel": "N1"
+    },
+    {
+      "rf": "RF-MOD-UX-001",
+      "ct": [
+        "CT-MOD-UX-001"
+      ],
+      "tel": [
+        "TEL-034",
+        "TEL-035"
+      ],
+      "story": "STORY-MOD-UX-001",
+      "stories": [
+        "STORY-MOD-UX-001"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-001-01",
+        "TASK-MOD-UX-001-02"
+      ],
+      "nowIds": [
+        "modulo_mod_ux_lista_minha_lista",
+        "x_2326104_cob_contato"
+      ],
+      "nowIdsInstalados": [
+        "modulo_mod_ux_lista_minha_lista"
+      ],
+      "atf": [],
+      "nivel": "N2"
+    },
+    {
+      "rf": "RF-MOD-UX-002",
+      "ct": [
+        "CT-MOD-UX-002"
+      ],
+      "tel": [
+        "TEL-035"
+      ],
+      "story": "STORY-MOD-UX-002",
+      "stories": [
+        "STORY-MOD-UX-002"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-002-01",
+        "TASK-MOD-UX-002-02"
+      ],
+      "nowIds": [
+        "RF-MOD-UX-002_acl_contato_create",
+        "RF-MOD-UX-002_acl_contato_write",
+        "RF-MOD-UX-002_acl_contato_write_atendente",
+        "RF-MOD-UX-002_acl_contato_write_campos",
+        "RF-MOD-UX-002_acl_contato_write_ciclo",
+        "RF-MOD-UX-002_acl_contato_write_contribuinte",
+        "RF-MOD-UX-002_acl_contato_write_prioridade",
+        "RF-MOD-UX-002_acl_contato_write_status",
+        "RF-MOD-UX-002_acl_contato_write_tentativas",
+        "RF-MOD-UX-002_acl_contato_write_valor_em_aberto",
+        "RF-MOD-UX-002_br_interacao_um_pai",
+        "RF-MOD-UX-002_si_contato_ligacao",
+        "RF-MOD-UX-002_ua_registrar_ligacao"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-UX-002_acl_contato_create",
+        "RF-MOD-UX-002_acl_contato_write",
+        "RF-MOD-UX-002_acl_contato_write_atendente",
+        "RF-MOD-UX-002_acl_contato_write_campos",
+        "RF-MOD-UX-002_acl_contato_write_ciclo",
+        "RF-MOD-UX-002_acl_contato_write_contribuinte",
+        "RF-MOD-UX-002_acl_contato_write_prioridade",
+        "RF-MOD-UX-002_acl_contato_write_status",
+        "RF-MOD-UX-002_acl_contato_write_tentativas",
+        "RF-MOD-UX-002_acl_contato_write_valor_em_aberto",
+        "RF-MOD-UX-002_br_interacao_um_pai",
+        "RF-MOD-UX-002_si_contato_ligacao",
+        "RF-MOD-UX-002_ua_registrar_ligacao"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-UX-002",
+          "status": "success",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:33:17.063Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
+    },
+    {
+      "rf": "RF-MOD-UX-003",
+      "ct": [
+        "CT-MOD-UX-003"
+      ],
+      "tel": [
+        "TEL-035"
+      ],
+      "story": "STORY-MOD-UX-003",
+      "stories": [
+        "STORY-MOD-UX-003"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-003-01"
+      ],
+      "nowIds": [
+        "RF-MOD-UX-003_ua_encerrar_contato"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-UX-003_ua_encerrar_contato"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-UX-003",
+          "status": "success",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:33:31.606Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
+    },
+    {
+      "rf": "RF-MOD-UX-004",
+      "ct": [
+        "CT-MOD-UX-004"
+      ],
+      "tel": [
+        "TEL-009"
+      ],
+      "story": "STORY-MOD-UX-004",
+      "stories": [
+        "STORY-MOD-UX-004"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-004-01",
+        "TASK-MOD-UX-004-02"
+      ],
+      "nowIds": [
+        "RF-MOD-UX-004_br_contato_controle",
+        "RF-MOD-UX-004_ua_distribuir_lista"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-UX-004_br_contato_controle",
+        "RF-MOD-UX-004_ua_distribuir_lista"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-UX-004",
+          "status": "success",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:34:28.475Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
+    },
+    {
+      "rf": "RF-MOD-UX-005",
+      "ct": [
+        "CT-MOD-UX-005"
+      ],
+      "tel": [
+        "TEL-023",
+        "TEL-024"
+      ],
+      "story": "STORY-MOD-UX-005",
+      "stories": [
+        "STORY-MOD-UX-005"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-005-01",
+        "TASK-MOD-UX-005-02"
+      ],
+      "nowIds": [
+        "RF-MOD-UX-005_br_caso_ordem_etapa",
+        "RF-MOD-UX-005_si_caso_conducao",
+        "RF-MOD-UX-005_ua_avancar_etapa",
+        "RF-MOD-UX-005_ua_encerrar_caso",
+        "x_2326104_cob_caso"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-UX-005_br_caso_ordem_etapa",
+        "RF-MOD-UX-005_si_caso_conducao",
+        "RF-MOD-UX-005_ua_avancar_etapa",
+        "RF-MOD-UX-005_ua_encerrar_caso"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-UX-005",
+          "status": "success",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:35:42.858Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
+    },
+    {
+      "rf": "RF-MOD-UX-006",
+      "ct": [
+        "CT-MOD-UX-006"
+      ],
+      "tel": [
+        "TEL-024",
+        "TEL-034"
+      ],
+      "story": "STORY-MOD-UX-006",
+      "stories": [
+        "STORY-MOD-UX-006"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-006-01",
+        "TASK-MOD-UX-006-02"
+      ],
+      "nowIds": [
+        "RF-MOD-UX-006_acl_caso_campos_sem_atendente",
+        "RF-MOD-UX-006_acl_caso_sem_atendente",
+        "RF-MOD-UX-006_acl_contato_carteira",
+        "RF-MOD-UX-006_acl_contato_write_carteira",
+        "RF-MOD-UX-006_br_consulta_carteira_contato",
+        "RF-MOD-UX-006_br_contato_carteira",
+        "US-MOD-F5-007_atf_carteira_propria_positivo"
+      ],
+      "nowIdsInstalados": [
+        "RF-MOD-UX-006_acl_caso_campos_sem_atendente",
+        "RF-MOD-UX-006_acl_caso_sem_atendente",
+        "RF-MOD-UX-006_acl_contato_carteira",
+        "RF-MOD-UX-006_acl_contato_write_carteira",
+        "RF-MOD-UX-006_br_consulta_carteira_contato",
+        "RF-MOD-UX-006_br_contato_carteira",
+        "US-MOD-F5-007_atf_carteira_propria_positivo"
+      ],
+      "atf": [
+        {
+          "story": "STORY-MOD-UX-006",
+          "status": "success",
+          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+          "horario": "2026-11-25T03:35:56.567Z",
+          "verde": true
+        }
+      ],
+      "nivel": "N3"
+    },
+    {
+      "rf": "RF-MOD-UX-007",
+      "ct": [
+        "CT-MOD-UX-007"
+      ],
+      "tel": [
+        "TEL-026",
+        "TEL-034"
+      ],
+      "story": "STORY-MOD-UX-007",
+      "stories": [
+        "STORY-MOD-UX-007"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-007-01",
+        "TASK-MOD-UX-007-02"
+      ],
+      "nowIds": [
+        "home_demo_atendente",
+        "modulo_mod_ux_analytics_funil_do_credito"
+      ],
+      "nowIdsInstalados": [
+        "modulo_mod_ux_analytics_funil_do_credito"
+      ],
+      "atf": [],
+      "nivel": "N2"
+    },
+    {
+      "rf": "RF-MOD-UX-008",
+      "ct": [
+        "CT-MOD-UX-008"
+      ],
+      "tel": [
+        "TEL-009",
+        "TEL-035"
+      ],
+      "story": "STORY-MOD-UX-008",
+      "stories": [
+        "STORY-MOD-UX-008"
+      ],
+      "tasks": [
+        "TASK-MOD-UX-008-01",
+        "TASK-MOD-UX-008-02"
+      ],
+      "nowIds": [
+        "TEL-009_registro_demo",
+        "processflow_contato_formatter"
+      ],
+      "nowIdsInstalados": [
+        "TEL-009_registro_demo",
+        "processflow_contato_formatter"
+      ],
+      "atf": [],
+      "nivel": "N2"
     }
   ],
-  "geradoEm": "2026-11-24T20:59:54.043Z"
+  "geradoEm": "2026-11-25T03:38:26.009Z"
 }
