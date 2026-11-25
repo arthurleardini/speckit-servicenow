@@ -126,18 +126,244 @@ ReguaMotor.prototype = {
         return { segue: true, executar_em: executar };
     },
 
-    /** F2 (US-MOD-F4-010): contrato final, regra mínima — as guardas entram na US-MOD-F4-011. */
+    /**
+     * Guardas antes de cada envio e do encaminhamento (RN-NOVO-F4-011). Inscrição não ativa: segue=false sem
+     * regravar. Com motivo de parada, encerra a inscrição (e as comunicações agendadas dela) e devolve segue=false.
+     */
     checarGuardas: function (inscricao) {
         var insc = this._inscricao(inscricao);
         if (!insc || insc.getValue('status') !== 'ativa') {
             return { segue: false, motivo: '' };
         }
+        var motivo = this.motivoParada(insc);
+        if (motivo) {
+            this.encerrar(insc, motivo);
+            gs.info('RF-MOD-F4-011: inscrição ' + insc.getUniqueValue() + ' encerrada pela guarda: ' + motivo);
+            return { segue: false, motivo: motivo };
+        }
         return { segue: true, motivo: '' };
     },
 
-    /** F2 (US-MOD-F4-010): contrato final, regra mínima — o envio entra na US-MOD-F4-011. */
+    /**
+     * Por que a régua para para esta inscrição ('' quando segue): régua pausada; contribuinte no grupo de controle
+     * do ciclo da inscrição (sem ciclo, a guarda não se aplica); na carteira Parcelamentos, o parcelamento em dia
+     * ou quitado (regularizado) ou rompido (parcelamento_rompido); nas outras, nenhum débito em aberto do tributo.
+     */
+    motivoParada: function (inscricao) {
+        var insc = this._inscricao(inscricao);
+        if (!insc) {
+            return '';
+        }
+        var regua = new GlideRecord(ReguaMotor.T_REGUA);
+        if (!regua.get(insc.getValue('regua')) || regua.getValue('ativa') !== '1') {
+            return 'regua_pausada';
+        }
+        var contribuinte = insc.getValue('contribuinte');
+        var ciclo = insc.getValue('ciclo');
+        if (ciclo && new QualificacaoCiclo().emControle(contribuinte, ciclo)) {
+            return 'controle';
+        }
+        var carteira = regua.getValue('carteira');
+        if (carteira === 'parcelamentos') {
+            var parc = new GlideRecord(ReguaMotor.T_PARCELAMENTO);
+            if (!insc.getValue('parcelamento') || !parc.get(insc.getValue('parcelamento'))) {
+                return '';
+            }
+            var st = parc.getValue('status');
+            if (st === 'em_dia' || st === 'quitado') {
+                return 'regularizado';
+            }
+            return st === 'rompido' ? 'parcelamento_rompido' : '';
+        }
+        var deb = new GlideAggregate(ReguaMotor.T_DEBITO);
+        deb.addQuery('contribuinte', contribuinte);
+        deb.addQuery('status', 'aberto');
+        deb.addQuery('tributo', carteira);
+        deb.addAggregate('COUNT');
+        deb.query();
+        var abertos = deb.next() ? parseInt(deb.getAggregate('COUNT'), 10) : 0;
+        return abertos > 0 ? '' : 'regularizado';
+    },
+
+    /**
+     * Encerra a inscrição com o motivo e passa as comunicações «agendada» dela para «encerrada» numa só
+     * consulta (RN-NOVO-F1-002).
+     */
+    encerrar: function (inscricao, motivo) {
+        var insc = this._inscricao(inscricao);
+        if (!insc) {
+            return;
+        }
+        insc.setValue('status', 'encerrada');
+        insc.setValue('encerrada_em', new GlideDateTime().getValue());
+        insc.setValue('motivo_encerramento', motivo);
+        insc.update();
+        var com = new GlideRecord(ReguaMotor.T_COMUNICACAO);
+        com.addQuery('inscricao', insc.getUniqueValue());
+        com.addQuery('status', 'agendada');
+        com.setValue('status', 'encerrada');
+        com.updateMultiple();
+    },
+
+    /** Configuração dos canais simulados: { canal: { contratado, exigeOptIn, falha } } (primeiro registro por canal). */
+    _canais: function () {
+        var mapa = {};
+        var c = new GlideRecord(ReguaMotor.T_CANAL);
+        c.orderBy('sys_created_on');
+        c.query();
+        while (c.next()) {
+            var nome = c.getValue('canal');
+            if (!mapa[nome]) {
+                mapa[nome] = {
+                    contratado: c.getValue('contratado') === '1',
+                    exigeOptIn: c.getValue('exige_opt_in') === '1',
+                    falha: c.getValue('forcar_falha') === '1'
+                };
+            }
+        }
+        return mapa;
+    },
+
+    /** Consentimento vigente por canal: o mais recente (registrado_em, depois sys_created_on). { canal: 'opt_in'|'opt_out' }. */
+    _consentimentos: function (contribuinteId) {
+        var mapa = {};
+        var c = new GlideRecord(ReguaMotor.T_CONSENTIMENTO);
+        c.addQuery('contribuinte', contribuinteId);
+        c.orderByDesc('registrado_em');
+        c.orderByDesc('sys_created_on');
+        c.query();
+        while (c.next()) {
+            var canal = c.getValue('canal');
+            if (!mapa[canal]) {
+                mapa[canal] = c.getValue('situacao');
+            }
+        }
+        return mapa;
+    },
+
+    /** Tentativas do contribuinte no canal dentro da janela de segundos_por_dia (D19). */
+    _tentativasNaJanela: function (contribuinteId, canal) {
+        var limite = new GlideDateTime();
+        limite.addSeconds(-this.segundosPorDia());
+        var e = new GlideAggregate(ReguaMotor.T_ENVIO);
+        e.addQuery('comunicacao.contribuinte', contribuinteId);
+        e.addQuery('canal', canal);
+        e.addQuery('recebido_em', '>=', limite);
+        e.addAggregate('COUNT');
+        e.query();
+        return e.next() ? parseInt(e.getAggregate('COUNT'), 10) : 0;
+    },
+
+    /**
+     * Envia a etapa `ordem` (RN-NOVO-F4-012, F4-003): canal da etapa e depois SNE, e-mail e SMS, sem repetir.
+     * Pula o canal não contratado, o que exige opt-in sem opt-in vigente, o com opt-out vigente e o que já teve
+     * TETO_POR_JANELA tentativas do contribuinte nos últimos segundos_por_dia segundos. Cada tentativa vira um
+     * retorno de envio; para no primeiro entregue. Uma comunicação por inscrição e etapa (idempotente).
+     * @returns {{status: string, canal: string, comunicacao: string}}
+     */
     enviar: function (inscricao, ordem) {
-        return { status: 'pulada', canal: '', comunicacao: '' };
+        var insc = this._inscricao(inscricao);
+        if (!insc) {
+            throw new Error('inscrição não encontrada');
+        }
+        var etapa = null;
+        var etapas = this._etapas(insc.getValue('regua'));
+        for (var i = 0; i < etapas.length; i++) {
+            if (etapas[i].ordem === ordem) {
+                etapa = etapas[i];
+            }
+        }
+        if (!etapa) {
+            throw new Error('etapa ' + ordem + ' não existe na régua');
+        }
+        var com = new GlideRecord(ReguaMotor.T_COMUNICACAO);
+        com.addQuery('inscricao', insc.getUniqueValue());
+        com.addQuery('etapa', etapa.id);
+        com.setLimit(1);
+        com.query();
+        if (com.next()) {
+            if (com.getValue('status') !== 'agendada') {
+                return { status: com.getValue('status'), canal: com.getValue('canal') || '', comunicacao: com.getUniqueValue() };
+            }
+        } else {
+            com = new GlideRecord(ReguaMotor.T_COMUNICACAO);
+            com.initialize();
+            com.setValue('contribuinte', insc.getValue('contribuinte'));
+            com.setValue('regua', insc.getValue('regua'));
+            com.setValue('etapa', etapa.id);
+            com.setValue('ciclo', insc.getValue('ciclo'));
+            com.setValue('inscricao', insc.getUniqueValue());
+            com.setValue('canal', etapa.canal);
+            com.setValue('status', 'agendada');
+            if (!com.insert()) {
+                throw new Error('comunicação recusada ao gravar (grupo de controle)');
+            }
+        }
+        var contribuinte = insc.getValue('contribuinte');
+        var canais = [etapa.canal];
+        for (var f = 0; f < ReguaMotor.ORDEM_FALLBACK.length; f++) {
+            if (canais.indexOf(ReguaMotor.ORDEM_FALLBACK[f]) < 0) {
+                canais.push(ReguaMotor.ORDEM_FALLBACK[f]);
+            }
+        }
+        var config = this._canais();
+        var vigente = this._consentimentos(contribuinte);
+        var notas = [];
+        var tentativas = 0;
+        var entregue = '';
+        var ultimo = '';
+        var agora = new GlideDateTime().getValue();
+        for (var k = 0; k < canais.length && !entregue; k++) {
+            var canal = canais[k];
+            var rotulo = ReguaMotor.ROTULO_CANAL[canal] || canal;
+            var cfg = config[canal];
+            if (!cfg || !cfg.contratado) {
+                notas.push(rotulo + ': não contratado');
+                continue;
+            }
+            if (cfg.exigeOptIn && vigente[canal] !== 'opt_in') {
+                notas.push(rotulo + ': sem opt-in');
+                continue;
+            }
+            if (vigente[canal] === 'opt_out') {
+                notas.push(rotulo + ': opt-out');
+                continue;
+            }
+            if (this._tentativasNaJanela(contribuinte, canal) >= ReguaMotor.TETO_POR_JANELA) {
+                notas.push(rotulo + ': teto');
+                continue;
+            }
+            var env = new GlideRecord(ReguaMotor.T_ENVIO);
+            env.initialize();
+            env.setValue('comunicacao', com.getUniqueValue());
+            env.setValue('inscricao', insc.getUniqueValue());
+            env.setValue('canal', canal);
+            env.setValue('status_retorno', cfg.falha ? 'falha' : 'entregue');
+            env.setValue('codigo_retorno', cfg.falha ? '500' : '200');
+            env.setValue('recebido_em', agora);
+            env.insert();
+            tentativas++;
+            ultimo = canal;
+            if (cfg.falha) {
+                notas.push(rotulo + ': falha');
+            } else {
+                entregue = canal;
+            }
+        }
+        var status = entregue ? 'entregue' : (tentativas > 0 ? 'falha' : 'pulada');
+        com.setValue('status', status);
+        com.setValue('canal', entregue || ultimo || etapa.canal);
+        com.setValue('tentativas', tentativas);
+        if (tentativas > 0) {
+            com.setValue('enviada_em', agora);
+        }
+        var motivo = notas.join('; ');
+        com.setValue('motivo', status === 'pulada' ? 'Comunicação pulada: ' + motivo + '.' : motivo);
+        com.update();
+        if (status !== 'entregue') {
+            gs.warn('RF-MOD-F4-011: comunicação ' + com.getUniqueValue() + ' da inscrição ' + insc.getUniqueValue() + ' etapa ' + ordem + ' ' + status + ' — ' + motivo);
+        }
+        return { status: status, canal: com.getValue('canal'), comunicacao: com.getUniqueValue() };
     },
 
     /** F2 (US-MOD-F4-010): contrato final, regra mínima — o escalonamento entra na US-MOD-F4-012. */

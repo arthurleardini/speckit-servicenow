@@ -28,6 +28,9 @@ import {
     t_f4010_modelo, t_f4010_flows, t_f4010_etapa_pos, t_f4010_etapa_neg, t_f4010_controle, t_f4010_fumaca,
     t_f4010_acl_coord, t_f4010_acl_atendente,
 } from './US-MOD-F4-010.now'
+import {
+    t_f4011_guardas_pos, t_f4011_guardas_neg, t_f4011_guardas_encerrada, t_f4011_envio, t_f4011_teto, t_f4011_idempotencia,
+} from './US-MOD-F4-011.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -52,5 +55,6 @@ export const suite_cob_regressao = TestSuite({
         t_ux010_quadro, t_ux010_gravacao, t_ux010_equipe_coordenador, t_ux010_equipe_atendente,
         t_f4010_modelo, t_f4010_flows, t_f4010_etapa_pos, t_f4010_etapa_neg, t_f4010_controle, t_f4010_fumaca,
         t_f4010_acl_coord, t_f4010_acl_atendente,
+        t_f4011_guardas_pos, t_f4011_guardas_neg, t_f4011_guardas_encerrada, t_f4011_envio, t_f4011_teto, t_f4011_idempotencia,
     ],
 })
