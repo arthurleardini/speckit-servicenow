@@ -24,8 +24,13 @@
   pelas custom actions (`actionStep.script`) e testado por ATF de servidor. Flow e seed de régua só pelo
   `app/scripts/gerar-flows-regua.mjs` a partir de `outputs/spec/reguas.json`; régua de ATF usa `codigo = atf_*`
   (nenhum gatilho de Flow casa). Saída de data/hora de action de script sai como objeto `GlideDateTime`.
-- `npm run reinstall` depois de install longo (Flows) cai em «fetch failed» (EPIPE em socket reaproveitado) na
-  etapa de órfãos: rodar com `NODE_OPTIONS=--import=<pré-carga que refaz o fetch>` (fora do repo).
+- A lib do kit (`.claude/skills/sn-reinstall/scripts/lib/instancia.mjs`) refaz a chamada REST com espera crescente
+  quando ela cai sem resposta («fetch failed», EPIPE em socket reaproveitado depois de install longo). O
+  `npm run reinstall` roda sem `NODE_OPTIONS` (até a F3 precisava de uma pré-carga fora do repo).
+- Coluna nova em tabela com seed gerado leva `"semSeed": true` no `data-model.json`: fica vazia no seed e fora do
+  sorteio, e o sn-seed não regera nomes nem CPF da tabela (`contribuinte.encaminhado_qualificada_em`, F4).
+- ATF que inscreve por carteira (inscrever, publicação, parcelamento em risco) desliga as réguas reais da carteira
+  com `setWorkflow(false)` dentro do teste (o rollback religa): a inscrição cai na régua `atf_*` e o Flow real não dispara.
 
 ---
 
@@ -59,6 +64,26 @@
 ---
 
 ## Histórico de tasks
+
+### US-MOD-F4-012 e US-MOD-F4-013 — inscrição, reavaliação, escalonamento, pausa, régua Parcelamentos e segurança da inscrição (design UX v2, F4)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-F4-012.json e US-MOD-F4-013.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
+
+**Implementado:**
+- `ReguaMotor`: `inscrever` (massificada do ciclo, carteira = tributo com a maior soma em aberto, régua ativa da carteira, sem duplicar inscrição ativa; limpa `encaminhado_qualificada_em` dos segmentados), `reavaliar`, `escalonar` real (ativa → `QualificacaoCiclo.atribuirContato`; qualificada → marca no contribuinte), `inscreverParcelamento` (último ciclo publicado por `publicado_em`), `encerrarDaRegua`, `pausar`/`ativar`, `motivoRecusaInscricao` (Parcelamentos sem parcelamento é recusada, GAP-159).
+- `QualificacaoCiclo`: `_criarContato` (com `origem` e `inscricao`), `atribuirContato` (reaproveita contato aberto do ciclo, antecipa a próxima ação para hoje; sem atendente, o atendente com menos contatos abertos), `distribuir` usa o helper (comportamento igual; UX-004 sem mudança).
+- `SegmentacaoScore.aplicar`: marca `encaminhado_qualificada_em` → qualificada, motivo «Esgotou a régua (RN-NOVO-F4-008)».
+- `business-rules/regua.now.ts`: inscrever ao publicar (after update prévia → publicado), reavaliar no débito e na regularização, encerrar ao pausar, parcelamento em risco inscreve, parcelamento fora de em risco reavalia; recusa de inscrição de Parcelamentos sem parcelamento na BR de padrões.
+- `ui-actions/regua.now.ts`: Pausar e Ativar (form e lista), coordenador e admin. Módulo «Inscrições» no separador Réguas (14º módulo do coordenador).
+- Segurança da inscrição: ACL deny de leitura por `contribuinte.atendente` (`security/regua.now.ts`), BR de consulta (`carteira.now.ts` + mapa `DONO`); sem ACL de create/write/delete para personas.
+- `contribuinte.encaminhado_qualificada_em` pelo `data-model.json` + sn-scaffold, com `semSeed` (seed dos 51 contribuintes igual).
+
+**Testes:**
+- `tests/US-MOD-F4-012.now.ts` (8): inscrever, BR ao publicar por GlideRecord (9 de 10, controle fora; prévia renomeada não inscreve), reavaliar (outro tributo não encerra; IPVA e regularização encerram), escalonar ativa (cria com origem régua, reaproveita aberto, segunda chamada nada, sem atendente), escalonar qualificada (marca → qualificada no ciclo seguinte → inscrever limpa), pausa/ativação, UI coordenador (Pausar e módulo), UI atendente (sem Pausar nem módulo).
+- `tests/US-MOD-F4-013.now.ts` (4): em risco inscreve/quitado/rompido/em dia/sem duplicar, sem ciclo publicado e recusa sem parcelamento, ACL atendente (consulta, contagem, ACL sem BR, insert negado), ACL coordenador (lê 2, não grava, insert negado).
+
+**Decisões / pegadinhas:**
+- Carteira de teste não existe na choice de `regua.carteira`: os ATF desligam a régua real da carteira dentro do teste em vez de usar «carteira de teste» (B9).
+- Execução de ponta a ponta com escalonamento real: `auditorias/F4-012-execucao-demo.md`.
 
 ### US-MOD-F4-010 e US-MOD-F4-011 — régua como Flow: modelo, gerador, custom actions, guardas e envio simulado (design UX v2, F2 e F3)
 **Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-F4-010.json e US-MOD-F4-011.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)

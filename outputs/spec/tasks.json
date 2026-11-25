@@ -89341,7 +89341,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Inscrição na publicação do ciclo, reavaliação quando o débito muda ou há regularização, e encerramento das inscrições ao pausar a régua (business rules e ReguaMotor.inscrever, reavaliar)",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Inscrição na publicação do ciclo, reavaliação quando o débito muda ou há regularização, e encerramento das inscrições ao pausar a régua (business rules e ReguaMotor.inscrever, reavaliar). A inscrição precisa nascer por qualquer caminho de publicação do ciclo (botão, lista, form ou API) e parar na mesma transação quando o contribuinte regulariza; pausar a régua encerra as inscrições ativas dela. Entrega o comportamento do requisito RF-MOD-F4-003, RF-MOD-F4-009 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "business_rule",
@@ -89802,7 +89802,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Encaminhamento no fecho (ReguaMotor.escalonar): cobrança ativa por QualificacaoCiclo.atribuirContato com dedupe e cobrança qualificada pela marca lida em SegmentacaoScore.aplicar",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Encaminhamento no fecho (ReguaMotor.escalonar): cobrança ativa por QualificacaoCiclo.atribuirContato com dedupe e cobrança qualificada pela marca lida em SegmentacaoScore.aplicar. Depois da última etapa e do prazo de resposta, o contribuinte que não regularizou vai à cobrança ativa (entra na lista do atendente, sem contato em dobro com a distribuição do ciclo) ou à qualificada (entra no segmento qualificada na publicação seguinte). P1 do dono: ambos os caminhos de contato valem. Entrega o comportamento do requisito RF-MOD-F4-003, RF-MOD-F4-009 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "script_include",
@@ -90288,7 +90288,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Pausar e Ativar a régua (form e lista) e módulo «Inscrições» no separador Réguas",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Pausar e Ativar a régua (form e lista) e módulo «Inscrições» no separador Réguas. O coordenador precisa parar uma régua inteira (por exemplo, antes de mudar a estrutura no reinstall) e acompanhar as inscrições ativas e com erro de todas as réguas. Entrega o comportamento do requisito RF-MOD-F4-003, RF-MOD-F4-009 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -90896,7 +90896,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Régua Parcelamentos: parcelamento «em risco» inscreve; volta a em dia, quitado ou rompido encerra (business rules e ReguaMotor.inscreverParcelamento)",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Régua Parcelamentos: parcelamento «em risco» inscreve; volta a em dia, quitado ou rompido encerra (business rules e ReguaMotor.inscreverParcelamento). P3 do dono: o parcelamento que passa a «em risco» entra na régua Parcelamentos, com guarda pelo próprio parcelamento (não pelo débito, que está parcelado). Entrega o comportamento do requisito RF-MOD-F4-002, RF-MOD-F4-003 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "business_rule",
@@ -91347,7 +91347,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Segurança da inscrição: atendente lê só as inscrições da própria carteira (ACL deny e business rule de consulta); coordenador e admin leem todas",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Segurança da inscrição: atendente lê só as inscrições da própria carteira (ACL deny e business rule de consulta); coordenador e admin leem todas. A inscrição traz contribuinte e a situação de cobrança dele; sem restrição, o atendente leria a carteira dos colegas, contrariando a regra de carteira já entregue. Entrega o comportamento do requisito RF-MOD-F4-002, RF-MOD-F4-003 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "acl",

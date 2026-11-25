@@ -1,0 +1,62 @@
+{
+  "alvo": "US-MOD-F4-013",
+  "tipo": "story",
+  "sys_id": [
+    "a8f40c78b6804161bb56732a620ae633",
+    "9ba4da239b154713a1e15231efa73dff",
+    "66501347c32846e3a26ffe1853cfc3dc",
+    "b3610291b24e4203840a23215d20d551"
+  ],
+  "resultId": [
+    "2ef7011193b8d7107a57f7c4b503d65a",
+    "0c08851193b8d7107a57f7c4b503d6d3",
+    "6908491193b8d7107a57f7c4b503d6f9",
+    "f708455193b8d7107a57f7c4b503d603"
+  ],
+  "status": "success",
+  "horario": "2026-11-25T18:37:47.783Z",
+  "commit": "b7b589ba8722c1aa85335ad0dd223edd6eee0f2b",
+  "runner": false,
+  "testes": [
+    {
+      "chave": "US-MOD-F4-013_atf_em_risco",
+      "sys_id": "a8f40c78b6804161bb56732a620ae633",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "2ef7011193b8d7107a57f7c4b503d65a",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=2ef7011193b8d7107a57f7c4b503d65a"
+    },
+    {
+      "chave": "US-MOD-F4-013_atf_sem_ciclo",
+      "sys_id": "9ba4da239b154713a1e15231efa73dff",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "0c08851193b8d7107a57f7c4b503d6d3",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=0c08851193b8d7107a57f7c4b503d6d3"
+    },
+    {
+      "chave": "US-MOD-F4-013_atf_acl_atendente",
+      "sys_id": "66501347c32846e3a26ffe1853cfc3dc",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "6908491193b8d7107a57f7c4b503d6f9",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=6908491193b8d7107a57f7c4b503d6f9"
+    },
+    {
+      "chave": "US-MOD-F4-013_atf_acl_coordenador",
+      "sys_id": "b3610291b24e4203840a23215d20d551",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "f708455193b8d7107a57f7c4b503d603",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f708455193b8d7107a57f7c4b503d603"
+    }
+  ]
+}
