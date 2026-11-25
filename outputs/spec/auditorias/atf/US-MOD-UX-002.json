@@ -1,0 +1,86 @@
+{
+  "alvo": "US-MOD-UX-002",
+  "tipo": "story",
+  "sys_id": [
+    "b1ec452987b945ef8ed838b8f6606016",
+    "da65402d2dc149048423940371e86d29",
+    "6d9d5b0ac83c4fd3802693d4ece8d1c6",
+    "3c971ce8eee3482f97e90de934e45e9d",
+    "fe351d3ccd43463bb3bb89b6f9d302c5",
+    "5e49bda29b4e40cb90bdaddb07701ae0"
+  ],
+  "resultId": [
+    "8300bd4593b017107a57f7c4b503d608",
+    "4910fd4593b017107a57f7c4b503d6e5",
+    "ae10b18593b017107a57f7c4b503d675",
+    "8820f58593b017107a57f7c4b503d6f4",
+    "91203d8593b017107a57f7c4b503d654",
+    "4f3039c593b017107a57f7c4b503d6aa"
+  ],
+  "status": "success",
+  "horario": "2026-11-25T02:55:17.504Z",
+  "commit": "62dbed8a3d992bebd7ed68288954bc1b5a8c2d1b",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-UX-002_atf_promessa_positivo",
+      "sys_id": "b1ec452987b945ef8ed838b8f6606016",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "8300bd4593b017107a57f7c4b503d608",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=8300bd4593b017107a57f7c4b503d608"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_sem_contato_positivo",
+      "sys_id": "da65402d2dc149048423940371e86d29",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "4910fd4593b017107a57f7c4b503d6e5",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4910fd4593b017107a57f7c4b503d6e5"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_recusa_contato_efetivo_positivo",
+      "sys_id": "6d9d5b0ac83c4fd3802693d4ece8d1c6",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "ae10b18593b017107a57f7c4b503d675",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=ae10b18593b017107a57f7c4b503d675"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_registrar_negativo",
+      "sys_id": "3c971ce8eee3482f97e90de934e45e9d",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "8820f58593b017107a57f7c4b503d6f4",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=8820f58593b017107a57f7c4b503d6f4"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_interacao_um_pai_negativo",
+      "sys_id": "fe351d3ccd43463bb3bb89b6f9d302c5",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "91203d8593b017107a57f7c4b503d654",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=91203d8593b017107a57f7c4b503d654"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_ui_registrar_ligacao",
+      "sys_id": "5e49bda29b4e40cb90bdaddb07701ae0",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "4f3039c593b017107a57f7c4b503d6aa",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4f3039c593b017107a57f7c4b503d6aa"
+    }
+  ]
+}

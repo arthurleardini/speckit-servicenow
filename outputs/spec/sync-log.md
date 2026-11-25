@@ -14,6 +14,7 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 44 | 2026-11-24 23:53 | now-sdk-install | dev493801 | x_2326104_cob | 62dbed8a3d992bebd7ed68288954bc1b5a8c2d1b | ok; 1009 registros | — | sn-capture |
 | 43 | 2026-11-24 23:38 | now-sdk-install | dev493801 | x_2326104_cob | e6cb7c5696875bd164fd469591c266627a105ebc | ok; 1009 registros | — | sn-capture |
 | 42 | 2026-11-24 23:28 | now-sdk-install | dev493801 | x_2326104_cob | 8c8784d57bab744bdc663ddcc945e13d39e7350b | ok; 1009 registros | — | sn-capture |
 | 41 | 2026-11-25 10:20 | spec-scope-change (Etapa B) | Etapa B — propagação de 18 CHGs decididos (R1–R8 + correções obrigatórias da v1.1) | scope-change-gaps.md (Respostas) | scope-change-analysis.md, scope-change-impact-matrix.md, scope-change-gaps.md; outputs/spec/tasks.json (EPIC-008, 4 features, STORY-MOD-UX-001..008, 15 tasks — desvio autorizado: direto no tasks.json); outputs/explore/gaps.md (GAP-021..024) | 18/18 CHGs fechados, 0 abertos; risco 🔴 → 🟡; validadores de tasks exit 0 (0 FATAL) | agente (autorizado por arthurleardini) | F2: data-model.json → sn-scaffold → seed manual → npm run reinstall |
