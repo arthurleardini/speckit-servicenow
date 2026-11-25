@@ -20,6 +20,12 @@
   `CarteiraAtendente.podeVer(current, '<campo dono>')`; a ACL de leitura por papel do scaffold continua.
 - IDs de story nos arquivos de teste, recibo e auditoria: `US-MOD-<F>-<nnn>` (a story do tasks.json é
   `STORY-MOD-<F>-<nnn>`; o `promocao.mjs --rastreio` aceita os dois).
+- Régua como Flow: o Flow só passa inscrição e ordem; a regra fica no `ReguaMotor` (Script Include), chamado
+  pelas custom actions (`actionStep.script`) e testado por ATF de servidor. Flow e seed de régua só pelo
+  `app/scripts/gerar-flows-regua.mjs` a partir de `outputs/spec/reguas.json`; régua de ATF usa `codigo = atf_*`
+  (nenhum gatilho de Flow casa). Saída de data/hora de action de script sai como objeto `GlideDateTime`.
+- `npm run reinstall` depois de install longo (Flows) cai em «fetch failed» (EPIPE em socket reaproveitado) na
+  etapa de órfãos: rodar com `NODE_OPTIONS=--import=<pré-carga que refaz o fetch>` (fora do repo).
 
 ---
 
@@ -53,6 +59,34 @@
 ---
 
 ## Histórico de tasks
+
+### US-MOD-F4-010 e US-MOD-F4-011 — régua como Flow: modelo, gerador, custom actions, guardas e envio simulado (design UX v2, F2 e F3)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-F4-010.json e US-MOD-F4-011.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
+
+**Implementado:**
+- `data-model.json` + scaffold: `regua_inscricao` (TEL-037 lista, TEL-038 form), régua com `codigo`, `prazo_final_dias`, `flow`; etapa com `postura` e `encaminhar_ativa`; `inscricao` em comunicação e retorno de envio; `origem` e `inscricao` no contato (TEL-035). `seedManual` += régua, etapa, inscrição, canal, consentimento, comunicação, envio.
+- `outputs/spec/reguas.json` (5 réguas) → `app/scripts/gerar-flows-regua.mjs` (+ `gerar-flows-regua.test.mjs`): `flows/regua-<codigo>.now.ts` (Anexo A) e `seed-demo/regua.now.ts` (régua IPVA = `TEL-014_registro_demo`, flow por `Now.ref('sys_hub_flow','flow_regua_<codigo>')`). Valida D17 antes de escrever; `flowManual` não reescreve o Flow.
+- `gerar-seed-demo.mjs`: canais simulados, consentimento de A (opt-in em tudo) e B (opt-out de SMS), débitos de IPVA de demo (A e B abertos, C regularizado), inscrição demo da TEL-038 com 2 comunicações e 2 retornos; contato com `origem = distribuicao`; contagem das tabelas da régua.
+- `actions/regua.now.ts` (4 custom actions, contrato B3) + `server/regua/acao-*.js` (parseInt da ordem, GlideRecord da inscrição, gs.error e relança).
+- `server/regua/ReguaMotor.server.js` + `script-includes/regua-motor.now.ts`: `agendar` (GlideDateTime), `checarGuardas`/`motivoParada`/`encerrar`, `enviar` (fallback, opt-in, opt-out, não contratado, falha forçada, teto por janela, idempotência), `escalonar` mínimo (F4-012), validação de régua e etapa, padrões da inscrição.
+- `business-rules/regua.now.ts`: validar etapa (D17), validar régua (código e prazo), inscrição nasce ativa, inscrição de contribuinte em controle recusada (reusa `recusarAcaoControle`).
+- `security/regua.now.ts`: write de régua e etapa para coordenador e admin do app; código, carteira, Flow, régua da etapa e ordem só admin.
+- `properties/regua.now.ts` (`segundos_por_dia = 60`), `ui/regua-related-lists.now.ts` (etapas, inscrições e comunicações na régua; comunicações e retornos na inscrição).
+
+**Testes:**
+- `app/scripts/gerar-flows-regua.test.mjs` (6, node --test).
+- `tests/US-MOD-F4-010.now.ts` (8): modelo, Flows do seed, etapa válida, etapa recusada (6 casos), inscrição em controle, fumaça pelo FlowAPI (agendar, fecho, encerrada, sys_id), ACL coordenador, ACL atendente.
+- `tests/US-MOD-F4-011.now.ts` (6): guardas positivo, guardas negativo (controle, pausada, regularizado, parcelamento quitado/rompido/em risco), inscrição encerrada, envio (WhatsApp sem opt-in, SNE com falha, tudo falha, opt-out de SMS), teto em modo demo, idempotência.
+
+**Decisões / pegadinhas:**
+- O install do SDK não apaga registro de dados (`installMethod: 'demo'`) que saiu da fonte: o `reinstall` apaga os órfãos por REST, um a um; com ~300 órfãos a etapa caiu em «fetch failed» duas vezes. Apagados por script com nova tentativa (456 órfãos, 301 apagados, 155 já não existiam) e reinstall de novo.
+- Coluna nova numa tabela com seed gerado desloca o sorteio do sn-seed e regera todos os registros dela (nomes, CPF, segmento): `contribuinte.encaminhado_qualificada_em` ficou fora da F2 (só a F4-012 a lê).
+- Tabela em `seedManual` some do seed gerado e as references a ela ficam vazias (regularização perdeu `comunicacao`), o que desloca o sorteio da tabela que aponta para ela (o seed de regularização mudou).
+- O sn-scaffold não gera `default` de coluna: «Ativa» e etapa 0 da inscrição e prazo final 5 da régua vêm de business rule.
+- A massa do ATF é texto literal em cada passo (macro expandida antes do build; a fonte da macro fica fora do repo).
+- `sn_fd.FlowAPI` com reference por sys_id falha («Invalid GlideRecord input format found»); o ATF passa o GlideRecord.
+- No `GlideRecordSecure` de escopo, os elementos `template` e `flow` voltam nulos (`gr.template`, `gr.getElement('flow')`): a ACL desses campos é provada pela gravação, não por `canWrite()`. No form da régua o coordenador não vê o campo «Flow» (TEL-014) — fica para a F4-014 («Abrir no Flow Designer»).
+- Execução de ponta a ponta (régua IPVA, `segundos_por_dia = 60`): 35 min 16 s do gatilho ao COMPLETE, 1 comunicação por etapa, etapa 3 (SMS com opt-out) entregue por SNE (`auditorias/F4-011-execucao-demo.md`).
 
 ### US-MOD-UX-009 e US-MOD-UX-010 — ações na lista, Update/New por papel, «O que fazer agora» e «Lista da equipe» (design UX v2, F1)
 **Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-UX-009.json e US-MOD-UX-010.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)

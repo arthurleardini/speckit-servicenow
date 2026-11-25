@@ -85285,7 +85285,7 @@
           "class": "functional",
           "type": "database",
           "title": "Modelo da régua como Flow: tabela «Inscrição na régua», colunas novas em régua, etapa, comunicação, retorno de envio, contato e contribuinte, propriedade segundos_por_dia",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Modelo da régua como Flow: tabela «Inscrição na régua», colunas novas em régua, etapa, comunicação, retorno de envio, contato e contribuinte, propriedade segundos_por_dia. A régua é só cadastro e não existe registro que diga «este contribuinte está na etapa N desta régua». Nasce a inscrição (contribuinte × régua × ciclo), em cuja criação o Flow da régua dispara, e as colunas que o motor lê e grava; a espera usa a propriedade segundos_por_dia (60 na demo, 86400 em produção). Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "table",
@@ -85731,7 +85731,7 @@
           "class": "functional",
           "type": "database",
           "title": "Réguas em outputs/spec/reguas.json, gerador de Flows e seed (gerar-flows-regua.mjs + teste), seed à mão de canal e consentimento e remoção do seed aleatório",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Réguas em outputs/spec/reguas.json, gerador de Flows e seed (gerar-flows-regua.mjs + teste), seed à mão de canal e consentimento e remoção do seed aleatório. O seed de régua é aleatório (51 réguas, 50 etapas, 50 canais) e comunicação, retorno de envio e consentimento apontam para ele. As 5 réguas (uma por carteira) passam a sair de reguas.json; o mesmo script gera o seed de régua e etapa e os Flows, para régua e Flow nunca divergirem no número de etapas. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "seed",
@@ -86122,7 +86122,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Custom actions da régua (agendar etapa, checar guardas, enviar comunicação, escalonar), ReguaMotor com contrato final e os 5 Flows «Régua: <nome>»",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Custom actions da régua (agendar etapa, checar guardas, enviar comunicação, escalonar), ReguaMotor com contrato final e os 5 Flows «Régua: <nome>». Cada régua é um Flow: dispara na criação da inscrição, tem um stage por etapa e um «Encaminhamento», espera o prazo e chama 4 custom actions que delegam ao Script Include ReguaMotor. As actions nascem com contrato final nesta story, para os Flows compilarem; o motor começa mínimo (segue = true, status pulada) e ganha a regra nas stories seguintes. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "flow",
@@ -86598,7 +86598,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Business rules da etapa (validarEtapa: postura, dia, encaminhar e sigilo) e da inscrição (recusa contribuinte do grupo de controle)",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Business rules da etapa (validarEtapa: postura, dia, encaminhar e sigilo) e da inscrição (recusa contribuinte do grupo de controle). Validar a estrutura só no gerador deixaria o form gravar régua inválida: postura que salta de utilitária para ameaçadora, dia fora de ordem, encaminhar no meio da régua ou valor de débito em SMS. A etapa passa a ser recusada no save; e a inscrição de contribuinte do grupo de controle é recusada pela mesma regra que já protege comunicação e contato. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "business_rule",
@@ -87127,7 +87127,7 @@
           "class": "functional",
           "type": "backend",
           "title": "ACLs de régua e etapa: coordenador grava parâmetros; código, carteira, Flow, régua da etapa e ordem só o admin",
-          "status": "TODO",
+          "status": "DONE",
           "description": "ACLs de régua e etapa: coordenador grava parâmetros; código, carteira, Flow, régua da etapa e ordem só o admin. O coordenador só tem leitura em régua e etapa e não consegue ajustar texto, canal, prazo nem pausar. Ele passa a gravar régua e etapa; os campos que amarram régua e Flow (código, carteira, Flow, régua da etapa, ordem) ficam só com o admin; criar régua e etapa continua só do admin de sistema. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "acl",
@@ -87878,7 +87878,7 @@
           "class": "functional",
           "type": "backend",
           "title": "Guardas da régua (ReguaMotor.checarGuardas e motivoParada): régua pausada, grupo de controle, regularizado, parcelamento quitado ou rompido, inscrição encerrada",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Guardas da régua (ReguaMotor.checarGuardas e motivoParada): régua pausada, grupo de controle, regularizado, parcelamento quitado ou rompido, inscrição encerrada. Sem guarda, a régua manda mensagem a quem já pagou, a quem está no grupo de controle ou depois de a régua ser pausada. Antes de cada envio e do encaminhamento, o Flow chama «Checar guardas»: com motivo, a inscrição encerra e o Flow termina sem enviar. Entrega o comportamento do requisito RF-MOD-F4-002, RF-MOD-F4-004, RF-MOD-F4-005 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "script_include",
@@ -88394,7 +88394,7 @@
           "class": "functional",
           "type": "integration",
           "title": "Envio simulado (ReguaMotor.enviar): canal da etapa e fallback SNE → e-mail → SMS, opt-in, opt-out, canal não contratado, falha forçada, teto por janela e idempotência",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Envio simulado (ReguaMotor.enviar): canal da etapa e fallback SNE → e-mail → SMS, opt-in, opt-out, canal não contratado, falha forçada, teto por janela e idempotência. A régua precisa entregar a mensagem pelo canal possível sem ferir consentimento nem passar do teto, e nunca mandar duas vezes a mesma etapa. O envio continua simulado em canal_sim e envio_sim: cada tentativa real gera um retorno de envio e a comunicação guarda o canal e o status finais. Entrega o comportamento do requisito RF-MOD-F4-002, RF-MOD-F4-004, RF-MOD-F4-005 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "script_include",

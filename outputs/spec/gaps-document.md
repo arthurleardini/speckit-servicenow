@@ -794,6 +794,34 @@ A auditoria (outputs/spec/auditorias/US-MOD-UX-010.md, CONF-001 e TEST-001) regi
 1. ATF de form para o aviso e `moduleVisibility` com a lista completa dos módulos do coordenador.
 2. Reduzir as listas da v1 a 6 colunas numa story própria.
 
+### GAP-158 — Inscrição legível fora da carteira até a F4-013, validação da etapa na criação e ATF da ACL do coordenador (auditoria US-MOD-F4-010)
+
+**Área:** MOD-F4
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-010-04, TASK-MOD-F4-010-05, TASK-MOD-F4-013-02
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-010.md, SEC-001, CONF-001 e TEST-001) registrou: (1) a ACL de leitura de `regua_inscricao` libera o atendente sem filtro de carteira, e a tabela não está no mapa `DONO` de `restringirConsultaCarteira.server.js`; pela lista da tabela ou pela Table API o atendente vê contribuinte, régua, status e motivo de quem não é da carteira dele (dados fictícios nesta instância; a correção é a TASK-MOD-F4-013-02, B5 do design); (2) na criação de etapa, a regra «a última etapa precisa encaminhar» não é aplicada (só na alteração); só o admin cria etapa e o gerador valida a régua inteira; (3) o ATF da ACL do coordenador grava só o texto da etapa e o prazo da régua, sem canal, dia e postura, e prova o campo «flow» só pela releitura.
+
+**Opções identificadas:**
+1. Manter a correção da leitura na F4-013 e acrescentar canal, dia e postura ao ATF da ACL do coordenador; deixar a criação de etapa como está.
+2. Antecipar o deny de leitura da inscrição e aplicar a regra da última etapa também na criação.
+
+### GAP-159 — Testes de envio pulado e canal não contratado, Parcelamentos sem parcelamento, teto não atômico e evidência citada nas isenções (auditoria US-MOD-F4-011)
+
+**Área:** MOD-F4
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-011-01, TASK-MOD-F4-011-02, TASK-MOD-F4-013-01
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-011.md, TEST-001, BUG-001, BUG-002 e CONF-002) registrou: (1) nenhum ATF cobre o canal não contratado nem a comunicação «Pulada» (todos os canais pulados, motivo «Comunicação pulada: …»); (2) inscrição na régua Parcelamentos sem `parcelamento` não para por regularização (`ReguaMotor.motivoParada` devolve vazio); nenhum caminho cria essa inscrição hoje; (3) o teto por janela conta e depois insere, então dois Flows do mesmo contribuinte no mesmo canal e no mesmo instante passam os dois; (4) as isenções g3 de US-MOD-F4-010 e US-MOD-F4-011 citam `auditorias/F4-011-execucao-demo.md`, que não existe no repositório.
+
+**Opções identificadas:**
+1. Acrescentar os dois casos ao ATF de envio, recusar ou parar a inscrição de Parcelamentos sem parcelamento na F4-013, aceitar o teto não atômico na demo e criar o arquivo de execução (ou tirar a referência das isenções).
+2. Serializar o envio por contribuinte (lote agendado do GAP-155, opção 2).
+
 ---
 
 ## Respostas
@@ -1135,6 +1163,18 @@ A auditoria (outputs/spec/auditorias/US-MOD-UX-010.md, CONF-001 e TEST-001) regi
 **Impacto na task:** _(a preencher)_
 
 ### GAP-157
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-158
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-159
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_
