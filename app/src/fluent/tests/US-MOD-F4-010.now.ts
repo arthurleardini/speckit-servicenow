@@ -516,6 +516,14 @@ export const t_f4010_fumaca = Test({
         etapa(r, 1, 0, 'sne', 'utilitaria', 'intensificar');
         etapa(r, 2, 10, 'email', 'consciente', 'encaminhar_ativa');
         var p = contribuinte('fumaça');
+        var d = new GlideRecord('x_2326104_cob_debito');
+        d.initialize();
+        d.setValue('contribuinte', p);
+        d.setValue('origem', 'sne');
+        d.setValue('tributo', 'ipva');
+        d.setValue('status', 'aberto');
+        d.setValue('valor', 1250);
+        d.insert();
         var id = inscricao(p, r, '');
         var gr = new GlideRecord('x_2326104_cob_regua_inscricao');
         gr.get(id);
@@ -638,12 +646,12 @@ export const t_f4010_acl_coord = Test({
             r = new GlideRecordSecure('x_2326104_cob_regua');
             r.addQuery('codigo', 'atf_acl');
             r.query();
-            r.next();
+            erro = 'régua atf_acl ' + (r.next() ? 'lida' : 'não lida') + '; ';
             e = new GlideRecordSecure('x_2326104_cob_regua_etapa');
             e.addQuery('regua', r.getUniqueValue());
             e.addQuery('ordem', 2);
             e.query();
-            e.next();
+            erro += 'etapa 2 ' + (e.next() ? 'lida' : 'não lida') + '; ';
             podeTexto = e.template.canWrite();
             podeOrdem = e.ordem.canWrite();
             e.setValue('template', 'Nova mensagem de ciência no DT-e.');
@@ -653,10 +661,10 @@ export const t_f4010_acl_coord = Test({
             podeFlow = r.flow.canWrite();
             podeAtiva = r.ativa.canWrite();
         } catch (ex) {
-            erro = String(ex);
+            erro += 'erro: ' + String(ex);
         }
         it('sem erro no passo', function() {
-            expect(erro).toBe('');
+            expect(erro).toBe('régua atf_acl lida; etapa 2 lida; ');
         });
         it('grava o texto da etapa e os parâmetros da régua', function() {
             expect(podeTexto).toBe(true);
