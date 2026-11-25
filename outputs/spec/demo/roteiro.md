@@ -7,7 +7,7 @@ Público: diretor da EloGroup. A demo dura cerca de 20 minutos. Todos os dados s
 1. `npm run doutor`: tudo verde, exceto o `gh` fora do PATH, que é contornado com `GH_BIN`.
 2. Regerar o seed manual (ciclos, carteira segmentada, contatos e casos, com datas relativas a hoje), da raiz: `node app/scripts/gerar-seed-demo.mjs`. Commitar `app/src/fluent/seed-demo/` e `app/src/fluent/seed/_contagem.manual.json`, e rodar `node .claude/skills/sn-seed/scripts/gerar-seed.mjs` para juntar a contagem. Sem isso, a «Minha lista» do atendente chega vazia, porque as próximas ações envelhecem (design UX v1, R7).
 3. Antes do reinstall, conferir se alguém editou um Flow de régua no Flow Designer (seção «Régua como Flow», item Flow Designer). Se houver edição a manter, levá-la à fonte antes; o reinstall a apaga.
-4. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde (94 testes).
+4. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde (97 testes).
 5. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login; PDI dormindo para as esperas da régua, que voltam ao acordar).
 6. Conferir a propriedade `x_2326104_cob.regua.segundos_por_dia = 60` (1 dia da régua = 1 minuto).
 7. Disparar a régua **pelo menos 40 minutos antes** da reunião: como `demo.coordenador`, «Ciclo do mês» → «Ciclo 2026-12» (prévia) → «Publicar ciclo». A régua IPVA leva cerca de 36 minutos do início ao encaminhamento; publicando antes, a reunião pega inscrições em todas as etapas. Alternativa: publicar na hora e mostrar a etapa 1 sair em 1 minuto.

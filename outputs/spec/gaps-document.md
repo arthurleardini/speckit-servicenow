@@ -866,6 +866,36 @@ Na F5 (US-MOD-F4-014), impersonando `demo.coordenador` (papel com `flow_designer
 1. Manter: coordenador vê estado e log da execução no form clássico; stage tracker com o admin na demo.
 2. Incluir `flow_admin` no papel do coordenador (`security/coordenador-flow.now.ts`), que também dá a ele administração de todos os Flows da instância.
 
+### GAP-163 — Alcance de flow_designer/flow_operator, filtro de «Ver execuções», mensagens fixas e teste de «Ver execução» que depende de execução existente (auditoria US-MOD-F4-014)
+
+**Área:** MOD-F4
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-014-01, TASK-MOD-F4-014-02
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-014.md, SEC-001, CONF-001, CONF-003 e TST-001) registrou: (1) `flow_designer` e `flow_operator`, contidos no papel do coordenador e do admin do app, valem para a instância inteira, inclusive cancelar e reiniciar execução de qualquer Flow (na PDI de demo, só há os Flows do app e os da plataforma); (2) «Ver execuções» filtra por `flow=<sys_id>` do Flow da régua, e o nome «Régua: <nome>» só entra quando a régua não tem Flow; o A1 do design cita o filtro por nome; (3) as mensagens novas do motor são texto fixo, como as antigas, e não `gs.getMessage`; (4) os testes de «Ver execução» com execução só conferem algo quando já existe execução na instância.
+
+**Opções identificadas:**
+1. Aceitar (1) na PDI e registrar no roteiro; alinhar o A1 ao filtro por Flow; mensagens traduzíveis numa story transversal; teste com execução criada pelo próprio ATF por `sn_fd.FlowAPI`.
+2. Trocar (1) por um papel restrito ao escopo do app quando houver instância de homologação.
+
+### GAP-164 — Testes que faltam no «Reenviar» (auditoria US-MOD-F4-016)
+
+**Área:** MOD-F4
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-016-01
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-016.md, BUG-001, BUG-002, TST-001 e OBS-001) registrou: (1) o reenvio não conferia se a inscrição estava ativa; (2) o status ia a «agendada» antes de enviar, e um erro no envio deixava a comunicação presa; (3) faltam ATF da ação de lista, do botão oculto na comunicação entregue e de opt-out e teto pelo caminho do reenvio; (4) nada registrava quem reenviou.
+
+**Opções identificadas:**
+1. Acrescentar os testes do item (3) na US-MOD-F4-016.
+2. Cobrir (3) pela verificação por Playwright no roteiro da véspera.
+
+**Corrigido depois da auditoria (25/11, mesma F5):** itens (1), (2) e (4). `reenviar` recusa inscrição que não está ativa ou que tem motivo de parada (`motivoParada`: régua pausada, controle, regularizado, parcelamento) com ATF; erro no envio volta a comunicação a «Falha» e avisa; o log registra quem reenviou e o resultado. Fica aberto (3) e o clique duplo simultâneo (duas rodadas).
+
 ---
 
 ## Respostas
@@ -1237,6 +1267,18 @@ Na F5 (US-MOD-F4-014), impersonando `demo.coordenador` (papel com `flow_designer
 **Impacto na task:** _(a preencher)_
 
 ### GAP-162
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-163
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-164
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

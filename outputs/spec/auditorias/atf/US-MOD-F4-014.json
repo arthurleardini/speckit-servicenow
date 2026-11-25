@@ -12,18 +12,18 @@
     "3e6a17b1717949ce8ab1b7fc227bfe11"
   ],
   "resultId": [
-    "e35b915d93b01b107a57f7c4b503d663",
-    "408bd95d93b01b107a57f7c4b503d610",
-    "edab599d93b01b107a57f7c4b503d6f4",
-    null,
-    "69eb151193f01b107a57f7c4b503d60d",
-    "32ebd51193f01b107a57f7c4b503d60e",
-    "0cfbdd1193f01b107a57f7c4b503d622",
-    "edfb155193f01b107a57f7c4b503d66e"
+    "ceb8219993f81b107a57f7c4b503d612",
+    "1ed8299993f81b107a57f7c4b503d602",
+    "d7f8e5d993f81b107a57f7c4b503d62b",
+    "45396d1d93f81b107a57f7c4b503d6bf",
+    "9e39ad1d93f81b107a57f7c4b503d6d8",
+    "d339615d93f81b107a57f7c4b503d63a",
+    "0549695d93f81b107a57f7c4b503d654",
+    "a649619d93f81b107a57f7c4b503d64b"
   ],
-  "status": "failure",
-  "horario": "2026-11-25T20:04:45.930Z",
-  "commit": "a95f44f798da864c368d3543f5236dbf5916dd6a",
+  "status": "success",
+  "horario": "2026-11-25T21:03:00.873Z",
+  "commit": "e6e44f1736cc5b339ef9654aa49300db58a73c8c",
   "runner": true,
   "testes": [
     {
@@ -32,9 +32,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "e35b915d93b01b107a57f7c4b503d663",
+      "resultId": "ceb8219993f81b107a57f7c4b503d612",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=e35b915d93b01b107a57f7c4b503d663"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=ceb8219993f81b107a57f7c4b503d612"
     },
     {
       "chave": "US-MOD-F4-014_atf_links_atendente",
@@ -42,9 +42,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "408bd95d93b01b107a57f7c4b503d610",
+      "resultId": "1ed8299993f81b107a57f7c4b503d602",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=408bd95d93b01b107a57f7c4b503d610"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1ed8299993f81b107a57f7c4b503d602"
     },
     {
       "chave": "US-MOD-F4-014_atf_sem_flow",
@@ -52,19 +52,19 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "edab599d93b01b107a57f7c4b503d6f4",
+      "resultId": "d7f8e5d993f81b107a57f7c4b503d62b",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=edab599d93b01b107a57f7c4b503d6f4"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=d7f8e5d993f81b107a57f7c4b503d62b"
     },
     {
       "chave": "US-MOD-F4-014_atf_enderecos",
       "sys_id": "79a72038fa0e4e5cb7d5eba4937180ee",
-      "ok": false,
-      "exit": 1,
-      "status": "failure",
-      "resultId": null,
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "45396d1d93f81b107a57f7c4b503d6bf",
       "resumo": {},
-      "url": null
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=45396d1d93f81b107a57f7c4b503d6bf"
     },
     {
       "chave": "US-MOD-F4-014_atf_papel_flow_designer",
@@ -72,9 +72,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "69eb151193f01b107a57f7c4b503d60d",
+      "resultId": "9e39ad1d93f81b107a57f7c4b503d6d8",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=69eb151193f01b107a57f7c4b503d60d"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=9e39ad1d93f81b107a57f7c4b503d6d8"
     },
     {
       "chave": "US-MOD-F4-014_atf_campo_flow_coordenador",
@@ -82,9 +82,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "32ebd51193f01b107a57f7c4b503d60e",
+      "resultId": "d339615d93f81b107a57f7c4b503d63a",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=32ebd51193f01b107a57f7c4b503d60e"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=d339615d93f81b107a57f7c4b503d63a"
     },
     {
       "chave": "US-MOD-F4-014_atf_origem_atendente",
@@ -92,9 +92,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "0cfbdd1193f01b107a57f7c4b503d622",
+      "resultId": "0549695d93f81b107a57f7c4b503d654",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=0cfbdd1193f01b107a57f7c4b503d622"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=0549695d93f81b107a57f7c4b503d654"
     },
     {
       "chave": "US-MOD-F4-014_atf_origem_coordenador",
@@ -102,9 +102,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "edfb155193f01b107a57f7c4b503d66e",
+      "resultId": "a649619d93f81b107a57f7c4b503d64b",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=edfb155193f01b107a57f7c4b503d66e"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=a649619d93f81b107a57f7c4b503d64b"
     }
   ]
 }

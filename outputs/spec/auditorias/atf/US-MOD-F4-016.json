@@ -1,0 +1,50 @@
+{
+  "alvo": "US-MOD-F4-016",
+  "tipo": "story",
+  "sys_id": [
+    "e9bd04bc1b8e456abb5152c3a1ae5034",
+    "c064b00d96eb490a90b75e6efffad55d",
+    "08c308d625b1418bb3b5fa8f17ac44c1"
+  ],
+  "resultId": [
+    "53bda5dd93fc1b107a57f7c4b503d61e",
+    "accd69dd93fc1b107a57f7c4b503d6f7",
+    "a9dde51193305b107a57f7c4b503d6dd"
+  ],
+  "status": "success",
+  "horario": "2026-11-25T21:23:13.861Z",
+  "commit": "4c23345cd95c9140a8aa04527c3d729eeca25a53",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-F4-016_atf_reenviar",
+      "sys_id": "e9bd04bc1b8e456abb5152c3a1ae5034",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "53bda5dd93fc1b107a57f7c4b503d61e",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=53bda5dd93fc1b107a57f7c4b503d61e"
+    },
+    {
+      "chave": "US-MOD-F4-016_atf_reenviar_atendente",
+      "sys_id": "c064b00d96eb490a90b75e6efffad55d",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "accd69dd93fc1b107a57f7c4b503d6f7",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=accd69dd93fc1b107a57f7c4b503d6f7"
+    },
+    {
+      "chave": "US-MOD-F4-016_atf_reenviar_ui",
+      "sys_id": "08c308d625b1418bb3b5fa8f17ac44c1",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "a9dde51193305b107a57f7c4b503d6dd",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=a9dde51193305b107a57f7c4b503d6dd"
+    }
+  ]
+}
