@@ -1,0 +1,123 @@
+{
+ "atendente_lista_colunas": [
+  "Contribuinte",
+  "O que fazer agora",
+  "Telefone",
+  "Valor em aberto (R$)",
+  "Próxima ação em",
+  "Prioridade"
+ ],
+ "atendente_lista_new": 0,
+ "atendente_menu_linha": [
+  "Show Matching",
+  "Filter Out",
+  "Copy URL to Clipboard",
+  "Assign Tag",
+  "Registrar ligação…",
+  "Encerrar…"
+ ],
+ "atendente_form_botoes": [
+  "Registrar ligação",
+  "Encerrar",
+  "Registrar ligação",
+  "Encerrar"
+ ],
+ "atendente_form_aviso": [
+  "Info Message\nPróximo passo: Retornar a ligação em 25/11/2026",
+  "Próximo passo: Retornar a ligação em 25/11/2026"
+ ],
+ "atendente_form_proxima_acao": {
+  "valor": "Retornar a ligação em 25/11/2026",
+  "ro": false
+ },
+ "coord_ciclo_colunas": [
+  "Nome",
+  "O que fazer agora",
+  "Mês de referência",
+  "Estado",
+  "Massificada",
+  "Contatos distribuídos"
+ ],
+ "coord_ciclo_linhas": [
+  "Select record for action: Ciclo 2026-12 Ciclo 2026-12 Publicar ciclo 2026-12-01 Prévia",
+  "Select record for action: Ciclo 2026-11 Ciclo 2026-11 Acompanhar a lista 2026-11-01 Publicado 28 28"
+ ],
+ "coord_ciclo_new": 1,
+ "coord_acoes_selecionadas": [
+  "Actions on selected rows...",
+  "Delete",
+  "Delete with preview...",
+  "Publicar ciclo",
+  "Restore Selected",
+  "Distribuir lista",
+  "Create Application File",
+  "New tag (desabilitado)",
+  "Android",
+  "JavaScript",
+  "Java",
+  "Development",
+  "Access Analyzer",
+  "Security Center Checks",
+  "Security Center Suites",
+  "Includes code",
+  "More... (desabilitado)",
+  "Android",
+  "JavaScript",
+  "Java",
+  "Development",
+  "Access Analyzer",
+  "Security Center Checks",
+  "Security Center Suites",
+  "Includes code",
+  "More... (desabilitado)"
+ ],
+ "coord_form_ciclo_previa": [
+  "Publicar ciclo",
+  "Update",
+  "Publicar ciclo",
+  "Update"
+ ],
+ "coord_form_ciclo_publicado": [],
+ "coord_caso_colunas": [
+  "Contribuinte",
+  "O que fazer agora",
+  "Estágio",
+  "Prioridade",
+  "Valor em aberto (R$)",
+  "Sinalização coercitiva ativa"
+ ],
+ "coord_equipe": {
+  "grupos": [
+   "Atendente: Demo Atendente (13)",
+   "Atendente: Demo Atendente B (13)"
+  ],
+  "linhas": 26,
+  "erro": null,
+  "new": false
+ },
+ "coord_equipe_linhas_expandidas": 26,
+ "coord_form_contato": [
+  "Registrar ligação",
+  "Encerrar",
+  "Registrar ligação",
+  "Encerrar"
+ ],
+ "coord_regua_new": 0,
+ "admin_equipe": {
+  "grupos": [
+   "Atendente: Demo Atendente (13)",
+   "Atendente: Demo Atendente B (13)"
+  ],
+  "new": true
+ },
+ "admin_form_contato": [
+  "Registrar ligação",
+  "Encerrar",
+  "Update",
+  "Delete",
+  "Registrar ligação",
+  "Encerrar",
+  "Update",
+  "Delete"
+ ]
+}

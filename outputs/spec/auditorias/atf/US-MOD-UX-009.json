@@ -10,27 +10,27 @@
     "9ee6a060fe33462391bc1af7cf6eeb99"
   ],
   "resultId": [
-    null,
-    "4417805d93bc57107a57f7c4b503d6f1",
-    "e127409d93bc57107a57f7c4b503d6b6",
-    "5f27449d93bc57107a57f7c4b503d6d6",
-    "2647c0dd93bc57107a57f7c4b503d621",
-    "0267401193fc57107a57f7c4b503d6b4"
+    "24e750d9937497107a57f7c4b503d62b",
+    "1df71cd9937497107a57f7c4b503d641",
+    "c708501d937497107a57f7c4b503d64f",
+    "9018141d937497107a57f7c4b503d611",
+    "4728105d937497107a57f7c4b503d6dc",
+    "7548dc5d937497107a57f7c4b503d609"
   ],
-  "status": "failure",
-  "horario": "2026-11-25T13:55:42.826Z",
-  "commit": "3bbd2d4bb3c76b4f618aae80e0ef7f914dbd7e0e",
+  "status": "success",
+  "horario": "2026-11-25T15:09:23.779Z",
+  "commit": "8cf89bc35578240535b7c79e77daf0c92d3074a1",
   "runner": true,
   "testes": [
     {
       "chave": "US-MOD-UX-009_atf_lista_atendente",
       "sys_id": "32fe8ec770064d86a4ea5390ebcf5433",
-      "ok": false,
-      "exit": 1,
-      "status": "failure",
-      "resultId": null,
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "24e750d9937497107a57f7c4b503d62b",
       "resumo": {},
-      "url": null
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=24e750d9937497107a57f7c4b503d62b"
     },
     {
       "chave": "US-MOD-UX-009_atf_lista_coordenador",
@@ -38,9 +38,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "4417805d93bc57107a57f7c4b503d6f1",
+      "resultId": "1df71cd9937497107a57f7c4b503d641",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4417805d93bc57107a57f7c4b503d6f1"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1df71cd9937497107a57f7c4b503d641"
     },
     {
       "chave": "US-MOD-UX-009_atf_condicoes_lista",
@@ -48,9 +48,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "e127409d93bc57107a57f7c4b503d6b6",
+      "resultId": "c708501d937497107a57f7c4b503d64f",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=e127409d93bc57107a57f7c4b503d6b6"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=c708501d937497107a57f7c4b503d64f"
     },
     {
       "chave": "US-MOD-UX-009_atf_update_contato",
@@ -58,9 +58,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "5f27449d93bc57107a57f7c4b503d6d6",
+      "resultId": "9018141d937497107a57f7c4b503d611",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=5f27449d93bc57107a57f7c4b503d6d6"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=9018141d937497107a57f7c4b503d611"
     },
     {
       "chave": "US-MOD-UX-009_atf_update_ciclo_previa",
@@ -68,9 +68,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "2647c0dd93bc57107a57f7c4b503d621",
+      "resultId": "4728105d937497107a57f7c4b503d6dc",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=2647c0dd93bc57107a57f7c4b503d621"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=4728105d937497107a57f7c4b503d6dc"
     },
     {
       "chave": "US-MOD-UX-009_atf_update_ciclo_publicado",
@@ -78,9 +78,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "0267401193fc57107a57f7c4b503d6b4",
+      "resultId": "7548dc5d937497107a57f7c4b503d609",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=0267401193fc57107a57f7c4b503d6b4"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=7548dc5d937497107a57f7c4b503d609"
     }
   ]
 }

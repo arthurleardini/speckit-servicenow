@@ -82769,7 +82769,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "UI Actions de lista (menu da linha e «Ações nas linhas selecionadas»), order dos botões de form e override de Update em contato e ciclo",
-          "status": "TODO",
+          "status": "DONE",
           "description": "UI Actions de lista (menu da linha e «Ações nas linhas selecionadas»), order dos botões de form e override de Update em contato e ciclo. Hoje os 8 verbos de negócio só aparecem no cabeçalho do form aberto; na lista, nenhum aparece, e o Update do admin compete com «Registrar ligação». Cada verbo ganha uma UI Action de lista própria (actionName x_cob_l_*), separada da de form, e o Update sai do form do contato (só admin) e do ciclo fora da prévia. Entrega o comportamento do requisito RF-MOD-UX-009 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -83210,7 +83210,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "New só para o admin nas listas de contato, régua e etapa (sys_ui_list_control com new_roles)",
-          "status": "TODO",
+          "status": "DONE",
           "description": "New só para o admin nas listas de contato, régua e etapa (sys_ui_list_control com new_roles). O coordenador vê New nas listas de contato, régua e etapa e cria registro fora do fluxo (contato nasce pela distribuição ou pela régua; régua e etapa pelo gerador). New passa a ser só do admin, inclusive na related list de etapas da régua; inscrição e comunicação já não têm ACL de create para as personas. Entrega o comportamento do requisito RF-MOD-UX-009 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "list",
@@ -83875,7 +83875,7 @@
           "class": "functional",
           "type": "backend",
           "title": "«O que fazer agora» (proxima_acao) calculado por ProximaAcao e gravado por business rule em contato, caso e ciclo; aviso no form do contato",
-          "status": "TODO",
+          "status": "DONE",
           "description": "«O que fazer agora» (proxima_acao) calculado por ProximaAcao e gravado por business rule em contato, caso e ciclo; aviso no form do contato. Nenhuma lista diz qual é o próximo passo e o verbo que move o estado não aparece. A coluna «O que fazer agora» (string 120, só leitura) é gravada em toda gravação de contato, caso e ciclo a partir do estado, com a data da próxima ação gravada (não envelhece); o form do contato aberto mostra «Próximo passo: <texto>». Entrega o comportamento do requisito RF-MOD-UX-010 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "script_include",
@@ -84542,7 +84542,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "«Lista da equipe» no separador Equipe, «Ciclo do mês» com a lista TEL-036, colunas de TEL-034 e TEL-023 e ordem dos campos do form do contato (TEL-035)",
-          "status": "TODO",
+          "status": "DONE",
           "description": "«Lista da equipe» no separador Equipe, «Ciclo do mês» com a lista TEL-036, colunas de TEL-034 e TEL-023 e ordem dos campos do form do contato (TEL-035). «Minha lista» filtra pelo usuário e o separador é só do atendente: coordenador e admin não têm lista da equipe. O separador «Equipe» ganha «Lista da equipe», agrupada por atendente; as listas trocam uma coluna por «O que fazer agora» (até 6 colunas); o form do contato traz no topo os campos do verbo. Entrega o comportamento do requisito RF-MOD-UX-010 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "menu",
