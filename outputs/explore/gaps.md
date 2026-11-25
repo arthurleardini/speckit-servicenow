@@ -12,6 +12,7 @@
 |---|---|---|
 | 0.1 | 2026-11-24 | versão inicial |
 | 0.2 | 2026-11-24 | Plan: GAP-013 atualizado (reports instalados na instância) |
+| 0.3 | 2026-11-25 | Change ux-v1 (design UX v1.1, R1–R8): GAP-021 a GAP-024 registram os cortes da reformulação de UX |
 
 ## Questões abertas
 
@@ -37,6 +38,10 @@
 | GAP-018 | Seis candidatos a corte "Em discussão" no plano: WhatsApp (F4), score UFMT (F3), grupo de controle com priorização por score (F2/F6), recalibração do score (F3), sinalização coercitiva no dossiê (F5), insumos analíticos automáticos (F6). O v0 mantém todos | ⏳ Aguardando | médio | SEFAZ-MT |
 | GAP-019 | Valores das metas formais por tributo, canal e instrumento não constam no plano. O seed de `x_2326104_cob_meta` usa valores fictícios. Afeta RF-602, RF-605 | ⏳ Aguardando | baixo | Coordenação de Cobrança (CPRF) |
 | GAP-020 | Domínio de "instrumento" no critério de qualificação não listado no plano; no v0 é texto livre (`instrumento`, string). Afeta RF-201 | ⏳ Aguardando | baixo | Coordenação de Cobrança (CPRF) |
+| GAP-021 | Regra que encerra os contatos abertos da lista ativa quando o contribuinte regulariza (RN-09 do design UX v1) cortada do v1. Hoje o contato só sai da lista por «Registrar ligação» ou «Encerrar» com motivo «regularizado», feitos pelo atendente. Falta definir momento da regra (before/after insert da regularização), o que conta como «aberto» e a relação com o grupo de controle. Afeta STORY-MOD-UX-003, RF-MOD-F5-006 | ⏳ Aguardando | médio | Coordenação de Cobrança (CPRF) + FDE |
+| GAP-022 | Painel único da cobrança (`Dashboard()` do Platform Analytics) cortado do v1 (R5): a Core UI clássica entrega os números como 4 entradas da área Analytics do menu: reports TEL-026 (funil do crédito), TEL-027 (regularizações por tributo), TEL-028 (por origem e canal) e a lista TEL-029 (efeito incremental por ciclo), conforme a regra de UI do projeto (painel que a Core UI não faz vira report ou lista). A home do coordenador passa a ser «Casos qualificados». Fica em aberto o painel único com widgets cruzando duas fontes (regularizado × meta, efeito × controle). Complementa GAP-013 | 🟡 Parcialmente | médio | FDE + Coordenação de Cobrança |
+| GAP-023 | Ação «Gerar prévia» do ciclo cortada do v1 (R2): o fluxo do ciclo fica Publicar (sorteio do grupo de controle e totais, já existente) → Distribuir lista, 2 botões no mesmo registro. Falta o algoritmo da prévia (ler o critério publicado, apagar e recriar a carteira segmentada do ciclo, idempotente, sem gravar campos protegidos). Afeta STORY-MOD-F2-003, STORY-MOD-F2-006, STORY-MOD-UX-004 | ⏳ Aguardando | médio | FDE |
+| GAP-024 | Quadro Kanban (Visual Task Board) dos casos e contatos fora do v1: a etapa aparece como lista ordenada por etapa e prioridade («Casos qualificados», `ORDERBYestagio^ORDERBYDESCprioridade`) mais a trilha de etapas (process flow) no topo do form de contato, caso e ciclo. Agrupamento visual por etapa e arrastar entre colunas ficam em aberto. Afeta STORY-MOD-UX-005, STORY-MOD-UX-008 | ⏳ Aguardando | baixo | FDE + Coordenação de Cobrança |
 
 ## Dispensas registradas
 

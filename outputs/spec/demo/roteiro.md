@@ -5,9 +5,10 @@ Público: diretor da EloGroup. A demo dura cerca de 20 minutos. Todos os dados s
 ## Véspera
 
 1. `npm run doutor`: tudo verde, exceto o `gh` fora do PATH, que é contornado com `GH_BIN`.
-2. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde.
-3. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login).
-4. Abrir as abas da trilha (abaixo) e conferir que a [issue #63](https://github.com/arthurleardini/speckit-servicenow/issues/63) mostra os prints.
+2. Regerar o seed manual (ciclos, carteira segmentada, contatos e casos, com datas relativas a hoje): `cd app && node scripts/gerar-seed-demo.mjs`, commitar `app/src/fluent/seed-demo/` e `seed/_contagem.manual.json`, e rodar `node .claude/skills/sn-seed/scripts/gerar-seed.mjs` para juntar a contagem. Sem isso, a «Minha lista» do atendente chega vazia, porque as próximas ações envelhecem (design UX v1, R7).
+3. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde.
+4. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login).
+5. Abrir as abas da trilha (abaixo) e conferir que a [issue #63](https://github.com/arthurleardini/speckit-servicenow/issues/63) mostra os prints.
 
 ## 1. O problema (2 min)
 
