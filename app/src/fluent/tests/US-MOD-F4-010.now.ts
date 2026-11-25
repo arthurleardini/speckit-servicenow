@@ -645,7 +645,7 @@ export const t_f4010_acl_coord = Test({
             var el = gr.getElement(campo);
             return el ? el.canWrite() : 'sem elemento ' + campo;
         }
-        var r, e, podeOrdem, podeCodigo, podeCarteira, podeFlow, podeAtiva;
+        var r, e, podeOrdem, podeCodigo, podeCarteira, podeAtiva;
         try {
             r = new GlideRecordSecure('x_2326104_cob_regua');
             r.addQuery('codigo', 'atf_acl');
@@ -661,7 +661,12 @@ export const t_f4010_acl_coord = Test({
             e.update();
             podeCodigo = pode(r, 'codigo');
             podeCarteira = pode(r, 'carteira');
-            podeFlow = pode(r, 'flow');
+            // «flow» (como «template») não volta como elemento no GlideRecordSecure de escopo: prova pela gravação
+            var outroFlow = new GlideRecord('sys_hub_flow');
+            outroFlow.get('internal_name', 'regua_ipva');
+            r.setValue('flow', outroFlow.getUniqueValue());
+            r.setValue('prazo_final_dias', 7);
+            r.update();
             podeAtiva = pode(r, 'ativa');
         } catch (ex) {
             erro += 'erro: ' + String(ex);
@@ -679,13 +684,14 @@ export const t_f4010_acl_coord = Test({
             expect(podeOrdem).toBe(false);
             expect(podeCodigo).toBe(false);
             expect(podeCarteira).toBe(false);
-            expect(podeFlow).toBe(false);
             var lidaE = new GlideRecord('x_2326104_cob_regua_etapa');
             lidaE.get(e.getUniqueValue());
             expect(lidaE.getValue('ordem')).toBe('2');
             var lidaR = new GlideRecord('x_2326104_cob_regua');
             lidaR.get(r.getUniqueValue());
             expect(lidaR.getValue('codigo')).toBe('atf_acl');
+            expect(lidaR.getValue('flow')).toBeFalsy();
+            expect(lidaR.getValue('prazo_final_dias')).toBe('7');
         });
     });
 })(outputs, steps, params, stepResult, assertEqual);
