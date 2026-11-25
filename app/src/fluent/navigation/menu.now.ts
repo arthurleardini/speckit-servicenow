@@ -234,61 +234,67 @@ Record({
 })
 
 Record({
+    $id: Now.ID["modulo_administracao_regua_inscricao"],
+    table: 'sys_app_module',
+    data: { title: "Inscrição na régua", application: menu, link_type: 'LIST', name: "x_2326104_cob_regua_inscricao", roles: ["x_2326104_cob.admin"], active: true, order: 6700 },
+})
+
+Record({
     $id: Now.ID["modulo_administracao_comunicacao"],
     table: 'sys_app_module',
-    data: { title: "Comunicação", application: menu, link_type: 'LIST', name: "x_2326104_cob_comunicacao", roles: ["x_2326104_cob.admin"], active: true, order: 6700 },
+    data: { title: "Comunicação", application: menu, link_type: 'LIST', name: "x_2326104_cob_comunicacao", roles: ["x_2326104_cob.admin"], active: true, order: 6800 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_envio_sim"],
     table: 'sys_app_module',
-    data: { title: "Retorno de envio (Simulado)", application: menu, link_type: 'LIST', name: "x_2326104_cob_envio_sim", roles: ["x_2326104_cob.admin"], active: true, order: 6800 },
+    data: { title: "Retorno de envio (Simulado)", application: menu, link_type: 'LIST', name: "x_2326104_cob_envio_sim", roles: ["x_2326104_cob.admin"], active: true, order: 6900 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_canal_sim"],
     table: 'sys_app_module',
-    data: { title: "Canal de envio (Simulado)", application: menu, link_type: 'LIST', name: "x_2326104_cob_canal_sim", roles: ["x_2326104_cob.admin"], active: true, order: 6900 },
+    data: { title: "Canal de envio (Simulado)", application: menu, link_type: 'LIST', name: "x_2326104_cob_canal_sim", roles: ["x_2326104_cob.admin"], active: true, order: 7000 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_consentimento"],
     table: 'sys_app_module',
-    data: { title: "Consentimento por canal", application: menu, link_type: 'LIST', name: "x_2326104_cob_consentimento", roles: ["x_2326104_cob.admin"], active: true, order: 7000 },
+    data: { title: "Consentimento por canal", application: menu, link_type: 'LIST', name: "x_2326104_cob_consentimento", roles: ["x_2326104_cob.admin"], active: true, order: 7100 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_regularizacao"],
     table: 'sys_app_module',
-    data: { title: "Regularização", application: menu, link_type: 'LIST', name: "x_2326104_cob_regularizacao", roles: ["x_2326104_cob.admin"], active: true, order: 7100 },
+    data: { title: "Regularização", application: menu, link_type: 'LIST', name: "x_2326104_cob_regularizacao", roles: ["x_2326104_cob.admin"], active: true, order: 7200 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_contato"],
     table: 'sys_app_module',
-    data: { title: "Contato da lista", application: menu, link_type: 'LIST', name: "x_2326104_cob_contato", roles: ["x_2326104_cob.admin"], active: true, order: 7200 },
+    data: { title: "Contato da lista", application: menu, link_type: 'LIST', name: "x_2326104_cob_contato", roles: ["x_2326104_cob.admin"], active: true, order: 7300 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_caso"],
     table: 'sys_app_module',
-    data: { title: "Caso de cobrança qualificada", application: menu, link_type: 'LIST', name: "x_2326104_cob_caso", roles: ["x_2326104_cob.admin"], active: true, order: 7300 },
+    data: { title: "Caso de cobrança qualificada", application: menu, link_type: 'LIST', name: "x_2326104_cob_caso", roles: ["x_2326104_cob.admin"], active: true, order: 7400 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_interacao"],
     table: 'sys_app_module',
-    data: { title: "Interação", application: menu, link_type: 'LIST', name: "x_2326104_cob_interacao", roles: ["x_2326104_cob.admin"], active: true, order: 7400 },
+    data: { title: "Interação", application: menu, link_type: 'LIST', name: "x_2326104_cob_interacao", roles: ["x_2326104_cob.admin"], active: true, order: 7500 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_meta"],
     table: 'sys_app_module',
-    data: { title: "Meta de KPI", application: menu, link_type: 'LIST', name: "x_2326104_cob_meta", roles: ["x_2326104_cob.admin"], active: true, order: 7500 },
+    data: { title: "Meta de KPI", application: menu, link_type: 'LIST', name: "x_2326104_cob_meta", roles: ["x_2326104_cob.admin"], active: true, order: 7600 },
 })
 
 Record({
     $id: Now.ID["modulo_administracao_exportacao"],
     table: 'sys_app_module',
-    data: { title: "Exportação", application: menu, link_type: 'LIST', name: "x_2326104_cob_exportacao", roles: ["x_2326104_cob.admin"], active: true, order: 7600 },
+    data: { title: "Exportação", application: menu, link_type: 'LIST', name: "x_2326104_cob_exportacao", roles: ["x_2326104_cob.admin"], active: true, order: 7700 },
 })

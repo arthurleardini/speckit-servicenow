@@ -24,6 +24,10 @@ import {
     t_ux009_update_ciclo_previa, t_ux009_update_ciclo_publicado,
 } from './US-MOD-UX-009.now'
 import { t_ux010_quadro, t_ux010_gravacao, t_ux010_equipe_coordenador, t_ux010_equipe_atendente } from './US-MOD-UX-010.now'
+import {
+    t_f4010_modelo, t_f4010_flows, t_f4010_etapa_pos, t_f4010_etapa_neg, t_f4010_controle, t_f4010_fumaca,
+    t_f4010_acl_coord, t_f4010_acl_atendente,
+} from './US-MOD-F4-010.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -46,5 +50,7 @@ export const suite_cob_regressao = TestSuite({
         t_ux009_lista_atendente, t_ux009_lista_coordenador, t_ux009_condicoes, t_ux009_update_contato,
         t_ux009_update_ciclo_previa, t_ux009_update_ciclo_publicado,
         t_ux010_quadro, t_ux010_gravacao, t_ux010_equipe_coordenador, t_ux010_equipe_atendente,
+        t_f4010_modelo, t_f4010_flows, t_f4010_etapa_pos, t_f4010_etapa_neg, t_f4010_controle, t_f4010_fumaca,
+        t_f4010_acl_coord, t_f4010_acl_atendente,
     ],
 })

@@ -42,6 +42,11 @@ export const x_2326104_cob_contato = Table({
             "outro": { label: "Outro", sequence: 4 },
         }, dropdown: 'dropdown_with_none' }),
         proxima_acao: StringColumn({ label: "O que fazer agora", maxLength: 100 }),
+        origem: ChoiceColumn({ label: "Origem", choices: {
+            "distribuicao": { label: "Distribuição do ciclo", sequence: 0 },
+            "regua": { label: "Régua (encaminhada à cobrança ativa)", sequence: 1 },
+        }, dropdown: 'dropdown_with_none' }),
+        inscricao: ReferenceColumn({ label: "Inscrição na régua", referenceTable: "x_2326104_cob_regua_inscricao" }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

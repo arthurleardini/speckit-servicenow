@@ -3,7 +3,15 @@
     "x_2326104_cob_ciclo": 3,
     "x_2326104_cob_segmentacao": 56,
     "x_2326104_cob_contato": 40,
-    "x_2326104_cob_caso": 6
+    "x_2326104_cob_caso": 6,
+    "x_2326104_cob_regua": 5,
+    "x_2326104_cob_regua_etapa": 17,
+    "x_2326104_cob_debito": 53,
+    "x_2326104_cob_canal_sim": 4,
+    "x_2326104_cob_consentimento": 8,
+    "x_2326104_cob_regua_inscricao": 1,
+    "x_2326104_cob_comunicacao": 2,
+    "x_2326104_cob_envio_sim": 2
   },
   "extras": []
 }

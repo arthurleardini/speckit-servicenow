@@ -5,7 +5,8 @@
 // Uso (na pasta app/):  node scripts/gerar-seed-demo.mjs [--hoje AAAA-MM-DD]
 //
 // Lê os contribuintes e critérios do seed gerado (src/fluent/seed/, sn-seed) e grava:
-//   src/fluent/seed-demo/{ciclo,segmentacao,contato,caso}.now.ts
+//   src/fluent/seed-demo/{ciclo,segmentacao,contato,caso,debito,canal_sim,consentimento,inscricao}.now.ts
+//   (régua e etapas: seed-demo/regua.now.ts, de app/scripts/gerar-flows-regua.mjs — rodar antes deste)
 //   src/fluent/seed/_contagem.manual.json e _documentos.manual.json
 // As datas (próxima ação de hoje a +7 dias) envelhecem: na véspera da demo, rodar de novo,
 // commitar e rodar `npm run reinstall` (ver outputs/spec/demo/roteiro.md, Véspera).
@@ -196,6 +197,7 @@ for (const [atendente, lista] of [...porAtendente.entries()].sort()) {
       ciclo: raw(ref(`${S}ciclo`, CICLO_MES)), status: p.status,
       proxima_acao_em: p.d === undefined ? undefined : dia(p.d), ultimo_resultado: p.res,
       tentativas: p.t, prioridade: prioridade(c), valor_em_aberto: c.valor, motivo_encerramento: p.motivo,
+      origem: 'distribuicao',
     }));
     contagemPorAtendente[atendente] = (contagemPorAtendente[atendente] ?? 0) + 1;
     statusDoMes.set(c.id, p.status);
@@ -207,7 +209,7 @@ massa.slice(0, encMassa).forEach((c, i) => {
   contatos.push(record(`seed_demo_contato_${String(contatos.length + 1).padStart(3, '0')}`, `${S}contato`, {
     contribuinte: raw(ref(`${S}contribuinte`, c.id)), atendente: raw(refUser(c.atendente)),
     ciclo: raw(ref(`${S}ciclo`, CICLO_ENC)), status: 'encerrado', ultimo_resultado: p.res, tentativas: p.t,
-    prioridade: prioridade(c), valor_em_aberto: c.valor, motivo_encerramento: p.motivo,
+    prioridade: prioridade(c), valor_em_aberto: c.valor, motivo_encerramento: p.motivo, origem: 'distribuicao',
   }));
 });
 
@@ -268,20 +270,84 @@ massa.slice(0, encMassa).forEach((c, i) => linhaSeg(CICLO_ENC, criterios[1], c, 
 qualificadosEnc.forEach((c, i) => linhaSeg(CICLO_ENC, criterios[1], c, 'qualificada', i === 0 ? 'regularizado' : 'notificado', false));
 controle.slice(controleMes, controleMes + 2).forEach((c) => linhaSeg(CICLO_ENC, criterios[1], c, 'controle', 'identificado', false));
 
+// ——— Régua (design ux-v2, B1; US-MOD-F4-010): canais simulados, consentimento dos contribuintes de demo A e B
+// e a inscrição demo da TEL-038. As réguas e etapas vêm de app/scripts/gerar-flows-regua.mjs (seed-demo/regua.now.ts).
+// A = opt-in em tudo; B = opt-out de SMS (CUJ-4): dois da massificada do ciclo do mês, fora do controle, com
+// débito de IPVA em aberto; C (terceiro) leva a inscrição demo, encerrada (não dispara Flow).
+// Débito de IPVA dos três (A e B em aberto; C regularizado, por isso a inscrição dele encerrou): o seed
+// gerado quase não tem IPVA em aberto na massificada.
+const [contribA, contribB, contribC] = massa;
+const debitosGerados = lerSeed('debito.now.ts').length;
+const debitosDemo = [[contribA, 'a', 'aberto'], [contribB, 'b', 'aberto'], [contribC, 'c', 'regularizado']].map(([c, rot, status]) =>
+  record(`seed_demo_debito_ipva_${rot}`, `${S}debito`, {
+    contribuinte: raw(ref(`${S}contribuinte`, c.id)), origem: 'sne', tributo: 'ipva', valor: 1250, vencimento: dia(-60),
+    dias_atraso: 60, status, id_fonte: `IPVA-DEMO-${rot.toUpperCase()}`, sobreposto: false, atualizado_em: `${dia(-1)} 08:00:00`,
+  }));
+const CANAIS = [
+  { canal: 'sne', contratado: true, exige_opt_in: false },
+  { canal: 'email', contratado: true, exige_opt_in: false },
+  { canal: 'sms', contratado: true, exige_opt_in: false },
+  { canal: 'whatsapp', contratado: true, exige_opt_in: true },
+];
+const canais = CANAIS.map((c) => record(`seed_demo_canal_${c.canal}`, `${S}canal_sim`, { ...c, forcar_falha: false }));
+const consentimentos = [];
+const consentir = (c, rotulo, canal, situacao) => consentimentos.push(record(
+  `seed_demo_consentimento_${rotulo}_${canal}`, `${S}consentimento`, {
+    contribuinte: raw(ref(`${S}contribuinte`, c.id)), canal, situacao,
+    registrado_em: `${dia(-30)} 10:00:00`, origem: 'Portal do contribuinte (fictício)',
+  }));
+for (const canal of ['sne', 'email', 'sms', 'whatsapp']) consentir(contribA, 'a', canal, 'opt_in');
+for (const canal of ['sne', 'email', 'whatsapp']) consentir(contribB, 'b', canal, 'opt_in');
+consentir(contribB, 'b', 'sms', 'opt_out');
+const REGUA_IPVA = 'TEL-014_registro_demo';
+const inscricoes = [record('TEL-038_registro_demo', `${S}regua_inscricao`, {
+  contribuinte: raw(ref(`${S}contribuinte`, contribC.id)), regua: raw(ref(`${S}regua`, REGUA_IPVA)),
+  ciclo: raw(ref(`${S}ciclo`, CICLO_MES)), status: 'encerrada', etapa_atual: 2,
+  iniciada_em: `${dia(-12)} 09:00:00`, proxima_etapa_em: `${dia(8)} 09:00:00`, encerrada_em: `${dia(-1)} 15:00:00`,
+  motivo_encerramento: 'regularizado',
+})];
+const comunicacoes = [];
+const envios = [];
+[{ ordem: 1, canal: 'sne', d: -12 }, { ordem: 2, canal: 'email', d: -2 }].forEach((e) => {
+  const chave = `seed_demo_comunicacao_${e.ordem}`;
+  comunicacoes.push(record(chave, `${S}comunicacao`, {
+    contribuinte: raw(ref(`${S}contribuinte`, contribC.id)), regua: raw(ref(`${S}regua`, REGUA_IPVA)),
+    etapa: raw(ref(`${S}regua_etapa`, `seed_regua_etapa_ipva_${e.ordem}`)), ciclo: raw(ref(`${S}ciclo`, CICLO_MES)),
+    inscricao: raw(ref(`${S}regua_inscricao`, 'TEL-038_registro_demo')), canal: e.canal, status: 'entregue',
+    motivo: `Etapa ${e.ordem} entregue por ${e.canal === 'sne' ? 'SNE' : 'e-mail'}`, enviada_em: `${dia(e.d)} 09:00:00`, tentativas: 1,
+  }));
+  envios.push(record(`seed_demo_envio_${e.ordem}`, `${S}envio_sim`, {
+    comunicacao: raw(ref(`${S}comunicacao`, chave)), inscricao: raw(ref(`${S}regua_inscricao`, 'TEL-038_registro_demo')),
+    canal: e.canal, status_retorno: 'entregue', codigo_retorno: '200', recebido_em: `${dia(e.d)} 09:00:05`,
+  }));
+});
+// Contagem das réguas e etapas escritas pelo gerador de Flows.
+const seedRegua = readFileSync(join(OUT, 'regua.now.ts'), 'utf8');
+const contarTabela = (t) => (seedRegua.match(new RegExp(`table: "${t}"`, 'g')) ?? []).length;
+
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'segmentacao.now.ts'), arquivo('carteira segmentada dos ciclos publicados', segmentacao));
 writeFileSync(join(OUT, 'ciclo.now.ts'), arquivo('ciclos de qualificação', ciclos));
 writeFileSync(join(OUT, 'contato.now.ts'), arquivo('contatos da lista de cobrança ativa', contatos));
 writeFileSync(join(OUT, 'caso.now.ts'), arquivo('casos qualificados do coordenador', casos));
+writeFileSync(join(OUT, 'debito.now.ts'), arquivo('débitos de IPVA dos contribuintes de demo da régua (A, B e C)', debitosDemo));
+writeFileSync(join(OUT, 'canal_sim.now.ts'), arquivo('canais de envio simulados (régua, design ux-v2 B1)', canais));
+writeFileSync(join(OUT, 'consentimento.now.ts'), arquivo('consentimento por canal dos contribuintes de demo A e B (CUJ-4)', consentimentos));
+writeFileSync(join(OUT, 'inscricao.now.ts'), arquivo('inscrição demo da TEL-038, com comunicações e retornos de envio', [...inscricoes, ...comunicacoes, ...envios]));
 writeFileSync(join(SEED, '_contagem.manual.json'), JSON.stringify({
   tabelas: {
     [`${S}ciclo`]: ciclos.length, [`${S}segmentacao`]: segmentacao.length,
     [`${S}contato`]: contatos.length, [`${S}caso`]: casos.length,
+    [`${S}regua`]: contarTabela(`${S}regua`), [`${S}regua_etapa`]: contarTabela(`${S}regua_etapa`),
+    [`${S}debito`]: debitosGerados + debitosDemo.length,
+    [`${S}canal_sim`]: canais.length, [`${S}consentimento`]: consentimentos.length,
+    [`${S}regua_inscricao`]: inscricoes.length, [`${S}comunicacao`]: comunicacoes.length, [`${S}envio_sim`]: envios.length,
   },
   extras: [],
 }, null, 2) + '\n');
 writeFileSync(join(SEED, '_documentos.manual.json'), JSON.stringify({ documentos: [] }, null, 2) + '\n');
 console.log(JSON.stringify({
   hoje: dia(0), ciclos: ciclos.length, segmentacao: segmentacao.length, contatos: contatos.length, casos: casos.length,
+  reguaDemo: { A: contribA.id, B: contribB.id, inscricaoDemo: contribC.id },
   contatosDoMes: massa.length, porAtendente: contagemPorAtendente, elegiveisMes: elegMes, controleMes,
 }));

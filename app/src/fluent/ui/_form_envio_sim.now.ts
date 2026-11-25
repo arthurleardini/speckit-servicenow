@@ -9,7 +9,7 @@ Form({
         {
             caption: "Retorno de envio (Simulado)",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "comunicacao", type: 'table_field' }, { field: "canal", type: 'table_field' }, { field: "status_retorno", type: 'table_field' }], rightElements: [{ field: "codigo_retorno", type: 'table_field' }, { field: "recebido_em", type: 'table_field' }, { field: "falhar", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "comunicacao", type: 'table_field' }, { field: "canal", type: 'table_field' }, { field: "status_retorno", type: 'table_field' }, { field: "codigo_retorno", type: 'table_field' }], rightElements: [{ field: "recebido_em", type: 'table_field' }, { field: "inscricao", type: 'table_field' }, { field: "falhar", type: 'table_field' }] },
             ],
         },
     ],

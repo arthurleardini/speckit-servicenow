@@ -30,5 +30,6 @@ export const x_2326104_cob_comunicacao = Table({
         motivo: StringColumn({ label: "Motivo", maxLength: 255 }),
         enviada_em: DateTimeColumn({ label: "Enviada em" }),
         tentativas: IntegerColumn({ label: "Tentativas" }),
+        inscricao: ReferenceColumn({ label: "Inscrição na régua", referenceTable: "x_2326104_cob_regua_inscricao" }),
     },
 })

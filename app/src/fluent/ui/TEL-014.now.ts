@@ -9,7 +9,7 @@ Form({
         {
             caption: "Editor de régua",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "nome", type: 'table_field' }, { field: "carteira", type: 'table_field' }, { field: "ativa", type: 'table_field' }], rightElements: [{ field: "janela_atribuicao_dias", type: 'table_field' }, { field: "ordem_fallback", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "nome", type: 'table_field' }, { field: "codigo", type: 'table_field' }, { field: "carteira", type: 'table_field' }, { field: "ativa", type: 'table_field' }], rightElements: [{ field: "prazo_final_dias", type: 'table_field' }, { field: "janela_atribuicao_dias", type: 'table_field' }, { field: "flow", type: 'table_field' }] },
                 { layout: 'one-column', elements: [{ field: "comentarios", type: 'table_field' }] },
             ],
         },

@@ -5,5 +5,5 @@ import { List, default_view } from '@servicenow/sdk/core'
 List({
     table: "x_2326104_cob_regua",
     view: default_view,
-    columns: ["nome","carteira","ativa","janela_atribuicao_dias","ordem_fallback"],
+    columns: ["nome","codigo","carteira","ativa","prazo_final_dias"],
 })

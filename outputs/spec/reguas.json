@@ -1,0 +1,37 @@
+{
+  "descricao": "Réguas de cobrança do app (design ux-cobranca-v2-regua-flow.md, B1 e D8). Fonte do gerador app/scripts/gerar-flows-regua.mjs: um Flow «Régua: <nome>» por régua e o seed de régua e etapas. «dia» vira offset_dias. Textos de canal informal (e-mail, SMS, WhatsApp) só dão ciência do DT-e, sem valor nem tributo (D17).",
+  "reguas": [
+    { "codigo": "parcelamentos", "nome": "Parcelamentos", "carteira": "parcelamentos", "ativa": true, "prazo_final_dias": 5, "janela_atribuicao_dias": 30,
+      "etapas": [
+        { "ordem": 1, "dia": 0,  "canal": "sne",   "postura": "utilitaria",  "acao_sem_resposta": "intensificar", "template": "Há uma mensagem sobre o seu parcelamento no DT-e. Acesse o portal da SEFAZ-MT." },
+        { "ordem": 2, "dia": 7,  "canal": "email", "postura": "consciente",  "acao_sem_resposta": "intensificar", "template": "Lembrete: há uma mensagem sobre o seu parcelamento no DT-e. Acesse o portal da SEFAZ-MT para conferir as parcelas." },
+        { "ordem": 3, "dia": 15, "canal": "sne",   "postura": "explicativa", "acao_sem_resposta": "encaminhar_ativa", "template": "Parcelas em atraso podem levar ao rompimento do parcelamento. Regularize pelo portal da SEFAZ-MT ou fale com a central de atendimento." }
+      ] },
+    { "codigo": "ipva", "nome": "IPVA", "carteira": "ipva", "ativa": true, "prazo_final_dias": 5, "janela_atribuicao_dias": 30,
+      "etapas": [
+        { "ordem": 1, "dia": 0,  "canal": "sne",   "postura": "utilitaria",  "acao_sem_resposta": "intensificar", "template": "Há uma mensagem para você no DT-e. Acesse o portal da SEFAZ-MT." },
+        { "ordem": 2, "dia": 10, "canal": "email", "postura": "consciente",  "acao_sem_resposta": "intensificar", "template": "Você tem uma mensagem não lida no DT-e. Acesse o portal da SEFAZ-MT para conferir a situação do seu veículo." },
+        { "ordem": 3, "dia": 20, "canal": "sms",   "postura": "explicativa", "acao_sem_resposta": "intensificar", "template": "SEFAZ-MT: há uma pendência do seu veículo no DT-e. Regularizar evita restrições no licenciamento. Acesse o portal." },
+        { "ordem": 4, "dia": 30, "canal": "sne",   "postura": "ameacadora",  "acao_sem_resposta": "encaminhar_ativa", "template": "Sem a regularização, o débito de IPVA segue para a cobrança ativa e pode ser inscrito em dívida ativa. Regularize pelo portal da SEFAZ-MT." }
+      ] },
+    { "codigo": "itcd", "nome": "ITCD", "carteira": "itcd", "ativa": true, "prazo_final_dias": 5, "janela_atribuicao_dias": 30,
+      "etapas": [
+        { "ordem": 1, "dia": 0,  "canal": "sne",   "postura": "utilitaria",  "acao_sem_resposta": "intensificar", "template": "Há uma mensagem para você no DT-e sobre uma declaração de ITCD. Acesse o portal da SEFAZ-MT." },
+        { "ordem": 2, "dia": 15, "canal": "email", "postura": "consciente",  "acao_sem_resposta": "intensificar", "template": "Você tem uma mensagem não lida no DT-e. Acesse o portal da SEFAZ-MT para conferir a sua declaração." },
+        { "ordem": 3, "dia": 30, "canal": "sne",   "postura": "explicativa", "acao_sem_resposta": "encaminhar_qualificada", "template": "A pendência de ITCD segue para análise da cobrança qualificada. Regularize pelo portal da SEFAZ-MT ou fale com a central de atendimento." }
+      ] },
+    { "codigo": "icms_normal", "nome": "ICMS Normal", "carteira": "icms_normal", "ativa": true, "prazo_final_dias": 5, "janela_atribuicao_dias": 30,
+      "etapas": [
+        { "ordem": 1, "dia": 0,  "canal": "sne",      "postura": "utilitaria",  "acao_sem_resposta": "intensificar", "template": "Há uma mensagem para a sua empresa no DT-e. Acesse o portal da SEFAZ-MT." },
+        { "ordem": 2, "dia": 10, "canal": "email",    "postura": "consciente",  "acao_sem_resposta": "intensificar", "template": "A sua empresa tem uma mensagem não lida no DT-e. Acesse o portal da SEFAZ-MT para conferir." },
+        { "ordem": 3, "dia": 20, "canal": "whatsapp", "postura": "explicativa", "acao_sem_resposta": "intensificar", "template": "SEFAZ-MT: há uma pendência da sua empresa no DT-e. Regularizar evita restrições na emissão de documentos. Acesse o portal." },
+        { "ordem": 4, "dia": 30, "canal": "sne",      "postura": "ameacadora",  "acao_sem_resposta": "encaminhar_ativa", "template": "Sem a regularização, o débito segue para a cobrança ativa e pode ser inscrito em dívida ativa. Regularize pelo portal da SEFAZ-MT." }
+      ] },
+    { "codigo": "icms_st", "nome": "ICMS ST", "carteira": "icms_st", "ativa": true, "prazo_final_dias": 5, "janela_atribuicao_dias": 30,
+      "etapas": [
+        { "ordem": 1, "dia": 0,  "canal": "sne",   "postura": "utilitaria",  "acao_sem_resposta": "intensificar", "template": "Há uma mensagem para a sua empresa no DT-e sobre substituição tributária. Acesse o portal da SEFAZ-MT." },
+        { "ordem": 2, "dia": 10, "canal": "email", "postura": "consciente",  "acao_sem_resposta": "intensificar", "template": "A sua empresa tem uma mensagem não lida no DT-e. Acesse o portal da SEFAZ-MT para conferir." },
+        { "ordem": 3, "dia": 20, "canal": "sne",   "postura": "explicativa", "acao_sem_resposta": "encaminhar_ativa", "template": "A pendência de substituição tributária segue para a cobrança ativa. Regularize pelo portal da SEFAZ-MT ou fale com a central de atendimento." }
+      ] }
+  ]
+}

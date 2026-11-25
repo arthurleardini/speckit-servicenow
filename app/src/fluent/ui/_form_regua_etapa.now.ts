@@ -9,7 +9,7 @@ Form({
         {
             caption: "Etapa da régua",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "regua", type: 'table_field' }, { field: "ordem", type: 'table_field' }, { field: "offset_dias", type: 'table_field' }], rightElements: [{ field: "canal", type: 'table_field' }, { field: "acao_sem_resposta", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "regua", type: 'table_field' }, { field: "ordem", type: 'table_field' }, { field: "offset_dias", type: 'table_field' }], rightElements: [{ field: "canal", type: 'table_field' }, { field: "postura", type: 'table_field' }, { field: "acao_sem_resposta", type: 'table_field' }] },
                 { layout: 'one-column', elements: [{ field: "template", type: 'table_field' }] },
             ],
         },

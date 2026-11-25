@@ -1443,14 +1443,15 @@
       "name": "x_2326104_cob_regua",
       "label": "Régua de cobrança",
       "pluralLabel": "Réguas de cobrança",
-      "description": "Guarda a régua de cobrança de uma carteira, ativa ou não, com janela de atribuição e ordem de fallback de canal.",
+      "description": "Guarda a régua de cobrança de uma carteira: código, etapas, prazo de resposta depois da última etapa e o Flow «Régua: <nome>» que a executa (design ux-v2, D6/D8). A coluna ordem_fallback não é mais lida (D18).",
       "journal": true,
       "audit": true,
       "rf": [
         "RF-MOD-F4-001",
         "RF-MOD-F4-003",
         "RF-MOD-F4-004",
-        "RF-MOD-F4-009"
+        "RF-MOD-F4-009",
+        "RF-MOD-F4-010"
       ],
       "rn": [
         "RN-NOVO-F4-001",
@@ -1464,6 +1465,14 @@
           "type": "string",
           "maxLength": 100,
           "mandatory": true
+        },
+        {
+          "name": "codigo",
+          "label": "Código",
+          "type": "string",
+          "maxLength": 40,
+          "mandatory": true,
+          "description": "Código único da régua (ex.: ipva); casa com o gatilho do Flow. Validado pelo gerador; só admin grava. Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
         },
         {
           "name": "carteira",
@@ -1499,6 +1508,13 @@
           "type": "boolean"
         },
         {
+          "name": "prazo_final_dias",
+          "label": "Prazo de resposta depois da última etapa (dias)",
+          "type": "integer",
+          "mandatory": true,
+          "description": "Padrão 5. Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
+        },
+        {
           "name": "janela_atribuicao_dias",
           "label": "Janela de atribuição (dias)",
           "type": "integer"
@@ -1508,6 +1524,13 @@
           "label": "Ordem de fallback de canal",
           "type": "string",
           "maxLength": 60
+        },
+        {
+          "name": "flow",
+          "label": "Flow",
+          "type": "reference",
+          "reference": "sys_hub_flow",
+          "description": "Flow «Régua: <nome>» gerado por app/scripts/gerar-flows-regua.mjs; só admin grava. Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
         },
         {
           "name": "comentarios",
@@ -1525,7 +1548,8 @@
       "rf": [
         "RF-MOD-F4-001",
         "RF-MOD-F4-003",
-        "RF-MOD-F4-009"
+        "RF-MOD-F4-009",
+        "RF-MOD-F4-010"
       ],
       "rn": [
         "RN-NOVO-F4-001",
@@ -1546,7 +1570,7 @@
         },
         {
           "name": "offset_dias",
-          "label": "Offset (dias)",
+          "label": "Dia (D+n)",
           "type": "integer"
         },
         {
@@ -1579,6 +1603,30 @@
           "maxLength": 1000
         },
         {
+          "name": "postura",
+          "label": "Postura",
+          "type": "choice",
+          "choices": {
+            "utilitaria": {
+              "label": "Utilitária",
+              "sequence": 10
+            },
+            "consciente": {
+              "label": "Consciente",
+              "sequence": 20
+            },
+            "explicativa": {
+              "label": "Explicativa",
+              "sequence": 30
+            },
+            "ameacadora": {
+              "label": "Ameaçadora",
+              "sequence": 40
+            }
+          },
+          "description": "Sobe no máximo um nível por etapa (D17). Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
+        },
+        {
           "name": "acao_sem_resposta",
           "label": "Ação sem resposta",
           "type": "choice",
@@ -1591,11 +1639,145 @@
               "label": "Intensificar",
               "sequence": 20
             },
+            "encaminhar_ativa": {
+              "label": "Encaminhar à cobrança ativa",
+              "sequence": 30
+            },
             "encaminhar_qualificada": {
               "label": "Encaminhar à qualificada",
+              "sequence": 40
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "x_2326104_cob_regua_inscricao",
+      "label": "Inscrição na régua",
+      "pluralLabel": "Inscrições na régua",
+      "description": "Inscrição de um contribuinte numa régua: o Flow da régua dispara na criação e o motor grava etapa, próxima etapa e encerramento (design ux-v2, D6).",
+      "audit": true,
+      "display": "contribuinte",
+      "rf": [
+        "RF-MOD-F4-002",
+        "RF-MOD-F4-003",
+        "RF-MOD-F4-009",
+        "RF-MOD-F4-010"
+      ],
+      "rn": [
+        "RN-NOVO-F4-009",
+        "RN-NOVO-F4-011",
+        "RN-NOVO-F1-002",
+        "RN-NOVO-F2-005"
+      ],
+      "columns": [
+        {
+          "name": "contribuinte",
+          "label": "Contribuinte",
+          "type": "reference",
+          "reference": "x_2326104_cob_contribuinte",
+          "mandatory": true
+        },
+        {
+          "name": "regua",
+          "label": "Régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua",
+          "mandatory": true
+        },
+        {
+          "name": "ciclo",
+          "label": "Ciclo",
+          "type": "reference",
+          "reference": "x_2326104_cob_ciclo"
+        },
+        {
+          "name": "parcelamento",
+          "label": "Parcelamento",
+          "type": "reference",
+          "reference": "x_2326104_cob_parcelamento"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "choice",
+          "choices": {
+            "ativa": {
+              "label": "Ativa",
+              "sequence": 10
+            },
+            "encerrada": {
+              "label": "Encerrada",
+              "sequence": 20
+            },
+            "erro": {
+              "label": "Erro",
               "sequence": 30
             }
           }
+        },
+        {
+          "name": "etapa_atual",
+          "label": "Etapa atual",
+          "type": "integer"
+        },
+        {
+          "name": "proxima_etapa_em",
+          "label": "Próxima etapa em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "iniciada_em",
+          "label": "Iniciada em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "encerrada_em",
+          "label": "Encerrada em",
+          "type": "glide_date_time"
+        },
+        {
+          "name": "motivo_encerramento",
+          "label": "Motivo de encerramento",
+          "type": "choice",
+          "choices": {
+            "regularizado": {
+              "label": "Regularizado",
+              "sequence": 10
+            },
+            "parcelamento_rompido": {
+              "label": "Parcelamento rompido",
+              "sequence": 20
+            },
+            "controle": {
+              "label": "Grupo de controle",
+              "sequence": 30
+            },
+            "regua_pausada": {
+              "label": "Régua pausada",
+              "sequence": 40
+            },
+            "encaminhada_ativa": {
+              "label": "Encaminhada à cobrança ativa",
+              "sequence": 50
+            },
+            "encaminhada_qualificada": {
+              "label": "Encaminhada à cobrança qualificada",
+              "sequence": 60
+            }
+          }
+        },
+        {
+          "name": "contato",
+          "label": "Contato da cobrança ativa",
+          "type": "reference",
+          "reference": "x_2326104_cob_contato"
+        },
+        {
+          "name": "detalhe",
+          "label": "Detalhe",
+          "type": "string",
+          "maxLength": 255
         }
       ]
     },
@@ -1717,6 +1899,12 @@
           "name": "tentativas",
           "label": "Tentativas",
           "type": "integer"
+        },
+        {
+          "name": "inscricao",
+          "label": "Inscrição na régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua_inscricao"
         }
       ]
     },
@@ -1794,6 +1982,12 @@
           "name": "recebido_em",
           "label": "Recebido em",
           "type": "glide_date_time"
+        },
+        {
+          "name": "inscricao",
+          "label": "Inscrição na régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua_inscricao"
         }
       ]
     },
@@ -2253,6 +2447,28 @@
           "type": "string",
           "maxLength": 100,
           "description": "Próximo passo pelo estado do registro, gravado pela business rule (ProximaAcao, RN-NOVO-UX-015); só leitura. Design ux-cobranca-v2-regua-flow.md, D3/A3."
+        },
+        {
+          "name": "origem",
+          "label": "Origem",
+          "type": "choice",
+          "choices": {
+            "distribuicao": {
+              "label": "Distribuição do ciclo",
+              "sequence": 10
+            },
+            "regua": {
+              "label": "Régua (encaminhada à cobrança ativa)",
+              "sequence": 20
+            }
+          },
+          "description": "Por onde o contato nasceu (D14). Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
+        },
+        {
+          "name": "inscricao",
+          "label": "Inscrição na régua",
+          "type": "reference",
+          "reference": "x_2326104_cob_regua_inscricao"
         },
         {
           "name": "comentarios",
@@ -3013,15 +3229,15 @@
       "module": "MOD-F4",
       "fields": [
         "nome",
+        "codigo",
         "carteira",
         "ativa",
-        "janela_atribuicao_dias",
-        "ordem_fallback"
+        "prazo_final_dias"
       ],
       "rf": [
         "RF-MOD-F4-001"
       ],
-      "demoRecord": "lista: seed fictício (50)"
+      "demoRecord": "lista: 5 réguas do seed (reguas.json)"
     },
     {
       "id": "TEL-014",
@@ -3033,23 +3249,27 @@
       "module": "MOD-F4",
       "fields": [
         "nome",
+        "codigo",
         "carteira",
         "ativa",
+        "prazo_final_dias",
         "janela_atribuicao_dias",
-        "ordem_fallback",
+        "flow",
         "comentarios"
       ],
       "relatedLists": [
         "x_2326104_cob_regua_etapa.regua",
+        "x_2326104_cob_regua_inscricao.regua",
         "x_2326104_cob_comunicacao.regua"
       ],
       "rf": [
         "RF-MOD-F4-001",
         "RF-MOD-F4-003",
         "RF-MOD-F4-004",
-        "RF-MOD-F4-009"
+        "RF-MOD-F4-009",
+        "RF-MOD-F4-010"
       ],
-      "demoRecord": "TEL-014_registro_demo: régua IPVA com 4 etapas (SNE, e-mail, SMS, encaminhar à qualificada)"
+      "demoRecord": "TEL-014_registro_demo: régua IPVA com 4 etapas (SNE utilitária, e-mail consciente, SMS explicativa, SNE ameaçadora que encaminha à cobrança ativa)"
     },
     {
       "id": "TEL-015",
@@ -3493,6 +3713,8 @@
         "prioridade",
         "atendente",
         "ciclo",
+        "origem",
+        "inscricao",
         "comentarios"
       ],
       "relatedLists": [
@@ -3525,6 +3747,58 @@
         "RF-MOD-UX-009"
       ],
       "demoRecord": "lista: ciclos não encerrados do seed (prévia e publicado)"
+    },
+    {
+      "id": "TEL-037",
+      "title": "Inscrições na régua",
+      "table": "x_2326104_cob_regua_inscricao",
+      "type": "list",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "contribuinte",
+        "regua",
+        "status",
+        "etapa_atual",
+        "proxima_etapa_em",
+        "motivo_encerramento"
+      ],
+      "rf": [
+        "RF-MOD-F4-010"
+      ],
+      "demoRecord": "lista: inscrições criadas pela publicação do ciclo"
+    },
+    {
+      "id": "TEL-038",
+      "title": "Inscrição na régua",
+      "table": "x_2326104_cob_regua_inscricao",
+      "type": "form",
+      "view": "default",
+      "role": "coordenador",
+      "module": "MOD-F4",
+      "fields": [
+        "contribuinte",
+        "regua",
+        "status",
+        "etapa_atual",
+        "proxima_etapa_em",
+        "motivo_encerramento",
+        "iniciada_em",
+        "encerrada_em",
+        "ciclo",
+        "parcelamento",
+        "contato",
+        "detalhe"
+      ],
+      "relatedLists": [
+        "x_2326104_cob_comunicacao.inscricao",
+        "x_2326104_cob_envio_sim.inscricao"
+      ],
+      "rf": [
+        "RF-MOD-F4-010"
+      ],
+      "demoRecord": "TEL-038_registro_demo: inscrição encerrada de demonstração na régua IPVA, com as comunicações e os retornos de envio"
     }
   ],
   "roles": [
@@ -3626,6 +3900,13 @@
     "x_2326104_cob_ciclo",
     "x_2326104_cob_segmentacao",
     "x_2326104_cob_contato",
-    "x_2326104_cob_caso"
+    "x_2326104_cob_caso",
+    "x_2326104_cob_regua",
+    "x_2326104_cob_regua_etapa",
+    "x_2326104_cob_regua_inscricao",
+    "x_2326104_cob_canal_sim",
+    "x_2326104_cob_consentimento",
+    "x_2326104_cob_comunicacao",
+    "x_2326104_cob_envio_sim"
   ]
 }

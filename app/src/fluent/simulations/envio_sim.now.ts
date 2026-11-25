@@ -22,6 +22,7 @@ export const x_2326104_cob_envio_sim = Table({
         }, dropdown: 'dropdown_with_none' }),
         codigo_retorno: StringColumn({ label: "Código de retorno", maxLength: 20 }),
         recebido_em: DateTimeColumn({ label: "Recebido em" }),
+        inscricao: ReferenceColumn({ label: "Inscrição na régua", referenceTable: "x_2326104_cob_regua_inscricao" }),
         falhar: BooleanColumn({ label: "Simular falha" }),
     },
 })

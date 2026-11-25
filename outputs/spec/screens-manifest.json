@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "sn-scaffold",
-  "generatedAt": "2026-11-25T13:14:00.541Z",
+  "generatedAt": "2026-11-25T15:36:13.695Z",
   "screens": [
     {
       "id": "TEL-001",
@@ -360,6 +360,26 @@
       "type": "list",
       "role": "coordenador",
       "table": "x_2326104_cob_ciclo",
+      "screenshot": null,
+      "capturedAt": null
+    },
+    {
+      "id": "TEL-037",
+      "title": "Inscrições na régua",
+      "route": "/x_2326104_cob_regua_inscricao_list.do",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regua_inscricao",
+      "screenshot": null,
+      "capturedAt": null
+    },
+    {
+      "id": "TEL-038",
+      "title": "Inscrição na régua",
+      "route": "/x_2326104_cob_regua_inscricao.do?sys_id=59a5b26622ef43809bb13bf963b7c2b7",
+      "type": "form",
+      "role": "coordenador",
+      "table": "x_2326104_cob_regua_inscricao",
       "screenshot": null,
       "capturedAt": null
     }

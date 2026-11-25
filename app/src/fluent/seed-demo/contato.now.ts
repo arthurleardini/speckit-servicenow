@@ -17,6 +17,7 @@ Record({
         tentativas: 1,
         prioridade: 5,
         valor_em_aberto: 95344.04,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
@@ -34,6 +35,7 @@ Record({
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 37562.26,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -51,6 +53,7 @@ Record({
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 80086.57,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -69,6 +72,7 @@ Record({
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 13738.68,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
@@ -86,6 +90,7 @@ Record({
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 74222.23,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -104,6 +109,7 @@ Record({
         tentativas: 1,
         prioridade: 4,
         valor_em_aberto: 70740.61,
+        origem: "distribuicao",
         proxima_acao: "Conferir pagamento combinado em 02/12/2026",
     },
 })
@@ -121,6 +127,7 @@ Record({
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 87281.64,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -139,6 +146,7 @@ Record({
         tentativas: 2,
         prioridade: 1,
         valor_em_aberto: 13845.56,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 26/11/2026",
     },
 })
@@ -156,6 +164,7 @@ Record({
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 36659.28,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -173,6 +182,7 @@ Record({
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 71786.35,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -191,6 +201,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 91736.44,
         motivo_encerramento: "recusa",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -209,6 +220,7 @@ Record({
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 13372.42,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 29/11/2026",
     },
 })
@@ -226,6 +238,7 @@ Record({
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 33202.53,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -244,6 +257,7 @@ Record({
         tentativas: 2,
         prioridade: 4,
         valor_em_aberto: 67645.63,
+        origem: "distribuicao",
         proxima_acao: "Conferir pagamento combinado em 01/12/2026",
     },
 })
@@ -262,6 +276,7 @@ Record({
         tentativas: 1,
         prioridade: 2,
         valor_em_aberto: 40187.09,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
@@ -279,6 +294,7 @@ Record({
         tentativas: 0,
         prioridade: 3,
         valor_em_aberto: 47533.5,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -296,6 +312,7 @@ Record({
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 32207.59,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -314,6 +331,7 @@ Record({
         tentativas: 1,
         prioridade: 2,
         valor_em_aberto: 41426.54,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
@@ -331,6 +349,7 @@ Record({
         tentativas: 0,
         prioridade: 3,
         valor_em_aberto: 51591.47,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -349,6 +368,7 @@ Record({
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 4628.03,
+        origem: "distribuicao",
         proxima_acao: "Conferir pagamento combinado em 02/12/2026",
     },
 })
@@ -366,6 +386,7 @@ Record({
         tentativas: 0,
         prioridade: 1,
         valor_em_aberto: 17437.97,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -384,6 +405,7 @@ Record({
         tentativas: 2,
         prioridade: 5,
         valor_em_aberto: 90319.49,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 26/11/2026",
     },
 })
@@ -401,6 +423,7 @@ Record({
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 28991.35,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -418,6 +441,7 @@ Record({
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 62558.22,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -436,6 +460,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 18470.63,
         motivo_encerramento: "recusa",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -454,6 +479,7 @@ Record({
         tentativas: 1,
         prioridade: 5,
         valor_em_aberto: 90285.67,
+        origem: "distribuicao",
         proxima_acao: "Retornar a ligação em 29/11/2026",
     },
 })
@@ -471,6 +497,7 @@ Record({
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 80024.95,
+        origem: "distribuicao",
         proxima_acao: "Ligar e registrar o resultado",
     },
 })
@@ -489,6 +516,7 @@ Record({
         tentativas: 2,
         prioridade: 5,
         valor_em_aberto: 95607.67,
+        origem: "distribuicao",
         proxima_acao: "Conferir pagamento combinado em 01/12/2026",
     },
 })
@@ -507,6 +535,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 95344.04,
         motivo_encerramento: "regularizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -525,6 +554,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 37562.26,
         motivo_encerramento: "contato_realizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -543,6 +573,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 40187.09,
         motivo_encerramento: "sem_contato",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -561,6 +592,7 @@ Record({
         prioridade: 3,
         valor_em_aberto: 47533.5,
         motivo_encerramento: "regularizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -579,6 +611,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 32207.59,
         motivo_encerramento: "recusa",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -597,6 +630,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 41426.54,
         motivo_encerramento: "contato_realizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -615,6 +649,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 80086.57,
         motivo_encerramento: "regularizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -633,6 +668,7 @@ Record({
         prioridade: 3,
         valor_em_aberto: 51591.47,
         motivo_encerramento: "contato_realizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -651,6 +687,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 13738.68,
         motivo_encerramento: "sem_contato",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -669,6 +706,7 @@ Record({
         prioridade: 4,
         valor_em_aberto: 74222.23,
         motivo_encerramento: "regularizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -687,6 +725,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 4628.03,
         motivo_encerramento: "recusa",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })
@@ -705,6 +744,7 @@ Record({
         prioridade: 4,
         valor_em_aberto: 70740.61,
         motivo_encerramento: "contato_realizado",
+        origem: "distribuicao",
         proxima_acao: "Nada a fazer (encerrado)",
     },
 })

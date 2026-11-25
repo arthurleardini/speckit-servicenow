@@ -9,7 +9,7 @@ Form({
         {
             caption: "Comunicação",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "contribuinte", type: 'table_field' }, { field: "regua", type: 'table_field' }, { field: "etapa", type: 'table_field' }, { field: "ciclo", type: 'table_field' }], rightElements: [{ field: "canal", type: 'table_field' }, { field: "status", type: 'table_field' }, { field: "enviada_em", type: 'table_field' }, { field: "tentativas", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "contribuinte", type: 'table_field' }, { field: "regua", type: 'table_field' }, { field: "etapa", type: 'table_field' }, { field: "ciclo", type: 'table_field' }, { field: "canal", type: 'table_field' }], rightElements: [{ field: "status", type: 'table_field' }, { field: "enviada_em", type: 'table_field' }, { field: "tentativas", type: 'table_field' }, { field: "inscricao", type: 'table_field' }] },
                 { layout: 'one-column', elements: [{ field: "motivo", type: 'table_field' }] },
             ],
         },

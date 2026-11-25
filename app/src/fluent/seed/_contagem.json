@@ -4,19 +4,13 @@
   "porTabela": 50,
   "tabelas": {
     "x_2326104_cob_contribuinte": 51,
-    "x_2326104_cob_debito": 50,
+    "x_2326104_cob_debito": 53,
     "x_2326104_cob_parcelamento": 50,
     "x_2326104_cob_sincronizacao": 50,
     "x_2326104_cob_rejeicao": 50,
     "x_2326104_cob_debito_stg": 50,
     "x_2326104_cob_criterio": 51,
     "x_2326104_cob_score_sim": 50,
-    "x_2326104_cob_regua": 51,
-    "x_2326104_cob_regua_etapa": 50,
-    "x_2326104_cob_comunicacao": 50,
-    "x_2326104_cob_envio_sim": 50,
-    "x_2326104_cob_canal_sim": 50,
-    "x_2326104_cob_consentimento": 50,
     "x_2326104_cob_regularizacao": 50,
     "x_2326104_cob_interacao": 51,
     "x_2326104_cob_meta": 50,
@@ -24,7 +18,14 @@
     "x_2326104_cob_ciclo": 3,
     "x_2326104_cob_segmentacao": 56,
     "x_2326104_cob_contato": 40,
-    "x_2326104_cob_caso": 6
+    "x_2326104_cob_caso": 6,
+    "x_2326104_cob_regua": 5,
+    "x_2326104_cob_regua_etapa": 17,
+    "x_2326104_cob_canal_sim": 4,
+    "x_2326104_cob_consentimento": 8,
+    "x_2326104_cob_regua_inscricao": 1,
+    "x_2326104_cob_comunicacao": 2,
+    "x_2326104_cob_envio_sim": 2
   },
   "extras": [
     {
@@ -47,12 +48,6 @@
       "tabela": "sys_journal_field",
       "query": "name=x_2326104_cob_criterio",
       "esperado": 2,
-      "minimo": true
-    },
-    {
-      "tabela": "sys_journal_field",
-      "query": "name=x_2326104_cob_regua",
-      "esperado": 3,
       "minimo": true
     },
     {
