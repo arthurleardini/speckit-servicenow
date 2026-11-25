@@ -4,7 +4,7 @@ import { ChoiceColumn, DateColumn, GenericColumn, IntegerColumn, ReferenceColumn
 
 export const x_2326104_cob_contato = Table({
     name: "x_2326104_cob_contato",
-    label: "Contato da lista",
+    label: [{ label: "Contato da lista", plural: "Contatos da lista", language: 'en' }],
     display: "contribuinte",
     audit: true,
     allowWebServiceAccess: true,

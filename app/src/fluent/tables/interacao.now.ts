@@ -4,7 +4,7 @@ import { ChoiceColumn, DateColumn, DateTimeColumn, GenericColumn, ReferenceColum
 
 export const x_2326104_cob_interacao = Table({
     name: "x_2326104_cob_interacao",
-    label: "Interação",
+    label: [{ label: "Interação", plural: "Interações", language: 'en' }],
     display: "descricao",
     audit: true,
     allowWebServiceAccess: true,

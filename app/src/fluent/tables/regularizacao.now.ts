@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateColumn, GenericColumn, ReferenceColumn
 
 export const x_2326104_cob_regularizacao = Table({
     name: "x_2326104_cob_regularizacao",
-    label: "Regularização",
+    label: [{ label: "Regularização", plural: "Regularizações", language: 'en' }],
     audit: true,
     allowWebServiceAccess: true,
     schema: {

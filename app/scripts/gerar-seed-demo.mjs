@@ -196,7 +196,8 @@ const casos = qualificados.map((c, i) => {
   const e = ETAPAS[i];
   return record(e.demo ? 'TEL-024_registro_demo' : `seed_demo_caso_${String(i + 1).padStart(3, '0')}`, `${S}caso`, {
     contribuinte: raw(ref(`${S}contribuinte`, c.id)), coordenador: raw(refUser(COORD)),
-    ciclo: raw(ref(`${S}ciclo`, CICLO_MES)), estagio: e.estagio, prioridade: 5 - (i % 5),
+    ciclo: raw(ref(`${S}ciclo`, CICLO_MES)), estagio: e.estagio,
+    etapa_ordem: { em_selecao: 1, selecionado: 2, dossie_gerado: 3, conducao: 4, encerrado: 5 }[e.estagio], prioridade: 5 - (i % 5),
     score: e.semScore ? undefined : e.score, sem_score: Boolean(e.semScore), valor_em_aberto: c.valor,
     // Campo ausente não é limpo pelo install num registro demo que já existia (TEL-024): na
     // instância de 2026-11-24 o motivo e a data de encerramento antigos foram limpos pela REST API.

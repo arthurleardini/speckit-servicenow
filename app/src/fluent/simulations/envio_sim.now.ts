@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, ReferenceColumn, StringCol
 
 export const x_2326104_cob_envio_sim = Table({
     name: "x_2326104_cob_envio_sim",
-    label: "Retorno de envio (Simulado)",
+    label: [{ label: "Retorno de envio (Simulado)", plural: "Retornos de envio (Simulado)", language: 'en' }],
     display: "codigo_retorno",
     allowWebServiceAccess: true,
     schema: {

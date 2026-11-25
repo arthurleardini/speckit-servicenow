@@ -4,7 +4,7 @@ import { ChoiceColumn, IntegerColumn, ReferenceColumn, StringColumn, Table } fro
 
 export const x_2326104_cob_regua_etapa = Table({
     name: "x_2326104_cob_regua_etapa",
-    label: "Etapa da régua",
+    label: [{ label: "Etapa da régua", plural: "Etapas da régua", language: 'en' }],
     display: "template",
     audit: true,
     allowWebServiceAccess: true,

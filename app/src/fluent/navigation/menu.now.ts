@@ -44,7 +44,7 @@ Record({
 Record({
     $id: Now.ID["modulo_mod_ux_casos_casos_qualificados"],
     table: 'sys_app_module',
-    data: { title: "Casos qualificados", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_caso", filter: "estagio!=encerrado^ORDERBYestagio^ORDERBYDESCprioridade", view_name: "x_2326104_cob_tel_023", order: 1100 },
+    data: { title: "Casos qualificados", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_caso", filter: "estagio!=encerrado^ORDERBYetapa_ordem^ORDERBYDESCprioridade", view_name: "x_2326104_cob_tel_023", order: 1100 },
 })
 
 Record({

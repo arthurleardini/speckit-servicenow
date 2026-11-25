@@ -34,7 +34,7 @@ Record({
     table: "sys_user_preference",
     data: {
         name: "my_home_navigation_page",
-        value: "x_2326104_cob_caso_list.do?sysparm_query=estagio!=encerrado^ORDERBYestagio^ORDERBYDESCprioridade&sysparm_view=x_2326104_cob_tel_023",
+        value: "x_2326104_cob_caso_list.do?sysparm_query=estagio!=encerrado^ORDERBYetapa_ordem^ORDERBYDESCprioridade&sysparm_view=x_2326104_cob_tel_023",
         user: Now.ref("sys_user", "usuario_demo_coordenador"),
         type: "string",
         description: "Página inicial do papel coordenador (módulo Casos qualificados)",

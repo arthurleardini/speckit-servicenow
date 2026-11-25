@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DecimalColumn, GenericColumn, ReferenceCol
 
 export const x_2326104_cob_contribuinte = Table({
     name: "x_2326104_cob_contribuinte",
-    label: "Contribuinte",
+    label: [{ label: "Contribuinte", plural: "Contribuintes", language: 'en' }],
     display: "nome",
     audit: true,
     allowWebServiceAccess: true,

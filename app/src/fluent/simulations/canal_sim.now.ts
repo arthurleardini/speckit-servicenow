@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, Table } from '@servicenow/sdk/core'
 
 export const x_2326104_cob_canal_sim = Table({
     name: "x_2326104_cob_canal_sim",
-    label: "Canal de envio (Simulado)",
+    label: [{ label: "Canal de envio (Simulado)", plural: "Canais de envio (Simulado)", language: 'en' }],
     allowWebServiceAccess: true,
     schema: {
         canal: ChoiceColumn({ label: "Canal", mandatory: true, choices: {

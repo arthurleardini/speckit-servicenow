@@ -4,7 +4,7 @@ import { ChoiceColumn, DateColumn, DateTimeColumn, DecimalColumn, GenericColumn,
 
 export const x_2326104_cob_ciclo = Table({
     name: "x_2326104_cob_ciclo",
-    label: "Ciclo de qualificação",
+    label: [{ label: "Ciclo de qualificação", plural: "Ciclos de qualificação", language: 'en' }],
     display: "nome",
     audit: true,
     allowWebServiceAccess: true,

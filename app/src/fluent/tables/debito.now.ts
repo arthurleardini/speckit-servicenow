@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateColumn, DateTimeColumn, GenericColumn,
 
 export const x_2326104_cob_debito = Table({
     name: "x_2326104_cob_debito",
-    label: "Débito",
+    label: [{ label: "Débito", plural: "Débitos", language: 'en' }],
     display: "id_fonte",
     audit: true,
     allowWebServiceAccess: true,

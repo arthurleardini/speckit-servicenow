@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, GenericColu
 
 export const x_2326104_cob_caso = Table({
     name: "x_2326104_cob_caso",
-    label: "Caso de cobrança qualificada",
+    label: [{ label: "Caso de cobrança qualificada", plural: "Casos de cobrança qualificada", language: 'en' }],
     display: "contribuinte",
     audit: true,
     allowWebServiceAccess: true,
@@ -19,6 +19,7 @@ export const x_2326104_cob_caso = Table({
             "conducao": { label: "Condução", sequence: 3 },
             "encerrado": { label: "Encerrado", sequence: 4 },
         }, dropdown: 'dropdown_with_none' }),
+        etapa_ordem: IntegerColumn({ label: "Ordem da etapa" }),
         prioridade: IntegerColumn({ label: "Prioridade" }),
         score: DecimalColumn({ label: "Score de liquidez" }),
         sem_score: BooleanColumn({ label: "Sem score" }),

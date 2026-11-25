@@ -4,7 +4,7 @@ import { ChoiceColumn, DateTimeColumn, IntegerColumn, StringColumn, Table } from
 
 export const x_2326104_cob_sincronizacao = Table({
     name: "x_2326104_cob_sincronizacao",
-    label: "Execução de sincronização",
+    label: [{ label: "Execução de sincronização", plural: "Execuções de sincronização", language: 'en' }],
     display: "mensagem",
     allowWebServiceAccess: true,
     schema: {

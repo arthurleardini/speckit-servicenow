@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DecimalColumn, GenericColumn, ReferenceCol
 
 export const x_2326104_cob_segmentacao = Table({
     name: "x_2326104_cob_segmentacao",
-    label: "Carteira segmentada",
+    label: [{ label: "Carteira segmentada", plural: "Carteiras segmentadas", language: 'en' }],
     display: "motivo",
     audit: true,
     allowWebServiceAccess: true,

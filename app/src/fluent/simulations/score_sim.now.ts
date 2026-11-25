@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, ReferenceCo
 
 export const x_2326104_cob_score_sim = Table({
     name: "x_2326104_cob_score_sim",
-    label: "Score de liquidez (Simulado)",
+    label: [{ label: "Score de liquidez (Simulado)", plural: "Scores de liquidez (Simulado)", language: 'en' }],
     display: "versao_modelo",
     allowWebServiceAccess: true,
     schema: {

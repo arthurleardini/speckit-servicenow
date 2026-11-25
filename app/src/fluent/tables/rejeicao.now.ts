@@ -4,7 +4,7 @@ import { ChoiceColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/
 
 export const x_2326104_cob_rejeicao = Table({
     name: "x_2326104_cob_rejeicao",
-    label: "Rejeição de registro",
+    label: [{ label: "Rejeição de registro", plural: "Rejeições de registro", language: 'en' }],
     display: "id_registro",
     allowWebServiceAccess: true,
     schema: {

@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, GenericColumn, IntegerColumn, StringColumn
 
 export const x_2326104_cob_regua = Table({
     name: "x_2326104_cob_regua",
-    label: "Régua de cobrança",
+    label: [{ label: "Régua de cobrança", plural: "Réguas de cobrança", language: 'en' }],
     display: "nome",
     audit: true,
     allowWebServiceAccess: true,

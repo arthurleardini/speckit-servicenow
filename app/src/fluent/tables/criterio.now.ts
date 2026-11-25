@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, GenericColu
 
 export const x_2326104_cob_criterio = Table({
     name: "x_2326104_cob_criterio",
-    label: "Critério de qualificação",
+    label: [{ label: "Critério de qualificação", plural: "Critérios de qualificação", language: 'en' }],
     display: "codigo",
     audit: true,
     allowWebServiceAccess: true,

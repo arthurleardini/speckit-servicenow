@@ -58,7 +58,7 @@
           "label": "Casos qualificados",
           "type": "FILTER",
           "table": "x_2326104_cob_caso",
-          "filter": "estagio!=encerrado^ORDERBYestagio^ORDERBYDESCprioridade",
+          "filter": "estagio!=encerrado^ORDERBYetapa_ordem^ORDERBYDESCprioridade",
           "view": "x_2326104_cob_tel_023",
           "roles": [
             "coordenador"
@@ -231,6 +231,7 @@
     {
       "name": "x_2326104_cob_contribuinte",
       "label": "Contribuinte",
+      "pluralLabel": "Contribuintes",
       "description": "Guarda o contribuinte fictício e serve de visão única: identificação, atendente vinculado (a carteira), segmento, score e valor em aberto.",
       "journal": true,
       "audit": true,
@@ -385,6 +386,7 @@
     {
       "name": "x_2326104_cob_debito",
       "label": "Débito",
+      "pluralLabel": "Débitos",
       "description": "Guarda cada débito consolidado, com a fonte de origem, o tributo, o valor, o atraso e a marca de sobreposição entre fontes.",
       "audit": true,
       "rf": [
@@ -519,6 +521,7 @@
     {
       "name": "x_2326104_cob_parcelamento",
       "label": "Parcelamento",
+      "pluralLabel": "Parcelamentos",
       "description": "Guarda os parcelamentos do contribuinte e o alerta de risco quando há parcela em atraso.",
       "audit": true,
       "rf": [
@@ -615,6 +618,7 @@
     {
       "name": "x_2326104_cob_sincronizacao",
       "label": "Execução de sincronização",
+      "pluralLabel": "Execuções de sincronização",
       "description": "Guarda cada execução de consolidação por fonte: início, fim, status, volume e rejeitados.",
       "rf": [
         "RF-MOD-F1-001",
@@ -704,6 +708,7 @@
     {
       "name": "x_2326104_cob_rejeicao",
       "label": "Rejeição de registro",
+      "pluralLabel": "Rejeições de registro",
       "description": "Guarda cada linha de fonte recusada na consolidação, com o motivo.",
       "rf": [
         "RF-MOD-F1-002",
@@ -920,6 +925,7 @@
     {
       "name": "x_2326104_cob_criterio",
       "label": "Critério de qualificação",
+      "pluralLabel": "Critérios de qualificação",
       "description": "Guarda cada versão do critério de qualificação. A versão publicada não muda; mudar cria nova versão com o mesmo código e número seguinte (fio condutor 1).",
       "journal": true,
       "audit": true,
@@ -1083,6 +1089,7 @@
     {
       "name": "x_2326104_cob_ciclo",
       "label": "Ciclo de qualificação",
+      "pluralLabel": "Ciclos de qualificação",
       "description": "Guarda o ciclo mensal de qualificação: a versão do critério aplicada, a semente do sorteio do grupo de controle, os totais por segmento e o efeito incremental (fio condutor 2).",
       "journal": true,
       "audit": true,
@@ -1214,6 +1221,7 @@
     {
       "name": "x_2326104_cob_segmentacao",
       "label": "Carteira segmentada",
+      "pluralLabel": "Carteiras segmentadas",
       "description": "Guarda a posição de cada contribuinte num ciclo: segmento (massificada, qualificada ou controle), score usado, marca «sem score» e estágio do funil (fios condutores 2 e 3).",
       "audit": true,
       "rf": [
@@ -1315,6 +1323,7 @@
     {
       "name": "x_2326104_cob_score_sim",
       "label": "Score de liquidez (Simulado)",
+      "pluralLabel": "Scores de liquidez (Simulado)",
       "description": "Score de liquidez simulado (SIM-01): um score por contribuinte e tributo, com versão do modelo e status; status diferente de «válido» leva ao fallback.",
       "simulation": true,
       "rf": [
@@ -1400,6 +1409,7 @@
     {
       "name": "x_2326104_cob_regua",
       "label": "Régua de cobrança",
+      "pluralLabel": "Réguas de cobrança",
       "description": "Guarda a régua de cobrança de uma carteira, ativa ou não, com janela de atribuição e ordem de fallback de canal.",
       "journal": true,
       "audit": true,
@@ -1476,6 +1486,7 @@
     {
       "name": "x_2326104_cob_regua_etapa",
       "label": "Etapa da régua",
+      "pluralLabel": "Etapas da régua",
       "description": "Guarda cada etapa da régua: ordem, prazo em dias, canal, texto e ação quando não há resposta.",
       "audit": true,
       "rf": [
@@ -1558,6 +1569,7 @@
     {
       "name": "x_2326104_cob_comunicacao",
       "label": "Comunicação",
+      "pluralLabel": "Comunicações",
       "description": "Guarda cada comunicação disparada por etapa de régua, com canal, status de entrega, tentativas e o ciclo em que foi disparada.",
       "audit": true,
       "rf": [
@@ -1678,6 +1690,7 @@
     {
       "name": "x_2326104_cob_envio_sim",
       "label": "Retorno de envio (Simulado)",
+      "pluralLabel": "Retornos de envio (Simulado)",
       "description": "Retorno de envio simulado (SIM-02): uma linha por tentativa de envio, com o status devolvido pelo canal.",
       "simulation": true,
       "rf": [
@@ -1754,6 +1767,7 @@
     {
       "name": "x_2326104_cob_canal_sim",
       "label": "Canal de envio (Simulado)",
+      "pluralLabel": "Canais de envio (Simulado)",
       "description": "Canal simulado (SIM-02): um registro por canal, com contratação, exigência de opt-in e interruptor de falha.",
       "simulation": true,
       "rf": [
@@ -1809,6 +1823,7 @@
     {
       "name": "x_2326104_cob_consentimento",
       "label": "Consentimento por canal",
+      "pluralLabel": "Consentimentos por canal",
       "description": "Guarda cada opt-in ou opt-out do contribuinte por canal, com data e origem do registro.",
       "audit": true,
       "rf": [
@@ -1881,6 +1896,7 @@
     {
       "name": "x_2326104_cob_regularizacao",
       "label": "Regularização",
+      "pluralLabel": "Regularizações",
       "description": "Guarda cada regularização com a origem (espontânea ou resposta à cobrança), o canal, o instrumento, a marca de grupo de controle e o atendente.",
       "audit": true,
       "rf": [
@@ -2046,6 +2062,7 @@
     {
       "name": "x_2326104_cob_contato",
       "label": "Contato da lista",
+      "pluralLabel": "Contatos da lista",
       "description": "Item da lista de cobrança ativa do atendente: um contribuinte da massificada a ligar no ciclo, com status, próxima ação, último resultado, tentativas e prioridade (design UX v1, D1, R3).",
       "journal": true,
       "audit": true,
@@ -2182,6 +2199,7 @@
     {
       "name": "x_2326104_cob_caso",
       "label": "Caso de cobrança qualificada",
+      "pluralLabel": "Casos de cobrança qualificada",
       "description": "Guarda o caso da cobrança qualificada, conduzido pelo coordenador (responsável), e é o dossiê: prioridade, score, sinalização coercitiva e encerramento (fios condutores 4 e 5; validação SEFAZ-MT de 17/06).",
       "journal": true,
       "audit": true,
@@ -2251,6 +2269,11 @@
           }
         },
         {
+          "name": "etapa_ordem",
+          "label": "Ordem da etapa",
+          "type": "integer"
+        },
+        {
           "name": "prioridade",
           "label": "Prioridade",
           "type": "integer"
@@ -2316,6 +2339,7 @@
     {
       "name": "x_2326104_cob_interacao",
       "label": "Interação",
+      "pluralLabel": "Interações",
       "description": "Guarda cada ligação ou interação: aponta para um contato da lista (atendente) ou para um caso qualificado (coordenador), com tipo, resultado, anotação, quando ocorreu e o retorno combinado.",
       "journal": true,
       "audit": true,
@@ -2419,6 +2443,7 @@
     {
       "name": "x_2326104_cob_meta",
       "label": "Meta de KPI",
+      "pluralLabel": "Metas de KPI",
       "description": "Guarda as metas formais de KPI por indicador, tributo, canal e período (valores fictícios, GAP-019).",
       "audit": true,
       "rf": [
@@ -2523,6 +2548,7 @@
     {
       "name": "x_2326104_cob_exportacao",
       "label": "Exportação",
+      "pluralLabel": "Exportações",
       "description": "Trilha de exportação: quem exportou, de qual tabela, em qual formato, com qual filtro e quantos registros.",
       "audit": true,
       "rf": [

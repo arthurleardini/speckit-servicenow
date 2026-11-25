@@ -4,7 +4,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, GenericColumn, IntegerColu
 
 export const x_2326104_cob_parcelamento = Table({
     name: "x_2326104_cob_parcelamento",
-    label: "Parcelamento",
+    label: [{ label: "Parcelamento", plural: "Parcelamentos", language: 'en' }],
     audit: true,
     allowWebServiceAccess: true,
     schema: {

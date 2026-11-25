@@ -4,7 +4,7 @@ import { ChoiceColumn, DateColumn, DecimalColumn, Table } from '@servicenow/sdk/
 
 export const x_2326104_cob_meta = Table({
     name: "x_2326104_cob_meta",
-    label: "Meta de KPI",
+    label: [{ label: "Meta de KPI", plural: "Metas de KPI", language: 'en' }],
     audit: true,
     allowWebServiceAccess: true,
     schema: {

@@ -4,7 +4,7 @@ import { ChoiceColumn, DateTimeColumn, ReferenceColumn, StringColumn, Table } fr
 
 export const x_2326104_cob_consentimento = Table({
     name: "x_2326104_cob_consentimento",
-    label: "Consentimento por canal",
+    label: [{ label: "Consentimento por canal", plural: "Consentimentos por canal", language: 'en' }],
     display: "origem",
     audit: true,
     allowWebServiceAccess: true,

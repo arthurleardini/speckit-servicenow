@@ -4,7 +4,7 @@ import { ChoiceColumn, DateTimeColumn, IntegerColumn, ReferenceColumn, StringCol
 
 export const x_2326104_cob_comunicacao = Table({
     name: "x_2326104_cob_comunicacao",
-    label: "Comunicação",
+    label: [{ label: "Comunicação", plural: "Comunicações", language: 'en' }],
     display: "motivo",
     audit: true,
     allowWebServiceAccess: true,
