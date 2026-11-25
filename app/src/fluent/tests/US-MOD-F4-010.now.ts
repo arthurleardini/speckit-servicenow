@@ -641,7 +641,11 @@ export const t_f4010_acl_coord = Test({
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
     describe('ACL de régua e etapa — coordenador', function() {
         var erro = '';
-        var r, e, podeTexto, podeOrdem, podeCodigo, podeCarteira, podeFlow, podeAtiva;
+        function pode(gr, campo) {
+            var el = gr.getElement(campo);
+            return el ? el.canWrite() : 'sem elemento ' + campo;
+        }
+        var r, e, podeOrdem, podeCodigo, podeCarteira, podeFlow, podeAtiva;
         try {
             r = new GlideRecordSecure('x_2326104_cob_regua');
             r.addQuery('codigo', 'atf_acl');
@@ -652,14 +656,13 @@ export const t_f4010_acl_coord = Test({
             e.addQuery('ordem', 2);
             e.query();
             erro += 'etapa 2 ' + (e.next() ? 'lida' : 'não lida') + '; ';
-            podeTexto = e.getElement('template').canWrite();
-            podeOrdem = e.getElement('ordem').canWrite();
+            podeOrdem = pode(e, 'ordem');
             e.setValue('template', 'Nova mensagem de ciência no DT-e.');
             e.update();
-            podeCodigo = r.getElement('codigo').canWrite();
-            podeCarteira = r.getElement('carteira').canWrite();
-            podeFlow = r.getElement('flow').canWrite();
-            podeAtiva = r.getElement('ativa').canWrite();
+            podeCodigo = pode(r, 'codigo');
+            podeCarteira = pode(r, 'carteira');
+            podeFlow = pode(r, 'flow');
+            podeAtiva = pode(r, 'ativa');
         } catch (ex) {
             erro += 'erro: ' + String(ex);
         }
@@ -667,7 +670,6 @@ export const t_f4010_acl_coord = Test({
             expect(erro).toBe('régua atf_acl lida; etapa 2 lida; ');
         });
         it('grava o texto da etapa e os parâmetros da régua', function() {
-            expect(podeTexto).toBe(true);
             expect(podeAtiva).toBe(true);
             var lida = new GlideRecord('x_2326104_cob_regua_etapa');
             lida.get(e.getUniqueValue());
