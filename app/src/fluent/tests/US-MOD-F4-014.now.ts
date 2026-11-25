@@ -169,7 +169,10 @@ export const t_f4014_enderecos = Test({
             r.setWorkflow(false);
             r.setValue('flow', '');
             r.update();
-            expect(m.urlDesigner(r.getUniqueValue())).toBe('$flow-designer.do#/flow-designer/' + flow);
+            var u = m.urlDesigner(r.getUniqueValue());
+            r.setValue('flow', flow);
+            r.update();
+            expect(u).toBe('$flow-designer.do#/flow-designer/' + flow);
         });
         it('Ver execução acha o contexto pelo source_record (admin: detalhes no Flow Designer)', function() {
             var c = new GlideRecord('sys_flow_context');

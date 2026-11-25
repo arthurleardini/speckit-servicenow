@@ -107,7 +107,7 @@ jasmine.getEnv().execute();`,
 export const t_f4016_atendente = Test({
     $id: Now.ID['US-MOD-F4-016_atf_reenviar_atendente'],
     name: 'RF-MOD-F4-006 — atendente não reenvia',
-    description: 'Impersonado como demo.atendente: reenviar uma comunicação com falha é recusado por papel e a comunicação fica como estava (AS-TASK-MOD-F4-016-01-03).',
+    description: 'Impersonado como demo.atendente, numa comunicação com falha de contribuinte da carteira dele: reenviar é recusado por papel e a comunicação fica como estava (AS-TASK-MOD-F4-016-01-03).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -123,9 +123,12 @@ export const t_f4016_atendente = Test({
     var rid = r.insert();
     var p = new GlideRecord('x_2326104_cob_contribuinte');
     p.initialize();
+    var u = new GlideRecord('sys_user');
+    u.get('user_name', 'demo.atendente');
     p.setValue('nome', 'Contribuinte fictício F4-016 atendente');
     p.setValue('tipo_pessoa', 'pj');
     p.setValue('ficticio', true);
+    p.setValue('atendente', u.getUniqueValue());
     var pid = p.insert();
     var c = new GlideRecord('x_2326104_cob_comunicacao');
     c.initialize();
