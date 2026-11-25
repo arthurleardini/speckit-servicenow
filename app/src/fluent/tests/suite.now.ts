@@ -40,6 +40,7 @@ import {
     t_f4014_links_coordenador, t_f4014_links_atendente, t_f4014_sem_flow, t_f4014_enderecos, t_f4014_papel, t_f4014_campo_flow,
     t_f4014_origem_atendente, t_f4014_origem_coordenador,
 } from './US-MOD-F4-014.now'
+import { t_f4016_reenviar, t_f4016_atendente, t_f4016_ui } from './US-MOD-F4-016.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -70,5 +71,6 @@ export const suite_cob_regressao = TestSuite({
         t_f4013_em_risco, t_f4013_sem_ciclo, t_f4013_acl_atendente, t_f4013_acl_coordenador,
         t_f4014_links_coordenador, t_f4014_links_atendente, t_f4014_sem_flow, t_f4014_enderecos, t_f4014_papel, t_f4014_campo_flow,
         t_f4014_origem_atendente, t_f4014_origem_coordenador,
+        t_f4016_reenviar, t_f4016_atendente, t_f4016_ui,
     ],
 })

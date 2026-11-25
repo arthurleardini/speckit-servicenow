@@ -171,7 +171,7 @@ export const t_f4014_enderecos = Test({
             r.update();
             expect(m.urlDesigner(r.getUniqueValue())).toBe('$flow-designer.do#/flow-designer/' + flow);
         });
-        it('Ver execução acha o contexto pelo source_record', function() {
+        it('Ver execução acha o contexto pelo source_record (admin: detalhes no Flow Designer)', function() {
             var c = new GlideRecord('sys_flow_context');
             c.addQuery('source_table', 'x_2326104_cob_regua_inscricao');
             c.orderByDesc('sys_created_on');
@@ -261,6 +261,17 @@ export const t_f4014_campo_flow = Test({
         it('lê as execuções', function() {
             var c = new GlideRecordSecure('sys_flow_context');
             expect(c.canRead()).toBe(true);
+        });
+        it('Ver execução abre o registro da execução (sem flow_admin, sem stage tracker)', function() {
+            var c = new GlideRecord('sys_flow_context');
+            c.addQuery('source_table', 'x_2326104_cob_regua_inscricao');
+            c.orderByDesc('sys_created_on');
+            c.setLimit(1);
+            c.query();
+            if (c.next()) {
+                var u = new ReguaMotor().urlExecucao(c.getValue('source_record'));
+                expect(u.indexOf('sys_flow_context.do?sys_id=')).toBe(0);
+            }
         });
         it('não grava o campo Flow', function() {
             var r = new GlideRecordSecure('x_2326104_cob_regua');

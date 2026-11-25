@@ -23,7 +23,7 @@
 us: US-MOD-F4-014
 repositorios: speckit-servicenow
 proximo-passo: implementar TASK-MOD-F4-014-01
-bloqueios: nenhum (F5 do design ux-v2; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
+bloqueios: nenhum (F5 do design ux-v2; US-MOD-F4-016 segue na mesma sessão; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
 <!-- /estado:us -->
 
 ## Passos já fechados nesta US

@@ -65,6 +65,22 @@
 
 ## Histórico de tasks
 
+### US-MOD-F4-014 — execuções visíveis e edição no Flow Designer (design UX v2, F5)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3; recibo atf/US-MOD-F4-014.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
+
+**Implementado:**
+- `ui-actions/regua.now.ts`: links de form «Ver execuções» (`x_cob_ver_execucoes`, order 300) e «Abrir no Flow Designer» (`x_cob_abrir_designer`, order 310, condition `!current.flow.nil()`), coordenador e admin do app. `ui-actions/inscricao.now.ts`: «Ver execução» (`x_cob_ver_execucao`); sem execução, «Execução não encontrada.».
+- `ReguaMotor`: `flowDaRegua` (campo «Flow»; vazio → `sys_hub_flow` por `internal_name = regua_<codigo>`, plano B de B6), `urlExecucoes` (`sys_flow_context_list.do`, filtro `flow=<id>`, mais recentes primeiro), `urlDesigner` (`$flow-designer.do#/flow-designer/<id>`), `urlExecucao` (contexto mais recente com `source_record` = inscrição → `#/operations/context/<id>`).
+- `security/coordenador-flow.now.ts`: 4 `sys_user_role_contains` por nome (`Now.ref('sys_user_role', { name })`): coordenador e admin do app contêm `flow_designer` e `flow_operator` (B6, mecanismo 1).
+- `security/contato.now.ts`: write de `contato.origem` só admin do app (era editável pelo atendente pelo curinga «*»).
+
+**Testes:**
+- `tests/US-MOD-F4-014.now.ts` (8): links do coordenador (régua com o Flow IPVA), atendente sem links, régua sem Flow (sem «Abrir no Flow Designer»; inscrição com «Ver execução» e endereço vazio), endereços do ReguaMotor (inclui plano B), papel (contains e herança em demo.coordenador; demo.atendente sem), campo «Flow» lido e não gravado pelo coordenador (GlideRecordSecure), «Origem» não gravável por atendente e coordenador.
+
+**Decisões / pegadinhas:**
+- Causa do campo «Flow» invisível para o coordenador: sem papel que leia `sys_hub_flow` (`flow_operator` e outros na ACL `sys_hub_flow.*`), o `GlideRecordSecure` tira o elemento de referência inteiro (`getElement('flow')` nulo) e o form não mostra o campo. Com o `flow_operator` contido no papel, lê e mostra o «Régua: IPVA». Sem ACL de campo nova.
+- `runServerSideScript` devolve `record_id` quando o script grava `outputs.table` e `outputs.record_id`: assim o ATF abre o form de um registro criado por script.
+
 ### US-MOD-F4-012 e US-MOD-F4-013 — inscrição, reavaliação, escalonamento, pausa, régua Parcelamentos e segurança da inscrição (design UX v2, F4)
 **Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-F4-012.json e US-MOD-F4-013.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
 
@@ -110,7 +126,7 @@
 - O sn-scaffold não gera `default` de coluna: «Ativa» e etapa 0 da inscrição e prazo final 5 da régua vêm de business rule.
 - A massa do ATF é texto literal em cada passo (macro expandida antes do build; a fonte da macro fica fora do repo).
 - `sn_fd.FlowAPI` com reference por sys_id falha («Invalid GlideRecord input format found»); o ATF passa o GlideRecord.
-- No `GlideRecordSecure` de escopo, os elementos `template` e `flow` voltam nulos (`gr.template`, `gr.getElement('flow')`): a ACL desses campos é provada pela gravação, não por `canWrite()`. No form da régua o coordenador não vê o campo «Flow» (TEL-014) — fica para a F4-014 («Abrir no Flow Designer»).
+- No `GlideRecordSecure` de escopo, os elementos `template` e `flow` voltam nulos (`gr.template`, `gr.getElement('flow')`): a ACL desses campos é provada pela gravação, não por `canWrite()`. No form da régua o coordenador não vê o campo «Flow» (TEL-014) — resolvido na F4-014 (papel do coordenador contém `flow_operator`).
 - Execução de ponta a ponta (régua IPVA, `segundos_por_dia = 60`): 35 min 16 s do gatilho ao COMPLETE, 1 comunicação por etapa, etapa 3 (SMS com opt-out) entregue por SNE (`auditorias/F4-011-execucao-demo.md`).
 
 ### US-MOD-UX-009 e US-MOD-UX-010 — ações na lista, Update/New por papel, «O que fazer agora» e «Lista da equipe» (design UX v2, F1)

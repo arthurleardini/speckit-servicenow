@@ -54,6 +54,10 @@ ReguaMotor.MSG_PAUSADA = 'Régua pausada: {n} inscrição(ões) ativa(s) encerra
 ReguaMotor.MSG_ATIVADA = 'Régua ativada: as inscrições encerradas pela pausa não voltam; entra quem for inscrito daqui em diante.';
 ReguaMotor.MSG_SEM_EXECUCAO = 'Execução não encontrada.';
 ReguaMotor.MSG_SEM_FLOW = 'Esta régua não tem Flow.';
+ReguaMotor.MSG_REENVIAR_SEM_FALHA = 'Operação recusada: só comunicação com falha pode ser reenviada.';
+ReguaMotor.MSG_REENVIAR_PAPEL = 'Operação recusada: ação do coordenador.';
+ReguaMotor.MSG_REENVIAR_SEM_ETAPA = 'Operação recusada: comunicação sem inscrição ou etapa da régua.';
+ReguaMotor.MSG_REENVIADA = 'Comunicação reenviada: {status} por {canal}.';
 ReguaMotor.MSG_SIGILO ='Operação recusada: texto de e-mail, SMS ou WhatsApp não pode trazer valor nem tributo (só ciência do DT-e).';
 
 /** sys_id de um GlideRecord ou de uma string. */
@@ -377,6 +381,41 @@ ReguaMotor.prototype = {
             gs.warn('RF-MOD-F4-011: comunicação ' + com.getUniqueValue() + ' da inscrição ' + insc.getUniqueValue() + ' etapa ' + ordem + ' ' + status + ' — ' + motivo);
         }
         return { status: status, canal: com.getValue('canal'), comunicacao: com.getUniqueValue() };
+    },
+
+    /**
+     * «Reenviar» (RF-MOD-F4-006, RN-NOVO-F4-005; US-MOD-F4-016): comunicação com falha ganha uma nova rodada de
+     * tentativas na mesma comunicação, com as regras de enviar (canal da etapa, fallback, opt-in, opt-out, contrato e
+     * teto). Só coordenador e admin do app; só status «Falha». Tentativas somam às anteriores.
+     * @returns {{ok: boolean, mensagem: string, status: string}}
+     */
+    reenviar: function (comunicacao) {
+        var E = gs.getCurrentScopeName();
+        if (!gs.hasRole(E + '.coordenador') && !gs.hasRole(E + '.admin')) {
+            return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_PAPEL, status: '' };
+        }
+        var com = new GlideRecord(ReguaMotor.T_COMUNICACAO);
+        if (!com.get(ReguaMotor.idDe(comunicacao)) || com.getValue('status') !== 'falha') {
+            return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_SEM_FALHA, status: com.isValidRecord() ? com.getValue('status') : '' };
+        }
+        var insc = this._inscricao(com.getValue('inscricao'));
+        if (!insc || !com.getValue('etapa')) {
+            return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_SEM_ETAPA, status: 'falha' };
+        }
+        var ordem = parseInt(com.etapa.ordem.toString() || '0', 10);
+        var antes = parseInt(com.getValue('tentativas') || '0', 10);
+        com.setValue('status', 'agendada');
+        com.update();
+        var r = this.enviar(insc, ordem);
+        var depois = new GlideRecord(ReguaMotor.T_COMUNICACAO);
+        depois.get(com.getUniqueValue());
+        depois.setValue('tentativas', antes + parseInt(depois.getValue('tentativas') || '0', 10));
+        depois.update();
+        return {
+            ok: r.status === 'entregue',
+            mensagem: ReguaMotor.MSG_REENVIADA.replace('{status}', depois.getDisplayValue('status')).replace('{canal}', depois.getDisplayValue('canal')),
+            status: r.status
+        };
     },
 
     /**
@@ -781,7 +820,9 @@ ReguaMotor.prototype = {
 
     /**
      * «Ver execução» (D12): a execução mais recente cujo source_record é a inscrição (F0, ponto 6), nos detalhes
-     * de execução do Flow Designer. '' quando a inscrição não tem execução.
+     * de execução do Flow Designer. '' quando a inscrição não tem execução. Os detalhes de execução (stage tracker)
+     * leem sys_flow_context_chunk e sys_hub_flow_stage, que a plataforma só abre a flow_admin e admin; para quem
+     * não tem flow_admin (coordenador), abre o registro da execução (estado, tempo, log) no form clássico (GAP-162).
      */
     urlExecucao: function (inscricao) {
         var id = ReguaMotor.idDe(inscricao);
@@ -793,7 +834,11 @@ ReguaMotor.prototype = {
         c.orderByDesc('sys_created_on');
         c.setLimit(1);
         c.query();
-        return c.next() ? '$flow-designer.do#/operations/context/' + c.getUniqueValue() : '';
+        if (!c.next()) {
+            return '';
+        }
+        return gs.hasRole('flow_admin') ? '$flow-designer.do#/operations/context/' + c.getUniqueValue()
+            : 'sys_flow_context.do?sys_id=' + c.getUniqueValue();
     },
 
     type: 'ReguaMotor'
