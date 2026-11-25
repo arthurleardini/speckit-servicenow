@@ -27,6 +27,18 @@ export const br_recusar_caso_controle = BusinessRule({
     script: Now.include('../../server/qualificacao/recusarAcaoControle.server.js'),
 })
 
+export const br_recusar_contato_controle = BusinessRule({
+    $id: Now.ID['RF-MOD-UX-004_br_contato_controle'],
+    name: 'Recusar contato para contribuinte em controle',
+    description: 'Contribuinte no grupo de controle de ciclo publicado não entra na lista de contatos (RN-NOVO-F2-005, RN-NOVO-UX-006, design UX v1 🟡7).',
+    table: 'x_2326104_cob_contato',
+    when: 'before',
+    action: ['insert'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/qualificacao/recusarAcaoControle.server.js'),
+})
+
 export const br_publicar_ciclo = BusinessRule({
     $id: Now.ID['RF-MOD-F2-004_br_publicar_ciclo'],
     name: 'Sortear grupo de controle ao publicar o ciclo',

@@ -10,6 +10,11 @@ var QualificacaoCiclo = Class.create();
 QualificacaoCiclo.TABELA_CICLO = 'x_2326104_cob_ciclo';
 QualificacaoCiclo.TABELA_SEGMENTACAO = 'x_2326104_cob_segmentacao';
 QualificacaoCiclo.TABELA_CRITERIO = 'x_2326104_cob_criterio';
+QualificacaoCiclo.TABELA_CONTATO = 'x_2326104_cob_contato';
+QualificacaoCiclo.TABELA_CONTRIBUINTE = 'x_2326104_cob_contribuinte';
+QualificacaoCiclo.MSG_JA_DISTRIBUIDO = 'Operação recusada: ciclo já distribuído ou não publicado.';
+QualificacaoCiclo.MSG_SO_COORDENADOR_DISTRIBUI = 'Só o coordenador de cobrança distribui a lista do ciclo.';
+QualificacaoCiclo.MSG_SEM_ATENDENTE = 'Operação recusada: nenhum usuário ativo com o papel atendente para receber a lista.';
 /** Premissa P do grupo de controle quando a versão do critério não informa (RN-NOVO-F2-006, GAP-003). */
 QualificacaoCiclo.PCT_PADRAO = 10;
 QualificacaoCiclo.MSG_SO_COORDENADOR = 'Só o coordenador de cobrança publica o ciclo.';
@@ -137,6 +142,123 @@ QualificacaoCiclo.prototype = {
         ciclo.setValue('publicado_por', gs.getUserID());
         gs.info('RF-MOD-F2-004: ciclo ' + cicloId + ' publicado com ' + totais.controle + ' no grupo de controle');
         return '';
+    },
+
+    /**
+     * Botão «Distribuir lista» (RF-MOD-UX-004, RN-NOVO-UX-006, design UX v1 R1/R3/🟡7): cria um contato por
+     * contribuinte do segmento massificada do ciclo publicado. O atendente do contato é o do contribuinte;
+     * contribuinte sem atendente recebe um por rodízio entre os usuários com o papel atendente, gravado no
+     * contato e no contribuinte. Grava «Distribuído em» e «Contatos distribuídos». Não distribui duas vezes
+     * e não cria contato repetido para o mesmo contribuinte no ciclo. O grupo de controle fica de fora
+     * (só massificada, e a business rule do contato recusa contribuinte em controle).
+     * @param {GlideRecord} ciclo
+     * @returns {{ok: boolean, mensagem: string, porAtendente: object}}
+     */
+    distribuir: function (ciclo) {
+        if (!this._ehCoordenador()) {
+            return { ok: false, mensagem: QualificacaoCiclo.MSG_SO_COORDENADOR_DISTRIBUI, porAtendente: {} };
+        }
+        if (ciclo.getValue('estado') != 'publicado' || ciclo.getValue('distribuido_em')) {
+            gs.warn('RF-MOD-UX-004_ua_distribuir_lista: recusado; ciclo ' + ciclo.getUniqueValue() + ', usuário ' + gs.getUserID());
+            return { ok: false, mensagem: QualificacaoCiclo.MSG_JA_DISTRIBUIDO, porAtendente: {} };
+        }
+        var atendentes = this._atendentes();
+        if (!atendentes.length) {
+            return { ok: false, mensagem: QualificacaoCiclo.MSG_SEM_ATENDENTE, porAtendente: {} };
+        }
+        var cicloId = ciclo.getUniqueValue();
+        var jaTem = {};
+        var ex = new GlideRecord(QualificacaoCiclo.TABELA_CONTATO);
+        ex.addQuery('ciclo', cicloId);
+        ex.query();
+        while (ex.next()) {
+            jaTem[ex.getValue('contribuinte')] = true;
+        }
+        var porAtendente = {};
+        var vez = 0;
+        var criados = 0;
+        var seg = new GlideRecord(QualificacaoCiclo.TABELA_SEGMENTACAO);
+        seg.addQuery('ciclo', cicloId);
+        seg.addQuery('segmento', 'massificada');
+        seg.orderBy('contribuinte');
+        seg.query();
+        while (seg.next()) {
+            var pid = seg.getValue('contribuinte');
+            var p = new GlideRecord(QualificacaoCiclo.TABELA_CONTRIBUINTE);
+            if (jaTem[pid] || !p.get(pid)) {
+                continue;
+            }
+            jaTem[pid] = true;
+            var dono = p.getValue('atendente');
+            if (!dono) {
+                dono = atendentes[vez % atendentes.length];
+                vez++;
+                p.setValue('atendente', dono);
+                p.update();
+            }
+            var valor = p.getValue('valor_em_aberto') || seg.getValue('valor_em_aberto') || 0;
+            var c = new GlideRecord(QualificacaoCiclo.TABELA_CONTATO);
+            c.initialize();
+            c.setValue('contribuinte', pid);
+            c.setValue('atendente', dono);
+            c.setValue('ciclo', cicloId);
+            c.setValue('status', 'a_ligar');
+            c.setValue('tentativas', 0);
+            c.setValue('prioridade', this.prioridadePorValor(valor));
+            c.setValue('valor_em_aberto', valor);
+            if (c.insert()) {
+                criados++;
+                porAtendente[dono] = (porAtendente[dono] || 0) + 1;
+            }
+        }
+        var total = new GlideAggregate(QualificacaoCiclo.TABELA_CONTATO);
+        total.addQuery('ciclo', cicloId);
+        total.addAggregate('COUNT');
+        total.query();
+        ciclo.setValue('distribuido_em', new GlideDateTime());
+        ciclo.setValue('qtd_contatos', total.next() ? parseInt(total.getAggregate('COUNT'), 10) || 0 : criados);
+        ciclo.update();
+        gs.info('RF-MOD-UX-004_ua_distribuir_lista: ciclo ' + cicloId + ' distribuído com ' + criados + ' contatos; usuário ' + gs.getUserID());
+        return { ok: true, mensagem: this._mensagemDistribuicao(criados, porAtendente), porAtendente: porAtendente };
+    },
+
+    /** Prioridade 1 (menor) a 5 (maior) pelo valor em aberto do contribuinte (design UX v1, D1). */
+    prioridadePorValor: function (valor) {
+        var v = parseFloat(valor) || 0;
+        if (v >= 100000) { return 5; }
+        if (v >= 50000) { return 4; }
+        if (v >= 20000) { return 3; }
+        if (v >= 5000) { return 2; }
+        return 1;
+    },
+
+    /** Usuários ativos com o papel atendente do app, em ordem de login (base do rodízio). */
+    _atendentes: function () {
+        var lista = [];
+        var visto = {};
+        var r = new GlideRecord('sys_user_has_role');
+        r.addQuery('role.name', gs.getCurrentScopeName() + '.atendente');
+        r.addQuery('user.active', true);
+        r.orderBy('user.user_name');
+        r.query();
+        while (r.next()) {
+            var u = r.getValue('user');
+            if (!visto[u]) {
+                visto[u] = true;
+                lista.push(u);
+            }
+        }
+        return lista;
+    },
+
+    _mensagemDistribuicao: function (criados, porAtendente) {
+        var partes = [];
+        for (var u in porAtendente) {
+            var usr = new GlideRecord('sys_user');
+            partes.push((usr.get(u) ? usr.getDisplayValue() : u) + ': ' + porAtendente[u]);
+        }
+        partes.sort();
+        return 'Lista distribuída: ' + criados + (criados == 1 ? ' contato' : ' contatos') + (partes.length ? ' — ' + partes.join('; ') : '') + '.';
     },
 
     _ehCoordenador: function () {
