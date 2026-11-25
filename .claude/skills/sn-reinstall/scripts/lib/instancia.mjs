@@ -36,9 +36,34 @@ function cabecalhoBasic() {
   return `Basic ${tok}`;
 }
 
-/** Chamada REST com basic auth. Devolve { status, headers, json }. */
-export async function rest(caminho, { method = 'GET', body } = {}) {
-  const resp = await fetch(urlInstancia() + caminho, {
+/**
+ * `fetch` com nova tentativa e espera que dobra a cada vez. Só refaz quando a chamada nem chegou a ter
+ * resposta (TypeError do undici: «fetch failed», ECONNRESET, EPIPE — o socket keep-alive reaproveitado
+ * depois de um install longo cai assim). Resposta HTTP, mesmo 5xx, volta na hora: quem chama decide.
+ * As chamadas do kit (GET, e DELETE de órfão por sys_id) são idempotentes, então repetir é seguro.
+ * @param {string} url
+ * @param {RequestInit} init
+ * @param {{ fetchFn?: typeof fetch, tentativas?: number, esperaMs?: number, aviso?: (m: string) => void }} [opcoes]
+ */
+export async function fetchComRetry(url, init, {
+  fetchFn = globalThis.fetch, tentativas = 4, esperaMs = 1500, aviso = (m) => process.stderr.write(m + '\n'),
+} = {}) {
+  for (let i = 1; ; i++) {
+    try {
+      return await fetchFn(url, init);
+    } catch (e) {
+      if (i >= tentativas || !(e instanceof TypeError)) throw e;
+      const espera = esperaMs * 2 ** (i - 1);
+      const causa = e.cause?.code ? ` (${e.cause.code})` : '';
+      aviso(`[instancia] ${init?.method ?? 'GET'} falhou: ${e.message}${causa}; tentativa ${i + 1} de ${tentativas} em ${espera} ms`);
+      await new Promise((r) => setTimeout(r, espera));
+    }
+  }
+}
+
+/** Chamada REST com basic auth e nova tentativa em falha de rede. Devolve { status, headers, json }. */
+export async function rest(caminho, { method = 'GET', body, retry } = {}) {
+  const resp = await fetchComRetry(urlInstancia() + caminho, {
     method,
     headers: {
       Authorization: cabecalhoBasic(),
@@ -46,7 +71,7 @@ export async function rest(caminho, { method = 'GET', body } = {}) {
       ...(body ? { 'Content-Type': 'application/json' } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
-  });
+  }, retry);
   let json = null;
   try { json = await resp.json(); } catch { /* corpo vazio */ }
   return { status: resp.status, headers: resp.headers, json };
