@@ -14,19 +14,19 @@
 ## Changelog
 | Versão | Data | Mudança |
 |---|---|---|
-| 1.0 | 2026-11-24 | criação do manifesto: repositório único `speckit-servicenow` (decisão A3 do design) |
+| 1.0 | AAAA-MM-DD | criação do manifesto: repositório único (decisão A3 do design) |
 
 ## Repositórios
 
 | Papel | Repositório | Pasta local | Para que serve |
 |---|---|---|---|
-| docs + codigo | `arthurleardini/speckit-servicenow` (GitHub, privado) | `.` | kit, spec (`inputs/`, `outputs/`), app Fluent em `app/` e backlog em issues |
+| docs + codigo | `<usuario>/<repositorio>` (GitHub, privado) | `.` | kit, spec (`inputs/`, `outputs/`), app Fluent em `app/` e backlog em issues |
 
-Não há repositório de protótipo: a instância `dev493801` é o protótipo (decisão A2), com prints em `outputs/spec/screens/`.
+Não há repositório de protótipo: a instância ServiceNow é o protótipo (decisão A2), com prints em `outputs/spec/screens/`.
 
 <!-- harness:workspace -->
 - papel: docs
-  repositorio: https://github.com/arthurleardini/speckit-servicenow
+  repositorio: https://github.com/<usuario>/<repositorio>
 <!-- /harness:workspace -->
 
 > **Mono-repo.** O mesmo repositório tem os dois papéis. O manifesto aceita um nome de repositório

@@ -42,3 +42,7 @@ O app de teste foi removido depois da checagem. O install com `keys.ts` (`delete
 * A autenticação do SDK usa variáveis de ambiente em modo CI (`SN_SDK_NODE_ENV=SN_SDK_CI_INSTALL` + `SN_SDK_*`), carregadas de `.env.instancia` (`node --env-file`). Não há alias no cofre do sistema operacional, porque o contêiner não tem keyring.
 * O `now-sdk init --template base` registrou o escopo `x_2326104_cob` (scopeId `7ad96995d30241c2bce1843c3be98996`) e fixou `@servicenow/sdk` em 4.14.3.
 * A instância abre com o cabeçalho Next Experience (Polaris) em volta do form e da list clássicos. Para o cabeçalho UI16, é preciso `glide.ui.polaris.experience = false` (pendente de decisão do autor).
+
+## Branch `template` (2026-11-25)
+
+Kit limpo para outro plano de implementação: sem `app/`, `inputs/` e `outputs/` do piloto (que ficam na `feat/v0`), com `workspace.md` e `.env.example` genéricos e o `README.md` como guia de uso. O `check_sensivel.py` passou a ir junto, em `scripts/`, e o `doutor` o procura ali, ou no caminho da variável `CHECK_SENSIVEL`. A alteração no `doutor.mjs` foi feita em modo template, com o manifesto regerado.

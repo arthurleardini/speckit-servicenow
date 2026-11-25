@@ -24,7 +24,7 @@
     ".claude/ferramentas/andamento.mjs": "ad39b4bfe5049b39cada62a73090d41f7c218e38526fe67d360b275a84cf5968",
     ".claude/ferramentas/andamento.test.mjs": "9e05e57d425ce310b5389970fe1442982e98cb39c67427455479208286ca8081",
     ".claude/ferramentas/bench.mjs": "9cf20e6975687d825a44429d69f58eb7d43b14178ea17ff17bebdcc6bf75e5c7",
-    ".claude/ferramentas/doutor.mjs": "68cd76deeeb4c6be6204c16af27597a4dc23c67facfaf8e04cd9850366784b98",
+    ".claude/ferramentas/doutor.mjs": "fffe0d8b0b7b3386c0e6002829bedf075013a718e15f90e645e963686c04ad15",
     ".claude/ferramentas/doutor.test.mjs": "a40aca48e57da139b4eb6c7fad86b03e9aa3c4048787e480483ba3ee26a12a75",
     ".claude/ferramentas/empacotar.mjs": "72c7ca08abe01a16484fe411f1a00d58e8849faef6d522abd7e901e0844f6bf2",
     ".claude/ferramentas/empacotar.test.mjs": "236fb6b765ce589c5d8e5d1c41c2b1cf5da8dfc1a78550907ca27e45abb6b26e",

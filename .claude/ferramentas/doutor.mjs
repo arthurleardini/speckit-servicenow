@@ -55,7 +55,8 @@ export const ITENS = [
 /** As variáveis que o SDK lê em modo CI, e o alias do projeto. Só a PRESENÇA é conferida. */
 export const VARIAVEIS_DA_INSTANCIA = ['SN_SDK_INSTANCE_URL', 'SN_SDK_USER', 'SN_SDK_USER_PWD', 'SN_ALIAS'];
 export const ARQUIVO_CREDENCIAL = '.env.instancia';
-export const CHECK_SENSIVEL = '/config/workspace/scripts/check_sensivel.py';
+// No repositório (scripts/), ou no caminho dado por CHECK_SENSIVEL. O npm run doutor roda na raiz.
+export const CHECK_SENSIVEL = process.env.CHECK_SENSIVEL || 'scripts/check_sensivel.py';
 export const PROPRIEDADE_PREFIXO = 'glide.appcreator.company.code';
 
 /**

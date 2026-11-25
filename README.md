@@ -1,137 +1,104 @@
-# Harness Elo v2
+# Speckit ServiceNow
 
-Harness único de método e produção: o pré-projeto conversacional do `harness-elo` com a cadeia de
-produção do `Elo-Spec-Kit`. Entregue como **pacote `.zip`**: extraia numa pasta vazia. O guia do
-usuário é distribuído à parte.
+Kit para Claude Code que leva um plano de implementação até um app ServiceNow funcionando:
+
+1. especificação do plano;
+2. o app instalado na instância, que serve de protótipo;
+3. backlog no GitHub com o print de cada tela;
+4. implementação das stories com testes automatizados (ATF).
+
+Exemplo completo, no piloto 2.6 Cobrança SEFAZ-MT: branch [`feat/v0`](../../tree/feat/v0) (roteiro em `outputs/spec/demo/roteiro.md`).
 
 ## Pré-requisitos
 
-Antes do primeiro projeto, a máquina precisa de:
+| Precisa de | Onde conseguir |
+|---|---|
+| Instância ServiceNow própria (PDI) | developer.servicenow.com → *Request Instance* |
+| Node 20.18 a 26, Git e Python 3 | instalados na máquina |
+| GitHub CLI logado | `gh auth login` |
+| Claude Code | `claude` no terminal, aberto **na pasta do repositório** |
 
-| # | Dependência | Para quê | Quando morde |
-|---|---|---|---|
-| 1 | **Claude Code** | runtime do agente — rules, skills, verificadores | sempre |
-| 2 | **Node na faixa do `engines`** do `package.json` da raiz (`>=20.18 <27`) | verificadores, CLIs de skill e scripts `sn-*` | sempre |
-| 3 | **Git** | branch por US, gate no push, conexão ao ADO | sempre |
-| 4 | **Python 3** no PATH como `python3` | `tools/*.py` do kit. `check-flowmap.py` é FATAL na `spec-data-model`, `spec-api-contracts` e `spec-iterate` | Plan e Deliver |
-| 5 | **npm com acesso a registry** | **somente o protótipo.** Nenhum CLI do harness tem dependência externa | Explore |
-| 6 | **Instância ServiceNow e GitHub** — `now-sdk` na versão fixada em `app/package.json`; `.env.instancia` (chmod 600) com `SN_SDK_INSTANCE_URL`, `SN_SDK_USER`, `SN_SDK_USER_PWD` e o prefixo da instância igual ao de `app/now.config.json`; `gh` autenticado com escopo `repo`; Playwright com Chromium; `check_sensivel.py` no caminho absoluto | instalar o app, tirar os prints, publicar as issues, rodar o ATF | Explore (instância como protótipo) |
-| 7 | *opcional:* `pytm`, `scc`, `ast-grep`, `vale` | threat model, hotspots, lint. O kit tem rota degradada para cada um | Plan |
+Depois de preparar (abaixo), confira tudo com `npm run doutor`, que roda `node .claude/ferramentas/doutor.mjs`.
 
-**Confira tudo de uma vez, na pasta recém-extraída:**
+## Preparar (uma vez, cerca de 15 min)
 
 ```bash
-node .claude/ferramentas/doutor.mjs
+# 1. Seu repositório, a partir deste modelo
+git clone -b template https://github.com/arthurleardini/speckit-servicenow.git meu-projeto
+cd meu-projeto
+git remote remove origin
+gh repo create <usuario>/<repositorio> --private --source . --push
+
+# 2. Dependências
+npm install
+npx playwright install chromium
+
+# 3. Credencial da instância (nunca vai para o git)
+cp .env.example .env.instancia
+chmod 600 .env.instancia
+#    preencha SN_SDK_INSTANCE_URL, SN_SDK_USER, SN_SDK_USER_PWD, SN_ALIAS e GH_REPO
+
+# 4. Criar o app na instância
+#    O escopo é x_<prefixo>_<sufixo>, com até 18 caracteres. O prefixo aparece na instância em
+#    System Properties → glide.appcreator.company.code.
+mkdir app && cd app
+set -a; . ../.env.instancia; set +a
+npx @servicenow/sdk@4.14.3 init --appName "Nome do App" --packageName meuapp --scopeName x_<prefixo>_<sufixo> --template base
+npm install
+cd ..
+
+# 5. Conferir o ambiente
+npm run doutor
 ```
 
-Ele relata e nunca bloqueia. Duas coisas ele **não** sonda, de propósito: acesso ao registry npm
-(exigiria rede, e sondagem de rede pendura — 2,5 a 42 s medidos numa share fora do ar) e o valor do
-da credencial em `.env.instancia` (confere presença e permissão, nunca imprime o conteúdo). Sem
-rede, `npm run doutor -- --offline` pula as checagens que falam com a instância.
+Mais três passos:
 
-**Duas armadilhas conhecidas:**
+- No `workspace.md`, troque `<usuario>/<repositorio>` pelo seu repositório.
+- Na instância, ligue os testes automatizados: em **System Properties** (`sys_properties_list.do`), procure `sn_atf.runner.enabled` e mude para `true`.
+- Coloque o seu plano de implementação (`.md` ou `.pdf`) em `inputs/`. Use só dados fictícios ou agregados. Para conferir, rode `python3 scripts/check_sensivel.py inputs/*.md`; score 40 ou mais é sinal de dado pessoal real.
 
-- **Item 4, em Windows:** o comando é `python3`, mas o Windows instala o Python como `python` e
-  mantém um *App Execution Alias* de `python3.exe` que **abre a Microsoft Store** em vez de falhar.
-  O script não roda, o exit code engana e a mensagem não ajuda. Confirme com
-  `python3 -c "import sys; print(sys.executable)"` — tem que imprimir um caminho real.
-- **Item 6 é provisionamento com prazo**, não instalação. A instância de desenvolvedor é reclamada
-  depois de 10 dias sem login; `npm run reinstall` refaz o app a partir do git.
+## Usar: três pedidos ao Claude Code
 
-## Instalação
+Abra o Claude Code na pasta do repositório e peça uma fase de cada vez. Os gates do kit impedem pular etapas.
 
-Crie uma pasta vazia com o nome do projeto e extraia o `.zip` **dentro dela**. Confira que **não**
-veio `.git/` nem `.harness-template` — o pacote é gerado sem os dois — e que **veio** o
-`harness-zona.lock.json` na raiz: é o manifesto da zona imutável, versione-o junto e não o edite.
-
-Atualizando uma pasta que veio de um zip anterior? Apague, se existirem, o `GUIA.html` da raiz e os
-arquivos `docs/verificacoes-primeiro-dia*.md` que as versões 2.1.0 a 2.3.0 deixavam — só esses
-arquivos, não a pasta `docs/` (ela pode ser sua): eles não fazem mais parte do harness.
-
-Abrir uma sessão do Claude Code na raiz. O `estado` detecta a fase e injeta a rule certa.
-
-## Estrutura
-
-| Caminho | O que é |
-|---|---|
-| `inputs/` | insumos brutos: briefing, transcrições, material de mercado, código de legado |
-| `outputs/explore/` | os quatro documentos do pré-projeto mais `gaps.md` — entregável versionado |
-| `outputs/spec/` | tudo que as skills do kit escrevem |
-| `workspace.md` | manifesto multi-repo — qual repositório tem qual papel |
-| `.claude/rules/harness/` | as cinco rules do método (zona imutável) |
-| `.claude/templates/` | os seis templates do Explore (zona imutável) |
-| `.claude/hooks/` | os verificadores da camada — disparados **por evento**, com orçamento de latência (zona imutável) |
-| `.claude/ferramentas/` | os executáveis de mão — rodados **por comando**, sem orçamento (zona imutável) |
-| `.claude/skills/` | a cadeia `spec-*` vendorizada (zona imutável) |
-
-## As duas zonas
-
-| Zona | Caminho | Regra |
+| Fase | O que pedir | O que sai |
 |---|---|---|
-| **Imutável** | `CLAUDE.md`, `.claude/hooks/`, `.claude/ferramentas/`, `.claude/settings.json`, `.claude/templates/`, `.claude/rules/harness/`, `.claude/skills/` | nunca edite — a atualização sobrescreve |
-| **Mutável** | `inputs/`, `outputs/`, raiz de `.claude/rules/`, `.cursor/rules/` | é onde o projeto vive |
+| **1. Explore** | "Rode o Explore com o plano que está em `inputs/`: documentos do Explore, prévia do modelo de dados, gere o app com o sn-scaffold, instale com `npm run reinstall`, tire os prints com `npm run capture` e feche o Explore." | `outputs/explore/`; app com tabelas, telas e dados fictícios na instância; prints em `outputs/spec/screens/` |
+| **2. Plan** | "Rode o Plan até publicar o backlog: produto, tech-rules, HLD, plano de segurança, modelo final, plano de testes, tasks, revisão de segurança, rastreio e publicação com o sn-tasks-github." | `outputs/spec/` completo; issues no seu repositório, com o print de cada tela |
+| **3. Deliver** | "Implemente a story `<ID>` com o sn-implement." (uma por vez) | lógica no app, teste ATF verde, print, comentário na issue e auditoria |
 
-Atualizar o template é **sobrescrever a zona imutável**, não fazer merge. Se ninguém editou o
-maquinário, a atualização não conflita.
+Para olhar o resultado:
 
-**A garantia está no PR, não só no agente.** A trava do agente nega escrita na zona, mas o terminal e
-a IDE passam por fora dela. Para fechar isso, ligue uma vez a verificação da zona como *build
-validation* da `main` do repositório onde o harness mora: o pipeline é o
-`.claude/templates/pipeline-verificar-zona.yml`, e o cabeçalho dele tem o passo a passo. Ele roda
-`node .claude/ferramentas/verificar-zona.mjs`, que confere cada arquivo da zona contra o
-`harness-zona.lock.json` do pacote e falha se algo foi editado, apagado ou criado ali. Uma
-atualização do harness passa, e o log mostra de qual versão para qual.
+- **Na instância:** menu **All → nome do app**.
+- **Visão de cada papel:** *Impersonate User* com `demo.coordenador`, `demo.atendente` ou `demo.admin`.
+- **Backlog:** aba **Issues** do seu repositório.
 
-**Agente ou skill próprios do projeto são permitidos.** Um agente novo em `.claude/agents/` ou uma
-skill nova em `.claude/skills/<nome>/`, com nome que o pacote não tem, é extensão do projeto: a trava
-deixa criar e o `verificar-zona.mjs` só avisa. O que veio no pacote continua intocável.
+## Comandos úteis
 
-**Isso vale para o seu projeto.** Para quem **mantém o template**, a zona `.claude/skills/` tem
-procedimento próprio a partir de 2026-09-09: ela é a fonte única de verdade do `Elo-spec-kit`, e
-atualizá-la é merge de três pontas, não sobrescrita. Ver [`MANUTENCAO.md`](./MANUTENCAO.md).
-
-## Rodar os testes
-
-```bash
-node --test .claude/hooks/*.test.mjs .claude/ferramentas/*.test.mjs
-```
-
-**A forma de diretório não funciona.** `node --test .claude/hooks/` sai com código 1 e `# fail 1`
-sem rodar teste nenhum: o descobridor de arquivos do Node ignora diretório cujo nome começa com
-ponto, e o caminho cai no carregador de módulo. Se você vir `Cannot find module ...\.claude\hooks`,
-é isso — não é a suíte quebrada.
-
-`report-dominios.test.mjs` roda o `generate-report.py` do kit de verdade, por subprocesso — e o
-gerador precisa do pacote Python `markdown`. Aponte `PYTHON_REPORT` para um interpretador que o
-tenha (por exemplo um venv) antes de rodar a suíte:
-
-```bash
-export PYTHON_REPORT="/caminho/para/um/venv/com/markdown/bin/python"        # Linux/macOS
-export PYTHON_REPORT="C:/caminho/para/um/venv/com/markdown/.venv/Scripts/python.exe"  # Windows
-node --test .claude/hooks/report-dominios.test.mjs
-```
-
-Sem isso, esses testes falham alto e claro por design — o primeiro teste da suíte é um pré-voo
-que nomeia exatamente essa falta; nunca silenciam com `test.skip`.
-
-## Validar o manifesto
-
-```bash
-node .claude/hooks/workspace.mjs --validar
-```
-
-## Ferramentas de mão
-
-Rodadas por comando, quando você precisa. Não são disparadas por evento e não têm orçamento de
-latência — ao contrário dos verificadores, elas podem levar um segundo e podem escrever arquivo.
-
-| Comando | Quando |
+| Comando | Para quê |
 |---|---|
-| `node .claude/ferramentas/doutor.mjs` | uma vez, na pasta recém-extraída: confere os pré-requisitos da máquina |
-| `node .claude/ferramentas/verificar-zona.mjs` | quando quiser saber se a zona imutável está como veio no pacote; no PR, pelo pipeline `.claude/templates/pipeline-verificar-zona.yml` (com `--base origin/main`) |
-| `node .claude/ferramentas/promocao.mjs` | no marco do Plan, quando a `spec-product` termina: relatório de cobertura de promoção |
-| `node .claude/ferramentas/promocao.mjs --congelar` | depois de aceitar o relatório: carimba `outputs/explore/` e liga o congelamento |
-| `node .claude/ferramentas/wiki.mjs --saida <dir>` | quando for publicar a wiki do cliente |
-| `node .claude/ferramentas/bench.mjs` | quando quiser medir o custo da camada |
-| `node .claude/ferramentas/validar.mjs iniciar --task <TASK>` | no Deliver, depois dos testes verdes da `sn-implement`: valida a task com agentes independentes, manda corrigir o que bloqueia e revalida, até zero bloqueantes. Antes de escrever código, `validar.mjs linha-de-base --task <TASK>` guarda como os comandos do projeto saem; passe o arquivo em `--linha-de-base` para que a falha que já existia não bloqueie. Depois de cada ação, `validar.mjs avancar --task <TASK>`. Rode com timeout alto (os testes e o build do projeto rodam dentro; no Windows, no Git Bash). No Kiro, ou sem subagentes, acrescente `--sem-agentes`. Opções no cabeçalho do arquivo |
-| `node .claude/ferramentas/empacotar.mjs --saida <dir>` | **só na cópia do template**, por quem mantém: gera o zip publicável do `HEAD`, com o nome `harness-elo-v2-<versao>.zip`. Procedimento completo em `MANUTENCAO.md`, "Gerar e publicar o zip" |
+| `npm run doutor` | confere ambiente, credencial e instância |
+| `npm run reinstall` | instala o app e os dados fictícios e roda a suíte de testes |
+| `npm run capture` | tira os prints das telas na visão de cada papel |
+| `npm run atf -- --story <ID>` | roda o teste da story e grava o recibo |
+
+## Se algo travar
+
+| Sintoma | O que fazer |
+|---|---|
+| `doutor` vermelho no `gh` | `gh auth login`; se o `gh` não estiver no PATH, use `GH_BIN=/caminho/do/gh` |
+| Teste ATF responde 400 "Start ATF test Failed" | `sn_atf.runner.enabled` ainda está `false` na instância |
+| Instância "hibernando" | entre pelo navegador em developer.servicenow.com e acorde a instância. A PDI é recolhida depois de 10 dias sem login |
+| Gate do Explore nega | a mensagem diz o que falta. O mais comum é rodar `npm run reinstall` depois de mudar o app e fazer commit antes |
+
+Como o kit foi feito e o que mudou em relação ao harness Elo: `ORIGEM.md` e `docs/designs/speckit-servicenow-v0.md`. Para manter o kit: `MANUTENCAO.md`.
+
+## Manutenção do kit
+
+O maquinário fica em três pastas:
+
+- `.claude/hooks/`: verificadores **disparados por evento** (início de sessão, antes e depois de cada ferramenta). Eles só leem e decidem; não escrevem arquivo.
+- `.claude/ferramentas/`: utilitários rodados **por comando**, à mão ou por uma skill, como `promocao.mjs`, `validar.mjs`, `verificar-zona.mjs`, `wiki.mjs` (wiki do cliente) e `bench.mjs` (comparação de rodadas).
+- `.claude/skills/`: as skills do kit (`spec-*`) e as do ServiceNow (`sn-*`).
+
+Suíte de testes do kit: `node --test .claude/hooks/*.test.mjs .claude/ferramentas/*.test.mjs` (ou `npm test`, que roda também os testes das skills). Para alterar a zona travada, siga o ciclo do `ORIGEM.md`.
