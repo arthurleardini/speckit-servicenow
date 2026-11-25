@@ -1,0 +1,38 @@
+{
+  "alvo": "US-MOD-UX-003",
+  "tipo": "story",
+  "sys_id": [
+    "b5998b8a39a644678783b5689624212d",
+    "66ca04ef1bfa469e98fed2e267b0976f"
+  ],
+  "resultId": [
+    "3e71758d93b017107a57f7c4b503d6e8",
+    "f081798d93b017107a57f7c4b503d62b"
+  ],
+  "status": "success",
+  "horario": "2026-11-25T03:00:25.737Z",
+  "commit": "b4e03b3cdccee0105c690002ab0841a55f1abe0f",
+  "runner": false,
+  "testes": [
+    {
+      "chave": "US-MOD-UX-003_atf_encerrar_positivo",
+      "sys_id": "b5998b8a39a644678783b5689624212d",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "3e71758d93b017107a57f7c4b503d6e8",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=3e71758d93b017107a57f7c4b503d6e8"
+    },
+    {
+      "chave": "US-MOD-UX-003_atf_encerrar_negativo",
+      "sys_id": "66ca04ef1bfa469e98fed2e267b0976f",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "f081798d93b017107a57f7c4b503d62b",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f081798d93b017107a57f7c4b503d62b"
+    }
+  ]
+}

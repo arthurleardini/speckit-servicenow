@@ -1,6 +1,6 @@
 # Log de sincronização — Cobrança MT (Speckit ServiceNow v0, piloto 2.6 Cobrança)
 
-Última atualização: 2026-11-24
+Última atualização: 2026-11-25
 
 Este log é a **memória cronológica do projeto**. Toda execução de skill (`spec-ingest`, `spec-legacy`, `spec-benchmark`, `spec-product`, `spec-prototype`, `spec-iterate`, `spec-report`) registra uma linha aqui ao terminar. Skills subsequentes leem este log no início para entender de onde viemos antes de produzir novo conteúdo.
 
@@ -14,6 +14,7 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 45 | 2026-11-25 00:00 | now-sdk-install | dev493801 | x_2326104_cob | b4e03b3cdccee0105c690002ab0841a55f1abe0f | ok; 1009 registros | — | sn-capture |
 | 44 | 2026-11-24 23:53 | now-sdk-install | dev493801 | x_2326104_cob | 62dbed8a3d992bebd7ed68288954bc1b5a8c2d1b | ok; 1009 registros | — | sn-capture |
 | 43 | 2026-11-24 23:38 | now-sdk-install | dev493801 | x_2326104_cob | e6cb7c5696875bd164fd469591c266627a105ebc | ok; 1009 registros | — | sn-capture |
 | 42 | 2026-11-24 23:28 | now-sdk-install | dev493801 | x_2326104_cob | 8c8784d57bab744bdc663ddcc945e13d39e7350b | ok; 1009 registros | — | sn-capture |
