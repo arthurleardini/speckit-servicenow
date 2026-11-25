@@ -27,6 +27,10 @@
     "number": 9,
     "id": 6586969216
   },
+  "EPIC-008": {
+    "number": 91,
+    "id": 6596934171
+  },
   "FEAT-F1-CARTEIRA": {
     "number": 16,
     "id": 6586970952
@@ -118,6 +122,22 @@
   "FEAT-T-VISAO": {
     "number": 23,
     "id": 6586972856
+  },
+  "FEAT-UX-CASO": {
+    "number": 94,
+    "id": 6596937278
+  },
+  "FEAT-UX-CICLO": {
+    "number": 93,
+    "id": 6596937030
+  },
+  "FEAT-UX-LISTA": {
+    "number": 92,
+    "id": 6596936834
+  },
+  "FEAT-UX-NAVEGACAO": {
+    "number": 95,
+    "id": 6596937530
   },
   "STORY-F1-ESTRUTURA": {
     "number": 38,
@@ -326,6 +346,38 @@
   "STORY-MOD-T-004": {
     "number": 59,
     "id": 6586982331
+  },
+  "STORY-MOD-UX-001": {
+    "number": 96,
+    "id": 6596953074
+  },
+  "STORY-MOD-UX-002": {
+    "number": 97,
+    "id": 6596953240
+  },
+  "STORY-MOD-UX-003": {
+    "number": 98,
+    "id": 6596953385
+  },
+  "STORY-MOD-UX-004": {
+    "number": 99,
+    "id": 6596953515
+  },
+  "STORY-MOD-UX-005": {
+    "number": 100,
+    "id": 6596953691
+  },
+  "STORY-MOD-UX-006": {
+    "number": 101,
+    "id": 6596953875
+  },
+  "STORY-MOD-UX-007": {
+    "number": 102,
+    "id": 6596954064
+  },
+  "STORY-MOD-UX-008": {
+    "number": 103,
+    "id": 6596954239
   },
   "STORY-SEC-TRANSVERSAL": {
     "number": 37,
