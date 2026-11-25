@@ -1,8 +1,8 @@
 # Requisitos de Produto / UX — Cobrança MT (piloto 2.6 Cobrança, SEFAZ-MT)
 
 Status: draft
-Última atualização: 2026-11-24
-Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens-manifest.json (33 telas instaladas e fotografadas na instância `dev493801`)
+Última atualização: 2026-11-25 (reformulação de UX v1, `docs/designs/ux-cobranca-v1.md` v1.1)
+Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens-manifest.json (35 telas instaladas e fotografadas na instância `dev493801`)
 
 **Âmbito deste arquivo:** um PR por tela `TEL-` do `screens-manifest.json`. A tela já existe na instância como form, list ou report da Core UI clássica (UI16); o print de cada uma está em `outputs/spec/screens/<TEL>.png`, tirado na visão do papel da tela. O inventário de campos sai do `data-model.json` final, com as opções transcritas.
 
@@ -21,6 +21,7 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | MOD-F5 | Cobrança Qualificada | 5 |
 | MOD-F6 | Monitoramento, KPIs e Grupo de Controle | 6 |
 | MOD-T | Transversais | 1 |
+| MOD-UX-LISTA | Lista ativa do atendente (design UX v1) | 2 |
 
 ---
 
@@ -31,17 +32,22 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 ### Princípio: a tela é a da plataforma
 **Origem:** F-017, F-086
 **Descrição:** toda tela é form, list ou report padrão da Core UI clássica, sem layout próprio; o que o cliente valida é o que vai para produção.
-**Como verificar:** 33 de 33 telas com print da instância (RNF-USABILIDADE-001).
+**Como verificar:** 35 de 35 telas com print da instância (RNF-USABILIDADE-001).
 
 ### Princípio: cada um vê o que é seu
 **Origem:** F-016, F-145
-**Descrição:** o atendente só encontra a própria carteira em qualquer tela; números de colegas nunca aparecem.
-**Como verificar:** 0 registros alheios nos testes de acesso (RNF-SEGURANCA-002).
+**Descrição:** o atendente só encontra a própria lista de contatos e a própria carteira em qualquer tela; números de colegas nunca aparecem. O caso qualificado é do coordenador responsável; o atendente não o vê.
+**Como verificar:** 0 registros alheios nos testes de acesso (RNF-SEGURANCA-002); atendente sem leitura de caso (ATF US-MOD-UX-006).
 
 ### Princípio: a regra aparece na tela
 **Origem:** F-032, F-140
 **Descrição:** versão do critério, marca «sem score», grupo de controle e origem da regularização são campos visíveis, não cálculo escondido.
 **Como verificar:** os campos constam do inventário de TEL-008, TEL-009, TEL-010, TEL-020 e TEL-024.
+
+### Princípio: cada um entra no próprio trabalho e age por botão
+**Origem:** design UX v1 (M1, M3, M4)
+**Descrição:** o atendente cai em «Minha lista» e o coordenador em «Casos qualificados». O estado do contato, do caso e do ciclo muda pelos botões da tela («Registrar ligação», «Encerrar», «Avançar etapa», «Encerrar caso», «Distribuir lista»), com a trilha de etapas no topo do form; o servidor recusa a mesma mudança feita à mão (GAP-150, GAP-152).
+**Como verificar:** `outputs/spec/screens/ux-v1/verificacao.json` (home e menu por papel) e `acoes.json` (cliques por jornada).
 
 ### Princípio: o que é simulado diz que é
 **Origem:** F-170
@@ -89,6 +95,8 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | PR-MOD-F6-006 | MOD-F6 | RF-MOD-F6-006 | TEL-031; product-vision §6 | F-077, F-018 |
 | PR-MOD-F1-007 | MOD-F1 | RF-MOD-T-002, RF-MOD-T-003 | TEL-032; product-vision §6 | F-080, F-081, F-018 |
 | PR-MOD-T-001 | MOD-T | RF-MOD-T-001 | TEL-033; product-vision §6 | F-079, F-018 |
+| PR-MOD-UX-001 | MOD-UX-LISTA | RF-MOD-F5-005, RF-MOD-F5-007 | TEL-034; design UX v1 (CUJ-A) | F-065, F-067 |
+| PR-MOD-UX-002 | MOD-UX-LISTA | RF-MOD-F5-005 | TEL-035; design UX v1 (CUJ-A) | F-065 |
 
 ---
 
@@ -1387,7 +1395,7 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 **Prioridade:** Must  
 **Origem:** `Protótipo` (tela instalada na instância no Explore)
 
-**Contexto de uso:** Coordenador de Cobrança abre «Distribuição da carteira qualificada» pelo menu «Cobrança MT» › Cobrança Qualificada. Registro de exemplo: lista: seed fictício (50).
+**Contexto de uso:** Coordenador de Cobrança abre «Distribuição da carteira qualificada» pela área «Administração» ou pela lista de casos. Registro de exemplo: lista: casos do seed manual (6). O dono do caso é o coordenador responsável (coluna «Responsável»).
 
 **Requisito de experiência:** A lista mostra as colunas do inventário, com filtro padrão da plataforma por qualquer coluna, ordenação por coluna e paginação de 20 linhas.
 
@@ -1412,17 +1420,17 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
 | contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | vazio → "Contribuinte é obrigatório" | RF-MOD-F5-001 |
-| atendente | Atendente | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-001 |
+| coordenador | Responsável | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-001 |
 | ciclo | Ciclo | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_ciclo` | — | — | — | — | RF-MOD-F5-001 |
 | estagio | Estágio | select | Não | única | `em_selecao` — Em seleção; `selecionado` — Caso selecionado; `dossie_gerado` — Dossiê gerado; `conducao` — Condução; `encerrado` — Encerrado | `domainTable:x_2326104_cob_caso.estagio` | — | — | — | — | RF-MOD-F5-001 |
 | prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-001 |
 | score | Score de liquidez | number | Não | — | — | — | — | — | 0 a 100 | — | RF-MOD-F5-001 |
 | sem_score | Sem score | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F5-001 |
-| valor_em_aberto | Valor em aberto | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-001 |
+| valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-001 |
 
 **Grid / listagem**
 
-- Colunas exibidas (em ordem): contribuinte, atendente, ciclo, estagio, prioridade, score, sem_score, valor_em_aberto
+- Colunas exibidas (em ordem): contribuinte, coordenador (Responsável), ciclo, estagio, prioridade, score, sem_score, valor_em_aberto
 - Ordenação default: data de criação, mais recente primeiro
 - Paginação: 20 linhas por página (padrão da plataforma)
 - Ações por linha: abrir o registro
@@ -1440,7 +1448,7 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 ---
 
-### PR-MOD-F5-002 — TEL-022 Carga por atendente
+### PR-MOD-F5-002 — TEL-022 Carga por responsável
 
 **RF relacionado:** RF-MOD-F5-001  
 **Etapa do fluxo:** ETP-027  
@@ -1450,9 +1458,9 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 **Prioridade:** Must  
 **Origem:** `Protótipo` (tela instalada na instância no Explore)
 
-**Contexto de uso:** Coordenador de Cobrança abre «Carga por atendente» pelo menu «Cobrança MT» › Cobrança Qualificada. Registro de exemplo: report: seed fictício por atendente.
+**Contexto de uso:** Coordenador de Cobrança abre «Carga por responsável» na área «Analytics». Registro de exemplo: report: casos do seed manual por estágio.
 
-**Requisito de experiência:** O relatório agrupa os registros da tabela por `atendente` e mostra a contagem de cada grupo.
+**Requisito de experiência:** O relatório mostra a contagem de casos qualificados por estágio, com o responsável (coordenador) como agrupamento disponível.
 
 **Critérios mensuráveis:**
 - A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
@@ -1474,11 +1482,12 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
-| atendente | Atendente | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-001 |
+| coordenador | Responsável | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-001 |
+| estagio | Estágio | select | Não | única | `em_selecao` — Em seleção; `selecionado` — Caso selecionado; `dossie_gerado` — Dossiê gerado; `conducao` — Condução; `encerrado` — Encerrado | `domainTable:x_2326104_cob_caso.estagio` | — | — | — | — | RF-MOD-F5-001 |
 
 **Grid / listagem**
 
-- Colunas exibidas (em ordem): atendente, contagem
+- Colunas exibidas (em ordem): estagio, contagem
 - Ordenação default: maior contagem primeiro
 - Paginação: não se aplica
 - Ações por linha: abrir a lista filtrada pelo grupo
@@ -1496,28 +1505,29 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 ---
 
-### PR-MOD-F5-003 — TEL-023 Minha fila
+### PR-MOD-F5-003 — TEL-023 Casos qualificados
 
 **RF relacionado:** RF-MOD-F5-002, RF-MOD-F5-007  
 **Etapa do fluxo:** ETP-028  
 **Tela:** `TEL-023` · list da tabela `x_2326104_cob_caso` (Caso de cobrança qualificada) · rota `/x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023` · print `screens/TEL-023.png`
 
-**Personas:** Atendente de Cobrança  
+**Personas:** Coordenador de Cobrança  
 **Prioridade:** Must  
 **Origem:** `Protótipo` (tela instalada na instância no Explore)
 
-**Contexto de uso:** Atendente de Cobrança abre «Minha fila» pelo menu «Cobrança MT» › Cobrança Qualificada. Registro de exemplo: lista: casos do atendente demo.
+**Contexto de uso:** Coordenador de Cobrança entra direto em «Casos qualificados» (home do papel) ou pelo menu «Cobrança MT» › Casos qualificados. Registro de exemplo: lista: 6 casos qualificados do coordenador demo, um por etapa. Substitui a antiga «Minha fila» do atendente (design UX v1, R6).
 
 **Requisito de experiência:** A lista mostra as colunas do inventário, com filtro padrão da plataforma por qualquer coluna, ordenação por coluna e paginação de 20 linhas.
 
 **Critérios mensuráveis:**
 - A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
 - Todos os rótulos em português (RNF-USABILIDADE-001).
-- Só aparecem registros da carteira do atendente logado (RNF-SEGURANCA-002).
+- Só aparecem casos não encerrados de que o coordenador logado é responsável (RNF-SEGURANCA-002); o atendente não tem acesso.
+- Da home ao caso aberto: 1 clique (`outputs/spec/screens/ux-v1/acoes.json`).
 
 **Antipadrão (o que evitar):**
 - Layout próprio fora da Core UI.
-- Mostrar registro ou total de outro atendente.
+- Mostrar caso a quem só tem o papel de atendente.
 
 **Mapa de estados:**
 - Carregando: indicador padrão da plataforma
@@ -1531,18 +1541,18 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
-| prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
 | contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | vazio → "Contribuinte é obrigatório" | RF-MOD-F5-002, RF-MOD-F5-007 |
 | estagio | Estágio | select | Não | única | `em_selecao` — Em seleção; `selecionado` — Caso selecionado; `dossie_gerado` — Dossiê gerado; `conducao` — Condução; `encerrado` — Encerrado | `domainTable:x_2326104_cob_caso.estagio` | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
-| score | Score de liquidez | number | Não | — | — | — | — | — | 0 a 100 | — | RF-MOD-F5-002, RF-MOD-F5-007 |
-| sem_score | Sem score | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
-| valor_em_aberto | Valor em aberto | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
+| prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
+| valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
 | sinal_coercitivo | Sinalização coercitiva ativa | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
+| ciclo | Ciclo | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_ciclo` | — | — | — | — | RF-MOD-F5-002, RF-MOD-F5-007 |
 
 **Grid / listagem**
 
-- Colunas exibidas (em ordem): prioridade, contribuinte, estagio, score, sem_score, valor_em_aberto, sinal_coercitivo
-- Ordenação default: data de criação, mais recente primeiro
+- Colunas exibidas (em ordem): contribuinte, estagio, prioridade, valor_em_aberto, sinal_coercitivo, ciclo
+- Filtro do módulo: `estagio!=encerrado`
+- Ordenação default: sequência das etapas (`etapa_ordem`) e, dentro da etapa, maior prioridade primeiro
 - Paginação: 20 linhas por página (padrão da plataforma)
 - Ações por linha: abrir o registro
 - Mensagem de lista vazia: «Nenhum registro»
@@ -1565,27 +1575,28 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 **Etapa do fluxo:** ETP-029, ETP-031  
 **Tela:** `TEL-024` · form da tabela `x_2326104_cob_caso` (Caso de cobrança qualificada) · rota `/x_2326104_cob_caso.do?sys_id=541104d723384cd0bd1aaa40e178ae60` · print `screens/TEL-024.png`
 
-**Personas:** Atendente de Cobrança  
+**Personas:** Coordenador de Cobrança  
 **Prioridade:** Must  
 **Origem:** `Protótipo` (tela instalada na instância no Explore)
 
-**Contexto de uso:** Atendente de Cobrança abre «Dossiê do caso» pelo menu «Cobrança MT» › Cobrança Qualificada. Registro de exemplo: TEL-024_registro_demo: caso fictício em condução, com sinalização coercitiva e 3 interações.
+**Contexto de uso:** Coordenador de Cobrança abre o caso na lista «Casos qualificados» (TEL-023). Registro de exemplo: TEL-024_registro_demo: caso fictício em condução do coordenador demo, com sinalização coercitiva.
 
-**Requisito de experiência:** O form mostra os campos do inventário em seções, o histórico de atividades (comentários e alterações) e as listas relacionadas `x_2326104_cob_debito.contribuinte`, `x_2326104_cob_parcelamento.contribuinte`, `x_2326104_cob_comunicacao.contribuinte`, `x_2326104_cob_interacao.caso`, `x_2326104_cob_regularizacao.caso`.
+**Requisito de experiência:** A trilha de etapas (em seleção → selecionado → dossiê → condução → encerrado) fica no topo do form. O caso anda pelo botão «Avançar etapa» (uma etapa por vez) e termina pelo botão «Encerrar caso», que exige o motivo; «Estágio» e «Encerrado em» não são editáveis à mão e o servidor recusa pular etapa, encerrar sem motivo ou reabrir, também por lista e API (GAP-152). O form mostra os campos do inventário em seções, o histórico de atividades (comentários e alterações) e as listas relacionadas `x_2326104_cob_debito.contribuinte`, `x_2326104_cob_parcelamento.contribuinte`, `x_2326104_cob_comunicacao.contribuinte`, `x_2326104_cob_interacao.caso`, `x_2326104_cob_regularizacao.caso`.
 
 **Critérios mensuráveis:**
 - A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
 - Todos os rótulos em português (RNF-USABILIDADE-001).
-- Só aparecem registros da carteira do atendente logado (RNF-SEGURANCA-002).
+- Só o coordenador responsável (e o admin) abre o caso; o atendente não tem acesso (RNF-SEGURANCA-002).
+- Da home ao caso avançado: 2 cliques (`outputs/spec/screens/ux-v1/acoes.json`).
 
 **Antipadrão (o que evitar):**
 - Layout próprio fora da Core UI.
-- Mostrar registro ou total de outro atendente.
+- Mudar o estágio fora dos botões.
 
 **Mapa de estados:**
 - Carregando: indicador padrão da plataforma enquanto o registro abre
 - Sucesso: campos preenchidos e mensagem de confirmação no topo ao salvar
-- Erro de validação: campo obrigatório vazio fica marcado e o topo mostra a mensagem do inventário
+- Erro de validação: «Encerrar caso» sem motivo marca o campo e o topo mostra «Operação recusada: informe o motivo de encerramento.»
 - Erro de sistema: o topo mostra a mensagem de erro da plataforma e nada é gravado
 - Vazio: não se aplica (form sempre abre um registro)
 - Offline: não se aplica (a plataforma exige conexão; a página não carrega)
@@ -1595,16 +1606,16 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
 | contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | vazio → "Contribuinte é obrigatório" | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
-| atendente | Atendente | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
+| coordenador | Responsável | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | ciclo | Ciclo | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_ciclo` | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
-| estagio | Estágio | select | Não | única | `em_selecao` — Em seleção; `selecionado` — Caso selecionado; `dossie_gerado` — Dossiê gerado; `conducao` — Condução; `encerrado` — Encerrado | `domainTable:x_2326104_cob_caso.estagio` | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
+| estagio | Estágio | select | Não | única | `em_selecao` — Em seleção; `selecionado` — Caso selecionado; `dossie_gerado` — Dossiê gerado; `conducao` — Condução; `encerrado` — Encerrado | `domainTable:x_2326104_cob_caso.estagio` | — | — | — | muda só por «Avançar etapa» e «Encerrar caso» → «Operação recusada: o caso anda uma etapa por vez; use «Avançar etapa».» | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | score | Score de liquidez | number | Não | — | — | — | — | — | 0 a 100 | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | sem_score | Sem score | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
-| valor_em_aberto | Valor em aberto | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
+| valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | sinal_coercitivo | Sinalização coercitiva ativa | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | sinal_coercitivo_desc | Sinalização coercitiva (descrição) | text | Não | — | — | — | — | — | até 255 caracteres | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
-| motivo_encerramento | Motivo de encerramento | select | Não | única | `regularizado` — Regularizado; `esgotado` — Esgotado; `outro` — Outro | `domainTable:x_2326104_cob_caso.motivo_encerramento` | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
+| motivo_encerramento | Motivo de encerramento | select | Não | única | `regularizado` — Regularizado; `esgotado` — Esgotado; `outro` — Outro | `domainTable:x_2326104_cob_caso.motivo_encerramento` | — | — | — | vazio ao encerrar → "Operação recusada: informe o motivo de encerramento." | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | encerrado_em | Encerrado em | datetime | Não | — | — | — | DD/MM/AAAA HH:mm | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 | comentarios | Comentários | textarea | Não | — | — | — | — | — | — | — | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003 |
 
@@ -1622,18 +1633,18 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 **Etapa do fluxo:** ETP-030  
 **Tela:** `TEL-025` · form da tabela `x_2326104_cob_interacao` (Interação) · rota `/x_2326104_cob_interacao.do?sys_id=385ad7c968ff4f8c93f0d9f1e64350e0` · print `screens/TEL-025.png`
 
-**Personas:** Atendente de Cobrança  
+**Personas:** Coordenador de Cobrança (no caso); a interação do contato nasce do botão «Registrar ligação» (TEL-035)  
 **Prioridade:** Should  
 **Origem:** `Protótipo` (tela instalada na instância no Explore)
 
-**Contexto de uso:** Atendente de Cobrança abre «Registro de interação» pelo menu «Cobrança MT» › Cobrança Qualificada. Registro de exemplo: TEL-025_registro_demo: interação "promessa de pagamento" do caso da TEL-024.
+**Contexto de uso:** Coordenador de Cobrança registra a interação pela lista relacionada «Interações» do caso (TEL-024). Registro de exemplo: TEL-025_registro_demo: interação «promessa de pagamento» registrada pelo coordenador. A interação aponta para um contato da lista ou para um caso, nunca para os dois.
 
 **Requisito de experiência:** O form mostra os campos do inventário em seções, o histórico de atividades (comentários e alterações) e as listas relacionadas —.
 
 **Critérios mensuráveis:**
 - A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
 - Todos os rótulos em português (RNF-USABILIDADE-001).
-- Só aparecem registros da carteira do atendente logado (RNF-SEGURANCA-002).
+- O atendente vê só interações dos próprios contatos; interação de caso só o coordenador responsável (RNF-SEGURANCA-002).
 
 **Antipadrão (o que evitar):**
 - Layout próprio fora da Core UI.
@@ -1651,12 +1662,14 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
-| caso | Caso | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_caso` | — | — | — | vazio → "Caso é obrigatório" | RF-MOD-F5-005 |
+| caso | Caso qualificado | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_caso` | — | — | — | contato e caso juntos, ou nenhum → "Operação recusada: a interação pertence a um contato ou a um caso." | RF-MOD-F5-005 |
+| contato | Contato da lista | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_contato` | — | — | — | contato e caso juntos, ou nenhum → "Operação recusada: a interação pertence a um contato ou a um caso." | RF-MOD-F5-005 |
 | atendente | Atendente | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-005 |
 | tipo | Tipo | select | Não | única | `telefone` — Telefone; `email` — E-mail; `presencial` — Presencial; `dte` — DT-e | `domainTable:x_2326104_cob_interacao.tipo` | — | — | — | — | RF-MOD-F5-005 |
 | resultado | Resultado | select | Sim | única | `contato_efetivo` — Contato efetivo; `sem_contato` — Sem contato; `promessa_pagamento` — Promessa de pagamento; `recusa` — Recusa | `domainTable:x_2326104_cob_interacao.resultado` | — | — | — | vazio → "Resultado é obrigatório" | RF-MOD-F5-005 |
-| descricao | Descrição | text | Não | — | — | — | — | — | até 4000 caracteres | — | RF-MOD-F5-005 |
+| descricao | Anotação | text | Não | — | — | — | — | — | até 4000 caracteres | — | RF-MOD-F5-005 |
 | ocorrida_em | Ocorrida em | datetime | Não | — | — | — | DD/MM/AAAA HH:mm | — | — | — | RF-MOD-F5-005 |
+| retorno_em | Retorno em | date | Não | — | — | — | DD/MM/AAAA | — | — | — | RF-MOD-F5-005 |
 | comentarios | Comentários | textarea | Não | — | — | — | — | — | — | — | RF-MOD-F5-005 |
 
 **Grid / listagem** — (form; as listas relacionadas seguem o padrão de lista da plataforma)
@@ -2079,14 +2092,152 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 ---
 
+## Módulo: Lista ativa do atendente (`MOD-UX-LISTA`)
+
+### PR-MOD-UX-001 — TEL-034 Minha lista
+
+**RF relacionado:** RF-MOD-F5-005, RF-MOD-F5-007
+**Etapa do fluxo:** ETP-041
+**Tela:** `TEL-034` · list da tabela `x_2326104_cob_contato` (Contato da lista) · rota `/x_2326104_cob_contato_list.do` · print `screens/TEL-034.png`
+
+**Personas:** Atendente de Cobrança
+**Prioridade:** Must
+**Origem:** design UX v1 (CUJ-A), tela instalada na instância na F2
+
+**Contexto de uso:** Atendente de Cobrança entra direto em «Minha lista» (home do papel). Registro de exemplo: lista: contatos do atendente demo com próxima ação até hoje.
+
+**Requisito de experiência:** A lista mostra só os contatos do atendente logado que não estão encerrados e cuja próxima ação é hoje ou antes (ou está vazia), ordenados pela próxima ação e, dentro do dia, pela maior prioridade. Telefone, valor e status aparecem sem abrir o contato.
+
+**Critérios mensuráveis:**
+- A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
+- Todos os rótulos em português (RNF-USABILIDADE-001).
+- Só aparecem contatos do atendente logado (RNF-SEGURANCA-002).
+- Do login ao contato aberto: 1 clique; até a ligação registrada: 5 cliques (`outputs/spec/screens/ux-v1/acoes.json`).
+
+**Antipadrão (o que evitar):**
+- Mostrar contato de outro atendente ou contato encerrado.
+- Ordenar por data de criação.
+
+**Mapa de estados:**
+- Carregando: indicador padrão da plataforma
+- Sucesso: linhas da lista
+- Erro de validação: não se aplica (tela só de consulta)
+- Erro de sistema: mensagem de erro da plataforma no topo
+- Vazio: «Nenhum registro» (nenhuma ligação para hoje)
+- Offline: não se aplica (a plataforma exige conexão)
+
+**Inventário de campos**
+
+| Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
+|-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
+| contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | vazio → "Contribuinte é obrigatório" | RF-MOD-F5-005, RF-MOD-F5-007 |
+| contribuinte.telefone | Contribuinte › Telefone | text | Não | — | — | — | — | — | até 20 caracteres | — | RF-MOD-F5-005, RF-MOD-F5-007 |
+| valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-005, RF-MOD-F5-007 |
+| status | Status | select | Não | única | `a_ligar` — A ligar; `ligado` — Ligado; `retornar` — Retornar; `encerrado` — Encerrado | `domainTable:x_2326104_cob_contato.status` | — | — | — | — | RF-MOD-F5-005, RF-MOD-F5-007 |
+| proxima_acao_em | Próxima ação em | date | Não | — | — | — | DD/MM/AAAA | — | — | — | RF-MOD-F5-005, RF-MOD-F5-007 |
+| prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-005, RF-MOD-F5-007 |
+
+**Grid / listagem**
+
+- Colunas exibidas (em ordem): contribuinte, contribuinte.telefone, valor_em_aberto, status, proxima_acao_em, prioridade
+- Filtro do módulo: `atendente=javascript:gs.getUserID()^status!=encerrado^proxima_acao_emISEMPTY^ORproxima_acao_em<=javascript:gs.endOfToday()`
+- Ordenação default: próxima ação, depois maior prioridade
+- Paginação: 20 linhas por página (padrão da plataforma)
+- Ações por linha: abrir o contato (TEL-035)
+- Mensagem de lista vazia: «Nenhum registro»
+
+**Comportamento dos filtros**
+
+- Aplica: filtro fixo do módulo; o construtor de filtro da plataforma refina
+- Combinação entre filtros: AND (OR disponível no construtor)
+- Limpar todos de uma vez: sim (volta ao filtro do módulo pelo menu)
+- Persistência do filtro: querystring (`sysparm_query`)
+- Dependências entre filtros: nenhuma
+
+**Gap associado:** —
+
+---
+
+### PR-MOD-UX-002 — TEL-035 Contato da lista
+
+**RF relacionado:** RF-MOD-F5-005
+**Etapa do fluxo:** ETP-042, ETP-043
+**Tela:** `TEL-035` · form da tabela `x_2326104_cob_contato` (Contato da lista) · rota `/x_2326104_cob_contato.do?sys_id=8ca2d0136d084cabb0b53bd4748fc574` · print `screens/TEL-035.png`
+
+**Personas:** Atendente de Cobrança
+**Prioridade:** Must
+**Origem:** design UX v1 (CUJ-A), tela instalada na instância na F2
+
+**Contexto de uso:** Atendente de Cobrança abre o contato em «Minha lista» (TEL-034). Registro de exemplo: TEL-035_registro_demo: contato de demo.atendente em «Retornar», com 1 tentativa e retorno para hoje.
+
+**Requisito de experiência:** A trilha de etapas (a ligar → ligado → retornar → encerrado) fica no topo. O atendente escolhe «Resultado desta ligação» (o campo abre sempre vazio), escreve a anotação em «Comentários», informa a próxima ação se combinou retorno e clica em «Registrar ligação». O sistema cria a interação, soma 1 em tentativas e decide o status pela tabela de decisão; o resultado vai para «Último resultado», que só o botão grava (GAP-150). «Encerrar» tira o contato da lista e exige o motivo. Status, tentativas e último resultado não são editáveis à mão pelo atendente.
+
+**Critérios mensuráveis:**
+- A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
+- Todos os rótulos em português (RNF-USABILIDADE-001).
+- Só o atendente dono do contato, o coordenador e o admin registram ligação (RNF-SEGURANCA-002).
+- Da abertura do contato à ligação registrada: 4 cliques mais a digitação da anotação (`outputs/spec/screens/ux-v1/acoes.json`).
+
+**Antipadrão (o que evitar):**
+- Reaproveitar o resultado da ligação anterior sem o atendente escolher de novo.
+- Encerrar sem motivo.
+
+**Mapa de estados:**
+- Carregando: indicador padrão da plataforma enquanto o registro abre
+- Sucesso: mensagem no topo, por exemplo «Ligação registrada. Status: Ligado; próxima ação em 01/12/2026.»
+- Erro de validação: campo do botão vazio fica marcado e o topo mostra a mensagem do inventário
+- Erro de sistema: o topo mostra «A ligação não foi registrada. Confira a mensagem acima e tente de novo.» e nada é gravado pela metade
+- Vazio: não se aplica (form sempre abre um registro)
+- Offline: não se aplica (a plataforma exige conexão)
+
+**Inventário de campos**
+
+| Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
+|-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
+| contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | vazio → "Contribuinte é obrigatório" | RF-MOD-F5-005 |
+| atendente | Atendente | lookup | Não | única | *(dinâmica)* | `domainTable:sys_user` | — | — | — | — | RF-MOD-F5-005 |
+| ciclo | Ciclo | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_ciclo` | — | — | — | — | RF-MOD-F5-005 |
+| status | Status | select | Não | única | `a_ligar` — A ligar; `ligado` — Ligado; `retornar` — Retornar; `encerrado` — Encerrado | `domainTable:x_2326104_cob_contato.status` | — | — | — | só os botões mudam (atendente não edita) | RF-MOD-F5-005 |
+| proxima_acao_em | Próxima ação em | date | Não | — | — | — | DD/MM/AAAA | — | — | — | RF-MOD-F5-005 |
+| ultimo_resultado | Último resultado | select | Não | única | `contato_efetivo` — Contato efetivo; `sem_contato` — Sem contato; `promessa_pagamento` — Promessa de pagamento; `recusa` — Recusa | `domainTable:x_2326104_cob_contato.ultimo_resultado` | — | — | — | só o botão «Registrar ligação» grava (atendente não edita) | RF-MOD-F5-005 |
+| tentativas | Tentativas | number | Não | — | — | — | — | — | — | só o botão «Registrar ligação» soma (atendente não edita) | RF-MOD-F5-005 |
+| prioridade | Prioridade | number | Não | — | — | — | — | — | — | — | RF-MOD-F5-005 |
+| valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-005 |
+| motivo_encerramento | Motivo de encerramento | select | Não | única | `regularizado` — Regularizado; `contato_realizado` — Contato realizado; `sem_contato` — Sem contato; `recusa` — Recusa; `outro` — Outro | `domainTable:x_2326104_cob_contato.motivo_encerramento` | — | — | — | vazio ao encerrar → "Operação recusada: informe o motivo de encerramento." | RF-MOD-F5-005 |
+| resultado_ligacao | Resultado desta ligação | select | Não | única | `contato_efetivo` — Contato efetivo; `sem_contato` — Sem contato; `promessa_pagamento` — Promessa de pagamento; `recusa` — Recusa | `domainTable:x_2326104_cob_contato.resultado_ligacao` | — | — | — | vazio ao registrar → "Operação recusada: informe o resultado da ligação." | RF-MOD-F5-005 |
+| comentarios | Comentários | textarea | Não | — | — | — | — | — | — | vazio ao registrar → "Operação recusada: informe a anotação da ligação." | RF-MOD-F5-005 |
+
+**Tabela de decisão de «Registrar ligação»**
+
+| Resultado desta ligação | Retorno informado? | Tentativas após somar 1 | Novo status | Próxima ação em | Motivo |
+|---|---|---|---|---|---|
+| Promessa de pagamento | — | — | Ligado | retorno informado ou hoje + 7 | — |
+| Contato efetivo | sim | — | Retornar | retorno | — |
+| Contato efetivo | não | — | Encerrado | vazio | Contato realizado |
+| Sem contato | — | < 3 | Retornar | amanhã | — |
+| Sem contato | — | ≥ 3 | Encerrado | vazio | Sem contato |
+| Recusa | — | — | Encerrado | vazio | Recusa |
+
+**Grid / listagem** — (form; a lista relacionada «Interações» segue o padrão de lista da plataforma)
+
+**Comportamento dos filtros** — (form sem filtro)
+
+**Gap associado:** GAP-150 (fechado)
+
+---
+
 <!-- id: pr-ttfv -->
 
 ## Time to First Value (TTFV) por jornada
 
 ```
-TTFV alvo: 2 minutos para o Atendente abrir o primeiro caso da fila com o dossiê completo
-Passos máximos: 3 passos entre login e o dossiê aberto (menu › Minha fila › caso)
-Pré-requisitos visíveis ao usuário: casos distribuídos para o atendente
+TTFV alvo: 2 minutos para o Atendente registrar a primeira ligação do dia
+Passos máximos: 5 cliques entre login e a ligação registrada (home «Minha lista» › contato › Resultado desta ligação › Comentários › Registrar ligação)
+Pré-requisitos visíveis ao usuário: lista do ciclo distribuída para o atendente
+
+TTFV alvo: 1 minuto para o Coordenador avançar um caso qualificado
+Passos máximos: 2 cliques (home «Casos qualificados» › caso › Avançar etapa)
+Pré-requisitos visíveis ao usuário: casos qualificados de que é responsável
 
 TTFV alvo: 5 minutos para o Coordenador publicar uma nova versão de critério
 Passos máximos: 4 passos (menu › Critérios › Criar nova versão › Publicar versão)
@@ -2124,7 +2275,7 @@ A Core UI clássica entrega os componentes; o app não cria componente visual pr
 | Nível | Requisito | Como verificar |
 |-------|-----------|----------------|
 | A | Imagens com alt text | inspeção dos ícones da plataforma |
-| A | Navegação por teclado em todos os fluxos | teste manual nas 33 telas |
+| A | Navegação por teclado em todos os fluxos | teste manual nas 35 telas |
 | AA | Contraste mínimo 4.5:1 | tema padrão da instância |
 | AA | Labels em campos de formulário | inventário de campos com rótulo em 100% das linhas |
 | AA | Foco não encoberto por header/modal | teste manual |
@@ -2161,27 +2312,52 @@ A Core UI clássica entrega os componentes; o app não cria componente visual pr
 | 9 | Ajudar a reconhecer, diagnosticar e recuperar de erros | ✅ | mensagem diz o que fazer |
 | 10 | Ajuda e documentação | ⚠️ | ajuda padrão da plataforma |
 
-### Jornada: conduzir um caso — persona Atendente de Cobrança
+### Jornada: trabalhar a lista do dia — persona Atendente de Cobrança
 
 **Espinha padronizada (5 passos):**
 
 | Passo | Descrição | Estado(s) de UI envolvido(s) |
 |-------|-----------|------------------------------|
-| 1. Entrada | menu Cobrança MT › Minha fila (TEL-023) | Carregando, Sucesso, Vazio |
-| 2. Ação principal | abre o caso (TEL-024) e consulta débitos, comunicações, score e sinalizações | Sucesso |
-| 3. Confirmação | registra a interação (TEL-025); ela aparece no dossiê | Sucesso |
-| 4. Erro / recuperação | salva interação sem resultado → «Resultado é obrigatório» | Erro de validação |
-| 5. Saída / próximo | caso encerrado ao regularizar; volta à fila | Sucesso |
+| 1. Entrada | login cai em «Minha lista» (TEL-034), já filtrada e ordenada | Carregando, Sucesso, Vazio |
+| 2. Ação principal | abre o contato (TEL-035), escolhe «Resultado desta ligação» e escreve a anotação | Sucesso |
+| 3. Confirmação | clica em «Registrar ligação»; a mensagem diz o novo status e a próxima ação; a interação entra no histórico | Sucesso |
+| 4. Erro / recuperação | registra sem escolher o resultado → «Operação recusada: informe o resultado da ligação.» | Erro de validação |
+| 5. Saída / próximo | o contato sai da lista do dia (retorno futuro ou encerrado); volta a «Minha lista» | Sucesso |
 
 | # | Heurística | Atende? (✅/⚠️/❌) | Evidência / nota |
 |---|-----------|--------------------|------------------|
-| 1 | Visibilidade do estado do sistema | ✅ | estágio e prioridade do caso |
+| 1 | Visibilidade do estado do sistema | ✅ | trilha de etapas e mensagem com o novo status |
+| 2 | Correspondência sistema ↔ mundo real | ✅ | resultado, retorno e anotação, como numa ligação |
+| 3 | Controle e liberdade do usuário | ✅ | «Encerrar» com motivo a qualquer momento |
+| 4 | Consistência e padrões | ✅ | form e lista padrão |
+| 5 | Prevenção de erros | ✅ | resultado escolhido na hora, sem reaproveitar o anterior (GAP-150) |
+| 6 | Reconhecimento em vez de memorização | ✅ | «Último resultado» e histórico no form |
+| 7 | Flexibilidade e eficiência de uso | ✅ | 5 cliques do login à ligação registrada |
+| 8 | Estética e design minimalista | ✅ | 6 colunas na lista |
+| 9 | Ajudar a reconhecer, diagnosticar e recuperar de erros | ✅ | mensagens dizem o que falta |
+| 10 | Ajuda e documentação | ⚠️ | dica do botão e ajuda padrão da plataforma |
+
+### Jornada: conduzir um caso qualificado — persona Coordenador de Cobrança
+
+**Espinha padronizada (5 passos):**
+
+| Passo | Descrição | Estado(s) de UI envolvido(s) |
+|-------|-----------|------------------------------|
+| 1. Entrada | login cai em «Casos qualificados» (TEL-023), na sequência das etapas | Carregando, Sucesso, Vazio |
+| 2. Ação principal | abre o caso (TEL-024) e consulta débitos, comunicações, score, sinalizações e interações | Sucesso |
+| 3. Confirmação | clica em «Avançar etapa»; a trilha anda uma etapa e a mensagem confirma | Sucesso |
+| 4. Erro / recuperação | «Encerrar caso» sem motivo → «Operação recusada: informe o motivo de encerramento.» | Erro de validação |
+| 5. Saída / próximo | encerra com motivo; o caso sai da lista | Sucesso |
+
+| # | Heurística | Atende? (✅/⚠️/❌) | Evidência / nota |
+|---|-----------|--------------------|------------------|
+| 1 | Visibilidade do estado do sistema | ✅ | trilha de etapas no topo |
 | 2 | Correspondência sistema ↔ mundo real | ✅ | dossiê nos 3 níveis do plano |
-| 3 | Controle e liberdade do usuário | ✅ | volta à fila a qualquer momento |
+| 3 | Controle e liberdade do usuário | ✅ | volta à lista a qualquer momento |
 | 4 | Consistência e padrões | ✅ | form e listas padrão |
-| 5 | Prevenção de erros | ✅ | resultado obrigatório na interação |
+| 5 | Prevenção de erros | ✅ | estágio só pelos botões, uma etapa por vez (GAP-152) |
 | 6 | Reconhecimento em vez de memorização | ✅ | listas relacionadas no caso |
-| 7 | Flexibilidade e eficiência de uso | ✅ | fila já ordenada |
+| 7 | Flexibilidade e eficiência de uso | ✅ | 2 cliques da home ao caso avançado |
 | 8 | Estética e design minimalista | ⚠️ | dossiê longo em form (GAP-012) |
-| 9 | Ajudar a reconhecer, diagnosticar e recuperar de erros | ✅ | mensagens do inventário |
+| 9 | Ajudar a reconhecer, diagnosticar e recuperar de erros | ✅ | mensagens dizem o que fazer |
 | 10 | Ajuda e documentação | ⚠️ | ajuda padrão da plataforma |

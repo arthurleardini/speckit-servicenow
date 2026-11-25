@@ -1,10 +1,10 @@
 # Mapa de Fluxos e Telas — Cobrança MT (piloto 2.6 Cobrança, SEFAZ-MT)
 
 Status: draft  
-Última atualização: 2026-11-24  
-Fonte: discovery-document.md, product-requirements.md, business-rules.md, screens-manifest.json
+Última atualização: 2026-11-25 (reformulação de UX v1, `docs/designs/ux-cobranca-v1.md` v1.1)  
+Fonte: discovery-document.md, product-requirements.md, business-rules.md, screens-manifest.json, docs/designs/ux-cobranca-v1.md
 
-Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest.json`, já instaladas na instância; a rota é a da instância e o print é o da `sn-capture`. Etapa sem tela (`—`) é processamento do sistema.
+Sem legado: todos os fluxos são TO-BE. As 35 telas são as do `screens-manifest.json`, já instaladas na instância; a rota é a da instância e o print é o da `sn-capture`. Etapa sem tela (`—`) é processamento do sistema.
 
 ## Fluxos
 
@@ -14,9 +14,10 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | FLX-002 | Qualificação do ciclo | TO-BE | Coordenador de Cobrança | — | Publicar a versão do critério, gerar a prévia e publicar o ciclo com o grupo de controle sorteado |
 | FLX-003 | Ingestão do score de liquidez | TO-BE | Sistema | — | Receber o score simulado da UFMT e acompanhar a cobertura |
 | FLX-004 | Régua multicanal | TO-BE | Coordenador de Cobrança | — | Desenhar a régua, disparar as etapas sem confirmação manual e marcar a origem das regularizações |
-| FLX-005 | Cobrança qualificada | TO-BE | Atendente de Cobrança | — | Distribuir os casos e conduzir cada caso pela fila e pelo dossiê até o encerramento |
+| FLX-005 | Cobrança qualificada | TO-BE | Coordenador de Cobrança | — | Conduzir cada caso qualificado pela trilha de etapas («Avançar etapa») e pelo dossiê até «Encerrar caso» com motivo; o caso é do coordenador responsável |
 | FLX-006 | Monitoramento do ciclo | TO-BE | Coordenador de Cobrança | — | Acompanhar funil, KPIs contra metas e efeito incremental |
 | FLX-007 | Exportação com trilha | TO-BE | Coordenador de Cobrança | — | Exportar listas e relatórios com registro na trilha |
+| FLX-008 | Lista ativa do atendente | TO-BE | Atendente de Cobrança | — | Distribuir a lista de ligações do ciclo («Distribuir lista») e trabalhar a lista do dia («Registrar ligação», «Encerrar») |
 
 ## Etapas
 
@@ -47,12 +48,12 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | ETP-023 | FLX-004 | 7 | Conferir retornos de envio | Administrador do app | TEL-019 | Retornos simulados | Retornos conferidos |
 | ETP-024 | FLX-004 | 8 | Registrar regularização com origem | Sistema | TEL-020 | Pagamento ou parcelamento | Regularização marcada |
 | ETP-025 | FLX-004 | 9 | Avaliar efetividade da régua | Coordenador de Cobrança | TEL-016 | Comunicações por canal e status | Ajustes na régua |
-| ETP-026 | FLX-005 | 1 | Distribuir casos | Coordenador de Cobrança | TEL-021 | Casos sem atendente | Casos atribuídos |
-| ETP-027 | FLX-005 | 2 | Conferir carga por atendente | Coordenador de Cobrança | TEL-022 | Casos atribuídos | Carga equilibrada |
-| ETP-028 | FLX-005 | 3 | Abrir a própria fila | Atendente de Cobrança | TEL-023 | Casos do atendente | Caso escolhido |
-| ETP-029 | FLX-005 | 4 | Consultar o dossiê | Atendente de Cobrança | TEL-024 | Caso escolhido | Caso em condução |
-| ETP-030 | FLX-005 | 5 | Registrar interação | Atendente de Cobrança | TEL-025 | Contato com o contribuinte | Interação registrada |
-| ETP-031 | FLX-005 | 6 | Encerrar o caso | Sistema | TEL-024 | Regularização ou decisão do atendente | Caso encerrado |
+| ETP-026 | FLX-005 | 1 | Distribuir casos | Coordenador de Cobrança | TEL-021 | Casos sem responsável | Casos atribuídos |
+| ETP-027 | FLX-005 | 2 | Conferir carga por responsável | Coordenador de Cobrança | TEL-022 | Casos atribuídos | Carga conhecida |
+| ETP-028 | FLX-005 | 3 | Abrir os casos qualificados | Coordenador de Cobrança | TEL-023 | Casos de que é responsável, na sequência das etapas | Caso escolhido |
+| ETP-029 | FLX-005 | 4 | Consultar o dossiê e avançar etapa | Coordenador de Cobrança | TEL-024 | Caso escolhido | Caso na etapa seguinte |
+| ETP-030 | FLX-005 | 5 | Registrar interação no caso | Coordenador de Cobrança | TEL-025 | Contato com o contribuinte | Interação registrada |
+| ETP-031 | FLX-005 | 6 | Encerrar o caso | Coordenador de Cobrança | TEL-024 | Regularização ou decisão do coordenador, com motivo | Caso encerrado |
 | ETP-032 | FLX-006 | 1 | Cadastrar metas | Coordenador de Cobrança | TEL-030 | Indicador, tributo, canal e período | Metas vigentes |
 | ETP-033 | FLX-006 | 2 | Acompanhar o funil | Coordenador de Cobrança | TEL-026 | Carteira do ciclo | Funil conhecido |
 | ETP-034 | FLX-006 | 3 | Acompanhar regularizações por tributo | Coordenador de Cobrança | TEL-027 | Regularizações | KPIs por tributo |
@@ -61,6 +62,10 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | ETP-037 | FLX-006 | 6 | Ver os próprios indicadores | Atendente de Cobrança | TEL-031 | Regularizações do atendente | Resultado individual |
 | ETP-038 | FLX-007 | 1 | Exportar lista ou relatório | Coordenador de Cobrança | TEL-003 | Lista filtrada | Arquivo CSV ou PDF |
 | ETP-039 | FLX-007 | 2 | Conferir a trilha de exportação | Administrador do app | TEL-033 | Exportações registradas | Trilha conferida |
+| ETP-040 | FLX-008 | 1 | Distribuir lista | Coordenador de Cobrança | TEL-009 | Ciclo do mês publicado | Contatos da massificada criados e divididos entre os atendentes |
+| ETP-041 | FLX-008 | 2 | Abrir a lista do dia | Atendente de Cobrança | TEL-034 | Contatos próprios com próxima ação até hoje | Contato escolhido |
+| ETP-042 | FLX-008 | 3 | Registrar ligação | Atendente de Cobrança | TEL-035 | «Resultado desta ligação», anotação e retorno combinado | Interação criada; status, tentativas e próxima ação atualizados |
+| ETP-043 | FLX-008 | 4 | Encerrar contato | Atendente de Cobrança | TEL-035 | Motivo de encerramento | Contato encerrado, fora de «Minha lista» |
 
 ## Telas
 
@@ -74,7 +79,7 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | TEL-006 | Staging de fontes (Simulado) | /x_2326104_cob_debito_stg_list.do | MOD-F1 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F1-001, RF-MOD-F1-002, PR-MOD-F1-006 | screens/TEL-006.png |
 | TEL-007 | Critérios de qualificação | /x_2326104_cob_criterio_list.do | MOD-F2 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F2-001, RF-MOD-F2-002, PR-MOD-F2-001 | screens/TEL-007.png |
 | TEL-008 | Versão do critério de qualificação | /x_2326104_cob_criterio.do?sys_id=d5fc10ccc165417891772b280ae1b4c2 | MOD-F2 | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F2-001, RF-MOD-F2-002, RF-MOD-F2-005, PR-MOD-F2-002 | screens/TEL-008.png |
-| TEL-009 | Ciclo de qualificação (prévia) | /x_2326104_cob_ciclo.do?sys_id=67fc0380efcd42fe9d3da42308b5384d | MOD-F2 | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F2-003, RF-MOD-F2-004, RF-MOD-F2-006, PR-MOD-F2-003 | screens/TEL-009.png |
+| TEL-009 | Ciclo do mês | /x_2326104_cob_ciclo.do?sys_id=67fc0380efcd42fe9d3da42308b5384d | MOD-F2 | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F2-003, RF-MOD-F2-004, RF-MOD-F2-006, PR-MOD-F2-003 | screens/TEL-009.png |
 | TEL-010 | Carteira segmentada | /x_2326104_cob_segmentacao_list.do | MOD-F2 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F2-003, RF-MOD-F2-004, RF-MOD-F2-005, RF-MOD-T-002, PR-MOD-F2-004 | screens/TEL-010.png |
 | TEL-011 | Painel do score de liquidez | /sys_report_template.do?jvar_report_id=2b9fb315939349ffb1dfb40c6cf6af59 | MOD-F3 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F3-006, PR-MOD-F3-001 | screens/TEL-011.png |
 | TEL-012 | Scores ingeridos (Simulado) | /x_2326104_cob_score_sim_list.do | MOD-F3 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F3-001, RF-MOD-F3-002, RF-MOD-F3-004, RF-MOD-F3-005, PR-MOD-F3-002 | screens/TEL-012.png |
@@ -87,8 +92,8 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | TEL-019 | Retorno de envio (Simulado) | /x_2326104_cob_envio_sim_list.do | MOD-F4 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F4-006, PR-MOD-F4-007 | screens/TEL-019.png |
 | TEL-020 | Regularizações | /x_2326104_cob_regularizacao_list.do | MOD-F4 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F4-007, RF-MOD-F6-003, RF-MOD-T-004, PR-MOD-F4-008 | screens/TEL-020.png |
 | TEL-021 | Distribuição da carteira qualificada | /x_2326104_cob_caso_list.do | MOD-F5 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-001, PR-MOD-F5-001 | screens/TEL-021.png |
-| TEL-022 | Carga por atendente | /sys_report_template.do?jvar_report_id=ff58b093be4d42db947a1cfcc7ddd9df | MOD-F5 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-001, PR-MOD-F5-002 | screens/TEL-022.png |
-| TEL-023 | Minha fila | /x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023 | MOD-F5 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-002, RF-MOD-F5-007, PR-MOD-F5-003 | screens/TEL-023.png |
+| TEL-022 | Carga por responsável | /sys_report_template.do?jvar_report_id=ff58b093be4d42db947a1cfcc7ddd9df | MOD-F5 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-001, PR-MOD-F5-002 | screens/TEL-022.png |
+| TEL-023 | Casos qualificados | /x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023 | MOD-F5 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-002, RF-MOD-F5-007, PR-MOD-F5-003 | screens/TEL-023.png |
 | TEL-024 | Dossiê do caso | /x_2326104_cob_caso.do?sys_id=541104d723384cd0bd1aaa40e178ae60 | MOD-F5 | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F5-003, RF-MOD-F5-004, RF-MOD-F5-005, RF-MOD-F5-006, RF-MOD-F3-003, PR-MOD-F5-004 | screens/TEL-024.png |
 | TEL-025 | Registro de interação | /x_2326104_cob_interacao.do?sys_id=385ad7c968ff4f8c93f0d9f1e64350e0 | MOD-F5 | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F5-005, PR-MOD-F5-005 | screens/TEL-025.png |
 | TEL-026 | Funil do crédito | /sys_report_template.do?jvar_report_id=1a1426065dd943ab896d646f7625bb90 | MOD-F6 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F6-001, RF-MOD-F6-007, PR-MOD-F6-001 | screens/TEL-026.png |
@@ -99,6 +104,8 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | TEL-031 | Meus indicadores | /sys_report_template.do?jvar_report_id=f40880cae4d8479b8758361ce063a033 | MOD-F6 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F6-006, PR-MOD-F6-006 | screens/TEL-031.png |
 | TEL-032 | Contribuintes | /x_2326104_cob_contribuinte_list.do | MOD-F1 | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-T-002, RF-MOD-T-003, PR-MOD-F1-007 | screens/TEL-032.png |
 | TEL-033 | Trilha de exportação | /x_2326104_cob_exportacao_list.do | MOD-T | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-T-001, PR-MOD-T-001 | screens/TEL-033.png |
+| TEL-034 | Minha lista | /x_2326104_cob_contato_list.do | MOD-UX-LISTA | Carregando, Sucesso, Vazio, Erro de sistema | RF-MOD-F5-005, RF-MOD-F5-007, PR-MOD-UX-001 | screens/TEL-034.png |
+| TEL-035 | Contato da lista | /x_2326104_cob_contato.do?sys_id=8ca2d0136d084cabb0b53bd4748fc574 | MOD-UX-LISTA | Carregando, Sucesso, Erro de validação, Erro de sistema | RF-MOD-F5-005, PR-MOD-UX-002 | screens/TEL-035.png |
 
 ## Transições
 
@@ -125,11 +132,11 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | TRS-019 | ETP-019 | ETP-026 | Última etapa vence sem pagamento | RN-NOVO-F4-008 | Comunicacao.encerrada |
 | TRS-020 | ETP-020 | ETP-020 | Coordenador clica em «Reenviar» | RN-NOVO-F4-005, RN-NOVO-F5-005 | Comunicacao.entregue |
 | TRS-021 | ETP-026 | ETP-027 | Distribuição concluída | RN-NOVO-F5-001 | Caso.selecionado |
-| TRS-022 | ETP-027 | ETP-028 | Casos atribuídos aparecem na fila | RN-NOVO-F5-002, RN-NOVO-F5-007 | — |
-| TRS-023 | ETP-028 | ETP-029 | Atendente abre o caso | RN-NOVO-F5-003, RN-NOVO-F5-004, RN-NOVO-F5-007 | Caso.conducao |
-| TRS-024 | ETP-029 | ETP-030 | Atendente clica em «Registrar interação» | RN-NOVO-F5-005 | — |
+| TRS-022 | ETP-027 | ETP-028 | Casos aparecem em «Casos qualificados» do responsável | RN-NOVO-F5-002, RN-NOVO-UX-007 | — |
+| TRS-023 | ETP-028 | ETP-029 | Coordenador abre o caso | RN-NOVO-F5-003, RN-NOVO-F5-004, RN-NOVO-UX-007 | Caso.conducao |
+| TRS-024 | ETP-029 | ETP-030 | Coordenador registra interação na lista «Interações» do caso | RN-NOVO-F5-005, RN-NOVO-UX-004 | — |
 | TRS-025 | ETP-030 | ETP-029 | Interação salva | RN-NOVO-F5-005 | — |
-| TRS-026 | ETP-029 | ETP-031 | Regularização total ou «Encerrar caso» | RN-NOVO-F5-006 | Caso.encerrado |
+| TRS-026 | ETP-029 | ETP-031 | Regularização total ou «Encerrar caso» com motivo | RN-NOVO-F5-006, RN-NOVO-UX-008 | Caso.encerrado |
 | TRS-027 | ETP-031 | — | Caso encerrado | — | — |
 | TRS-028 | ETP-032 | ETP-033 | Metas cadastradas | — | — |
 | TRS-029 | ETP-033 | ETP-034 | Coordenador abre KPIs por tributo | RN-NOVO-F6-002 | Segmentacao.regularizado |
@@ -148,6 +155,14 @@ Sem legado: todos os fluxos são TO-BE. As 33 telas são as do `screens-manifest
 | TRS-042 | ETP-008 | — | Histórico consultado | — | — |
 | TRS-043 | ETP-023 | — | Retornos conferidos | — | — |
 | TRS-044 | ETP-025 | ETP-018 | Coordenador ajusta a régua | RN-NOVO-F4-006 | — |
+| TRS-045 | ETP-013 | ETP-040 | Ciclo publicado; coordenador clica em «Distribuir lista» | RN-NOVO-UX-006, RN-NOVO-UX-001 | Contato.a_ligar |
+| TRS-046 | ETP-040 | ETP-041 | Contatos distribuídos aparecem em «Minha lista» do atendente | RN-NOVO-UX-002, RN-NOVO-F5-007 | — |
+| TRS-047 | ETP-041 | ETP-042 | Atendente clica em «Registrar ligação» | RN-NOVO-UX-003, RN-NOVO-UX-004 | Contato.ligado |
+| TRS-048 | ETP-042 | ETP-041 | Retorno combinado ou sem contato antes da 3ª tentativa: o contato volta à lista no dia | RN-NOVO-UX-003 | Contato.retornar |
+| TRS-049 | ETP-042 | — | Recusa, contato efetivo sem retorno ou 3ª tentativa sem contato: contato encerrado | RN-NOVO-UX-003 | Contato.encerrado |
+| TRS-050 | ETP-041 | ETP-043 | Atendente clica em «Encerrar» | RN-NOVO-UX-005 | Contato.encerrado |
+| TRS-051 | ETP-043 | — | Contato encerrado sai de «Minha lista» | — | — |
+| TRS-052 | ETP-029 | ETP-029 | Coordenador clica em «Avançar etapa» (uma etapa por vez) | RN-NOVO-UX-008 | Caso.dossie_gerado |
 
 ## Amarração Técnica
 
@@ -179,7 +194,7 @@ Preenchida pela `spec-data-model` (coluna Entidades). Não há contratos de API 
 | TEL-022 | x_2326104_cob_caso | — |
 | TEL-023 | x_2326104_cob_caso | — |
 | TEL-024 | x_2326104_cob_caso, x_2326104_cob_contribuinte, x_2326104_cob_debito, x_2326104_cob_parcelamento, x_2326104_cob_comunicacao, x_2326104_cob_interacao, x_2326104_cob_regularizacao | — |
-| TEL-025 | x_2326104_cob_interacao | — |
+| TEL-025 | x_2326104_cob_interacao, x_2326104_cob_caso, x_2326104_cob_contato | — |
 | TEL-026 | x_2326104_cob_segmentacao | — |
 | TEL-027 | x_2326104_cob_regularizacao | — |
 | TEL-028 | x_2326104_cob_regularizacao | — |
@@ -188,18 +203,21 @@ Preenchida pela `spec-data-model` (coluna Entidades). Não há contratos de API 
 | TEL-031 | x_2326104_cob_regularizacao | — |
 | TEL-032 | x_2326104_cob_contribuinte | — |
 | TEL-033 | x_2326104_cob_exportacao | — |
+| TEL-034 | x_2326104_cob_contato, x_2326104_cob_contribuinte | — |
+| TEL-035 | x_2326104_cob_contato, x_2326104_cob_interacao | — |
 
 ## Cobertura
 
 ```
 MÉTRICAS:
-  fluxos=7 etapas=39 telas=33 transições=44
-  % etapas com tela: 92.3%
-  % transições com regra RN: 75.0%
+  fluxos=8 etapas=43 telas=35 transições=52
+  % etapas com tela: 93.0%
+  % transições com regra RN: 76.9%
   telas órfãs: nenhuma
   fluxos sem etapas: nenhum
   matriz estado×tela:
     Caso.conducao → TEL-023, TEL-024
+    Caso.dossie_gerado → TEL-024
     Caso.encerrado → TEL-020, TEL-024
     Caso.selecionado → TEL-021, TEL-022
     Ciclo.encerrado → TEL-028, TEL-029
@@ -209,6 +227,10 @@ MÉTRICAS:
     Comunicacao.encerrada → TEL-021
     Comunicacao.entregue → TEL-015
     Comunicacao.enviada → TEL-015
+    Contato.a_ligar → TEL-009
+    Contato.encerrado → TEL-034, TEL-035
+    Contato.ligado → TEL-034, TEL-035
+    Contato.retornar → TEL-034, TEL-035
     Criterio.publicada → TEL-008, TEL-009
     Criterio.rascunho → TEL-007, TEL-008
     Debito.aberto → TEL-001
@@ -228,5 +250,6 @@ RESULTADO: OK (0 erro(s), 0 aviso(s))
 Avisos tratados:
 - `check-flowmap.py --data-model` acusa as entidades da amarração como desconhecidas porque procura `boundedContexts[].entities[]` (formato do kit); o `data-model.json` deste projeto segue o formato da prévia lido pelo `sn-scaffold` (design item 23). Os nomes da coluna Entidades conferem com `entities[].name` do `data-model.json` (conferência por script na execução da `spec-data-model`).
 - 3 etapas sem tela (ETP-002, ETP-014, ETP-019) são processamento do sistema (consolidação, ingestão do score, disparo).
-- 11 transições sem RN são navegação entre telas de consulta.
+- 12 transições sem RN são navegação entre telas de consulta.
+- TEL-009 aparece em dois fluxos: publica o ciclo (FLX-002) e distribui a lista de ligações (FLX-008).
 
