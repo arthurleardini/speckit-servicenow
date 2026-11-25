@@ -14,6 +14,7 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 61 | 2026-11-25 10:38 | now-sdk-install | dev493801 | x_2326104_cob | 8f2a7f5fffb00b1d047034232b8a22d1a043da7b | ok; 1009 registros | — | sn-capture |
 | 60 | 2026-11-25 10:30 | now-sdk-install | dev493801 | x_2326104_cob | 8221b5a24d9ba3f69029386e36f53585cbd64cb8 | ok; 1009 registros | — | sn-capture |
 | 59 | 2026-11-25 10:20 | now-sdk-install | dev493801 | x_2326104_cob | 24239fa68a8a242fbed45883c7181574182f2c14 | ok; 1009 registros | — | sn-capture |
 | 58 | 2026-11-25 10:10 | spike F0 (design ux-v2) | instância dev493801, Flow de 2 etapas descartável em app/src/fluent/_spike (apagado) | docs/designs/ux-cobranca-v2-regua-flow.md (linha F0, B1–B7, D12/D15, Anexo A) | docs/designs/review-ux/f0-spike-resultados.md, docs/designs/review-ux/f0-spike/*.png; tasks.json ajustado (showUpdate, executar_em, query_range, Duration 1 s, transform) | 9 pontos sim (1, 5, 7, 8, 9 com ajuste) e 1 parcial (10, transform não compila); nenhum plano B de tabela entra; installs #53, #54 e #57 com falha-contagem: #53/#54 pelas comunicações do spike, #57 por 5 interações criadas às 09:40 por outra sessão (não são do spike) | agente (F0) | F1: US-MOD-UX-009 e UX-010 |

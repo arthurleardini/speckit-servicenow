@@ -30,12 +30,8 @@ export const t_ux009_lista_atendente = Test({
         $id: Now.ID['US-MOD-UX-009_test_05'],
         script: `
 await sn_atf.navigate('/x_2326104_cob_contato_list.do?sysparm_query=atendente%3Djavascript:gs.getUserID()%5Estatus!%3Dencerrado')
-await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
-await sn_atf.evaluate(() => {
-    var cell = document.querySelector('tr.list_row td.vt');
-    cell.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2, clientX: 300, clientY: 300 }));
-    return true;
-})
+const nome = await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
+await user.pointer({ keys: '[MouseRight]', target: nome.closest('td') || nome })
 await sn_atf.delay(2500)
 const itens = await sn_atf.evaluate(() => {
     var t = [];
@@ -51,7 +47,8 @@ const itens = await sn_atf.evaluate(() => {
             for (var i = 0; i < cm[k].children.length; i++) { t.push(cm[k].children[i].textContent || ''); }
         }
     }
-    return t.map(function (x) { return x.trim(); }).join('|');
+    var diag = 'linhas=' + document.querySelectorAll('tr.list_row').length + ' menus=' + Object.keys(cm).join(',') + ' ctx=' + document.querySelectorAll('.context_menu').length;
+    return t.map(function (x) { return x.trim(); }).join('|') + ' #' + diag;
 })
 expect(itens).toContain('Registrar ligação…')
 expect(itens).toContain('Encerrar…')

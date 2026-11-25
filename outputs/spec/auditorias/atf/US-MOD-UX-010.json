@@ -8,14 +8,14 @@
     "6952efdd10ba475a94425ecaa2fde030"
   ],
   "resultId": [
-    "7c7f3b0d93f857107a57f7c4b503d67a",
-    null,
-    "349fb74d93f857107a57f7c4b503d69c",
-    "f6affb4d93f857107a57f7c4b503d6a6"
+    "f824cc59937c57107a57f7c4b503d68f",
+    "3a248099937c57107a57f7c4b503d6e1",
+    "f3348c99937c57107a57f7c4b503d6a6",
+    "245404d9937c57107a57f7c4b503d665"
   ],
-  "status": "failure",
-  "horario": "2026-11-25T13:21:42.203Z",
-  "commit": "24239fa68a8a242fbed45883c7181574182f2c14",
+  "status": "success",
+  "horario": "2026-11-25T13:42:01.348Z",
+  "commit": "8f2a7f5fffb00b1d047034232b8a22d1a043da7b",
   "runner": true,
   "testes": [
     {
@@ -24,19 +24,19 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "7c7f3b0d93f857107a57f7c4b503d67a",
+      "resultId": "f824cc59937c57107a57f7c4b503d68f",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=7c7f3b0d93f857107a57f7c4b503d67a"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f824cc59937c57107a57f7c4b503d68f"
     },
     {
       "chave": "US-MOD-UX-010_atf_proxima_acao_gravacao",
       "sys_id": "1c43996e6d754c7e9f26090f93e5ad7d",
-      "ok": false,
-      "exit": 1,
-      "status": "failure",
-      "resultId": null,
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "3a248099937c57107a57f7c4b503d6e1",
       "resumo": {},
-      "url": null
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=3a248099937c57107a57f7c4b503d6e1"
     },
     {
       "chave": "US-MOD-UX-010_atf_lista_equipe_coordenador",
@@ -44,9 +44,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "349fb74d93f857107a57f7c4b503d69c",
+      "resultId": "f3348c99937c57107a57f7c4b503d6a6",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=349fb74d93f857107a57f7c4b503d69c"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f3348c99937c57107a57f7c4b503d6a6"
     },
     {
       "chave": "US-MOD-UX-010_atf_lista_equipe_atendente",
@@ -54,9 +54,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "f6affb4d93f857107a57f7c4b503d6a6",
+      "resultId": "245404d9937c57107a57f7c4b503d665",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f6affb4d93f857107a57f7c4b503d6a6"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=245404d9937c57107a57f7c4b503d665"
     }
   ]
 }
