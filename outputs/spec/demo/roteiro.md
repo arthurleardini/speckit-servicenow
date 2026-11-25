@@ -5,8 +5,8 @@ Público: diretor da EloGroup. A demo dura cerca de 20 minutos. Todos os dados s
 ## Véspera
 
 1. `npm run doutor`: tudo verde, exceto o `gh` fora do PATH, que é contornado com `GH_BIN`.
-2. Regerar o seed manual (ciclos, carteira segmentada, contatos e casos, com datas relativas a hoje): `cd app && node scripts/gerar-seed-demo.mjs`, commitar `app/src/fluent/seed-demo/` e `seed/_contagem.manual.json`, e rodar `node .claude/skills/sn-seed/scripts/gerar-seed.mjs` para juntar a contagem. Sem isso, a «Minha lista» do atendente chega vazia, porque as próximas ações envelhecem (design UX v1, R7).
-3. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde.
+2. Regerar o seed manual (ciclos, carteira segmentada, contatos e casos, com datas relativas a hoje), da raiz: `node app/scripts/gerar-seed-demo.mjs`. Commitar `app/src/fluent/seed-demo/` e `app/src/fluent/seed/_contagem.manual.json`, e rodar `node .claude/skills/sn-seed/scripts/gerar-seed.mjs` para juntar a contagem. Sem isso, a «Minha lista» do atendente chega vazia, porque as próximas ações envelhecem (design UX v1, R7).
+3. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde (50 testes).
 4. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login).
 5. Abrir as abas da trilha (abaixo) e conferir que a [issue #63](https://github.com/arthurleardini/speckit-servicenow/issues/63) mostra os prints.
 
@@ -29,7 +29,55 @@ RF escolhido: **RF-MOD-F2-002, publicação de versão do critério de qualifica
 | Auditoria | `outputs/spec/auditorias/US-MOD-F2-002.md` | veredito de um revisor sem contexto da implementação |
 | Rastreio | `outputs/spec/traceability.json` / `report/tasks.html` | RF em N3, sem órfãos |
 
-Segunda trilha, se houver tempo: **isolamento de carteira** ([issue #68](https://github.com/arthurleardini/speckit-servicenow/issues/68)). Fazer *impersonate* de `demo.atendente` e depois de `demo.atendente2` em [Minha fila](https://dev493801.service-now.com/x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023): cada um vê só os próprios casos.
+Segunda trilha, se houver tempo: **isolamento de carteira** ([issue #68](https://github.com/arthurleardini/speckit-servicenow/issues/68), [issue #101](https://github.com/arthurleardini/speckit-servicenow/issues/101)). Fazer *impersonate* de `demo.atendente` e depois de `demo.atendente2` em [Minha lista](https://dev493801.service-now.com/x_2326104_cob_contato_list.do): cada um vê só os próprios contatos, e nenhum dos dois vê caso qualificado.
+
+## 2b. Antes e depois da UX v1 (4 min)
+
+A reformulação de UX v1 (`docs/designs/ux-cobranca-v1.md`, v1.1) organizou o app pelo trabalho de cada papel. Antes, o menu tinha uma lista por tabela e o atendente trabalhava casos qualificados. Depois, o atendente trabalha uma lista de ligações e o caso qualificado é do coordenador. Prints «antes» do commit `48e8686` (Plan, 33 telas); prints «depois» em `outputs/spec/screens/ux-v1/`.
+
+| Tela | Antes | Depois |
+|---|---|---|
+| Entrada do atendente | [TEL-023 antes](https://github.com/arthurleardini/speckit-servicenow/blob/48e8686/outputs/spec/screens/TEL-023.png) «Minha fila» de casos, aberta pelo menu | [home = Minha lista](../screens/ux-v1/home-atendente.png) · [TEL-034 Minha lista](../screens/ux-v1/TEL-034.png) |
+| Contato e ligação | [TEL-025 antes](https://github.com/arthurleardini/speckit-servicenow/blob/48e8686/outputs/spec/screens/TEL-025.png) interação solta, ligada ao caso | [TEL-035 Contato da lista](../screens/ux-v1/TEL-035.png) · [depois de Registrar ligação](../screens/ux-v1/contato-depois-registrar.png) |
+| Entrada do coordenador | [TEL-021 antes](https://github.com/arthurleardini/speckit-servicenow/blob/48e8686/outputs/spec/screens/TEL-021.png) lista crua de casos | [home = Casos qualificados](../screens/ux-v1/home-coordenador.png) · [pela sequência das etapas](../screens/ux-v1/casos-qualificados-por-etapa.png) |
+| Caso qualificado | [TEL-024 antes](https://github.com/arthurleardini/speckit-servicenow/blob/48e8686/outputs/spec/screens/TEL-024.png) sem trilha nem botões de etapa | [trilha de etapas](../screens/ux-v1/caso-dossie-trilha.png) · [depois de Avançar etapa](../screens/ux-v1/caso-depois-avancar.png) |
+| Ciclo do mês | [TEL-009 antes](https://github.com/arthurleardini/speckit-servicenow/blob/48e8686/outputs/spec/screens/TEL-009.png) «Ciclo de qualificação (prévia)» | [trilha do ciclo](../screens/ux-v1/ciclo-trilha.png) · [depois de Distribuir lista](../screens/ux-v1/ciclo-depois-distribuir.png) |
+| Menu | uma lista por tabela, igual para todos | [menu do atendente](../screens/ux-v1/menu-atendente.png) · [menu do coordenador](../screens/ux-v1/menu-coordenador.png) |
+
+**Jornada do atendente** (`demo.atendente`): login → «Minha lista» → «Registrar ligação». 5 cliques do login à ligação registrada, contados em `outputs/spec/screens/ux-v1/acoes.json`.
+
+| # | Passo | Cliques |
+|---|---|---|
+| 1 | Login: a home do atendente já é «Minha lista» | 0 |
+| 2 | Abrir o contato na lista | 1 |
+| 3 | Escolher «Resultado desta ligação» (abrir a lista e escolher) | 2 |
+| 4 | Clicar em «Comentários» e digitar a anotação | 1 |
+| 5 | Clicar em «Registrar ligação» | 1 |
+
+Resultado na instância: «Ligação registrada. Status: Ligado; próxima ação em 01/12/2026.» O form abre com «Resultado desta ligação» vazio, mesmo com «Último resultado» preenchido (GAP-150): repetir «Sem contato» funciona, esquecer de escolher é recusado.
+
+**Jornada do coordenador** (`demo.coordenador`): login → «Casos qualificados» → «Avançar etapa». 2 cliques do login ao caso avançado.
+
+| # | Passo | Cliques |
+|---|---|---|
+| 1 | Login: a home do coordenador já é «Casos qualificados» | 0 |
+| 2 | Abrir o caso na lista | 1 |
+| 3 | Clicar em «Avançar etapa» | 1 |
+
+Resultado: «Caso avançou para «Caso selecionado».» O caso anda uma etapa por vez e só encerra com motivo, também por lista e API (GAP-152).
+
+Depois, «Ciclo do mês» → «Distribuir lista»: 3 cliques.
+
+| # | Passo | Cliques |
+|---|---|---|
+| 1 | Login: a home do coordenador é «Casos qualificados» | 0 |
+| 2 | Menu «Ciclo do mês» | 1 |
+| 3 | Abrir o ciclo publicado | 1 |
+| 4 | Clicar em «Distribuir lista» | 1 |
+
+Resultado: «Lista distribuída: 3 contatos — Demo Atendente B: 1; Demo Atendente: 2.»
+
+Issues: [épico #91](https://github.com/arthurleardini/speckit-servicenow/issues/91) e stories [#96](https://github.com/arthurleardini/speckit-servicenow/issues/96) a [#103](https://github.com/arthurleardini/speckit-servicenow/issues/103), fechadas com ATF, prints e commits no comentário.
 
 ## 3. Um trecho ao vivo (5 min)
 
@@ -37,7 +85,7 @@ Rodar `npm run reinstall` (sem `--zerar`) e mostrar a linha nova no `outputs/spe
 
 ## 4. Largura (3 min)
 
-Na instância, menu **Cobrança MT**: 21 tabelas, 33 telas na Core UI clássica, 1056 registros fictícios e reports de KPI ([Funil do crédito](https://dev493801.service-now.com/sys_report_template.do?jvar_report_id=1a1426065dd943ab896d646f7625bb90)). No GitHub, 84 issues ([#7](https://github.com/arthurleardini/speckit-servicenow/issues/7) a #90) com prints.
+Na instância, menu **Cobrança MT** por área de trabalho: 22 tabelas, 35 telas na Core UI clássica, 1009 registros fictícios e reports de KPI ([Funil do crédito](https://dev493801.service-now.com/sys_report_template.do?jvar_report_id=1a1426065dd943ab896d646f7625bb90)). No GitHub, 97 issues ([#7](https://github.com/arthurleardini/speckit-servicenow/issues/7) a #103) com prints.
 
 | Situação | Quantidade |
 |---|---|
