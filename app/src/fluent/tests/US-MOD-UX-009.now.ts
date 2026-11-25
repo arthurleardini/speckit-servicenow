@@ -26,6 +26,7 @@ export const t_ux009_lista_atendente = Test({
     // O passo pronto «Validate List UI Action Visibility» não achou as ações no runner (F1: as ações aparecem na
     // UI, conferido por Playwright); o teste clica com o botão direito na linha e lê o menu, como o atendente faz.
     atf.uiTestScript.runTest({
+        // passo de script de UI (o comentário evita que o atf.mjs leia este runTest como Test())
         $id: Now.ID['US-MOD-UX-009_test_05'],
         script: `
 await sn_atf.navigate('/x_2326104_cob_contato_list.do?sysparm_query=atendente%3Djavascript:gs.getUserID()%5Estatus!%3Dencerrado')
@@ -38,7 +39,18 @@ await sn_atf.evaluate(() => {
 await sn_atf.delay(2500)
 const itens = await sn_atf.evaluate(() => {
     var t = [];
-    document.querySelectorAll('.context_menu').forEach(function (m) { if (m.style.display != 'none') { t = t.concat(m.innerText.split('\\n')); } });
+    var docs = [document];
+    try { if (window.parent && window.parent.document != document) { docs.push(window.parent.document); } } catch (e) {}
+    try { if (window.top && window.top.document != document) { docs.push(window.top.document); } } catch (e) {}
+    docs.forEach(function (d) {
+        d.querySelectorAll('.context_menu, .context_item').forEach(function (m) { t = t.concat((m.textContent || '').split('\\n')); });
+    });
+    var cm = window.contextMenus || {};
+    for (var k in cm) {
+        if (k.indexOf('context_list_row') == 0 && cm[k] && cm[k].children) {
+            for (var i = 0; i < cm[k].children.length; i++) { t.push(cm[k].children[i].textContent || ''); }
+        }
+    }
     return t.map(function (x) { return x.trim(); }).join('|');
 })
 expect(itens).toContain('Registrar ligação…')
@@ -61,6 +73,7 @@ export const t_ux009_lista_coordenador = Test({
     })
     atf.server.createUser({ $id: Now.ID['US-MOD-UX-009_test_08'], firstName: 'ATF', lastName: 'Coordenador UX-009 lista', roles: [role_coordenador] })
     atf.uiTestScript.runTest({
+        // passo de script de UI (o comentário evita que o atf.mjs leia este runTest como Test())
         $id: Now.ID['US-MOD-UX-009_test_09'],
         script: `
 await sn_atf.navigate('/x_2326104_cob_ciclo_list.do?sysparm_view=x_2326104_cob_tel_036&sysparm_query=estado!%3Dencerrado')
