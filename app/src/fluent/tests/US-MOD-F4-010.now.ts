@@ -652,14 +652,14 @@ export const t_f4010_acl_coord = Test({
             e.addQuery('ordem', 2);
             e.query();
             erro += 'etapa 2 ' + (e.next() ? 'lida' : 'não lida') + '; ';
-            podeTexto = e.template.canWrite();
-            podeOrdem = e.ordem.canWrite();
+            podeTexto = e.getElement('template').canWrite();
+            podeOrdem = e.getElement('ordem').canWrite();
             e.setValue('template', 'Nova mensagem de ciência no DT-e.');
             e.update();
-            podeCodigo = r.codigo.canWrite();
-            podeCarteira = r.carteira.canWrite();
-            podeFlow = r.flow.canWrite();
-            podeAtiva = r.ativa.canWrite();
+            podeCodigo = r.getElement('codigo').canWrite();
+            podeCarteira = r.getElement('carteira').canWrite();
+            podeFlow = r.getElement('flow').canWrite();
+            podeAtiva = r.getElement('ativa').canWrite();
         } catch (ex) {
             erro += 'erro: ' + String(ex);
         }
