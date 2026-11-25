@@ -26,7 +26,14 @@ export const t_ux009_lista_atendente = Test({
         return a;
     }
     function b(a, f) { var v = String(a.getValue(f)); return (v == 'true' || v == '1') ? '1' : '0'; }
-    function papeis(a) { return (a.getValue('roles') || '').split(',').sort().join(','); }
+    function papeis(a) {
+        var r = new GlideRecord('sys_ui_action_role');
+        r.addQuery('sys_ui_action', a.getUniqueValue());
+        r.query();
+        var n = [];
+        while (r.next()) { n.push(r.sys_user_role.name.toString()); }
+        return n.sort().join(',');
+    }
     var CONTATO = [E + '.atendente', E + '.coordenador'].sort().join(',');
     var COORD = E + '.coordenador';
     var lista = [

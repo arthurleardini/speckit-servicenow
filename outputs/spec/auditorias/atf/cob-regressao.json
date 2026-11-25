@@ -2,26 +2,21 @@
   "alvo": "cob-regressao",
   "tipo": "suite",
   "sys_id": "9d8bc780685745d0aa3a04ec2cc92d33",
-  "resultId": "2fe4c68d93b817107a57f7c4b503d6da",
-  "status": "success",
-  "horario": "2026-11-25T04:31:37.023Z",
-  "commit": "8773b414dedf5acce93d0b0241ac7b053ef37aae",
+  "resultId": null,
+  "status": "failure",
+  "horario": "2026-11-25T14:09:33.819Z",
+  "commit": "20c9a59e566aff9015efab764f7287aefb82d379",
   "runner": true,
   "testes": [
     {
       "chave": "cob-regressao",
       "sys_id": "9d8bc780685745d0aa3a04ec2cc92d33",
-      "ok": true,
-      "exit": 0,
-      "status": "success",
-      "resultId": "2fe4c68d93b817107a57f7c4b503d6da",
-      "resumo": {
-        "successCount": 50,
-        "failureCount": 0,
-        "errorCount": 0,
-        "skipCount": 0
-      },
-      "url": "https://dev493801.service-now.com/sys_atf_test_suite_result.do?sys_id=2fe4c68d93b817107a57f7c4b503d6da"
+      "ok": false,
+      "exit": 1,
+      "status": "failure",
+      "resultId": null,
+      "resumo": {},
+      "url": null
     }
   ]
 }
