@@ -44,6 +44,30 @@
       ]
     },
     {
+      "id": "MOD-UX-EQUIPE",
+      "label": "Equipe",
+      "roles": [
+        "coordenador",
+        "admin"
+      ],
+      "order": 500,
+      "tables": [
+        "x_2326104_cob_contato"
+      ],
+      "items": [
+        {
+          "label": "Lista da equipe",
+          "type": "FILTER",
+          "table": "x_2326104_cob_contato",
+          "filter": "status!=encerrado^GROUPBYatendente^ORDERBYproxima_acao_em",
+          "roles": [
+            "coordenador",
+            "admin"
+          ]
+        }
+      ]
+    },
+    {
       "id": "MOD-UX-CASOS",
       "label": "Casos qualificados",
       "roles": [
@@ -85,7 +109,8 @@
           "filter": "estado!=encerrado^ORDERBYDESCreferencia",
           "roles": [
             "coordenador"
-          ]
+          ],
+          "view": "x_2326104_cob_tel_036"
         },
         {
           "label": "Carteira",
@@ -1097,7 +1122,8 @@
         "RF-MOD-F2-003",
         "RF-MOD-F2-004",
         "RF-MOD-F2-006",
-        "RF-MOD-F6-004"
+        "RF-MOD-F6-004",
+        "RF-MOD-UX-010"
       ],
       "rn": [
         "RN-NOVO-F1-006",
@@ -1209,6 +1235,13 @@
           "name": "qtd_contatos",
           "label": "Contatos distribuídos",
           "type": "integer"
+        },
+        {
+          "name": "proxima_acao",
+          "label": "O que fazer agora",
+          "type": "string",
+          "maxLength": 100,
+          "description": "Próximo passo pelo estado do registro, gravado pela business rule (ProximaAcao, RN-NOVO-UX-015); só leitura. Design ux-cobranca-v2-regua-flow.md, D3/A3."
         },
         {
           "name": "comentarios",
@@ -2069,7 +2102,8 @@
       "display": "contribuinte",
       "rf": [
         "RF-MOD-F5-005",
-        "RF-MOD-F5-007"
+        "RF-MOD-F5-007",
+        "RF-MOD-UX-010"
       ],
       "rn": [
         "RN-NOVO-F5-005",
@@ -2214,6 +2248,13 @@
           }
         },
         {
+          "name": "proxima_acao",
+          "label": "O que fazer agora",
+          "type": "string",
+          "maxLength": 100,
+          "description": "Próximo passo pelo estado do registro, gravado pela business rule (ProximaAcao, RN-NOVO-UX-015); só leitura. Design ux-cobranca-v2-regua-flow.md, D3/A3."
+        },
+        {
           "name": "comentarios",
           "label": "Comentários",
           "type": "journal_input"
@@ -2234,7 +2275,8 @@
         "RF-MOD-F5-004",
         "RF-MOD-F5-006",
         "RF-MOD-F5-007",
-        "RF-MOD-F3-003"
+        "RF-MOD-F3-003",
+        "RF-MOD-UX-010"
       ],
       "rn": [
         "RN-NOVO-F5-001",
@@ -2351,6 +2393,13 @@
           "name": "encerrado_em",
           "label": "Encerrado em",
           "type": "glide_date_time"
+        },
+        {
+          "name": "proxima_acao",
+          "label": "O que fazer agora",
+          "type": "string",
+          "maxLength": 100,
+          "description": "Próximo passo pelo estado do registro, gravado pela business rule (ProximaAcao, RN-NOVO-UX-015); só leitura. Design ux-cobranca-v2-regua-flow.md, D3/A3."
         },
         {
           "name": "comentarios",
@@ -3175,15 +3224,16 @@
       "module": "MOD-F5",
       "fields": [
         "contribuinte",
+        "proxima_acao",
         "estagio",
         "prioridade",
         "valor_em_aberto",
-        "sinal_coercitivo",
-        "ciclo"
+        "sinal_coercitivo"
       ],
       "rf": [
         "RF-MOD-F5-002",
-        "RF-MOD-F5-007"
+        "RF-MOD-F5-007",
+        "RF-MOD-UX-010"
       ],
       "demoRecord": "lista: 6 casos qualificados do coordenador demo, um por etapa (substitui «Minha fila»)"
     },
@@ -3409,15 +3459,16 @@
       "module": "MOD-UX-LISTA",
       "fields": [
         "contribuinte",
+        "proxima_acao",
         "contribuinte.telefone",
         "valor_em_aberto",
-        "status",
         "proxima_acao_em",
         "prioridade"
       ],
       "rf": [
         "RF-MOD-F5-005",
-        "RF-MOD-F5-007"
+        "RF-MOD-F5-007",
+        "RF-MOD-UX-010"
       ],
       "demoRecord": "lista: contatos do atendente demo, de hoje a +7 dias"
     },
@@ -3430,26 +3481,50 @@
       "role": "atendente",
       "module": "MOD-UX-LISTA",
       "fields": [
-        "contribuinte",
-        "atendente",
-        "ciclo",
-        "status",
+        "resultado_ligacao",
         "proxima_acao_em",
+        "motivo_encerramento",
+        "proxima_acao",
+        "status",
+        "contribuinte",
+        "valor_em_aberto",
         "ultimo_resultado",
         "tentativas",
         "prioridade",
-        "valor_em_aberto",
-        "motivo_encerramento",
-        "resultado_ligacao",
+        "atendente",
+        "ciclo",
         "comentarios"
       ],
       "relatedLists": [
         "x_2326104_cob_interacao.contato"
       ],
       "rf": [
-        "RF-MOD-F5-005"
+        "RF-MOD-F5-005",
+        "RF-MOD-UX-010"
       ],
       "demoRecord": "TEL-035_registro_demo: contato de demo.atendente em «Retornar», com 1 tentativa e retorno para hoje"
+    },
+    {
+      "id": "TEL-036",
+      "title": "Ciclo do mês",
+      "table": "x_2326104_cob_ciclo",
+      "type": "list",
+      "view": "tel_036",
+      "role": "coordenador",
+      "module": "MOD-UX-CICLO",
+      "fields": [
+        "nome",
+        "proxima_acao",
+        "referencia",
+        "estado",
+        "qtd_massificada",
+        "qtd_contatos"
+      ],
+      "rf": [
+        "RF-MOD-UX-010",
+        "RF-MOD-UX-009"
+      ],
+      "demoRecord": "lista: ciclos não encerrados do seed (prévia e publicado)"
     }
   ],
   "roles": [

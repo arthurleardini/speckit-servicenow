@@ -1,5 +1,5 @@
 // Seed manual da demo: contatos da lista de cobrança ativa (design UX v1, R7). Escrito por app/scripts/gerar-seed-demo.mjs
-// com datas relativas a 2026-11-24; na véspera da demo, rodar o script de novo (roteiro da demo).
+// com datas relativas a 2026-11-25; na véspera da demo, rodar o script de novo (roteiro da demo).
 import '@servicenow/sdk/global'
 import { Record } from '@servicenow/sdk/core'
 
@@ -12,11 +12,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         ultimo_resultado: "sem_contato",
         tentativas: 1,
         prioridade: 5,
         valor_em_aberto: 95344.04,
+        proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
 
@@ -29,10 +30,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 37562.26,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -45,10 +47,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 80086.57,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -61,11 +64,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         ultimo_resultado: "contato_efetivo",
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 13738.68,
+        proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
 
@@ -78,10 +82,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 74222.23,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -94,11 +99,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "ligado",
-        proxima_acao_em: "2026-12-01",
+        proxima_acao_em: "2026-12-02",
         ultimo_resultado: "promessa_pagamento",
         tentativas: 1,
         prioridade: 4,
         valor_em_aberto: 70740.61,
+        proxima_acao: "Conferir pagamento combinado em 02/12/2026",
     },
 })
 
@@ -111,10 +117,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-25",
+        proxima_acao_em: "2026-11-26",
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 87281.64,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -127,11 +134,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-25",
+        proxima_acao_em: "2026-11-26",
         ultimo_resultado: "sem_contato",
         tentativas: 2,
         prioridade: 1,
         valor_em_aberto: 13845.56,
+        proxima_acao: "Retornar a ligação em 26/11/2026",
     },
 })
 
@@ -144,10 +152,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-26",
+        proxima_acao_em: "2026-11-27",
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 36659.28,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -160,10 +169,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-27",
+        proxima_acao_em: "2026-11-28",
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 71786.35,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -181,6 +191,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 91736.44,
         motivo_encerramento: "recusa",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -193,11 +204,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-28",
+        proxima_acao_em: "2026-11-29",
         ultimo_resultado: "contato_efetivo",
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 13372.42,
+        proxima_acao: "Retornar a ligação em 29/11/2026",
     },
 })
 
@@ -210,10 +222,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-29",
+        proxima_acao_em: "2026-11-30",
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 33202.53,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -226,11 +239,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "ligado",
-        proxima_acao_em: "2026-11-30",
+        proxima_acao_em: "2026-12-01",
         ultimo_resultado: "promessa_pagamento",
         tentativas: 2,
         prioridade: 4,
         valor_em_aberto: 67645.63,
+        proxima_acao: "Conferir pagamento combinado em 01/12/2026",
     },
 })
 
@@ -243,11 +257,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         ultimo_resultado: "sem_contato",
         tentativas: 1,
         prioridade: 2,
         valor_em_aberto: 40187.09,
+        proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
 
@@ -260,10 +275,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 3,
         valor_em_aberto: 47533.5,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -276,10 +292,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 32207.59,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -292,11 +309,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         ultimo_resultado: "contato_efetivo",
         tentativas: 1,
         prioridade: 2,
         valor_em_aberto: 41426.54,
+        proxima_acao: "Retornar a ligação em 25/11/2026",
     },
 })
 
@@ -309,10 +327,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-24",
+        proxima_acao_em: "2026-11-25",
         tentativas: 0,
         prioridade: 3,
         valor_em_aberto: 51591.47,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -325,11 +344,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "ligado",
-        proxima_acao_em: "2026-12-01",
+        proxima_acao_em: "2026-12-02",
         ultimo_resultado: "promessa_pagamento",
         tentativas: 1,
         prioridade: 1,
         valor_em_aberto: 4628.03,
+        proxima_acao: "Conferir pagamento combinado em 02/12/2026",
     },
 })
 
@@ -342,10 +362,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-25",
+        proxima_acao_em: "2026-11-26",
         tentativas: 0,
         prioridade: 1,
         valor_em_aberto: 17437.97,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -358,11 +379,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-25",
+        proxima_acao_em: "2026-11-26",
         ultimo_resultado: "sem_contato",
         tentativas: 2,
         prioridade: 5,
         valor_em_aberto: 90319.49,
+        proxima_acao: "Retornar a ligação em 26/11/2026",
     },
 })
 
@@ -375,10 +397,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-26",
+        proxima_acao_em: "2026-11-27",
         tentativas: 0,
         prioridade: 2,
         valor_em_aberto: 28991.35,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -391,10 +414,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-27",
+        proxima_acao_em: "2026-11-28",
         tentativas: 0,
         prioridade: 4,
         valor_em_aberto: 62558.22,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -412,6 +436,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 18470.63,
         motivo_encerramento: "recusa",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -424,11 +449,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "retornar",
-        proxima_acao_em: "2026-11-28",
+        proxima_acao_em: "2026-11-29",
         ultimo_resultado: "contato_efetivo",
         tentativas: 1,
         prioridade: 5,
         valor_em_aberto: 90285.67,
+        proxima_acao: "Retornar a ligação em 29/11/2026",
     },
 })
 
@@ -441,10 +467,11 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "a_ligar",
-        proxima_acao_em: "2026-11-29",
+        proxima_acao_em: "2026-11-30",
         tentativas: 0,
         prioridade: 5,
         valor_em_aberto: 80024.95,
+        proxima_acao: "Ligar e registrar o resultado",
     },
 })
 
@@ -457,11 +484,12 @@ Record({
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         ciclo: Now.ref("x_2326104_cob_ciclo", "TEL-009_registro_demo"),
         status: "ligado",
-        proxima_acao_em: "2026-11-30",
+        proxima_acao_em: "2026-12-01",
         ultimo_resultado: "promessa_pagamento",
         tentativas: 2,
         prioridade: 5,
         valor_em_aberto: 95607.67,
+        proxima_acao: "Conferir pagamento combinado em 01/12/2026",
     },
 })
 
@@ -479,6 +507,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 95344.04,
         motivo_encerramento: "regularizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -496,6 +525,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 37562.26,
         motivo_encerramento: "contato_realizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -513,6 +543,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 40187.09,
         motivo_encerramento: "sem_contato",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -530,6 +561,7 @@ Record({
         prioridade: 3,
         valor_em_aberto: 47533.5,
         motivo_encerramento: "regularizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -547,6 +579,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 32207.59,
         motivo_encerramento: "recusa",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -564,6 +597,7 @@ Record({
         prioridade: 2,
         valor_em_aberto: 41426.54,
         motivo_encerramento: "contato_realizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -581,6 +615,7 @@ Record({
         prioridade: 5,
         valor_em_aberto: 80086.57,
         motivo_encerramento: "regularizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -598,6 +633,7 @@ Record({
         prioridade: 3,
         valor_em_aberto: 51591.47,
         motivo_encerramento: "contato_realizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -615,6 +651,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 13738.68,
         motivo_encerramento: "sem_contato",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -632,6 +669,7 @@ Record({
         prioridade: 4,
         valor_em_aberto: 74222.23,
         motivo_encerramento: "regularizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -649,6 +687,7 @@ Record({
         prioridade: 1,
         valor_em_aberto: 4628.03,
         motivo_encerramento: "recusa",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -666,5 +705,6 @@ Record({
         prioridade: 4,
         valor_em_aberto: 70740.61,
         motivo_encerramento: "contato_realizado",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })

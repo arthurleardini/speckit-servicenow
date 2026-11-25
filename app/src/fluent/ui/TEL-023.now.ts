@@ -11,5 +11,5 @@ const view_TEL_023 = Record({
 List({
     table: "x_2326104_cob_caso",
     view: view_TEL_023,
-    columns: ["contribuinte","estagio","prioridade","valor_em_aberto","sinal_coercitivo","ciclo"],
+    columns: ["contribuinte","proxima_acao","estagio","prioridade","valor_em_aberto","sinal_coercitivo"],
 })

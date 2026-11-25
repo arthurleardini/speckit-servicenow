@@ -1,5 +1,5 @@
 // Seed manual da demo: ciclos de qualificação (design UX v1, R7). Escrito por app/scripts/gerar-seed-demo.mjs
-// com datas relativas a 2026-11-24; na véspera da demo, rodar o script de novo (roteiro da demo).
+// com datas relativas a 2026-11-25; na véspera da demo, rodar o script de novo (roteiro da demo).
 import '@servicenow/sdk/global'
 import { Record } from '@servicenow/sdk/core'
 
@@ -25,6 +25,7 @@ Record({
         publicado_por: Now.ref("sys_user", "usuario_demo_coordenador"),
         distribuido_em: "2026-10-01 13:00:00",
         qtd_contatos: 12,
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })
 
@@ -50,6 +51,7 @@ Record({
         publicado_por: Now.ref("sys_user", "usuario_demo_coordenador"),
         distribuido_em: "2026-11-01 13:00:00",
         qtd_contatos: 28,
+        proxima_acao: "Acompanhar a lista",
     },
 })
 
@@ -62,5 +64,6 @@ Record({
         referencia: "2026-12-01",
         criterio: Now.ref("x_2326104_cob_criterio", "seed_criterio_001"),
         estado: "previa",
+        proxima_acao: "Publicar ciclo",
     },
 })

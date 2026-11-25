@@ -19,6 +19,11 @@ import { t_ux003_pos, t_ux003_neg } from './US-MOD-UX-003.now'
 import { t_ux004_pos, t_ux004_neg, t_ux004_ui } from './US-MOD-UX-004.now'
 import { t_ux005_pos, t_ux005_neg, t_ux005_ui, t_ux005_so_verbos } from './US-MOD-UX-005.now'
 import { t_ux006_pos, t_ux006_neg } from './US-MOD-UX-006.now'
+import {
+    t_ux009_lista_atendente, t_ux009_lista_coordenador, t_ux009_condicoes, t_ux009_update_contato,
+    t_ux009_update_ciclo_previa, t_ux009_update_ciclo_publicado,
+} from './US-MOD-UX-009.now'
+import { t_ux010_quadro, t_ux010_gravacao, t_ux010_equipe_coordenador, t_ux010_equipe_atendente } from './US-MOD-UX-010.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -38,5 +43,8 @@ export const suite_cob_regressao = TestSuite({
         t_ux004_pos, t_ux004_neg, t_ux004_ui,
         t_ux005_pos, t_ux005_neg, t_ux005_ui, t_ux005_so_verbos,
         t_ux006_pos, t_ux006_neg,
+        t_ux009_lista_atendente, t_ux009_lista_coordenador, t_ux009_condicoes, t_ux009_update_contato,
+        t_ux009_update_ciclo_previa, t_ux009_update_ciclo_publicado,
+        t_ux010_quadro, t_ux010_gravacao, t_ux010_equipe_coordenador, t_ux010_equipe_atendente,
     ],
 })

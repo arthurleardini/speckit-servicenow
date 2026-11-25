@@ -116,3 +116,27 @@ Acl({
     roles: [role_coordenador, role_admin],
     description: 'O campo «valor_em_aberto» do contato muda pelos verbos da lista; à mão, só coordenador e admin do app.',
 })
+
+// RF-MOD-UX-010 — «O que fazer agora» é só leitura para as personas: a business rule grava pelo estado
+// (ProximaAcao); à mão, só o admin do app.
+Acl({
+    $id: Now.ID['UX-010_acl_contato_write_proxima_acao'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    field: 'proxima_acao',
+    operation: 'write',
+    roles: [role_admin],
+    description: '«O que fazer agora» é calculado pela business rule; à mão, só o admin do app.',
+})
+
+// RF-MOD-UX-010 — «Lista da equipe» agrupa os contatos por atendente (GROUPBYatendente). Sem query_range no
+// campo, o coordenador recebe «Security prevents reading Atendente» e a lista sai vazia (F0, ponto 9).
+Acl({
+    $id: Now.ID['UX-010_acl_contato_atendente_query_range'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    field: 'atendente',
+    operation: 'query_range',
+    roles: [role_coordenador, role_admin],
+    description: 'Coordenador e admin do app agrupam e filtram contatos por atendente («Lista da equipe»).',
+})

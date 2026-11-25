@@ -1,5 +1,5 @@
 // Seed manual da demo: carteira segmentada dos ciclos publicados (design UX v1, R7). Escrito por app/scripts/gerar-seed-demo.mjs
-// com datas relativas a 2026-11-24; na véspera da demo, rodar o script de novo (roteiro da demo).
+// com datas relativas a 2026-11-25; na véspera da demo, rodar o script de novo (roteiro da demo).
 import '@servicenow/sdk/global'
 import { Record } from '@servicenow/sdk/core'
 

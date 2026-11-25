@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "sn-scaffold",
-  "generatedAt": "2026-11-25T03:44:01.798Z",
+  "generatedAt": "2026-11-25T13:14:00.541Z",
   "screens": [
     {
       "id": "TEL-001",
@@ -352,6 +352,16 @@
       "table": "x_2326104_cob_contato",
       "screenshot": "screens/TEL-035.png",
       "capturedAt": "2026-11-25T04:33:34.964Z"
+    },
+    {
+      "id": "TEL-036",
+      "title": "Ciclo do mês",
+      "route": "/x_2326104_cob_ciclo_list.do?sysparm_view=x_2326104_cob_tel_036",
+      "type": "list",
+      "role": "coordenador",
+      "table": "x_2326104_cob_ciclo",
+      "screenshot": null,
+      "capturedAt": null
     }
   ]
 }

@@ -1,5 +1,5 @@
 // Seed manual da demo: casos qualificados do coordenador (design UX v1, R7). Escrito por app/scripts/gerar-seed-demo.mjs
-// com datas relativas a 2026-11-24; na véspera da demo, rodar o script de novo (roteiro da demo).
+// com datas relativas a 2026-11-25; na véspera da demo, rodar o script de novo (roteiro da demo).
 import '@servicenow/sdk/global'
 import { Record } from '@servicenow/sdk/core'
 
@@ -18,6 +18,7 @@ Record({
         sem_score: false,
         valor_em_aberto: 44844.64,
         sinal_coercitivo: false,
+        proxima_acao: "Avançar etapa: Caso selecionado",
     },
 })
 
@@ -36,6 +37,7 @@ Record({
         sem_score: false,
         valor_em_aberto: 96203.12,
         sinal_coercitivo: false,
+        proxima_acao: "Avançar etapa: Dossiê gerado",
     },
 })
 
@@ -53,6 +55,7 @@ Record({
         sem_score: true,
         valor_em_aberto: 75098.99,
         sinal_coercitivo: false,
+        proxima_acao: "Avançar etapa: Condução",
     },
 })
 
@@ -72,6 +75,7 @@ Record({
         valor_em_aberto: 57341.48,
         sinal_coercitivo: true,
         sinal_coercitivo_desc: "Notificação de protesto ativa na CCF (fictícia)",
+        proxima_acao: "Conduzir e encerrar com motivo",
     },
 })
 
@@ -90,6 +94,7 @@ Record({
         sem_score: false,
         valor_em_aberto: 4167.49,
         sinal_coercitivo: false,
+        proxima_acao: "Conduzir e encerrar com motivo",
     },
 })
 
@@ -109,6 +114,7 @@ Record({
         valor_em_aberto: 52337.19,
         sinal_coercitivo: false,
         motivo_encerramento: "regularizado",
-        encerrado_em: "2026-11-21 15:00:00",
+        encerrado_em: "2026-11-22 15:00:00",
+        proxima_acao: "Nada a fazer (encerrado)",
     },
 })

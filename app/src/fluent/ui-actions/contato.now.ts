@@ -3,7 +3,7 @@
 // ContatoLigacao revalida tudo e devolve {ok, mensagem}. A anotação da ligação é escrita em «Comentários».
 import '@servicenow/sdk/global'
 import { UiAction } from '@servicenow/sdk/core'
-import { role_atendente, role_coordenador } from '../security/roles.now'
+import { role_atendente, role_coordenador, role_admin } from '../security/roles.now'
 
 export const ua_registrar_ligacao = UiAction({
     $id: Now.ID['RF-MOD-UX-002_ua_registrar_ligacao'],
@@ -15,6 +15,7 @@ export const ua_registrar_ligacao = UiAction({
     condition: "current.status != 'encerrado' && !current.isNewRecord()",
     showInsert: false,
     showUpdate: true,
+    order: 100,
     form: { showButton: true, showLink: false, showContextMenu: false, style: 'primary' },
     client: { isClient: true, onClick: 'cobRegistrarLigacao()' },
     script: `function cobRegistrarLigacao() {
@@ -54,6 +55,7 @@ export const ua_encerrar_contato = UiAction({
     condition: "current.status != 'encerrado' && !current.isNewRecord()",
     showInsert: false,
     showUpdate: true,
+    order: 200,
     form: { showButton: true, showLink: false, showContextMenu: false, style: 'unstyled' },
     client: { isClient: true, onClick: 'cobEncerrarContato()' },
     script: `function cobEncerrarContato() {
@@ -77,4 +79,54 @@ function cobEncerrarContatoServidor() {
     }
     action.setRedirectURL(current);
 }`,
+})
+
+// RF-MOD-UX-009 — verbos do contato também na lista (menu da linha, botão direito). Pedem anotação ou motivo,
+// então só abrem o form, onde o verbo é executado (design ux-cobranca-v2-regua-flow.md, D1 e A1).
+export const ual_registrar_ligacao = UiAction({
+    $id: Now.ID['UX-009_ual_registrar_ligacao'],
+    name: 'Registrar ligação…',
+    actionName: 'x_cob_l_registrar_ligacao',
+    table: 'x_2326104_cob_contato',
+    hint: 'Abre o contato para registrar o resultado da ligação',
+    roles: [role_atendente, role_coordenador],
+    condition: "current.status != 'encerrado'",
+    showInsert: false,
+    showUpdate: true,
+    order: 100,
+    list: { showContextMenu: true },
+    script: `action.setRedirectURL(current);`,
+})
+
+export const ual_encerrar_contato = UiAction({
+    $id: Now.ID['UX-009_ual_encerrar_contato'],
+    name: 'Encerrar…',
+    actionName: 'x_cob_l_encerrar_contato',
+    table: 'x_2326104_cob_contato',
+    hint: 'Abre o contato para encerrar com o motivo',
+    roles: [role_atendente, role_coordenador],
+    condition: "current.status != 'encerrado'",
+    showInsert: false,
+    showUpdate: true,
+    order: 200,
+    list: { showContextMenu: true },
+    script: `action.setRedirectURL(current);`,
+})
+
+// RF-MOD-UX-009 — Update do contato só para o admin do app: o atendente e o coordenador mudam o contato pelos
+// verbos. Mesmo actionName da ação global (sysverb_update), que esta substitui na tabela (D2, A2).
+export const ua_update_contato = UiAction({
+    $id: Now.ID['UX-009_ua_update_contato'],
+    name: 'Update',
+    actionName: 'sysverb_update',
+    table: 'x_2326104_cob_contato',
+    hint: 'Grava o contato (só admin do app)',
+    roles: [role_admin],
+    condition: '!current.isNewRecord()',
+    showInsert: false,
+    showUpdate: true,
+    order: 900,
+    form: { showButton: true, showLink: false, showContextMenu: false, style: 'unstyled' },
+    script: `current.update();
+action.setRedirectURL(current);`,
 })

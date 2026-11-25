@@ -1,6 +1,6 @@
 // gerado por sn-scaffold — regerar com scaffold.mjs; mudança à mão se perde
 import '@servicenow/sdk/global'
-import { ChoiceColumn, DateColumn, GenericColumn, IntegerColumn, ReferenceColumn, Table } from '@servicenow/sdk/core'
+import { ChoiceColumn, DateColumn, GenericColumn, IntegerColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 
 export const x_2326104_cob_contato = Table({
     name: "x_2326104_cob_contato",
@@ -41,6 +41,7 @@ export const x_2326104_cob_contato = Table({
             "recusa": { label: "Recusa", sequence: 3 },
             "outro": { label: "Outro", sequence: 4 },
         }, dropdown: 'dropdown_with_none' }),
+        proxima_acao: StringColumn({ label: "O que fazer agora", maxLength: 100 }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

@@ -57,7 +57,35 @@ const ref = (tabela, chave) => `Now.ref(${JSON.stringify(tabela)}, ${JSON.string
 const refUser = (u) => ref('sys_user', u);
 const COORD = 'usuario_demo_coordenador';
 
-function record(chave, tabela, data) {
+// «O que fazer agora» (proxima_acao) do contato, do caso e do ciclo: o mesmo quadro de
+// app/src/server/contato/ProximaAcao.server.js (design ux-v2, A3). O install do seed não roda business rule.
+const ENCERRADO = 'Nada a fazer (encerrado)';
+const dataBr = (v) => (v ? v.slice(0, 10).split('-').reverse().join('/') : '');
+function proximaAcao(tabela, d) {
+  if (tabela === `${S}contato`) {
+    const data = dataBr(d.proxima_acao_em);
+    if (d.status === 'encerrado') return ENCERRADO;
+    if (d.status === 'retornar') return data ? `Retornar a ligação em ${data}` : 'Retornar a ligação';
+    if (d.status === 'ligado') return data ? `Conferir pagamento combinado em ${data}` : 'Conferir pagamento combinado';
+    return 'Ligar e registrar o resultado';
+  }
+  if (tabela === `${S}caso`) {
+    const proximo = { em_selecao: 'Caso selecionado', selecionado: 'Dossiê gerado', dossie_gerado: 'Condução' };
+    if (d.estagio === 'encerrado') return ENCERRADO;
+    if (d.estagio === 'conducao') return 'Conduzir e encerrar com motivo';
+    return `Avançar etapa: ${proximo[d.estagio] ?? 'Caso selecionado'}`;
+  }
+  if (tabela === `${S}ciclo`) {
+    if (d.estado === 'encerrado') return ENCERRADO;
+    if (d.estado === 'publicado') return d.distribuido_em ? 'Acompanhar a lista' : 'Distribuir lista';
+    return 'Publicar ciclo';
+  }
+  return undefined;
+}
+
+function record(chave, tabela, dados) {
+  const pa = proximaAcao(tabela, dados);
+  const data = pa === undefined ? dados : { ...dados, proxima_acao: pa };
   const linhas = Object.entries(data).filter(([, v]) => v !== undefined && v !== null).map(([k, v]) => {
     const val = typeof v === 'object' && v.raw ? v.raw : JSON.stringify(v);
     return `        ${k}: ${val},`;

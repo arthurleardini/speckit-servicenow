@@ -32,6 +32,7 @@ export const x_2326104_cob_caso = Table({
             "outro": { label: "Outro", sequence: 2 },
         }, dropdown: 'dropdown_with_none' }),
         encerrado_em: DateTimeColumn({ label: "Encerrado em" }),
+        proxima_acao: StringColumn({ label: "O que fazer agora", maxLength: 100 }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

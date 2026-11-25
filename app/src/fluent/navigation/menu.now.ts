@@ -36,6 +36,18 @@ Record({
 })
 
 Record({
+    $id: Now.ID["modulo_mod_ux_equipe"],
+    table: 'sys_app_module',
+    data: { title: "Equipe", application: menu, link_type: 'SEPARATOR', roles: ["x_2326104_cob.coordenador","x_2326104_cob.admin"], active: true, order: 500 },
+})
+
+Record({
+    $id: Now.ID["modulo_mod_ux_equipe_lista_da_equipe"],
+    table: 'sys_app_module',
+    data: { title: "Lista da equipe", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador","x_2326104_cob.admin"], active: true, name: "x_2326104_cob_contato", filter: "status!=encerrado^GROUPBYatendente^ORDERBYproxima_acao_em", order: 600 },
+})
+
+Record({
     $id: Now.ID["modulo_mod_ux_casos"],
     table: 'sys_app_module',
     data: { title: "Casos qualificados", application: menu, link_type: 'SEPARATOR', roles: ["x_2326104_cob.coordenador"], active: true, order: 1000 },
@@ -56,7 +68,7 @@ Record({
 Record({
     $id: Now.ID["modulo_mod_ux_ciclo_ciclo_do_mes"],
     table: 'sys_app_module',
-    data: { title: "Ciclo do mês", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_ciclo", filter: "estado!=encerrado^ORDERBYDESCreferencia", order: 2100 },
+    data: { title: "Ciclo do mês", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_ciclo", filter: "estado!=encerrado^ORDERBYDESCreferencia", view_name: "x_2326104_cob_tel_036", order: 2100 },
 })
 
 Record({

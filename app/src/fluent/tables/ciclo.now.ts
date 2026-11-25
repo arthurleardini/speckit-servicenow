@@ -30,6 +30,7 @@ export const x_2326104_cob_ciclo = Table({
         publicado_por: ReferenceColumn({ label: "Publicado por", referenceTable: "sys_user" }),
         distribuido_em: DateTimeColumn({ label: "Distribuído em" }),
         qtd_contatos: IntegerColumn({ label: "Contatos distribuídos" }),
+        proxima_acao: StringColumn({ label: "O que fazer agora", maxLength: 100 }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

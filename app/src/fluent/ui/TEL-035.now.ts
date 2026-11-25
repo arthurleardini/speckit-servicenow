@@ -12,7 +12,7 @@ Form({
             caption: "Contato da lista",
             content: [
                 { layout: 'one-column', elements: [{ type: 'formatter', formatterRef: processFlow_contato, formatterName: 'process_flow.xml' }] },
-                { layout: 'two-column', leftElements: [{ field: "contribuinte", type: 'table_field' }, { field: "atendente", type: 'table_field' }, { field: "ciclo", type: 'table_field' }, { field: "status", type: 'table_field' }, { field: "proxima_acao_em", type: 'table_field' }, { field: "ultimo_resultado", type: 'table_field' }], rightElements: [{ field: "tentativas", type: 'table_field' }, { field: "prioridade", type: 'table_field' }, { field: "valor_em_aberto", type: 'table_field' }, { field: "motivo_encerramento", type: 'table_field' }, { field: "resultado_ligacao", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "resultado_ligacao", type: 'table_field' }, { field: "proxima_acao_em", type: 'table_field' }, { field: "motivo_encerramento", type: 'table_field' }, { field: "proxima_acao", type: 'table_field' }, { field: "status", type: 'table_field' }, { field: "contribuinte", type: 'table_field' }], rightElements: [{ field: "valor_em_aberto", type: 'table_field' }, { field: "ultimo_resultado", type: 'table_field' }, { field: "tentativas", type: 'table_field' }, { field: "prioridade", type: 'table_field' }, { field: "atendente", type: 'table_field' }, { field: "ciclo", type: 'table_field' }] },
                 { layout: 'one-column', elements: [{ field: "comentarios", type: 'table_field' }] },
             ],
         },

@@ -15,6 +15,7 @@ export const ua_avancar_etapa = UiAction({
     condition: "current.estagio != 'encerrado' && current.estagio != 'conducao' && !current.isNewRecord()",
     showInsert: false,
     showUpdate: true,
+    order: 100,
     form: { showButton: true, showLink: false, showContextMenu: false, style: 'primary' },
     script: `(function () {
     var r = new CasoConducao().avancarEtapa(current);
@@ -37,6 +38,7 @@ export const ua_encerrar_caso = UiAction({
     condition: "current.estagio != 'encerrado' && !current.isNewRecord()",
     showInsert: false,
     showUpdate: true,
+    order: 200,
     form: { showButton: true, showLink: false, showContextMenu: false, style: 'unstyled' },
     client: { isClient: true, onClick: 'cobEncerrarCaso()' },
     script: `function cobEncerrarCaso() {
@@ -58,4 +60,43 @@ function cobEncerrarCasoServidor() {
     }
     action.setRedirectURL(current);
 }`,
+})
+
+// RF-MOD-UX-009 — verbos do caso na lista: «Avançar etapa» roda no servidor (menu da linha e «Ações nas linhas
+// selecionadas»); «Encerrar caso…» pede o motivo e só abre o form (D1, A1).
+export const ual_avancar_etapa = UiAction({
+    $id: Now.ID['UX-009_ual_avancar_etapa'],
+    name: 'Avançar etapa',
+    actionName: 'x_cob_l_avancar_etapa',
+    table: 'x_2326104_cob_caso',
+    hint: 'Leva cada caso marcado à etapa seguinte',
+    roles: [role_coordenador],
+    condition: "current.estagio != 'encerrado' && current.estagio != 'conducao' && !current.isNewRecord()",
+    showInsert: false,
+    showUpdate: true,
+    order: 100,
+    list: { showContextMenu: true, showListChoice: true },
+    script: `(function () {
+    var r = new CasoConducao().avancarEtapa(current);
+    if (r.ok) {
+        gs.addInfoMessage(r.mensagem);
+    } else {
+        gs.addErrorMessage(r.mensagem);
+    }
+})();`,
+})
+
+export const ual_encerrar_caso = UiAction({
+    $id: Now.ID['UX-009_ual_encerrar_caso'],
+    name: 'Encerrar caso…',
+    actionName: 'x_cob_l_encerrar_caso',
+    table: 'x_2326104_cob_caso',
+    hint: 'Abre o caso para encerrar com o motivo',
+    roles: [role_coordenador],
+    condition: "current.estagio != 'encerrado' && !current.isNewRecord()",
+    showInsert: false,
+    showUpdate: true,
+    order: 200,
+    list: { showContextMenu: true },
+    script: `action.setRedirectURL(current);`,
 })
