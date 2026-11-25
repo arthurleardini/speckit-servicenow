@@ -1,7 +1,7 @@
 # Cobrança MT v2: ações à vista e régua como Flow
 
 *   **Author:** arthurleardini (rascunho do agente em 25/11/2026; v2.1 no mesmo dia)
-*   **Status:** Proposed (v2.1)
+*   **Status:** Approved (v2.2: ajustes da F0 aplicados, ver `docs/designs/review-ux/f0-spike-resultados.md`)
 *   **Date:** 2026-11-25
 *   **Base:** `docs/designs/ux-cobranca-v1.md` (inclusive a seção v1.1, que continua valendo)
 *   **Revisão aplicada:** `docs/designs/review-ux/regua-flow_review_report.md` (8🔴, 24🟡, 12🟢), com as decisões do dono do produto de 25/11 (P1, P2, P3). Mapa em [Resolução da revisão](#resolução-da-revisão).
@@ -83,7 +83,7 @@ Fatos verificados no código (`app/src/fluent/`):
 | D8 | **Flows gerados por script** (`app/scripts/gerar-flows-regua.mjs`) a partir de `outputs/spec/reguas.json`. O mesmo script gera o seed de `regua` e `regua_etapa` | Régua e Flow não divergem no número de etapas. Arquivo separado do `data-model.json` para não depender de como `spec-data-model`, `sn-scaffold` e `sn-seed` tratam chave desconhecida | Seção `reguas` dentro do `data-model.json` |
 | D9 | **O Flow passa só inscrição e ordem; o `ReguaMotor` lê a etapa** (dia, canal, texto, postura, ação sem resposta) em tempo de execução. Número de etapas e ordem são fixos no Flow | O coordenador muda prazo, canal e texto no form sem regerar | Valores embutidos no Flow; `lookUpRecord` no Flow (duplica a leitura que o motor já faz) |
 | D10 | **Lógica no Script Include `ReguaMotor`**, chamado por 4 custom actions com `actionStep.script` (contrato em B3). As 4 actions nascem na F2, junto com os Flows | Flow legível no Designer; regra testável por ATF de servidor; F2 compila | Tudo num passo de script; tudo em ações nativas |
-| D11 | **Espera configurável sem mudar o Flow**: "Agendar etapa" devolve `executar_em = iniciada_em + dia × segundos_por_dia` e o Flow espera com `waitForADuration` relativo, `duration` 0 s, `relativeDatetime: wfa.dataPill(...)`. Propriedade `x_2326104_cob.regua.segundos_por_dia` (60 neste app de demo; 86400 em produção) | `Duration()` é literal; só o relativo aceita data vinda de pill | Duração explícita por etapa |
+| D11 | **Espera configurável sem mudar o Flow**: "Agendar etapa" devolve `executar_em = iniciada_em + dia × segundos_por_dia` e o Flow espera com `waitForADuration` relativo, `duration` 1 s (`Duration({ seconds: 1 })`, valor conferido na F0), `relativeDatetime: wfa.dataPill(...)` (pill direto). `executar_em` sai do script como objeto `GlideDateTime` (com `getValue()` em UTC a espera atrasa pelo fuso da sessão; F0 ponto 1). Propriedade `x_2326104_cob.regua.segundos_por_dia` (60 neste app de demo; 86400 em produção) | `Duration()` é literal; só o relativo aceita data vinda de pill | Duração explícita por etapa |
 | D12 | **Execução visível em dois lugares**: no app, o form da inscrição (comunicações e retornos de envio como related lists); no Flow Designer, os detalhes da execução com o stage tracker. Form da régua com "Ver execuções" e "Abrir no Flow Designer" | O stage tracker só aparece no Flow Designer, Workspace e Portal | Só Flow Designer |
 | D13 | **Escalonamento só no fecho do Flow**: etapas 1..N−1 têm `renotificar` ou `intensificar` (seguem para a próxima); a etapa N tem `encaminhar_ativa` ou `encaminhar_qualificada`. Depois da etapa N, o Flow espera `regua.prazo_final_dias`, confere guardas e escalona | Dá janela de resposta antes de escalonar e um só caminho de escalonamento | Escalonar logo após o envio (sem janela) |
 | D14 | **P1 (dono): ambos.** O contribuinte da massificada entra na lista do atendente na distribuição do ciclo ("Distribuir lista" continua igual) **e** quando a régua encaminha à cobrança ativa. "Escalonar" chama `QualificacaoCiclo.atribuirContato` (helper extraído, sem checagem de papel), com dedupe por contribuinte + ciclo: se já há contato aberto, não cria; grava `contato.inscricao` e antecipa `proxima_acao_em` para agora. `contato.origem` (distribuicao, regua) diz por onde o contato nasceu | Decisão do dono | (b) só na régua |
@@ -163,7 +163,7 @@ Form (existentes; só ganham `order` e, quando indicado, mudam):
 | `F4-014_ua_ver_execucao` | Ver execução | `x_cob_ver_execucao` | inscrição | link | `!current.isNewRecord()` | coordenador | 300 | procura `sys_flow_context` com `source_record` = inscrição; abre `/$flow-designer.do#/operations/context/<sys_id>`; sem contexto, mensagem "Execução não encontrada" |
 | `F4-016_ua_reenviar` (opcional) | Reenviar | `x_cob_reenviar` | comunicação | botão | `current.status == 'falha'` | coordenador | 100 | `new ReguaMotor().reenviar(current)` |
 
-Lista (novas; uma por ação, `form` ausente, `showInsert: false`, `showUpdate: false`):
+Lista (novas; uma por ação, `form` ausente, `showInsert: false`, `showUpdate: true` — sem `showUpdate: true` a action não aparece no menu da lista, F0 ponto 7):
 
 | `$id` | name | actionName | Tabela | `list` | condition | roles | order | Script |
 |---|---|---|---|---|---|---|---|---|
@@ -181,7 +181,7 @@ Lista (novas; uma por ação, `form` ausente, `showInsert: false`, `showUpdate: 
 
 Notas:
 *   As de lista que redirecionam abrem o form; o verbo é executado lá. "Registrar ligação…" e "Encerrar…" abrem o mesmo form.
-*   `showListChoice` vira `sys_ui_action.list_choice`, o menu "Ações nas linhas selecionadas" do UI16; a doc do SDK o descreve como "dropdown de campos choice". Confirmado na F0 (B6).
+*   `showListChoice` vira `sys_ui_action.list_choice`, o menu "Ações nas linhas selecionadas" do UI16; a doc do SDK o descreve como "dropdown de campos choice". Confirmado na F0 (ponto 7), com `showUpdate: true`.
 *   Os métodos chamados já reconferem papel e estado no servidor (`QualificacaoCiclo._ehCoordenador`, `CasoConducao`, `CriterioVersao`).
 *   Pausar grava `ativa = false`; a BR after update da régua (B4) encerra as inscrições ativas com `regua_pausada`. Ativar grava `ativa = true` e não retoma as encerradas; novas inscrições nascem na próxima publicação ou no próximo parcelamento em risco.
 
@@ -193,7 +193,7 @@ Notas:
 | Update | ciclo | override `UX-009_ua_update_ciclo` | coordenador na prévia; admin sempre |
 | Update | caso, critério, régua, etapa | sem mudança | coordenador, admin |
 | Delete | todas | sem mudança: não há ACL de delete para as personas | admin de sistema |
-| New | contato, régua, etapa | `Record({ table: 'sys_ui_list_control', data: { name, new_roles: 'x_2326104_cob.admin' } })`; para a etapa, mais um com `related_list: 'x_2326104_cob_regua_etapa.regua'` | admin |
+| New | contato, régua, etapa | `Record({ table: 'sys_ui_list_control', data: { name, new_roles: ['x_2326104_cob.admin'] } })` (array de string; string não compila e `[role_admin]` serializa "[object Object]", F0 ponto 8); para a etapa, mais um com `related_list: 'x_2326104_cob_regua_etapa.regua'` | admin |
 | New | inscrição, comunicação | sem list control: não há ACL de create para as personas | admin de sistema |
 | New | ciclo, critério | sem mudança | coordenador, admin |
 
@@ -242,7 +242,7 @@ Listas (até 6 colunas):
 | Réguas | Inscrições (novo) | FILTER | `regua_inscricao`: `statusINativa,erro^ORDERBYDESCstatus^ORDERBYproxima_etapa_em` | coordenador |
 | Réguas | Disparos com falha | FILTER | existe | coordenador |
 
-Coordenador: 14 módulos (D5). O admin do app já tem "Administração > Contato da lista" e passa a ter também "Equipe > Lista da equipe".
+Coordenador: 14 módulos (D5). O `GROUPBYatendente` exige a ACL `query_range` em `contato.atendente` para coordenador e admin (B5; F0 ponto 9). O admin do app já tem "Administração > Contato da lista" e passa a ter também "Equipe > Lista da equipe".
 
 #### A5. Form do contato (TEL-035)
 
@@ -287,7 +287,7 @@ Regras de campo do modelo:
 ] }
 ```
 
-Seed: 5 réguas, uma por carteira (Parcelamentos, IPVA, ITCD, ICMS Normal, ICMS ST), 3 a 4 etapas cada, `janela_atribuicao_dias: 30` (RN-NOVO-F4-007), textos de ciência do DT-e nos canais informais. Uma régua usa `encaminhar_qualificada` na última etapa (ITCD), para a demo mostrar os dois destinos.
+Seed: `flow: Now.ref('sys_hub_flow', 'flow_regua_<codigo>')` em cada régua. 5 réguas, uma por carteira (Parcelamentos, IPVA, ITCD, ICMS Normal, ICMS ST), 3 a 4 etapas cada, `janela_atribuicao_dias: 30` (RN-NOVO-F4-007), textos de ciência do DT-e nos canais informais. Uma régua usa `encaminhar_qualificada` na última etapa (ITCD), para a demo mostrar os dois destinos.
 
 #### B2. Sequência do Flow
 
@@ -311,7 +311,7 @@ Arquivo gerado `app/src/fluent/flows/regua-<codigo>.now.ts`. Código literal da 
 
 #### B3. Custom actions e `ReguaMotor`
 
-Arquivo `app/src/fluent/actions/regua.now.ts`. Cada action tem um `actionStep.script` com `required_run_time: 'instance'`, `script: Now.include('../../server/regua/acao-<nome>.js')`, `inputVariables` com os pills das entradas, `outputVariables` iguais às saídas, e `wfa.assignActionOutputs(params.outputs, ...)` no fim. O script de cada passo é `(function execute(inputs, outputs) { var r = new ReguaMotor().<método>(String(inputs.inscricao), ...); outputs.<x> = r.<x>; })(inputs, outputs);`. Chamada por script: `sn_fd.FlowAPI.getRunner().action('x_2326104_cob.<internalName>')`.
+Arquivo `app/src/fluent/actions/regua.now.ts`. Cada action tem um `actionStep.script` com `required_run_time: 'instance'`, `script: Now.include('../../server/regua/acao-<nome>.js')`, `inputVariables` com os pills das entradas, `outputVariables` iguais às saídas, e `wfa.assignActionOutputs(params.outputs, ...)` no fim. O script de cada passo é `(function execute(inputs, outputs) { var r = new ReguaMotor().<método>(inputs.inscricao, parseInt(inputs.ordem, 10)); outputs.<x> = r.<x>; })(inputs, outputs);`: `inputs.inscricao` chega como GlideRecord e `inputs.ordem` chega como string vinda do Flow e número vindo do FlowAPI (F0 ponto 2). Os métodos do motor aceitam GlideRecord ou sys_id. Chamada por script: `sn_fd.FlowAPI.getRunner().action('x_2326104_cob.<internalName>')`.
 
 | Action (`name`) | `$id` / `internalName` | Entradas | Saídas | Script / método |
 |---|---|---|---|---|
@@ -324,7 +324,7 @@ Arquivo `app/src/fluent/actions/regua.now.ts`. Cada action tem um `actionStep.sc
 
 | Método | Regra |
 |---|---|
-| `agendar(id, ordem)` | Inscrição não ativa → `{segue:false}` sem gravar. Etapa `ordem` existe → `executar_em = iniciada_em + offset_dias × segundos_por_dia`; `ordem` = última + 1 → `executar_em = iniciada_em + (offset_dias da última + prazo_final_dias) × segundos_por_dia`. Grava `etapa_atual` (só para etapa real) e `proxima_etapa_em` |
+| `agendar(id, ordem)` | Devolve `executar_em` como objeto `GlideDateTime` (não `getValue()`). Inscrição não ativa → `{segue:false}` sem gravar. Etapa `ordem` existe → `executar_em = iniciada_em + offset_dias × segundos_por_dia`; `ordem` = última + 1 → `executar_em = iniciada_em + (offset_dias da última + prazo_final_dias) × segundos_por_dia`. Grava `etapa_atual` (só para etapa real) e `proxima_etapa_em` |
 | `checarGuardas(id)` | Não ativa → `segue=false` (sem regravar). Senão `motivo = motivoParada(insc)`; com motivo → `encerrar(insc, motivo)`, `segue=false` |
 | `motivoParada(insc)` | Régua inativa → `regua_pausada`. `ciclo` preenchido e `QualificacaoCiclo.emControle(contribuinte, ciclo)` → `controle` (sem `ciclo`, essa guarda não se aplica; `emControle` com ciclo vazio olharia todos os ciclos e não é chamado). Carteira `parcelamentos`: parcelamento `em_risco` → segue; `em_dia`/`quitado` → `regularizado`; `rompido` → `parcelamento_rompido`. Outras carteiras: nenhum débito `aberto` com `tributo` = carteira → `regularizado` |
 | `enviar(id, ordem)` | **Idempotência**: já existe comunicação da inscrição e da etapa com status ≠ "agendada" → devolve a existente sem enviar. Senão cria (ou reaproveita a "agendada") comunicação com `contribuinte`, `regua`, `etapa`, `ciclo`, `inscricao`. Canais = canal da etapa + `ORDEM_FALLBACK` sem repetir. Por canal: pula se `canal_sim` não contratado; exige opt-in e o vigente não é opt-in; o vigente é opt-out; ou `envio_sim` do contribuinte no canal com `recebido_em` nos últimos `segundos_por_dia` s ≥ `TETO_POR_JANELA`. Senão cria `envio_sim` (`comunicacao`, `inscricao`, `canal`, `status_retorno` = falha se `forcar_falha`, senão entregue, `recebido_em` agora). Para no primeiro entregue. Grava status final, canal final, `enviada_em`, `tentativas` e `motivo` ("SMS: opt-out; WhatsApp: sem opt-in"). A BR atual que recusa comunicação de contribuinte em controle continua valendo |
@@ -378,13 +378,14 @@ Cada script de passo envolve a chamada em `try/catch` só para registrar `gs.err
 | `regua_inscricao` | create, write, delete | nenhuma ACL para as personas; o motor grava por `GlideRecord` no servidor |
 | `contato` | create | sem mudança (coordenador, admin); o Flow cria como system |
 | `sys_ui_list_control` | `new_roles` | admin (A2) |
+| `contato` | `query_range` de campo `atendente` (`app/src/fluent/security/contato.now.ts`) | coordenador, admin (sem ela o `GROUPBYatendente` da "Lista da equipe" dá 0 linhas ao coordenador, F0 ponto 9) |
 
 Nenhuma BR de carteira precisa de exceção de sistema: `recusarContatoForaDaCarteira` é só de update, e o motor não encerra contato (RN-09 fora).
 
 #### B6. Flow Designer (P2), execuções e transform
 
 **Mecanismo (decidido na F0, nesta ordem):**
-1. Registro `sys_user_role_contains` em `app/src/fluent/security/coordenador-flow.now.ts` (arquivo à mão; `roles.now.ts` é gerado pelo `sn-scaffold` e não aceita `containsRoles`): `role_coordenador` contém `flow_designer` e `flow_operator`, por sys_id lido na F0.
+1. Registro `sys_user_role_contains` em `app/src/fluent/security/coordenador-flow.now.ts` (arquivo à mão; `roles.now.ts` é gerado pelo `sn-scaffold` e não aceita `containsRoles`): `role: Now.ref('sys_user_role', { name: 'x_2326104_cob.coordenador' })` contém `Now.ref('sys_user_role', { name: 'flow_designer' })` e `flow_operator`, por nome nos dois lados (sem sys_id lido; `Now.ref('sys_user_role', 'role_coordenador')` não resolve). Validado na F0 (ponto 5).
 2. Se a instância recusar papel global contido em papel de escopo: `sys_user_has_role` de `demo.coordenador` com `flow_designer` e `flow_operator`, no mesmo arquivo.
 3. Se o Flow Designer não deixar um não-admin editar Flow do escopo: o coordenador abre para leitura e execuções; a edição no Designer é feita pelo admin. Registrado no `sync-log.md`.
 
@@ -392,12 +393,12 @@ Os Flows não usam `protectionPolicy: 'read'`.
 
 **Edição no Designer e reinstall** (vai para `outputs/spec/demo/roteiro.md` e `outputs/spec/sync-log.md`):
 *   O que for mudado no Flow pelo Designer vale até o próximo `npm run reinstall`, que reinstala a fonte Fluent e sobrescreve a mudança.
-*   Para manter: antes do reinstall, conferir `sys_hub_flow` com `internal_nameSTARTSWITHregua_^sys_updated_by!=<usuário do install>`; havendo edição, rodar `npm run transform` em `app/` e levar a mudança à fonte:
+*   Para manter: antes do reinstall, conferir `sys_hub_flow` com `internal_nameSTARTSWITHregua_^sys_updated_by!=<usuário do install>`; havendo edição, rodar `npm run transform` em `app/` só para ler a edição e levá-la à fonte à mão (a saída crua do transform não compila e nunca é commitada, F0 ponto 10):
     *   mudança de estrutura (etapa nova, removida ou reordenada) → `outputs/spec/reguas.json` e regerar; etapa nova precisa da `regua_etapa` correspondente, criada pelo gerador;
-    *   mudança que o gerador não expressa → a régua ganha `"flowManual": true` em `reguas.json`; o gerador para de escrever `regua-<codigo>.now.ts` (continua escrevendo o seed) e o arquivo vindo do transform passa a ser mantido à mão.
+    *   mudança que o gerador não expressa → a régua ganha `"flowManual": true` em `reguas.json`; o gerador para de escrever `regua-<codigo>.now.ts` (continua escrevendo o seed) e o arquivo vindo do transform, corrigido (repor os `const` das ações com saída em pill, tirar `masterSnapshot`, descartar `app/metadata/`), passa a ser mantido à mão.
 *   Mudança de estrutura com inscrições em andamento: "Pausar" a régua antes do reinstall (encerra as ativas com `regua_pausada`), reinstalar, "Ativar". Régua removida do JSON vira DELETE do Flow no install: pausar antes e confirmar com o usuário (`CLAUDE.md`).
 
-**Links**: "Abrir no Flow Designer", "Ver execuções" e "Ver execução" (A1). Plano B se `regua.flow` não resolver por reference no seed: a UI Action procura `sys_hub_flow` por `internal_name = regua_<codigo>` e o campo `flow` sai. Plano B se `source_record` não apontar para a inscrição: "Ver execução" abre "Ver execuções" da régua.
+**Links**: "Abrir no Flow Designer", "Ver execuções" e "Ver execução" (A1). No seed, `flow: Now.ref('sys_hub_flow', 'flow_regua_<codigo>')` (a constante do Flow não compila; F0 ponto 4). `source_record` aponta para a inscrição (F0 ponto 6).
 
 #### B7. Demo sem esperar dias
 
@@ -431,7 +432,7 @@ Massa criada pelo próprio teste. **Régua de teste**: `codigo = atf_<caso>`, qu
 | UX-010 | "Lista da equipe" visível ao coordenador e invisível ao atendente | `createUser`, `atf.applicationNavigator.moduleVisibility` | G4 |
 | F4-010 | `validarEtapa`: salto de postura, regressão, dia fora de ordem, encaminhar fora da última, última sem encaminhar e `R$` em SMS recusados; caso válido grava | `runServerSideScript` | D17 |
 | F4-010 | BR de inscrição recusa contribuinte em controle; grava massificada | `runServerSideScript` | RN-NOVO-F2-005 |
-| F4-010 | fumaça: `sn_fd.FlowAPI.getRunner().action('x_2326104_cob.regua_agendar_etapa').inForeground().withInputs({...}).run()` devolve `segue` e `executar_em` (régua `atf_fumaca`) | `runServerSideScript` | contrato B3 |
+| F4-010 | fumaça: `sn_fd.FlowAPI.getRunner().action('x_2326104_cob.regua_agendar_etapa').inForeground().withInputs({ inscricao: <GlideRecord>, ordem: 1 }).run()` (GlideRecord, não sys_id: F0 ponto 2) devolve `segue` e `executar_em` (régua `atf_fumaca`) | `runServerSideScript` | contrato B3 |
 | F4-011 | `checarGuardas`: controle, regularizado, parcelamento quitado, rompido, régua pausada, inscrição encerrada → `segue=false` com o motivo; caso limpo → `true` | `runServerSideScript` | G7 |
 | F4-011 | `enviar`: WhatsApp sem opt-in → pula e entrega por SNE; SNE com `forcar_falha` → e-mail, 2 `envio_sim`; tudo com falha → "Falha", 3 tentativas; opt-out de SMS → não sai por SMS | `runServerSideScript` | RN-NOVO-F4-003, 004, 005 |
 | F4-011 | teto em modo demo: com `segundos_por_dia = 60`, segundo envio no mesmo canal dentro de 60 s pula para o próximo canal; depois de 60 s (`recebido_em` do primeiro recuado 61 s pelo teste) sai no mesmo canal | `runServerSideScript` | D19, RN-38 |
@@ -496,6 +497,7 @@ Caminhos relativos ao worktree. Só estes arquivos mudam.
 | `app/src/fluent/ui/TEL-036.now.ts`, `TEL-037.now.ts`, `TEL-038.now.ts` | novo | `sn-scaffold` | UX-010, F4-010 |
 | `app/src/fluent/security/acl-base.now.ts` | muda (read de `regua_inscricao`) | `sn-scaffold` | F4-010 |
 | `app/src/fluent/security/regua.now.ts` | novo (write de régua e etapa, campos só leitura, deny de inscrição) | `sn-implement` | F4-010, F4-013 |
+| `app/src/fluent/security/contato.now.ts` | muda (ACL `query_range` em `contato.atendente`, F0 ponto 9) | `sn-implement` | UX-010 |
 | `app/src/fluent/security/coordenador-flow.now.ts` | novo (B6) | `sn-implement` | F4-014 |
 | `app/src/fluent/seed/regua.now.ts`, `regua_etapa.now.ts`, `canal_sim.now.ts`, `comunicacao.now.ts`, `envio_sim.now.ts`, `consentimento.now.ts` | apaga | `sn-seed` (seedManual) | F4-010 |
 | `app/src/fluent/seed/regularizacao.now.ts` | muda (`comunicacao` fica vazio: a reference para tabela de `seedManual` sai) | `sn-seed` | F4-010 |
@@ -677,7 +679,7 @@ export const flow_regua_ipva = Flow(
         wfa.flowLogic.if({ $id: Now.ID['ipva_e1_ag_parar'], condition: `${wfa.dataPill(ag1.segue, 'boolean')}=false` },
           () => { wfa.flowLogic.endFlow({ $id: Now.ID['ipva_e1_ag_fim'] }) })
         wfa.flowLogic.waitForADuration({ $id: Now.ID['ipva_e1_esperar'], durationType: 'relative_duration',
-          duration: Duration({ seconds: 0 }), relativeOperator: 'after',
+          duration: Duration({ seconds: 1 }), relativeOperator: 'after',
           relativeDatetime: wfa.dataPill(ag1.executar_em, 'glide_date_time') })
         const g1 = wfa.action(checarGuardas, { $id: Now.ID['ipva_e1_guardas'] },
           { inscricao: wfa.dataPill(params.trigger.current, 'reference') })
@@ -694,7 +696,7 @@ export const flow_regua_ipva = Flow(
         wfa.flowLogic.if({ $id: Now.ID['ipva_fim_ag_parar'], condition: `${wfa.dataPill(agF.segue, 'boolean')}=false` },
           () => { wfa.flowLogic.endFlow({ $id: Now.ID['ipva_fim_ag_fim'] }) })
         wfa.flowLogic.waitForADuration({ $id: Now.ID['ipva_fim_esperar'], durationType: 'relative_duration',
-          duration: Duration({ seconds: 0 }), relativeOperator: 'after',
+          duration: Duration({ seconds: 1 }), relativeOperator: 'after',
           relativeDatetime: wfa.dataPill(agF.executar_em, 'glide_date_time') })
         const gF = wfa.action(checarGuardas, { $id: Now.ID['ipva_fim_guardas'] },
           { inscricao: wfa.dataPill(params.trigger.current, 'reference') })
@@ -714,7 +716,7 @@ export const flow_regua_ipva = Flow(
   })
 ```
 
-Pontos conferidos na F0 e ajustados no gerador se der não: `relativeDatetime` por pill direto (alternativa: template literal; depois, plano B de Riscos); `ordem` como número (alternativa: `'1'`); stage dentro do `try` (plano B de Riscos); forma de `values` em `updateRecord` (`TemplateValue` ou objeto literal, conforme o tipo do SDK).
+Conferido na F0: `relativeDatetime` por pill direto; `ordem` só como número (`'1'` não compila); stage e `endFlow` dentro do `try`; `values: TemplateValue({...})` no `updateRecord` do `catch`; `Duration({ seconds: 1 })`.
 
 Custom action (as outras três seguem o mesmo molde, com as entradas e saídas de B3):
 
