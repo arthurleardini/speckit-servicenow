@@ -30,6 +30,7 @@ ContatoLigacao.MSG_ENCERRADO = 'Operação recusada: contato já encerrado.';
 ContatoLigacao.MSG_CARTEIRA = 'Operação recusada: atendente vê só a própria carteira.';
 ContatoLigacao.MSG_SEM_PAI = 'Operação recusada: a interação pertence a um contato ou a um caso.';
 ContatoLigacao.MSG_NAO_GRAVOU = 'A ligação não foi registrada. Confira a mensagem acima e tente de novo.';
+ContatoLigacao.MSG_NAO_ENCERROU = 'O contato não foi encerrado. Confira a mensagem acima e tente de novo.';
 ContatoLigacao.MSG_SEM_MOTIVO = 'Operação recusada: informe o motivo de encerramento.';
 ContatoLigacao.MOTIVOS = { regularizado: 'Regularizado', contato_realizado: 'Contato realizado', sem_contato: 'Sem contato', recusa: 'Recusa', outro: 'Outro' };
 ContatoLigacao.ROTULO_STATUS ={ a_ligar: 'A ligar', ligado: 'Ligado', retornar: 'Retornar', encerrado: 'Encerrado' };
@@ -58,7 +59,10 @@ ContatoLigacao.prototype = {
         if (!anotacao) {
             return this._recusar(contato, ContatoLigacao.MSG_SEM_ANOTACAO);
         }
-        var tentativas = (parseInt(contato.getValue('tentativas'), 10) || 0) + 1;
+        // Tentativas contadas a partir do valor gravado, não do que veio do form.
+        var gravado = new GlideRecord(ContatoLigacao.TABELA_CONTATO);
+        gravado.get(contato.getUniqueValue());
+        var tentativas = (parseInt(gravado.getValue('tentativas'), 10) || 0) + 1;
         var decisao = this.decidir(resultado, retorno, tentativas);
         if (!decisao) {
             return this._recusar(contato, ContatoLigacao.MSG_SEM_RESULTADO);
@@ -75,7 +79,8 @@ ContatoLigacao.prototype = {
         if (retorno) {
             i.setValue('retorno_em', retorno);
         }
-        if (!i.insert()) {
+        var interacaoId = i.insert();
+        if (!interacaoId) {
             gs.error('RF-MOD-UX-002_ua_registrar_ligacao: interação não gravada; contato ' + contato.getUniqueValue());
             return { ok: false, mensagem: ContatoLigacao.MSG_NAO_GRAVOU };
         }
@@ -87,7 +92,15 @@ ContatoLigacao.prototype = {
         if (decisao.motivo) {
             contato.setValue('motivo_encerramento', decisao.motivo);
         }
-        contato.update();
+        if (!contato.update()) {
+            // Sem o contato atualizado, a interação também sai: nada fica pela metade.
+            var desfaz = new GlideRecord(ContatoLigacao.TABELA_INTERACAO);
+            if (desfaz.get(interacaoId)) {
+                desfaz.deleteRecord();
+            }
+            gs.error('RF-MOD-UX-002_ua_registrar_ligacao: contato não gravado; contato ' + contato.getUniqueValue());
+            return { ok: false, mensagem: ContatoLigacao.MSG_NAO_GRAVOU };
+        }
         gs.info('RF-MOD-UX-002_ua_registrar_ligacao: contato ' + contato.getUniqueValue() + ' → ' + decisao.status + '; usuário ' + gs.getUserID());
         return { ok: true, mensagem: this._mensagemOk(decisao) };
     },
@@ -111,7 +124,10 @@ ContatoLigacao.prototype = {
         contato.setValue('status', 'encerrado');
         contato.setValue('motivo_encerramento', motivo);
         contato.setValue('proxima_acao_em', '');
-        contato.update();
+        if (!contato.update()) {
+            gs.error('RF-MOD-UX-003_ua_encerrar_contato: contato não gravado; contato ' + contato.getUniqueValue());
+            return { ok: false, mensagem: ContatoLigacao.MSG_NAO_ENCERROU };
+        }
         gs.info('RF-MOD-UX-003_ua_encerrar_contato: contato ' + contato.getUniqueValue() + ' encerrado (' + motivo + '); usuário ' + gs.getUserID());
         return { ok: true, mensagem: 'Contato encerrado: ' + ContatoLigacao.MOTIVOS[motivo] + '.' };
     },
@@ -165,10 +181,15 @@ ContatoLigacao.prototype = {
         if (!contato || !contato.getUniqueValue()) {
             return ContatoLigacao.MSG_CARTEIRA;
         }
-        if (!new CarteiraAtendente().podeVer(contato, 'atendente') || !this._temPapel()) {
+        // Dono e status conferidos como estão gravados: trocar o atendente no form não dá acesso.
+        var gravado = new GlideRecord(ContatoLigacao.TABELA_CONTATO);
+        if (!gravado.get(contato.getUniqueValue())) {
             return ContatoLigacao.MSG_CARTEIRA;
         }
-        if (contato.getValue('status') == 'encerrado') {
+        if (!new CarteiraAtendente().podeVer(gravado, 'atendente') || !this._temPapel()) {
+            return ContatoLigacao.MSG_CARTEIRA;
+        }
+        if (gravado.getValue('status') == 'encerrado') {
             return ContatoLigacao.MSG_ENCERRADO;
         }
         return '';

@@ -10,7 +10,7 @@ export const br_interacao_um_pai = BusinessRule({
     table: 'x_2326104_cob_interacao',
     when: 'before',
     action: ['insert', 'update'],
-    order: 50,
+    order: 100,
     active: true,
     script: Now.include('../../server/contato/interacaoUmPai.server.js'),
 })
