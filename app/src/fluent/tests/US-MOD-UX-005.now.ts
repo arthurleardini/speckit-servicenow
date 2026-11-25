@@ -258,7 +258,7 @@ export const t_ux005_so_verbos = Test({
     p.setValue('tipo_pessoa', 'pj');
     p.setValue('ficticio', true);
     var pid = p.insert();
-    var lista = [{estagio: 'em_selecao', prioridade: 9961}, {estagio: 'conducao', prioridade: 9962}, {estagio: 'encerrado', motivo: 'regularizado', prioridade: 9963}, {estagio: 'dossie_gerado', prioridade: 9964}];
+    var lista = [{estagio: 'em_selecao', prioridade: 9961}, {estagio: 'conducao', prioridade: 9962}, {estagio: 'encerrado', motivo: 'regularizado', prioridade: 9963}, {estagio: 'dossie_gerado', prioridade: 9964}, {estagio: 'conducao', prioridade: 9965}]; // um caso por it: o Jasmine embaralha a ordem
     for (var k = 0; k < lista.length; k++) {
         var c = new GlideRecord('x_2326104_cob_caso');
         c.initialize();
@@ -321,7 +321,7 @@ export const t_ux005_so_verbos = Test({
             a.setValue('estagio', 'conducao');
             a.update();
             expect(estagio(a)).toBe('conducao');
-            var b = caso(9962);
+            var b = caso(9965);
             b.setValue('estagio', 'encerrado');
             b.setValue('motivo_encerramento', 'esgotado');
             b.update();
