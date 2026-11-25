@@ -665,7 +665,8 @@ export const t_f4011_envio = Test({
         it('SNE com falha forçada: entregue por e-mail, 2 retornos', function() {
             expect(e2.status).toBe('entregue');
             expect(e2.canal).toBe('email');
-            expect(env2.join(',')).toBe('sne:falha,email:entregue');
+            // mesmo segundo de recebido_em/sys_created_on: a ordem de leitura não é garantida; a sequência vem do status
+            expect(env2.slice().sort().join(',')).toBe('email:entregue,sne:falha');
         });
         it('tudo falha: Falha com 3 tentativas', function() {
             expect(e3.status).toBe('falha');
