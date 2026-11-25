@@ -57,6 +57,8 @@ ReguaMotor.MSG_SEM_FLOW = 'Esta régua não tem Flow.';
 ReguaMotor.MSG_REENVIAR_SEM_FALHA = 'Operação recusada: só comunicação com falha pode ser reenviada.';
 ReguaMotor.MSG_REENVIAR_PAPEL = 'Operação recusada: ação do coordenador.';
 ReguaMotor.MSG_REENVIAR_SEM_ETAPA = 'Operação recusada: comunicação sem inscrição ou etapa da régua.';
+ReguaMotor.MSG_REENVIAR_PARADA = 'Operação recusada: a inscrição desta comunicação não está ativa (régua pausada, regularizado, controle ou encerrada).';
+ReguaMotor.MSG_REENVIAR_ERRO = 'A comunicação não foi reenviada: erro no envio. Ela continua com falha.';
 ReguaMotor.MSG_REENVIADA = 'Comunicação reenviada: {status} por {canal}.';
 ReguaMotor.MSG_SIGILO ='Operação recusada: texto de e-mail, SMS ou WhatsApp não pode trazer valor nem tributo (só ciência do DT-e).';
 
@@ -402,11 +404,23 @@ ReguaMotor.prototype = {
         if (!insc || !com.getValue('etapa')) {
             return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_SEM_ETAPA, status: 'falha' };
         }
+        if (insc.getValue('status') !== 'ativa' || this.motivoParada(insc)) {
+            return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_PARADA, status: 'falha' };
+        }
         var ordem = parseInt(com.etapa.ordem.toString() || '0', 10);
         var antes = parseInt(com.getValue('tentativas') || '0', 10);
         com.setValue('status', 'agendada');
         com.update();
-        var r = this.enviar(insc, ordem);
+        var r;
+        try {
+            r = this.enviar(insc, ordem);
+        } catch (e) {
+            com.setValue('status', 'falha');
+            com.update();
+            gs.error('RF-MOD-F4-006: reenvio da comunicação ' + com.getUniqueValue() + ' falhou — ' + e);
+            return { ok: false, mensagem: ReguaMotor.MSG_REENVIAR_ERRO, status: 'falha' };
+        }
+        gs.info('RF-MOD-F4-006: comunicação ' + com.getUniqueValue() + ' reenviada por ' + gs.getUserName() + ' — ' + r.status);
         var depois = new GlideRecord(ReguaMotor.T_COMUNICACAO);
         depois.get(com.getUniqueValue());
         depois.setValue('tentativas', antes + parseInt(depois.getValue('tentativas') || '0', 10));

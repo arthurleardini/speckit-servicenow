@@ -8,7 +8,7 @@ import { role_coordenador } from '../security/roles.now'
 export const t_f4016_reenviar = Test({
     $id: Now.ID['US-MOD-F4-016_atf_reenviar'],
     name: 'RF-MOD-F4-006 — «Reenviar» cria nova tentativa na comunicação com falha; entregue não reenvia',
-    description: 'Comunicação de teste com falha e 3 tentativas (SNE sem falha forçada): reenviar cria um retorno de envio entregue, status «Entregue» e 4 tentativas; comunicação entregue é recusada com a mensagem (AS-TASK-MOD-F4-016-01-01 e 02).',
+    description: 'Comunicação de teste com falha e 3 tentativas (SNE sem falha forçada): reenviar cria um retorno de envio entregue, status «Entregue» e 4 tentativas; comunicação de inscrição encerrada e comunicação entregue são recusadas com a mensagem (AS-TASK-MOD-F4-016-01-01 e 02; G7).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -41,6 +41,14 @@ export const t_f4016_reenviar = Test({
         p.setValue('tipo_pessoa', 'pj');
         p.setValue('ficticio', true);
         var pid = p.insert();
+        var d = new GlideRecord('x_2326104_cob_debito');
+        d.initialize();
+        d.setValue('contribuinte', pid);
+        d.setValue('origem', 'sne');
+        d.setValue('tributo', 'ipva');
+        d.setValue('status', 'aberto');
+        d.setValue('valor', 1250);
+        d.insert();
         var i = new GlideRecord('x_2326104_cob_regua_inscricao');
         i.initialize();
         i.setValue('contribuinte', pid);
@@ -87,6 +95,23 @@ export const t_f4016_reenviar = Test({
             e.addQuery('status_retorno', 'entregue');
             e.query();
             expect(e.getRowCount()).toBe(1);
+        });
+        it('inscrição encerrada (regularizou) → recusada, comunicação continua com falha', function() {
+            var m = massa('atf_reenviar3');
+            var id = comunicacao(m, 'falha', 3);
+            var i = new GlideRecord('x_2326104_cob_regua_inscricao');
+            i.get(m.inscricao);
+            i.setWorkflow(false);
+            i.setValue('status', 'encerrada');
+            i.setValue('motivo_encerramento', 'regularizado');
+            i.update();
+            var r = new ReguaMotor().reenviar(id);
+            expect(r.ok).toBe(false);
+            expect(r.mensagem).toBe(ReguaMotor.MSG_REENVIAR_PARADA);
+            var c = new GlideRecord('x_2326104_cob_comunicacao');
+            c.get(id);
+            expect(c.getValue('status')).toBe('falha');
+            expect(c.getValue('tentativas')).toBe('3');
         });
         it('entregue → recusada com a mensagem, nada muda', function() {
             var m = massa('atf_reenviar2');
