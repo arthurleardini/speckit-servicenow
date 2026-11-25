@@ -6,9 +6,13 @@ Público: diretor da EloGroup. A demo dura cerca de 20 minutos. Todos os dados s
 
 1. `npm run doutor`: tudo verde, exceto o `gh` fora do PATH, que é contornado com `GH_BIN`.
 2. Regerar o seed manual (ciclos, carteira segmentada, contatos e casos, com datas relativas a hoje), da raiz: `node app/scripts/gerar-seed-demo.mjs`. Commitar `app/src/fluent/seed-demo/` e `app/src/fluent/seed/_contagem.manual.json`, e rodar `node .claude/skills/sn-seed/scripts/gerar-seed.mjs` para juntar a contagem. Sem isso, a «Minha lista» do atendente chega vazia, porque as próximas ações envelhecem (design UX v1, R7).
-3. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde (50 testes).
-4. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login).
-5. Abrir as abas da trilha (abaixo) e conferir que a [issue #63](https://github.com/arthurleardini/speckit-servicenow/issues/63) mostra os prints.
+3. Antes do reinstall, conferir se alguém editou um Flow de régua no Flow Designer (seção «Régua como Flow», item Flow Designer). Se houver edição a manter, levá-la à fonte antes; o reinstall a apaga.
+4. `npm run reinstall`: install ok, contagem igual a `_contagem.json` e suíte `cob-regressao` verde (94 testes).
+5. Entrar na instância com o admin (a PDI é recolhida depois de 10 dias sem login; PDI dormindo para as esperas da régua, que voltam ao acordar).
+6. Conferir a propriedade `x_2326104_cob.regua.segundos_por_dia = 60` (1 dia da régua = 1 minuto).
+7. Disparar a régua **pelo menos 40 minutos antes** da reunião: como `demo.coordenador`, «Ciclo do mês» → «Ciclo 2026-12» (prévia) → «Publicar ciclo». A régua IPVA leva cerca de 36 minutos do início ao encaminhamento; publicando antes, a reunião pega inscrições em todas as etapas. Alternativa: publicar na hora e mostrar a etapa 1 sair em 1 minuto.
+8. Anotar os contribuintes de demo A (Comércio Esteves Fictícia Ltda) e B (Comércio Leme Fictícia Ltda, opt-out de SMS: a etapa 3 dele sai por SNE) e conferir em «Inscrições» que os dois entraram (nenhum dos dois foi sorteado para o grupo de controle).
+9. Abrir as abas da trilha (abaixo) e conferir que a [issue #63](https://github.com/arthurleardini/speckit-servicenow/issues/63) mostra os prints.
 
 ## 1. O problema (2 min)
 
@@ -78,6 +82,48 @@ Depois, «Ciclo do mês» → «Distribuir lista»: 3 cliques.
 Resultado: «Lista distribuída: 3 contatos — Demo Atendente B: 1; Demo Atendente: 2.»
 
 Issues: [épico #91](https://github.com/arthurleardini/speckit-servicenow/issues/91) e stories [#96](https://github.com/arthurleardini/speckit-servicenow/issues/96) a [#103](https://github.com/arthurleardini/speckit-servicenow/issues/103), fechadas com ATF, prints e commits no comentário.
+
+## 2c. Ações onde a pessoa está (2 min, UX v2)
+
+A UX v2 (`docs/designs/ux-cobranca-v2-regua-flow.md`) põe cada ação de negócio a até 2 cliques da lista. Prints em `outputs/spec/screens/ux-v2/`.
+
+| Onde | Quem | O que mostrar |
+|---|---|---|
+| Menu de contexto da linha (botão direito numa linha da lista) | `demo.atendente` em «Minha lista» | «Registrar ligação…» e «Encerrar…» abrem o form do contato já no verbo ([print](../screens/ux-v2/atendente-minha-lista-menu-da-linha.png)) |
+| «Actions on selected rows» (marcar linhas e escolher no menu abaixo da lista) | `demo.coordenador` em «Ciclo do mês» e «Casos qualificados» | «Publicar ciclo», «Distribuir lista» e «Avançar etapa» conforme o estado; «Pausar» e «Ativar» em «Réguas» ([print](../screens/ux-v2/coordenador-ciclo-acoes-nas-linhas-selecionadas.png)) |
+| Coluna e campo «Próximo passo» («O que fazer agora») | os dois | cada contato, caso e ciclo diz o próximo passo; no form do contato, o aviso no topo ([print](../screens/ux-v2/atendente-form-contato-aviso.png)) |
+| «Lista da equipe» | `demo.coordenador` | contatos abertos agrupados por atendente ([print](../screens/ux-v2/coordenador-lista-da-equipe.png)) |
+
+O botão Update some de onde o dado muda só pelo verbo (contato, ciclo publicado); o New de contato, régua e etapa é só do admin do app.
+
+## 2d. Régua como Flow (5 min, UX v2)
+
+Cada régua de cobrança é um Flow do Flow Designer, «Régua: <nome>». Cada contribuinte inscrito numa régua tem uma execução própria do Flow: ela espera o dia da etapa, confere as guardas (controle, regularizou, régua pausada), envia pelo canal da etapa com fallback e, no fim, encaminha à cobrança ativa (contato na «Minha lista» do atendente) ou à qualificada.
+
+**Onde ver** (como `demo.coordenador`):
+
+| Passo | Onde | O que mostrar |
+|---|---|---|
+| 1 | Menu «Réguas» → «Réguas» → régua **IPVA** | etapas (related list, por ordem: dia 0 SNE, 10 e-mail, 20 SMS, 30 SNE com encaminhamento), o campo «Flow» = «Régua: IPVA», os botões «Pausar»/«Ativar» ([print](../screens/ux-v2/F4-014-regua-ipva-coordenador.png)) |
+| 2 | Na régua, link «Ver execuções» | a lista de execuções do Flow «Régua: IPVA», uma por inscrição, com estado (em espera, concluída) ([print](../screens/ux-v2/F4-014-ver-execucoes.png)) |
+| 3 | Na régua, link «Abrir no Flow Designer» | o Flow com os stages «Etapa 1..4» e «Encaminhamento» ([print](../screens/ux-v2/F4-014-flow-designer.png)) |
+| 4 | Menu «Réguas» → «Inscrições» → uma inscrição | etapa atual, próxima etapa em, comunicações e retornos de envio; link «Ver execução» abre o registro da execução (estado, tempo, log) ([print](../screens/ux-v2/F4-014-ver-execucao.png)); o stage tracker etapa a etapa abre com o admin, porque a plataforma só mostra os detalhes de execução a `flow_admin` (GAP-162) |
+| 5 | Menu «Réguas» → «Disparos com falha» | comunicações em que todos os canais falharam; «Reenviar» (botão no form, menu da linha ou «Actions on selected rows») faz nova rodada de tentativas com as mesmas regras |
+
+**Como disparar na demo:**
+- publicar o ciclo em prévia («Ciclo do mês» → «Ciclo 2026-12» → «Publicar ciclo»): inscreve na régua da carteira cada contribuinte massificado com débito aberto (controle e qualificada ficam de fora); ou
+- mudar um parcelamento para «Em risco» (Carteira → contribuinte → parcelamento): inscreve na régua Parcelamentos; «Quitado» ou «Rompido» encerra a inscrição.
+
+**Tempo:** com `segundos_por_dia = 60`, 1 dia da régua = 1 minuto. A régua IPVA completa (dia 30 + prazo de 5 dias) leva cerca de 36 minutos. Por isso, disparar antes da reunião (Véspera, item 7). Regularizar o débito no meio (débito → «Regularizado») encerra a inscrição na hora e nenhuma comunicação seguinte sai.
+
+**Flow Designer: o que o coordenador edita.**
+- No form da régua e das etapas: dia, canal, texto, postura e ação sem resposta. Vale para as próximas etapas das inscrições em andamento, sem reinstalar. A gravação recusa texto com valor ou tributo em e-mail, SMS e WhatsApp, postura que regride ou salta nível e dia fora de ordem.
+- No Flow Designer (o papel do coordenador contém `flow_designer` e `flow_operator`): o próprio Flow, por «Edit flow» e ativar.
+- **Aviso:** edição feita no Designer vale até o próximo `npm run reinstall`, que reinstala a fonte e a sobrescreve. Para manter, antes do reinstall:
+  1. conferir `sys_hub_flow` com `internal_nameSTARTSWITHregua_^sys_updated_by!=admin` (o usuário do install);
+  2. havendo edição, rodar `npm run transform` em `app/` **só para ler** a mudança: o arquivo que o transform devolve não compila e nunca é commitado;
+  3. levar a mudança à fonte à mão: estrutura (etapa nova, removida, reordenada) em `outputs/spec/reguas.json` e regerar com `node app/scripts/gerar-flows-regua.mjs`; o que o gerador não expressa vira `"flowManual": true` na régua, com o arquivo do Flow corrigido e mantido à mão;
+  4. mudança de estrutura com inscrições em andamento: «Pausar» a régua, reinstalar, «Ativar».
 
 ## 3. Um trecho ao vivo (5 min)
 

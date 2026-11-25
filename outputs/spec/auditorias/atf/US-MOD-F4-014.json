@@ -1,0 +1,110 @@
+{
+  "alvo": "US-MOD-F4-014",
+  "tipo": "story",
+  "sys_id": [
+    "2b1ab8b677d94fb3b6b9bd3c90cb53d9",
+    "f82b37f3af0b4c9697b67686ee6c10c2",
+    "e5bef367d6c04fce9d0ae2d4b35ecd3b",
+    "79a72038fa0e4e5cb7d5eba4937180ee",
+    "75fceb2d05474690badd3b9d0ad11f64",
+    "aadc5b16a8b243df94a93ef9de330a63",
+    "b7aefccd93e34927a77c2d4a98ec5a1b",
+    "3e6a17b1717949ce8ab1b7fc227bfe11"
+  ],
+  "resultId": [
+    "e35b915d93b01b107a57f7c4b503d663",
+    "408bd95d93b01b107a57f7c4b503d610",
+    "edab599d93b01b107a57f7c4b503d6f4",
+    null,
+    "69eb151193f01b107a57f7c4b503d60d",
+    "32ebd51193f01b107a57f7c4b503d60e",
+    "0cfbdd1193f01b107a57f7c4b503d622",
+    "edfb155193f01b107a57f7c4b503d66e"
+  ],
+  "status": "failure",
+  "horario": "2026-11-25T20:04:45.930Z",
+  "commit": "a95f44f798da864c368d3543f5236dbf5916dd6a",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-F4-014_atf_links_coordenador",
+      "sys_id": "2b1ab8b677d94fb3b6b9bd3c90cb53d9",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "e35b915d93b01b107a57f7c4b503d663",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=e35b915d93b01b107a57f7c4b503d663"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_links_atendente",
+      "sys_id": "f82b37f3af0b4c9697b67686ee6c10c2",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "408bd95d93b01b107a57f7c4b503d610",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=408bd95d93b01b107a57f7c4b503d610"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_sem_flow",
+      "sys_id": "e5bef367d6c04fce9d0ae2d4b35ecd3b",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "edab599d93b01b107a57f7c4b503d6f4",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=edab599d93b01b107a57f7c4b503d6f4"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_enderecos",
+      "sys_id": "79a72038fa0e4e5cb7d5eba4937180ee",
+      "ok": false,
+      "exit": 1,
+      "status": "failure",
+      "resultId": null,
+      "resumo": {},
+      "url": null
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_papel_flow_designer",
+      "sys_id": "75fceb2d05474690badd3b9d0ad11f64",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "69eb151193f01b107a57f7c4b503d60d",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=69eb151193f01b107a57f7c4b503d60d"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_campo_flow_coordenador",
+      "sys_id": "aadc5b16a8b243df94a93ef9de330a63",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "32ebd51193f01b107a57f7c4b503d60e",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=32ebd51193f01b107a57f7c4b503d60e"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_origem_atendente",
+      "sys_id": "b7aefccd93e34927a77c2d4a98ec5a1b",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "0cfbdd1193f01b107a57f7c4b503d622",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=0cfbdd1193f01b107a57f7c4b503d622"
+    },
+    {
+      "chave": "US-MOD-F4-014_atf_origem_coordenador",
+      "sys_id": "3e6a17b1717949ce8ab1b7fc227bfe11",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "edfb155193f01b107a57f7c4b503d66e",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=edfb155193f01b107a57f7c4b503d66e"
+    }
+  ]
+}

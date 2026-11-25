@@ -92066,7 +92066,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Links de execução: «Ver execuções» e «Abrir no Flow Designer» no form da régua; «Ver execução» no form da inscrição",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Links de execução: «Ver execuções» e «Abrir no Flow Designer» no form da régua; «Ver execução» no form da inscrição. O stage tracker da régua só aparece no Flow Designer; no app, a execução aparece no form da inscrição (comunicações e retornos de envio). O coordenador precisa ir da régua às execuções do Flow e da inscrição aos detalhes da execução dela. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",
@@ -92428,7 +92428,7 @@
           "class": "functional",
           "type": "infrastructure",
           "title": "Papel de Flow Designer para o coordenador (sys_user_role_contains) e roteiro da demo: edição no Designer, transform antes do reinstall e véspera com segundos_por_dia",
-          "status": "TODO",
+          "status": "DONE",
           "description": "Papel de Flow Designer para o coordenador (sys_user_role_contains) e roteiro da demo: edição no Designer, transform antes do reinstall e véspera com segundos_por_dia. P2 do dono: o coordenador edita parâmetros no form e também pode editar o Flow no Flow Designer. Para isso o papel do coordenador contém flow_designer e flow_operator; a edição feita no Designer vale até o próximo reinstall, a menos que seja levada à fonte antes. Entrega o comportamento do requisito RF-MOD-F4-001, RF-MOD-F4-002 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "role",
@@ -92981,7 +92981,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "«Reenviar» comunicação com falha (form e lista) por ReguaMotor.reenviar — opcional",
-          "status": "TODO",
+          "status": "DONE",
           "description": "«Reenviar» comunicação com falha (form e lista) por ReguaMotor.reenviar — opcional. Comunicação em que todas as tentativas falharam fica com status Falha; o coordenador pode disparar uma nova rodada de tentativas na mesma comunicação, com as mesmas regras de canal, consentimento e teto. Story opcional, última da fila. Entrega o comportamento do requisito RF-MOD-F4-006 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "ui_action",

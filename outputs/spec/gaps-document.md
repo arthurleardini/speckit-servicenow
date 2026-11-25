@@ -852,6 +852,20 @@ A auditoria (outputs/spec/auditorias/US-MOD-F4-013.md, BUG-001, BUG-002 e TEST-0
 1. Acrescentar os ATF de alterar e apagar; deixar os dois casos de parcelamento como estão na demo.
 2. Além da opção 1, reinscrever pelo outro parcelamento em risco ao encerrar como regularizado, incluir insert na BR de «em risco» e avisar quem gravou quando a inscrição falha.
 
+### GAP-162 — Detalhes de execução (stage tracker) só para flow_admin
+
+**Área:** MOD-F4
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-014-01, TASK-MOD-F4-014-02
+
+**Descrição:**
+Na F5 (US-MOD-F4-014), impersonando `demo.coordenador` (papel com `flow_designer` e `flow_operator`): «Abrir no Flow Designer» abre o Flow «Régua: IPVA» no Workflow Studio e «Ver execuções» lista as execuções; os detalhes de uma execução (stage tracker) abrem em branco. A tela lê `sys_flow_context_chunk` e `sys_hub_flow_stage`, cujas ACLs de leitura da plataforma só aceitam `flow_admin` e `admin`. Para quem não tem `flow_admin`, «Ver execução» abre o registro da execução no form clássico (`sys_flow_context`: estado, tempo de execução e log); o admin vê o stage tracker.
+
+**Opções identificadas:**
+1. Manter: coordenador vê estado e log da execução no form clássico; stage tracker com o admin na demo.
+2. Incluir `flow_admin` no papel do coordenador (`security/coordenador-flow.now.ts`), que também dá a ele administração de todos os Flows da instância.
+
 ---
 
 ## Respostas
@@ -1217,6 +1231,12 @@ A auditoria (outputs/spec/auditorias/US-MOD-F4-013.md, BUG-001, BUG-002 e TEST-0
 **Impacto na task:** _(a preencher)_
 
 ### GAP-161
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-162
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

@@ -1,7 +1,7 @@
 # Requisitos de Produto / UX — Cobrança MT (piloto 2.6 Cobrança, SEFAZ-MT)
 
 Status: draft
-Última atualização: 2026-11-25 (reformulação de UX v1, `docs/designs/ux-cobranca-v1.md` v1.1)
+Última atualização: 2026-11-25 (UX v2, `docs/designs/ux-cobranca-v2-regua-flow.md` v2.2: TEL-036 a TEL-038, links de execução e Flow Designer na régua, «Origem» do contato só leitura; antes, UX v1)
 Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens-manifest.json (35 telas instaladas e fotografadas na instância `dev493801`)
 
 **Âmbito deste arquivo:** um PR por tela `TEL-` do `screens-manifest.json`. A tela já existe na instância como form, list ou report da Core UI clássica (UI16); o print de cada uma está em `outputs/spec/screens/<TEL>.png`, tirado na visão do papel da tela. O inventário de campos sai do `data-model.json` final, com as opções transcritas.
@@ -15,9 +15,9 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | Módulo | Objetivo negócio (resumo) | Qtd PR |
 |--------|---------------------------|--------|
 | MOD-F1 | Ingestão e Carteira Consolidada | 7 |
-| MOD-F2 | Qualificação e Parametrização da Carteira | 4 |
+| MOD-F2 | Qualificação e Parametrização da Carteira | 5 |
 | MOD-F3 | Scoring de Liquidez | 2 |
-| MOD-F4 | Réguas de Cobrança Multicanal | 8 |
+| MOD-F4 | Réguas de Cobrança Multicanal | 10 |
 | MOD-F5 | Cobrança Qualificada | 5 |
 | MOD-F6 | Monitoramento, KPIs e Grupo de Controle | 6 |
 | MOD-T | Transversais | 1 |
@@ -97,6 +97,9 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | PR-MOD-T-001 | MOD-T | RF-MOD-T-001 | TEL-033; product-vision §6 | F-079, F-018 |
 | PR-MOD-UX-001 | MOD-UX-LISTA | RF-MOD-F5-005, RF-MOD-F5-007 | TEL-034; design UX v1 (CUJ-A) | F-065, F-067 |
 | PR-MOD-UX-002 | MOD-UX-LISTA | RF-MOD-F5-005 | TEL-035; design UX v1 (CUJ-A) | F-065 |
+| PR-MOD-F2-005 | MOD-F2 | RF-MOD-F2-003, RF-MOD-F2-004 | TEL-036; design UX v2 (CUJ-2) | F-033, F-034 |
+| PR-MOD-F4-009 | MOD-F4 | RF-MOD-F4-002, RF-MOD-F4-003 | TEL-037; design UX v2 (CUJ-4, CUJ-6) | F-049, F-050 |
+| PR-MOD-F4-010 | MOD-F4 | RF-MOD-F4-002, RF-MOD-F4-003, RF-MOD-F4-006, RF-MOD-F4-009 | TEL-038; design UX v2 (CUJ-4 a CUJ-6) | F-049, F-050, F-053, F-056 |
 
 ---
 
@@ -790,6 +793,37 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 ---
 
+### PR-MOD-F2-005 — TEL-036 Ciclo do mês
+
+**RF relacionado:** RF-MOD-F2-003, RF-MOD-F2-004
+**Etapa do fluxo:** ETP-013, ETP-040
+**Tela:** `TEL-036` · lista da tabela `x_2326104_cob_ciclo` (Ciclo de qualificação), view `x_2326104_cob_tel_036` · rota `/x_2326104_cob_ciclo_list.do?sysparm_view=x_2326104_cob_tel_036` · print `screens/TEL-036.png`
+
+**Personas:** Coordenador de Cobrança
+**Prioridade:** Must
+**Origem:** design UX v2 (CUJ-2), tela instalada na instância na F1
+
+**Contexto de uso:** Coordenador de Cobrança abre «Ciclo do mês» pelo menu. A lista traz os ciclos não encerrados com «O que fazer agora».
+
+**Requisito de experiência:** O coordenador marca o ciclo e escolhe em «Ações nas linhas selecionadas»: «Publicar ciclo» (ciclo em prévia) e «Distribuir lista» (publicado sem distribuição); o menu da linha (botão direito) traz as mesmas ações. Publicar o ciclo inscreve os contribuintes massificados com débito aberto na régua da carteira (TEL-037). Update no form só na prévia.
+
+**Critérios mensuráveis:**
+- A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
+- Publicar ou distribuir a partir da lista em até 2 cliques (G1 do design UX v2).
+
+**Antipadrão (o que evitar):**
+- Ação oferecida num estado em que ela recusa (ex.: «Publicar ciclo» num ciclo publicado).
+
+**Mapa de estados:**
+- Carregando: indicador padrão da plataforma
+- Sucesso: mensagem no topo com o resultado da ação
+- Vazio: «Nenhum registro» da plataforma
+- Erro de sistema: o topo mostra a mensagem de erro e nada é gravado
+
+**Gap associado:** —
+
+---
+
 ## Módulo: Scoring de Liquidez (`MOD-F3`)
 
 ### PR-MOD-F3-001 — TEL-011 Painel do score de liquidez
@@ -983,7 +1017,7 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 
 **Contexto de uso:** Coordenador de Cobrança abre «Editor de régua» pelo menu «Cobrança MT» › Réguas de Cobrança Multicanal. Registro de exemplo: TEL-014_registro_demo: régua IPVA com 4 etapas (SNE, e-mail, SMS, encaminhar à qualificada).
 
-**Requisito de experiência:** O form mostra os campos do inventário em seções, o histórico de atividades (comentários e alterações) e as listas relacionadas `x_2326104_cob_regua_etapa.regua`, `x_2326104_cob_comunicacao.regua`.
+**Requisito de experiência:** O form mostra os campos do inventário em seções, o histórico de atividades (comentários e alterações) e as listas relacionadas Etapas (`x_2326104_cob_regua_etapa.regua`, por ordem), Inscrições (`x_2326104_cob_regua_inscricao.regua`) e Comunicações (`x_2326104_cob_comunicacao.regua`). Botões «Pausar» (régua ativa) e «Ativar» (régua pausada). Links «Ver execuções» (lista de execuções do Flow da régua, `sys_flow_context`, mais recentes primeiro) e «Abrir no Flow Designer» (o Flow «Régua: <nome>»; só aparece com o campo «Flow» preenchido). O coordenador lê o campo «Flow» e não o grava; código e carteira também são só do admin do app. Edição no Designer vale até o próximo reinstall, salvo se levada à fonte (`outputs/spec/demo/roteiro.md`, design UX v2 D12, D15).
 
 **Critérios mensuráveis:**
 - A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
@@ -1006,9 +1040,12 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
 |-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
 | nome | Nome | text | Sim | — | — | — | — | — | até 100 caracteres | vazio → "Nome é obrigatório" | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
+| codigo | Código | text | Sim | — | — | — | — | — | até 40 caracteres | só leitura para o coordenador; repetido → "Operação recusada: já existe régua com este código." | RF-MOD-F4-001 |
 | carteira | Carteira | select | Sim | única | `parcelamentos` — Parcelamentos; `ipva` — IPVA; `itcd` — ITCD; `icms_normal` — ICMS Normal; `icms_st` — ICMS ST | `domainTable:x_2326104_cob_regua.carteira` | — | — | — | vazio → "Carteira é obrigatório" | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
 | ativa | Ativa | checkbox | Não | — | — | — | — | — | — | — | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
+| prazo_final_dias | Prazo de resposta depois da última etapa (dias) | number | Sim | — | — | — | — | 5 | — | vazio → "Informe o prazo de resposta depois da última etapa." | RF-MOD-F4-003, RF-MOD-F4-009 |
 | janela_atribuicao_dias | Janela de atribuição (dias) | number | Não | — | — | — | — | — | — | — | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
+| flow | Flow | lookup | Não | única | *(dinâmica)* | `domainTable:sys_hub_flow` | — | Flow «Régua: <nome>» do gerador | — | só leitura para o coordenador (só o admin do app grava) | RF-MOD-F4-002 |
 | ordem_fallback | Ordem de fallback de canal | text | Não | — | — | — | — | — | até 60 caracteres | — | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
 | comentarios | Comentários | textarea | Não | — | — | — | — | — | — | — | RF-MOD-F4-001, RF-MOD-F4-003, RF-MOD-F4-004, RF-MOD-F4-009 |
 
@@ -1378,6 +1415,89 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 - Limpar todos de uma vez: sim
 - Persistência do filtro: querystring (`sysparm_query`)
 - Dependências entre filtros: nenhuma
+
+**Gap associado:** —
+
+---
+
+### PR-MOD-F4-009 — TEL-037 Inscrições na régua
+
+**RF relacionado:** RF-MOD-F4-002, RF-MOD-F4-003
+**Etapa do fluxo:** ETP-044, ETP-045
+**Tela:** `TEL-037` · lista da tabela `x_2326104_cob_regua_inscricao` (Inscrição na régua) · rota `/x_2326104_cob_regua_inscricao_list.do` · print `screens/TEL-037.png`
+
+**Personas:** Coordenador de Cobrança
+**Prioridade:** Must
+**Origem:** design UX v2 (CUJ-4, CUJ-6), tela instalada na instância na F4
+
+**Contexto de uso:** Coordenador de Cobrança abre «Réguas» › «Inscrições». A lista traz as inscrições ativas e com erro, por próxima etapa.
+
+**Requisito de experiência:** Cada linha é um contribuinte numa régua: régua, etapa atual, próxima etapa em, status e motivo de encerramento. Nenhuma persona cria, grava ou apaga inscrição: ela nasce da publicação do ciclo ou do parcelamento em risco e o motor da régua a atualiza. O atendente lê só as inscrições da própria carteira e não tem o módulo no menu.
+
+**Critérios mensuráveis:**
+- A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
+- Inscrição com erro aparece no topo da lista.
+
+**Antipadrão (o que evitar):**
+- Botão New ou edição em lista na inscrição.
+
+**Mapa de estados:**
+- Carregando: indicador padrão da plataforma
+- Sucesso: lista com as inscrições ativas e com erro
+- Vazio: «Nenhum registro» (nenhuma régua disparada)
+- Erro de sistema: mensagem de erro da plataforma
+
+**Gap associado:** GAP-160, GAP-161
+
+---
+
+### PR-MOD-F4-010 — TEL-038 Inscrição na régua
+
+**RF relacionado:** RF-MOD-F4-002, RF-MOD-F4-003, RF-MOD-F4-006, RF-MOD-F4-009
+**Etapa do fluxo:** ETP-045, ETP-046
+**Tela:** `TEL-038` · form da tabela `x_2326104_cob_regua_inscricao` (Inscrição na régua) · rota `/x_2326104_cob_regua_inscricao.do?sys_id=59a5b26622ef43809bb13bf963b7c2b7` · print `screens/TEL-038.png`
+
+**Personas:** Coordenador de Cobrança
+**Prioridade:** Must
+**Origem:** design UX v2 (CUJ-4 a CUJ-6), tela instalada na instância na F2
+
+**Contexto de uso:** Coordenador de Cobrança abre a inscrição pela lista TEL-037 ou pela related list «Inscrições» da régua (TEL-014). Registro de exemplo: TEL-038_registro_demo: inscrição na régua IPVA encerrada por regularização na etapa 2.
+
+**Requisito de experiência:** O form mostra a inscrição (contribuinte, régua, status, etapa atual, próxima etapa em, iniciada e encerrada em, motivo, ciclo, parcelamento, contato da cobrança ativa, detalhe do erro) e as related lists Comunicações e Retornos de envio. O link «Ver execução» abre a execução do Flow dessa inscrição: para o coordenador, o registro da execução (estado, tempo e log); para quem tem `flow_admin` (admin), os detalhes etapa a etapa no Flow Designer (GAP-162); sem execução (registro de exemplo, inscrição antiga), o topo mostra «Execução não encontrada.» e o form continua aberto. Coordenador e admin do app veem o link; o atendente não.
+
+**Critérios mensuráveis:**
+- A tela abre em até 3 segundos com até 300 registros por tabela (RNF-DESEMPENHO-001).
+- Da inscrição à execução no Flow Designer: 1 clique.
+
+**Antipadrão (o que evitar):**
+- Campo editável na inscrição (o motor grava; as personas só leem).
+
+**Mapa de estados:**
+- Carregando: indicador padrão da plataforma
+- Sucesso: campos e related lists preenchidos
+- Erro de sistema: o topo mostra a mensagem de erro da plataforma
+- Vazio: não se aplica (form sempre abre um registro)
+
+**Inventário de campos**
+
+| Campo | Rótulo | Tipo | Obrig. | Seleção | Opções (valor — rótulo) | Origem das opções | Máscara/Formato | Default | Limites | Validação → mensagem | RF/PR |
+|-------|--------|------|--------|---------|--------------------------|-------------------|-----------------|---------|---------|----------------------|-------|
+| contribuinte | Contribuinte | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_contribuinte` | — | — | — | só leitura | RF-MOD-F4-002 |
+| regua | Régua | lookup | Sim | única | *(dinâmica)* | `domainTable:x_2326104_cob_regua` | — | — | — | só leitura | RF-MOD-F4-002 |
+| status | Status | select | Não | única | `ativa` — Ativa; `encerrada` — Encerrada; `erro` — Erro | `domainTable:x_2326104_cob_regua_inscricao.status` | — | ativa | — | só leitura | RF-MOD-F4-003 |
+| etapa_atual | Etapa atual | number | Não | — | — | — | — | 0 | — | só leitura | RF-MOD-F4-003 |
+| proxima_etapa_em | Próxima etapa em | datetime | Não | — | — | — | DD/MM/AAAA hh:mm | — | — | só leitura | RF-MOD-F4-003 |
+| iniciada_em | Iniciada em | datetime | Não | — | — | — | DD/MM/AAAA hh:mm | — | — | só leitura | RF-MOD-F4-002 |
+| encerrada_em | Encerrada em | datetime | Não | — | — | — | DD/MM/AAAA hh:mm | — | — | só leitura | RF-MOD-F4-003 |
+| motivo_encerramento | Motivo de encerramento | select | Não | única | `regularizado` — Regularizado; `parcelamento_rompido` — Parcelamento rompido; `controle` — Grupo de controle; `regua_pausada` — Régua pausada; `encaminhada_ativa` — Encaminhada à cobrança ativa; `encaminhada_qualificada` — Encaminhada à qualificada | `domainTable:x_2326104_cob_regua_inscricao.motivo_encerramento` | — | — | — | só leitura | RF-MOD-F4-003, RF-MOD-F4-009 |
+| ciclo | Ciclo | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_ciclo` | — | — | — | só leitura | RF-MOD-F4-002 |
+| parcelamento | Parcelamento | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_parcelamento` | — | — | — | só leitura | RF-MOD-F4-002 |
+| contato | Contato da cobrança ativa | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_contato` | — | — | — | só leitura | RF-MOD-F4-009 |
+| detalhe | Detalhe | text | Não | — | — | — | — | — | até 255 caracteres | só leitura (mensagem de erro do motor) | RF-MOD-F4-003 |
+
+**Grid / listagem** — (form; Comunicações e Retornos de envio seguem o padrão de lista da plataforma)
+
+**Comportamento dos filtros** — (form sem filtro)
 
 **Gap associado:** —
 
@@ -2205,6 +2325,8 @@ Fonte: product-vision.md, requirements/requirements.md, data-model.json, screens
 | valor_em_aberto | Valor em aberto (R$) | currency | Não | — | — | — | R$ 0,00 | — | — | — | RF-MOD-F5-005 |
 | motivo_encerramento | Motivo de encerramento | select | Não | única | `regularizado` — Regularizado; `contato_realizado` — Contato realizado; `sem_contato` — Sem contato; `recusa` — Recusa; `outro` — Outro | `domainTable:x_2326104_cob_contato.motivo_encerramento` | — | — | — | vazio ao encerrar → "Operação recusada: informe o motivo de encerramento." | RF-MOD-F5-005 |
 | resultado_ligacao | Resultado desta ligação | select | Não | única | `contato_efetivo` — Contato efetivo; `sem_contato` — Sem contato; `promessa_pagamento` — Promessa de pagamento; `recusa` — Recusa | `domainTable:x_2326104_cob_contato.resultado_ligacao` | — | — | — | vazio ao registrar → "Operação recusada: informe o resultado da ligação." | RF-MOD-F5-005 |
+| origem | Origem | select | Não | única | `distribuicao` — Distribuição do ciclo; `regua` — Régua (encaminhada à cobrança ativa) | `domainTable:x_2326104_cob_contato.origem` | — | — | — | só leitura para atendente e coordenador; gravada na criação | RF-MOD-F4-009 |
+| inscricao | Inscrição na régua | lookup | Não | única | *(dinâmica)* | `domainTable:x_2326104_cob_regua_inscricao` | — | — | — | — | RF-MOD-F4-009 |
 | comentarios | Comentários | textarea | Não | — | — | — | — | — | — | vazio ao registrar → "Operação recusada: informe a anotação da ligação." | RF-MOD-F5-005 |
 
 **Tabela de decisão de «Registrar ligação»**

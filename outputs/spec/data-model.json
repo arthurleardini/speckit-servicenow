@@ -2479,7 +2479,7 @@
               "sequence": 20
             }
           },
-          "description": "Por onde o contato nasceu (D14). Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
+          "description": "Por onde o contato nasceu (D14); gravado na criação, só o admin do app muda à mão (ACL F4-012_acl_contato_write_origem, F5). Design ux-cobranca-v2-regua-flow.md, B1 (US-MOD-F4-010)."
         },
         {
           "name": "inscricao",

@@ -9,6 +9,7 @@
 | Versão | Data | Mudança |
 |---|---|---|
 | 0.1 | 2026-11-24 | versão inicial: 46 RF, 17 RN, 33 telas na Core UI clássica |
+| 0.3 | 2026-11-25 | UX v2 (`docs/designs/ux-cobranca-v2-regua-flow.md`, v2.2): ações na lista (menu da linha e «Ações nas linhas selecionadas»), «O que fazer agora», «Lista da equipe», TEL-036 «Ciclo do mês», régua como Flow (TEL-037 «Inscrições na régua», TEL-038 «Inscrição na régua»), «Ver execuções», «Abrir no Flow Designer» e «Ver execução»; papel de Flow Designer do coordenador; «Origem» do contato só leitura para as personas |
 | 0.2 | 2026-11-25 | reformulação de UX v1 (`docs/designs/ux-cobranca-v1.md`, v1.1): lista ativa do atendente (TEL-034 «Minha lista», TEL-035 «Contato da lista»); caso qualificado passa ao coordenador (TEL-023 «Casos qualificados», TEL-024, TEL-025); verbos «Registrar ligação», «Encerrar», «Distribuir lista», «Avançar etapa» e «Encerrar caso»; atendente sem acesso ao caso; menu por área de trabalho e home por papel |
 
 ## 1. Personas e perfis de acesso
@@ -33,13 +34,20 @@
 | Publicar o ciclo do mês e distribuir a lista de ligações (TEL-009: «Publicar ciclo», «Distribuir lista») | ✅ | — | — |
 | Ver carteira segmentada e grupo de controle (TEL-010) | ✅ | — | ✅ |
 | Ver painel e lista de score (TEL-011, TEL-012) | ✅ | — | ✅ |
-| Criar e editar régua e etapas (TEL-013, TEL-014) | ✅ | — | ✅ |
+| Editar parâmetros da régua e das etapas: ativa, prazos, dia, canal, texto, postura, ação sem resposta (TEL-013, TEL-014) | ✅ | — | ✅ |
+| Mudar código, carteira e Flow da régua, régua e ordem da etapa; criar régua e etapa | — | — | ✅ (a estrutura vem de `outputs/spec/reguas.json` pelo gerador) |
+| Pausar e ativar a régua (TEL-013, TEL-014: «Pausar», «Ativar») | ✅ | — | ✅ |
+| Ver inscrições na régua (TEL-037, TEL-038) | ✅ todas | ✅ só as da própria carteira (sem menu) | ✅ |
+| Ver execuções do Flow da régua e abrir o Flow no Flow Designer (TEL-014: «Ver execuções», «Abrir no Flow Designer»; TEL-038: «Ver execução») | ✅ (papel contém `flow_designer` e `flow_operator`) | — | ✅ |
+| Editar o Flow da régua no Flow Designer (vale até o próximo reinstall, salvo se levado à fonte) | ✅ | — | ✅ |
 | Ver execução, efetividade e consentimentos (TEL-015 a TEL-017) | ✅ | — | ✅ |
-| Reenviar comunicação com falha (TEL-015) | ✅ | — | ✅ |
+| Reenviar comunicação com falha (TEL-015, «Disparos com falha»: «Reenviar» no form e na lista) | ✅ | — | ✅ |
 | Operar tabelas simuladas e interruptores de falha (TEL-006, TEL-018, TEL-019) | — | — | ✅ |
 | Ver regularizações (TEL-020) | ✅ | ✅ só as da própria carteira | ✅ |
 | Ver a própria lista de ligações (TEL-034 «Minha lista») | ✅ todos os contatos | ✅ só os próprios contatos | ✅ |
-| Registrar ligação e encerrar contato (TEL-035: «Registrar ligação», «Encerrar») | ✅ | ✅ só no próprio contato | ✅ |
+| Registrar ligação e encerrar contato (TEL-035: «Registrar ligação», «Encerrar»; também no menu da linha da TEL-034) | ✅ | ✅ só no próprio contato | ✅ |
+| Mudar «Origem» e «O que fazer agora» do contato à mão | — | — | ✅ (gravados pelo sistema: distribuição ou régua; business rule do próximo passo) |
+| Ver «Lista da equipe» (contatos abertos agrupados por atendente) | ✅ | — | ✅ |
 | Distribuir e redistribuir casos qualificados (TEL-021) | ✅ | — | — |
 | Ver carga por responsável (TEL-022) | ✅ | — | ✅ |
 | Ver casos qualificados (TEL-023 «Casos qualificados») | ✅ só os casos de que é responsável | — sem acesso ao caso | ✅ |
@@ -75,7 +83,7 @@ Core UI clássica (UI16). Menu do app "Cobrança MT" organizado por área de tra
 | TEL-011 | Painel do score de liquidez | `x_2326104_cob_score_sim` | report | default | coordenador | MOD-F3 | RF-306 | report: seed fictício por tributo e status |
 | TEL-012 | Scores ingeridos (Simulado) | `x_2326104_cob_score_sim` | list | default | coordenador | MOD-F3 | RF-301, RF-302, RF-304, RF-305 | lista: seed fictício (50) |
 | TEL-013 | Réguas de cobrança | `x_2326104_cob_regua` | list | default | coordenador | MOD-F4 | RF-401 | lista: seed fictício (50) |
-| TEL-014 | Editor de régua | `x_2326104_cob_regua` | form | default | coordenador | MOD-F4 | RF-401, RF-403, RF-404, RF-409 | TEL-014_registro_demo: régua IPVA com 4 etapas (SNE, e-mail, SMS, encaminhar à qualificada) |
+| TEL-014 | Editor de régua | `x_2326104_cob_regua` | form | default | coordenador | MOD-F4 | RF-401, RF-403, RF-404, RF-409 | TEL-014_registro_demo: régua IPVA com 4 etapas (dia 0 SNE, 10 e-mail, 20 SMS, 30 SNE com encaminhamento à cobrança ativa) e o Flow «Régua: IPVA» |
 | TEL-015 | Execução e status de disparo | `x_2326104_cob_comunicacao` | list | default | coordenador | MOD-F4 | RF-402, RF-403, RF-406 | lista: seed fictício (50) |
 | TEL-016 | Efetividade da régua | `x_2326104_cob_comunicacao` | report | default | coordenador | MOD-F4 | RF-408 | report: seed fictício por canal e status |
 | TEL-017 | Consentimentos por canal | `x_2326104_cob_consentimento` | list | default | coordenador | MOD-F4 | RF-405 | lista: seed fictício (50) |
@@ -97,6 +105,9 @@ Core UI clássica (UI16). Menu do app "Cobrança MT" organizado por área de tra
 | TEL-033 | Trilha de exportação | `x_2326104_cob_exportacao` | list | default | admin | MOD-T | RF-901 | lista: seed fictício (50) |
 | TEL-034 | Minha lista | `x_2326104_cob_contato` | list | default | atendente | MOD-UX-LISTA | RF-505, RF-507 | lista: contatos do atendente demo com próxima ação até hoje, por próxima ação e prioridade |
 | TEL-035 | Contato da lista | `x_2326104_cob_contato` | form | default | atendente | MOD-UX-LISTA | RF-505 | TEL-035_registro_demo: contato de demo.atendente em «Retornar», com 1 tentativa e retorno para hoje |
+| TEL-036 | Ciclo do mês | `x_2326104_cob_ciclo` | list | x_2326104_cob_tel_036 | coordenador | MOD-F2 | RF-203, RF-204 | lista: ciclos não encerrados, com «O que fazer agora» e «Publicar ciclo»/«Distribuir lista» em «Ações nas linhas selecionadas» |
+| TEL-037 | Inscrições na régua | `x_2326104_cob_regua_inscricao` | list | default | coordenador | MOD-F4 | RF-402, RF-403 | lista: inscrições ativas e com erro, por próxima etapa |
+| TEL-038 | Inscrição na régua | `x_2326104_cob_regua_inscricao` | form | default | coordenador | MOD-F4 | RF-402, RF-403, RF-406, RF-409 | TEL-038_registro_demo: inscrição na régua IPVA encerrada por regularização na etapa 2, com comunicações e retornos de envio |
 
 **Related lists e seções dos forms**
 
@@ -105,7 +116,8 @@ Core UI clássica (UI16). Menu do app "Cobrança MT" organizado por área de tra
 | TEL-004 | Identificação · Carteira · Activity | Débitos, Parcelamentos, Comunicações, Consentimentos, Regularizações (por `contribuinte`) | Exportar |
 | TEL-008 | Critério · Score e grupo de controle · Publicação · Activity | Versões posteriores (`versao_anterior`), Ciclos que aplicaram a versão | Publicar versão · Criar nova versão |
 | TEL-009 | Trilha de etapas (prévia → publicado → distribuído → encerrado) · Ciclo · Totais · Efeito incremental · Activity | Carteira segmentada (`ciclo`) | Publicar ciclo · Distribuir lista |
-| TEL-014 | Régua · Activity | Etapas (`regua`), Comunicações (`regua`) | Ativar · Desativar |
+| TEL-014 | Régua (com o campo «Flow», só leitura para o coordenador) · Activity | Etapas (`regua`, por ordem), Inscrições (`regua`), Comunicações (`regua`) | Pausar · Ativar · links «Ver execuções» e «Abrir no Flow Designer» |
+| TEL-038 | Inscrição na régua · Activity | Comunicações (`inscricao`), Retornos de envio (`inscricao`) | link «Ver execução» (registro da execução com estado e log; com `flow_admin`, os detalhes etapa a etapa no Flow Designer, GAP-162; sem execução, «Execução não encontrada.») |
 | TEL-024 | Trilha de etapas (em seleção → selecionado → dossiê → condução → encerrado) · Caso · Score · Sinalizações · Encerramento · Activity | Débitos, Parcelamentos, Comunicações (relacionamento pelo `contribuinte` do caso), Interações (`caso`), Regularizações (`caso`) | Avançar etapa · Encerrar caso (motivo obrigatório) |
 | TEL-025 | Interação · Activity | — | — |
 | TEL-035 | Trilha de etapas (a ligar → ligado → retornar → encerrado) · Contato da lista (com «Resultado desta ligação», que abre vazio) · Activity | Interações (`contato`) | Registrar ligação · Encerrar (motivo obrigatório) |
@@ -193,6 +205,19 @@ O dossiê consolidado (TEL-024) e o painel de KPIs (TEL-026 a TEL-031) são entr
 | RF-407 | Marcação de origem da regularização | Marca a origem da regularização pelo canal/instrumento que a antecedeu |
 | RF-408 | Efetividade da régua | Monitora a efetividade por segmento, etapa e canal |
 | RF-409 | Encaminhamento à qualificada | Encaminha à cobrança qualificada quem esgota a régua sem regularizar |
+
+**Régua como Flow (design UX v2)**
+
+Cada régua é um Flow do Flow Designer, «Régua: <nome>», gerado de `outputs/spec/reguas.json`. A inscrição de um contribuinte numa régua (TEL-037, TEL-038) dispara uma execução do Flow: em cada etapa, espera o dia, confere as guardas (grupo de controle, débito regularizado, parcelamento quitado ou rompido, régua pausada), envia pelo canal da etapa com fallback (SNE, e-mail, SMS), respeitando opt-in, opt-out e o teto de 1 envio por canal na janela, e no fecho encaminha à cobrança ativa (contato com «Origem» = régua na «Minha lista» do atendente) ou à qualificada.
+
+| Gatilho | Efeito |
+|---|---|
+| Publicar o ciclo (TEL-009, TEL-036) | inscreve na régua da carteira cada contribuinte massificado com débito aberto; controle e qualificada ficam de fora |
+| Parcelamento muda para «Em risco» | inscreve na régua Parcelamentos; «Quitado» encerra como regularizado, «Rompido» como parcelamento rompido |
+| Débito regularizado | encerra a inscrição na hora; nenhuma comunicação seguinte sai |
+| «Pausar» a régua | encerra as inscrições ativas como «Régua pausada»; «Ativar» não as retoma |
+
+Onde ver a execução: no form da inscrição (comunicações e retornos de envio) e, pelo link «Ver execução», no registro da execução (estado e log; o stage tracker do Flow Designer exige `flow_admin`, GAP-162); no form da régua, «Ver execuções» lista as execuções do Flow e «Abrir no Flow Designer» abre o Flow para leitura e edição. Edição feita no Designer vale até o próximo reinstall, a menos que seja levada à fonte (`outputs/spec/demo/roteiro.md`). Na demo, 1 dia da régua = 1 minuto (`x_2326104_cob.regua.segundos_por_dia = 60`).
 
 **Regras de negócio**
 
