@@ -43,3 +43,38 @@ function cobRegistrarLigacaoServidor() {
     action.setRedirectURL(current);
 }`,
 })
+
+export const ua_encerrar_contato = UiAction({
+    $id: Now.ID['RF-MOD-UX-003_ua_encerrar_contato'],
+    name: 'Encerrar',
+    actionName: 'x_cob_encerrar_contato',
+    table: 'x_2326104_cob_contato',
+    hint: 'Informe o motivo de encerramento; o contato sai de «Minha lista»',
+    roles: [role_atendente, role_coordenador],
+    condition: "current.status != 'encerrado' && !current.isNewRecord()",
+    showInsert: false,
+    showUpdate: true,
+    form: { showButton: true, showLink: false, showContextMenu: false, style: 'unstyled' },
+    client: { isClient: true, onClick: 'cobEncerrarContato()' },
+    script: `function cobEncerrarContato() {
+    g_form.setMandatory('ultimo_resultado', false);
+    g_form.setMandatory('comentarios', false);
+    g_form.setMandatory('motivo_encerramento', true);
+    gsftSubmit(null, g_form.getFormElement(), 'x_cob_encerrar_contato');
+}
+
+if (typeof window == 'undefined') {
+    cobEncerrarContatoServidor();
+}
+
+function cobEncerrarContatoServidor() {
+    var r = new ContatoLigacao().encerrar(current, current.getValue('motivo_encerramento'));
+    if (r.ok) {
+        gs.addInfoMessage(r.mensagem);
+    } else {
+        gs.addErrorMessage(r.mensagem);
+        current.setAbortAction(true);
+    }
+    action.setRedirectURL(current);
+}`,
+})

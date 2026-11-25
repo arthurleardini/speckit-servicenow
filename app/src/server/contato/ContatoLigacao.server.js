@@ -1,6 +1,8 @@
 /**
  * ContatoLigacao — verbos do contato da lista de cobrança ativa (RF-MOD-UX-002, design UX v1 R3/🔴13).
  *
+ * «Encerrar» (RF-MOD-UX-003): exige o motivo de encerramento (RN-NOVO-UX-005).
+ *
  * «Registrar ligação»: cria a interação ligada ao contato, soma 1 em tentativas e aplica a tabela de
  * decisão do design (RN-NOVO-UX-003):
  *
@@ -28,7 +30,9 @@ ContatoLigacao.MSG_ENCERRADO = 'Operação recusada: contato já encerrado.';
 ContatoLigacao.MSG_CARTEIRA = 'Operação recusada: atendente vê só a própria carteira.';
 ContatoLigacao.MSG_SEM_PAI = 'Operação recusada: a interação pertence a um contato ou a um caso.';
 ContatoLigacao.MSG_NAO_GRAVOU = 'A ligação não foi registrada. Confira a mensagem acima e tente de novo.';
-ContatoLigacao.ROTULO_STATUS = { a_ligar: 'A ligar', ligado: 'Ligado', retornar: 'Retornar', encerrado: 'Encerrado' };
+ContatoLigacao.MSG_SEM_MOTIVO = 'Operação recusada: informe o motivo de encerramento.';
+ContatoLigacao.MOTIVOS = { regularizado: 'Regularizado', contato_realizado: 'Contato realizado', sem_contato: 'Sem contato', recusa: 'Recusa', outro: 'Outro' };
+ContatoLigacao.ROTULO_STATUS ={ a_ligar: 'A ligar', ligado: 'Ligado', retornar: 'Retornar', encerrado: 'Encerrado' };
 
 ContatoLigacao.prototype = {
     initialize: function () {},
@@ -86,6 +90,30 @@ ContatoLigacao.prototype = {
         contato.update();
         gs.info('RF-MOD-UX-002_ua_registrar_ligacao: contato ' + contato.getUniqueValue() + ' → ' + decisao.status + '; usuário ' + gs.getUserID());
         return { ok: true, mensagem: this._mensagemOk(decisao) };
+    },
+
+    /**
+     * Botão «Encerrar» (RF-MOD-UX-003, RN-NOVO-UX-005): exige o motivo; o contato vai a «Encerrado», a
+     * próxima ação fica vazia e ele sai de «Minha lista». Contato encerrado não encerra de novo.
+     * @param {GlideRecord} contato
+     * @param {string} motivo choice de contato.motivo_encerramento
+     * @returns {{ok: boolean, mensagem: string}}
+     */
+    encerrar: function (contato, motivo) {
+        var recusa = this._recusaBasica(contato);
+        if (recusa) {
+            return this._recusar(contato, recusa);
+        }
+        motivo = String(motivo || '');
+        if (!ContatoLigacao.MOTIVOS[motivo]) {
+            return this._recusar(contato, ContatoLigacao.MSG_SEM_MOTIVO);
+        }
+        contato.setValue('status', 'encerrado');
+        contato.setValue('motivo_encerramento', motivo);
+        contato.setValue('proxima_acao_em', '');
+        contato.update();
+        gs.info('RF-MOD-UX-003_ua_encerrar_contato: contato ' + contato.getUniqueValue() + ' encerrado (' + motivo + '); usuário ' + gs.getUserID());
+        return { ok: true, mensagem: 'Contato encerrado: ' + ContatoLigacao.MOTIVOS[motivo] + '.' };
     },
 
     /**
