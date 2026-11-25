@@ -7,19 +7,21 @@
     "6d9d5b0ac83c4fd3802693d4ece8d1c6",
     "3c971ce8eee3482f97e90de934e45e9d",
     "fe351d3ccd43463bb3bb89b6f9d302c5",
-    "5e49bda29b4e40cb90bdaddb07701ae0"
+    "5e49bda29b4e40cb90bdaddb07701ae0",
+    "e18e4f6b66d54abca2b1b3e034b3cefe"
   ],
   "resultId": [
-    "e1c831c193b417107a57f7c4b503d666",
-    "b6c871c193b417107a57f7c4b503d650",
-    "84d835c193b417107a57f7c4b503d69e",
-    "65d8b9c193b417107a57f7c4b503d615",
-    "1bd8710593b417107a57f7c4b503d683",
-    "40f8390593b417107a57f7c4b503d6ae"
+    "bb5d314993f417107a57f7c4b503d67e",
+    "cd6db54993f417107a57f7c4b503d6c1",
+    "476df94993f417107a57f7c4b503d6a6",
+    "147d318993f417107a57f7c4b503d620",
+    "617d398993f417107a57f7c4b503d622",
+    "ba8d71c993f417107a57f7c4b503d65a",
+    "dbad39c993f417107a57f7c4b503d681"
   ],
   "status": "success",
-  "horario": "2026-11-25T03:33:17.063Z",
-  "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+  "horario": "2026-11-25T03:53:35.873Z",
+  "commit": "eef1dfa9edc59e39d4453d55882ef40b3d6480fb",
   "runner": true,
   "testes": [
     {
@@ -28,9 +30,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "e1c831c193b417107a57f7c4b503d666",
+      "resultId": "bb5d314993f417107a57f7c4b503d67e",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=e1c831c193b417107a57f7c4b503d666"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=bb5d314993f417107a57f7c4b503d67e"
     },
     {
       "chave": "US-MOD-UX-002_atf_sem_contato_positivo",
@@ -38,9 +40,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "b6c871c193b417107a57f7c4b503d650",
+      "resultId": "cd6db54993f417107a57f7c4b503d6c1",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=b6c871c193b417107a57f7c4b503d650"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=cd6db54993f417107a57f7c4b503d6c1"
     },
     {
       "chave": "US-MOD-UX-002_atf_recusa_contato_efetivo_positivo",
@@ -48,9 +50,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "84d835c193b417107a57f7c4b503d69e",
+      "resultId": "476df94993f417107a57f7c4b503d6a6",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=84d835c193b417107a57f7c4b503d69e"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=476df94993f417107a57f7c4b503d6a6"
     },
     {
       "chave": "US-MOD-UX-002_atf_registrar_negativo",
@@ -58,9 +60,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "65d8b9c193b417107a57f7c4b503d615",
+      "resultId": "147d318993f417107a57f7c4b503d620",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=65d8b9c193b417107a57f7c4b503d615"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=147d318993f417107a57f7c4b503d620"
     },
     {
       "chave": "US-MOD-UX-002_atf_interacao_um_pai_negativo",
@@ -68,9 +70,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "1bd8710593b417107a57f7c4b503d683",
+      "resultId": "617d398993f417107a57f7c4b503d622",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1bd8710593b417107a57f7c4b503d683"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=617d398993f417107a57f7c4b503d622"
     },
     {
       "chave": "US-MOD-UX-002_atf_ui_registrar_ligacao",
@@ -78,9 +80,19 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "40f8390593b417107a57f7c4b503d6ae",
+      "resultId": "ba8d71c993f417107a57f7c4b503d65a",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=40f8390593b417107a57f7c4b503d6ae"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=ba8d71c993f417107a57f7c4b503d65a"
+    },
+    {
+      "chave": "US-MOD-UX-002_atf_resultado_desta_ligacao",
+      "sys_id": "e18e4f6b66d54abca2b1b3e034b3cefe",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "dbad39c993f417107a57f7c4b503d681",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=dbad39c993f417107a57f7c4b503d681"
     }
   ]
 }

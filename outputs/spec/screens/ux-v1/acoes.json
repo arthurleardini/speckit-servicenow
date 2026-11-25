@@ -1,9 +1,32 @@
 {
-  "verificadoEm": "2026-11-25T03:37:42.863Z",
+  "verificadoEm": "2026-11-25T03:55:51.360Z",
   "acoes": [
     {
       "acao": "Registrar ligação",
       "usuario": "demo.atendente",
+      "jornada": [
+        {
+          "passo": "Login: a home do atendente já é «Minha lista»",
+          "cliques": 0
+        },
+        {
+          "passo": "Abrir o contato na lista",
+          "cliques": 1
+        },
+        {
+          "passo": "Escolher «Resultado desta ligação» (abrir a lista e escolher)",
+          "cliques": 2
+        },
+        {
+          "passo": "Clicar em «Comentários» e digitar a anotação",
+          "cliques": 1
+        },
+        {
+          "passo": "Clicar em «Registrar ligação»",
+          "cliques": 1
+        }
+      ],
+      "cliques": 5,
       "antes": {
         "motivo_encerramento": "",
         "proxima_acao_em": "2026-11-24",
@@ -23,8 +46,27 @@
     {
       "acao": "Distribuir lista",
       "usuario": "demo.coordenador",
+      "jornada": [
+        {
+          "passo": "Login: a home do coordenador é «Casos qualificados»",
+          "cliques": 0
+        },
+        {
+          "passo": "Menu «Ciclo do mês»",
+          "cliques": 1
+        },
+        {
+          "passo": "Abrir o ciclo publicado",
+          "cliques": 1
+        },
+        {
+          "passo": "Clicar em «Distribuir lista»",
+          "cliques": 1
+        }
+      ],
+      "cliques": 3,
       "depois": {
-        "distribuido_em": "2026-11-25 03:38:01",
+        "distribuido_em": "2026-11-25 03:56:10",
         "qtd_contatos": "3"
       },
       "mensagens": [
@@ -34,6 +76,21 @@
     {
       "acao": "Avançar etapa",
       "usuario": "demo.coordenador",
+      "jornada": [
+        {
+          "passo": "Login: a home do coordenador já é «Casos qualificados»",
+          "cliques": 0
+        },
+        {
+          "passo": "Abrir o caso na lista",
+          "cliques": 1
+        },
+        {
+          "passo": "Clicar em «Avançar etapa»",
+          "cliques": 1
+        }
+      ],
+      "cliques": 2,
       "antes": {
         "estagio": "em_selecao"
       },

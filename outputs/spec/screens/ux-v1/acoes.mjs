@@ -17,6 +17,32 @@ const OUT = join(RAIZ, 'outputs/spec/screens/ux-v1');
 mkdirSync(OUT, { recursive: true });
 const rel = { verificadoEm: new Date().toISOString(), acoes: [] };
 
+// Jornada de cada papel até o resultado, depois do login, e os cliques de cada passo. A home de cada papel já
+// abre no trabalho dele (verificacao.json: atendente → «Minha lista», coordenador → «Casos qualificados»), então
+// o primeiro passo não custa clique. Digitar texto não conta como clique; abrir o campo conta. O script reproduz
+// os mesmos passos por URL e g_form e clica o botão de verdade.
+const JORNADA = {
+  'Registrar ligação': [
+    { passo: 'Login: a home do atendente já é «Minha lista»', cliques: 0 },
+    { passo: 'Abrir o contato na lista', cliques: 1 },
+    { passo: 'Escolher «Resultado desta ligação» (abrir a lista e escolher)', cliques: 2 },
+    { passo: 'Clicar em «Comentários» e digitar a anotação', cliques: 1 },
+    { passo: 'Clicar em «Registrar ligação»', cliques: 1 },
+  ],
+  'Distribuir lista': [
+    { passo: 'Login: a home do coordenador é «Casos qualificados»', cliques: 0 },
+    { passo: 'Menu «Ciclo do mês»', cliques: 1 },
+    { passo: 'Abrir o ciclo publicado', cliques: 1 },
+    { passo: 'Clicar em «Distribuir lista»', cliques: 1 },
+  ],
+  'Avançar etapa': [
+    { passo: 'Login: a home do coordenador já é «Casos qualificados»', cliques: 0 },
+    { passo: 'Abrir o caso na lista', cliques: 1 },
+    { passo: 'Clicar em «Avançar etapa»', cliques: 1 },
+  ],
+};
+const cliques = (acao) => JORNADA[acao].reduce((s, p) => s + p.cliques, 0);
+
 async function impersonar(page, id) {
   const ck = await page.evaluate(() => window.g_ck);
   const r = await page.request.post(`${BASE}/api/now/ui/impersonate/${id}`, {
@@ -70,7 +96,7 @@ try {
   await clicar(page, 'Registrar ligação');
   await page.screenshot({ path: join(OUT, 'contato-depois-registrar.png') });
   const [depoisContato] = await buscar('x_2326104_cob_contato', `sys_id=${contatoId}`, 'status,tentativas,proxima_acao_em', 1);
-  rel.acoes.push({ acao: 'Registrar ligação', usuario: 'demo.atendente', antes: antesContato, depois: depoisContato, mensagens: await mensagens(page) });
+  rel.acoes.push({ acao: 'Registrar ligação', usuario: 'demo.atendente', jornada: JORNADA['Registrar ligação'], cliques: cliques('Registrar ligação'), antes: antesContato, depois: depoisContato, mensagens: await mensagens(page) });
 
   // 2) Distribuir lista — ciclo fictício publicado com 3 contribuintes da massificada que já têm atendente.
   await impersonar(page, eu.sys_id);
@@ -88,18 +114,26 @@ try {
   await clicar(page, 'Distribuir lista');
   await page.screenshot({ path: join(OUT, 'ciclo-depois-distribuir.png') });
   const [depoisCiclo] = await buscar('x_2326104_cob_ciclo', `sys_id=${cicloId}`, 'distribuido_em,qtd_contatos', 1);
-  rel.acoes.push({ acao: 'Distribuir lista', usuario: 'demo.coordenador', depois: depoisCiclo, mensagens: await mensagens(page) });
+  rel.acoes.push({ acao: 'Distribuir lista', usuario: 'demo.coordenador', jornada: JORNADA['Distribuir lista'], cliques: cliques('Distribuir lista'), depois: depoisCiclo, mensagens: await mensagens(page) });
 
-  // 3) Avançar etapa — caso «Em seleção» de demo.coordenador.
-  const casoId = sysIdDaChave('seed_demo_caso_001');
+  // 3) Avançar etapa — cópia fictícia do caso «Em seleção» de demo.coordenador (seed_demo_caso_001). O estágio
+  // não volta para trás (GAP-152: business rule do caso), então a ação roda numa cópia apagada no fim.
+  const seedCasoId = sysIdDaChave('seed_demo_caso_001');
+  const [seedCaso] = await buscar('x_2326104_cob_caso', `sys_id=${seedCasoId}`, 'contribuinte,coordenador,ciclo,prioridade,score,sem_score,valor_em_aberto,sinal_coercitivo', 1);
+  const copia = Object.fromEntries(Object.entries(seedCaso).map(([k, v]) => [k, v && typeof v === 'object' ? v.value : v]));
+  const casoId = await criar('x_2326104_cob_caso', { ...copia, estagio: 'em_selecao' });
+  if (!casoId) throw new Error('cópia do caso não criada');
+  const apagarCaso = async () => { await apagar('x_2326104_cob_caso', casoId); };
+  desfazer.push(apagarCaso);
   const [antesCaso] = await buscar('x_2326104_cob_caso', `sys_id=${casoId}`, 'estagio', 1);
-  desfazer.push(async () => { await patch('x_2326104_cob_caso', casoId, { estagio: antesCaso.estagio }); });
   await abrir(page, `/x_2326104_cob_caso.do?sys_id=${casoId}`);
   await page.screenshot({ path: join(OUT, 'caso-antes-avancar.png') });
   await clicar(page, 'Avançar etapa');
   await page.screenshot({ path: join(OUT, 'caso-depois-avancar.png') });
   const [depoisCaso] = await buscar('x_2326104_cob_caso', `sys_id=${casoId}`, 'estagio,etapa_ordem', 1);
-  rel.acoes.push({ acao: 'Avançar etapa', usuario: 'demo.coordenador', antes: antesCaso, depois: depoisCaso, mensagens: await mensagens(page) });
+  rel.acoes.push({ acao: 'Avançar etapa', usuario: 'demo.coordenador', jornada: JORNADA['Avançar etapa'], cliques: cliques('Avançar etapa'), antes: antesCaso, depois: depoisCaso, mensagens: await mensagens(page) });
+  await apagarCaso();
+  desfazer.splice(desfazer.indexOf(apagarCaso), 1);
 
   // 4) Casos qualificados (lista ordenada pela sequência das etapas) depois do polimento.
   await abrir(page, `/x_2326104_cob_caso_list.do?sysparm_query=${encodeURIComponent('estagio!=encerrado^ORDERBYetapa_ordem^ORDERBYDESCprioridade')}&sysparm_view=x_2326104_cob_tel_023`);

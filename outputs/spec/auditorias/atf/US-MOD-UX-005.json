@@ -4,16 +4,18 @@
   "sys_id": [
     "692c26a614914aa8a3af71c136586468",
     "bce6670d049d4ebc8bc4ab0adb457e2b",
-    "09cd86d4600e42e882ca25fa88cf90a7"
+    "09cd86d4600e42e882ca25fa88cf90a7",
+    "5227b529e9f14cc49a7bd323e4c8806c"
   ],
   "resultId": [
-    "bc59f1c593b417107a57f7c4b503d643",
-    "da59b5c593b417107a57f7c4b503d6e4",
-    "1369b50993b417107a57f7c4b503d6bc"
+    "8c0d7d8593f417107a57f7c4b503d625",
+    "020d31c593f417107a57f7c4b503d695",
+    "002df9c593f417107a57f7c4b503d67a",
+    "915d790993f417107a57f7c4b503d611"
   ],
   "status": "success",
-  "horario": "2026-11-25T03:35:42.858Z",
-  "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
+  "horario": "2026-11-25T03:52:06.369Z",
+  "commit": "eef1dfa9edc59e39d4453d55882ef40b3d6480fb",
   "runner": true,
   "testes": [
     {
@@ -22,9 +24,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "bc59f1c593b417107a57f7c4b503d643",
+      "resultId": "8c0d7d8593f417107a57f7c4b503d625",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=bc59f1c593b417107a57f7c4b503d643"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=8c0d7d8593f417107a57f7c4b503d625"
     },
     {
       "chave": "US-MOD-UX-005_atf_conducao_negativo",
@@ -32,9 +34,9 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "da59b5c593b417107a57f7c4b503d6e4",
+      "resultId": "020d31c593f417107a57f7c4b503d695",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=da59b5c593b417107a57f7c4b503d6e4"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=020d31c593f417107a57f7c4b503d695"
     },
     {
       "chave": "US-MOD-UX-005_atf_ui_avancar_etapa",
@@ -42,9 +44,19 @@
       "ok": true,
       "exit": 0,
       "status": "success",
-      "resultId": "1369b50993b417107a57f7c4b503d6bc",
+      "resultId": "002df9c593f417107a57f7c4b503d67a",
       "resumo": {},
-      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1369b50993b417107a57f7c4b503d6bc"
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=002df9c593f417107a57f7c4b503d67a"
+    },
+    {
+      "chave": "US-MOD-UX-005_atf_estagio_so_pelos_verbos",
+      "sys_id": "5227b529e9f14cc49a7bd323e4c8806c",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "915d790993f417107a57f7c4b503d611",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=915d790993f417107a57f7c4b503d611"
     }
   ]
 }

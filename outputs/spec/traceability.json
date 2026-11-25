@@ -1552,7 +1552,9 @@
         "RF-MOD-UX-002_acl_contato_write_prioridade",
         "RF-MOD-UX-002_acl_contato_write_status",
         "RF-MOD-UX-002_acl_contato_write_tentativas",
+        "RF-MOD-UX-002_acl_contato_write_ultimo_resultado",
         "RF-MOD-UX-002_acl_contato_write_valor_em_aberto",
+        "RF-MOD-UX-002_br_contato_resultado_ligacao",
         "RF-MOD-UX-002_br_interacao_um_pai",
         "RF-MOD-UX-002_si_contato_ligacao",
         "RF-MOD-UX-002_ua_registrar_ligacao"
@@ -1567,7 +1569,9 @@
         "RF-MOD-UX-002_acl_contato_write_prioridade",
         "RF-MOD-UX-002_acl_contato_write_status",
         "RF-MOD-UX-002_acl_contato_write_tentativas",
+        "RF-MOD-UX-002_acl_contato_write_ultimo_resultado",
         "RF-MOD-UX-002_acl_contato_write_valor_em_aberto",
+        "RF-MOD-UX-002_br_contato_resultado_ligacao",
         "RF-MOD-UX-002_br_interacao_um_pai",
         "RF-MOD-UX-002_si_contato_ligacao",
         "RF-MOD-UX-002_ua_registrar_ligacao"
@@ -1576,8 +1580,8 @@
         {
           "story": "STORY-MOD-UX-002",
           "status": "success",
-          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
-          "horario": "2026-11-25T03:33:17.063Z",
+          "commit": "eef1dfa9edc59e39d4453d55882ef40b3d6480fb",
+          "horario": "2026-11-25T03:53:35.873Z",
           "verde": true
         }
       ],
@@ -1668,6 +1672,10 @@
         "TASK-MOD-UX-005-02"
       ],
       "nowIds": [
+        "RF-MOD-UX-005_acl_caso_write_encerrado_em",
+        "RF-MOD-UX-005_acl_caso_write_estagio",
+        "RF-MOD-UX-005_acl_caso_write_etapa_ordem",
+        "RF-MOD-UX-005_br_caso_estagio",
         "RF-MOD-UX-005_br_caso_ordem_etapa",
         "RF-MOD-UX-005_si_caso_conducao",
         "RF-MOD-UX-005_ua_avancar_etapa",
@@ -1675,6 +1683,10 @@
         "x_2326104_cob_caso"
       ],
       "nowIdsInstalados": [
+        "RF-MOD-UX-005_acl_caso_write_encerrado_em",
+        "RF-MOD-UX-005_acl_caso_write_estagio",
+        "RF-MOD-UX-005_acl_caso_write_etapa_ordem",
+        "RF-MOD-UX-005_br_caso_estagio",
         "RF-MOD-UX-005_br_caso_ordem_etapa",
         "RF-MOD-UX-005_si_caso_conducao",
         "RF-MOD-UX-005_ua_avancar_etapa",
@@ -1684,8 +1696,8 @@
         {
           "story": "STORY-MOD-UX-005",
           "status": "success",
-          "commit": "c384a0b9f84ab50c8c5cde90a3d419d458c5d1c7",
-          "horario": "2026-11-25T03:35:42.858Z",
+          "commit": "eef1dfa9edc59e39d4453d55882ef40b3d6480fb",
+          "horario": "2026-11-25T03:52:06.369Z",
           "verde": true
         }
       ],
@@ -1793,5 +1805,5 @@
       "nivel": "N2"
     }
   ],
-  "geradoEm": "2026-11-25T03:38:26.009Z"
+  "geradoEm": "2026-11-25T03:57:06.134Z"
 }

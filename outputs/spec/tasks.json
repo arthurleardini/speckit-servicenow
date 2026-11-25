@@ -74903,7 +74903,7 @@
           "class": "functional",
           "type": "database",
           "title": "Tabela «Contato da lista» (x_2326104_cob_contato) com status, próxima ação e resultado",
-          "status": "IN_PROGRESS",
+          "status": "DONE",
           "description": "Tabela «Contato da lista» (x_2326104_cob_contato) com status, próxima ação e resultado. O atendente trabalha uma lista de ligações por ciclo; cada item é um contato com dono, status e próxima ação, separado do caso qualificado, que é do coordenador. Entrega o comportamento do requisito RF-MOD-UX-001 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "table",
@@ -75273,7 +75273,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Menu «Cobrança MT» por área de trabalho e «Minha lista» com filtro e ordem",
-          "status": "IN_PROGRESS",
+          "status": "DONE",
           "description": "Menu «Cobrança MT» por área de trabalho e «Minha lista» com filtro e ordem. Cada papel entra pelo próprio trabalho: o atendente vê Minha lista, Meus contribuintes e Meus indicadores; o coordenador vê as áreas de casos, ciclo e carteira, réguas, analytics e configurações. Entrega o comportamento do requisito RF-MOD-UX-001 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "menu",
@@ -80424,7 +80424,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Preferência de página inicial por papel (my_home_navigation_page) nos usuários demo",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Preferência de página inicial por papel (my_home_navigation_page) nos usuários demo. A Core UI não tem página inicial por papel; a preferência por usuário funciona para os usuários demo e fica documentada para os reais. Entrega o comportamento do requisito RF-MOD-UX-007 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "seed",
@@ -80772,7 +80772,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Relatórios TEL-026..028 e lista TEL-029 como módulos da área Analytics",
-          "status": "PENDING",
+          "status": "DONE",
           "description": "Relatórios TEL-026..028 e lista TEL-029 como módulos da área Analytics. O painel único foi trocado por relatórios no menu (R5), conforme a regra da Core UI; o GAP do painel fica registrado. Entrega o comportamento do requisito RF-MOD-UX-007 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "menu",
@@ -81278,7 +81278,7 @@
           "class": "functional",
           "type": "database",
           "title": "Seed manual de ciclo, contato e caso em app/src/fluent/seed-demo/",
-          "status": "IN_PROGRESS",
+          "status": "DONE",
           "description": "Seed manual de ciclo, contato e caso em app/src/fluent/seed-demo/. O gerador de seed sorteia valor por coluna e não cruza tabelas; ciclo, contato e caso passam a seed escrito à mão, coerente entre si. Entrega o comportamento do requisito RF-MOD-UX-008 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "seed",
@@ -81607,7 +81607,7 @@
           "class": "functional",
           "type": "frontend",
           "title": "Trilha de etapas (process flow) em contato, caso e ciclo; rótulos e display",
-          "status": "IN_PROGRESS",
+          "status": "DONE",
           "description": "Trilha de etapas (process flow) em contato, caso e ciclo; rótulos e display. Estado e próxima ação visíveis: a trilha mostra a etapa do contato, do caso e do ciclo no topo do form. Entrega o comportamento do requisito RF-MOD-UX-008 na instância, com teste ATF positivo e negativo.",
           "snArtifact": {
             "kind": "form",

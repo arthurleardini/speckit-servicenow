@@ -695,6 +695,8 @@ O form traz o resultado da ligação anterior; se o atendente não trocar, o ver
 1. Campo próprio «Resultado desta ligação» no contato, limpo depois de cada registro.
 2. Diálogo do botão com o resultado e a anotação.
 
+**Status:** FECHADO em 2026-11-25 (opção 1, commit eef1dfa). Ver a resposta abaixo.
+
 ### GAP-151 — ATF não clica os botões cliente + servidor (TEST-001 das US-MOD-UX-002, 003 e 005)
 
 **Área:** MOD-UX
@@ -720,6 +722,8 @@ O coordenador grava `estagio=encerrado` sem motivo, ou pula etapa, pelo form, li
 
 **Opções identificadas:**
 1. Business rule before update no caso: encerrado exige motivo; estágio só anda uma etapa por vez.
+
+**Status:** FECHADO em 2026-11-25 (opção 1 mais ACL de campo, commit eef1dfa). Ver a resposta abaixo.
 
 ### GAP-153 — Ressalvas baixas das auditorias UX-002..006
 
@@ -1033,10 +1037,10 @@ Itens baixos registrados nos relatórios `outputs/spec/auditorias/US-MOD-UX-00{2
 **Impacto na task:** _(a preencher)_
 
 ### GAP-150
-**Decisão:** _(a preencher)_
-**Decidido por:** _(a preencher)_
-**Data:** _(a preencher)_
-**Impacto na task:** _(a preencher)_
+**Decisão:** Opção 1. O contato ganhou o campo «Resultado desta ligação» (`resultado_ligacao`), que abre sempre vazio no form: uma business rule before insert/update limpa o valor em toda gravação, então ele nunca fica gravado. O botão «Registrar ligação» exige esse campo no cliente e o servidor lê só ele; sem escolha nesta ação, recusa com «Operação recusada: informe o resultado da ligação.», mesmo com «Último resultado» preenchido. Repetir o resultado anterior (sem contato de novo) funciona, porque o valor vem da escolha atual. «Último resultado» virou histórico: só o verbo grava (ACL de campo; à mão, só coordenador e admin do app).
+**Decidido por:** fase F6 do design UX v1 (orientação do dono do produto: campo de entrada separado, servidor exige valor escolhido na ação)
+**Data:** 2026-11-25
+**Impacto na task:** TASK-MOD-UX-002-01 — coluna nova no `data-model.json` e no form TEL-035 (scaffold), BR `RF-MOD-UX-002_br_contato_resultado_ligacao`, ACL `RF-MOD-UX-002_acl_contato_write_ultimo_resultado`, UI Action lendo `resultado_ligacao`. ATF: teste novo «o resultado vem só do que o atendente escolhe nesta ligação» (repetir o mesmo resultado registra; sem escolha recusa; gravar o campo por script não fica; atendente não grava «Último resultado») e o teste de form confere «Resultado desta ligação» vazio com «Último resultado» preenchido. Recibo `outputs/spec/auditorias/atf/US-MOD-UX-002.json` (7/7).
 
 ### GAP-151
 **Decisão:** _(a preencher)_
@@ -1045,10 +1049,10 @@ Itens baixos registrados nos relatórios `outputs/spec/auditorias/US-MOD-UX-00{2
 **Impacto na task:** _(a preencher)_
 
 ### GAP-152
-**Decisão:** _(a preencher)_
-**Decidido por:** _(a preencher)_
-**Data:** _(a preencher)_
-**Impacto na task:** _(a preencher)_
+**Decisão:** Opção 1 mais ACL de campo. Uma business rule before update no caso (`CasoConducao.motivoRecusaEstagio`) aplica as regras dos botões a qualquer caminho (form, lista, API, script): o estágio anda uma etapa por vez («Operação recusada: o caso anda uma etapa por vez; use «Avançar etapa».»), «Encerrado» exige motivo («Operação recusada: informe o motivo de encerramento.») e caso encerrado não volta («Operação recusada: caso encerrado não reabre.»). ACL de campo: «Estágio», «Encerrado em» e «Ordem da etapa» só o admin do app grava à mão; o coordenador muda o estágio pelos botões e continua escolhendo o motivo no form, que o «Encerrar caso» pede.
+**Decidido por:** fase F6 do design UX v1 (orientação do dono do produto: bloquear no servidor, só pelos verbos)
+**Data:** 2026-11-25
+**Impacto na task:** TASK-MOD-UX-005-02 — BR `RF-MOD-UX-005_br_caso_estagio` e ACLs `RF-MOD-UX-005_acl_caso_write_{estagio,encerrado_em,etapa_ordem}`. ATF: teste novo «estágio do caso anda uma etapa por vez e só encerra com motivo, por qualquer caminho» (pular etapa, encerrar sem motivo e reabrir recusados; uma etapa e encerrar com motivo passam; coordenador sem gravação à mão do estágio). Recibo `outputs/spec/auditorias/atf/US-MOD-UX-005.json` (4/4).
 
 ### GAP-153
 **Decisão:** _(a preencher)_

@@ -54,6 +54,21 @@
 
 ## Histórico de tasks
 
+### GAP-150 (US-MOD-UX-002) e GAP-152 (US-MOD-UX-005) — achados da auditoria fechados no servidor (UX v1, F6)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-UX-002.json 7/7 e US-MOD-UX-005.json 4/4)
+
+**Implementado:**
+- `contato.resultado_ligacao` («Resultado desta ligação», pelo `data-model.json` + scaffold): campo de entrada do «Registrar ligação». `business-rules/contato.now.ts` limpa o valor em toda gravação (nunca fica gravado; o form abre vazio). A UI Action exige e lê só ele; `security/contato.now.ts` deixa «Último resultado» gravável à mão só por coordenador e admin.
+- `CasoConducao.motivoRecusaEstagio` + `business-rules/caso.now.ts` (`RF-MOD-UX-005_br_caso_estagio`, before update): estágio anda uma etapa por vez, «Encerrado» só com motivo, encerrado não volta — por form, lista, API ou script. `security/caso-estagio.now.ts`: estágio, encerrado em e ordem da etapa só o admin grava à mão.
+
+**Testes:**
+- Cenários: 10 | Verdes: 10 (2 testes ATF de servidor novos + 1 passo de form) | Vermelhos: 0
+- Arquivos: `src/fluent/tests/US-MOD-UX-002.now.ts` (`US-MOD-UX-002_atf_resultado_desta_ligacao`, passo `test_24` no teste de form), `src/fluent/tests/US-MOD-UX-005.now.ts` (`US-MOD-UX-005_atf_estagio_so_pelos_verbos`)
+
+**Decisões:**
+- Campo de entrada separado em vez de limpar «Último resultado» no onLoad: repetir o resultado anterior (sem contato de novo) é o caso comum e não dá para distinguir «escolhido agora» de «sobrou da ligação anterior» comparando valores.
+- A BR do estágio vale também para o admin: o print de «Avançar etapa» (`screens/ux-v1/acoes.mjs`) roda numa cópia fictícia do caso, apagada no fim, porque o caso não volta de etapa.
+
 ### US-MOD-UX-002..006 — verbos da lista, distribuição, caso do coordenador e acesso por papel (design UX v1, F3/F4)
 **Data:** 2026-11-25 | **State:** DONE (isenção g3: fora do fio condutor; auditoria-de-us por story)
 
