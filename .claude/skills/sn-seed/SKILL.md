@@ -135,6 +135,7 @@ padrão).
 | `columns[].type` | `string`, `integer`, `decimal`, `boolean`, `reference`, `choice`, `glide_date`, `glide_date_time`, `journal`, `journal_input`, `currency` |
 | `columns[].format` | `cpf` ou `cnpj` em coluna `string`: o valor sai formatado e com DV válido |
 | `columns[].reference` | tabela do próprio modelo (pelo sufixo) ou tabela existente (`sys_user`) |
+| `columns[].semSeed` | opcional. `true`: a coluna fica vazia no seed gerado e não entra no sorteio. Serve para acrescentar coluna a uma tabela já semeada sem mudar nomes, CPF e demais valores dos registros. Não vale para coluna obrigatória |
 | `choices` | lista de `{ value, label }`, lista de strings ou objeto `{ valor: rótulo }` |
 | `screens[]` | `id` no padrão `TEL-`, `table` do modelo, `type` `form`, `list` ou `report`, `role` de `roles` |
 | `roles` | sufixos; viram `<escopo>.<sufixo>`. Sem o campo, `coordenador`, `atendente` e `admin` |

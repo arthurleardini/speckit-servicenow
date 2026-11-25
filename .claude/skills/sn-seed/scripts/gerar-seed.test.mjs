@@ -101,6 +101,21 @@ test('limites e validação do modelo', () => {
   assert.throws(() => normalizarModelo(telaRuim, ESCOPO), /não está em entities/);
 });
 
+test('semSeed: coluna nova marcada fica vazia e não muda os valores já semeados', () => {
+  const antes = gerarSeed(normalizarModelo(MODELO, ESCOPO), { porTabela: 20 });
+  const com = structuredClone(MODELO);
+  com.entities[0].columns.push({ name: 'marcado_em', label: 'Marcado em', type: 'glide_date_time', semSeed: true });
+  const depois = gerarSeed(normalizarModelo(com, ESCOPO), { porTabela: 20 });
+  assert.deepEqual(depois.arquivos, antes.arquivos);
+  assert.ok(!/marcado_em/.test(depois.arquivos['pessoa.now.ts']));
+  const sem = structuredClone(MODELO);
+  sem.entities[0].columns.push({ name: 'marcado_em', label: 'Marcado em', type: 'glide_date_time' });
+  assert.notDeepEqual(gerarSeed(normalizarModelo(sem, ESCOPO), { porTabela: 20 }).arquivos['pessoa.now.ts'], antes.arquivos['pessoa.now.ts']);
+  const obrig = structuredClone(MODELO);
+  obrig.entities[0].columns.push({ name: 'x', label: 'X', type: 'string', mandatory: true, semSeed: true });
+  assert.throws(() => normalizarModelo(obrig, ESCOPO), /obrigatória não pode ter semSeed/);
+});
+
 test('gravarSeed grava os .now.ts e os dois JSON, e remove arquivo gerado que saiu do modelo', () => {
   const app = mkdtempSync(join(tmpdir(), 'sn-seed-'));
   const r = gerarSeed(normalizarModelo(MODELO, ESCOPO), { porTabela: 3 });

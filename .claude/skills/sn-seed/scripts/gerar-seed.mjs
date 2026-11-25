@@ -177,7 +177,9 @@ export function normalizarModelo(modelo, escopo) {
       const col = {
         name: c.name, label: c.label ?? c.name, type, mandatory: Boolean(c.mandatory),
         maxLength: c.maxLength, format: c.format, choices: normalizarChoices(c.choices),
+        semSeed: c.semSeed === true,
       };
+      if (col.semSeed && col.mandatory) erros.push(`${ent.name}.${c.name}: coluna obrigatória não pode ter semSeed`);
       if (type === 'choice' && !col.choices.length) erros.push(`${ent.name}.${c.name}: choice sem choices`);
       if (type === 'reference') {
         if (!c.reference) erros.push(`${ent.name}.${c.name}: reference sem tabela`);
@@ -433,6 +435,9 @@ const ref = (tabela, chave) => ({ __ref: [tabela, chave] });
 
 function valorColuna(ctx, ent, col, n) {
   const { rng, usados, documentos, chavesPorTabela, usuarios } = ctx;
+  // Coluna marcada `semSeed` fica vazia e não consome o sorteio: acrescentá-la a uma tabela já semeada
+  // não muda os valores das outras colunas nem dos registros seguintes (nomes e CPF continuam iguais).
+  if (col.semSeed) return undefined;
   switch (col.type) {
     case 'journal':
     case 'journal_input':
