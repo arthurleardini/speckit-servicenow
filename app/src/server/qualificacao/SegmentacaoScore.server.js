@@ -16,6 +16,7 @@ SegmentacaoScore.TABELA_CONTRIBUINTE = 'x_2326104_cob_contribuinte';
 SegmentacaoScore.TABELA_DEBITO = 'x_2326104_cob_debito';
 SegmentacaoScore.SCORE_MINIMO = 0;
 SegmentacaoScore.SCORE_MAXIMO = 100;
+SegmentacaoScore.MOTIVO_REGUA = 'Esgotou a régua (RN-NOVO-F4-008)';
 
 SegmentacaoScore.prototype = {
     initialize: function () {},
@@ -63,7 +64,7 @@ SegmentacaoScore.prototype = {
      * Valor em aberto e maior atraso do contribuinte, no tributo da versão (todos = sem filtro).
      */
     dadosDoContribuinte: function (contribuinteId, criterio) {
-        var dados = { valor: 0, atraso: 0, score: null };
+        var dados = { valor: 0, atraso: 0, score: null, encaminhado: '' };
         var agg = new GlideAggregate(SegmentacaoScore.TABELA_DEBITO);
         agg.addQuery('contribuinte', contribuinteId);
         var tributo = criterio.getValue('tributo');
@@ -81,6 +82,7 @@ SegmentacaoScore.prototype = {
         var c = new GlideRecord(SegmentacaoScore.TABELA_CONTRIBUINTE);
         if (c.get(contribuinteId)) {
             dados.score = c.getValue('score');
+            dados.encaminhado = c.getValue('encaminhado_qualificada_em') || '';
         }
         return dados;
     },
@@ -105,6 +107,12 @@ SegmentacaoScore.prototype = {
         }
         var dados = this.dadosDoContribuinte(seg.getValue('contribuinte'), criterio);
         var r = this.classificar(criterio, dados);
+        if (dados.encaminhado) {
+            // Esgotou a régua na cobrança massificada: vai à qualificada na publicação seguinte (RN-NOVO-F4-008).
+            // ReguaMotor.inscrever limpa a marca quando este ciclo é publicado.
+            r.segmento = 'qualificada';
+            r.motivo = SegmentacaoScore.MOTIVO_REGUA;
+        }
         seg.setValue('criterio', criterioId);
         seg.setValue('segmento', r.segmento);
         seg.setValue('sem_score', r.semScore);

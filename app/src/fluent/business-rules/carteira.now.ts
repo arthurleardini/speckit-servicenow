@@ -162,3 +162,15 @@ BusinessRule({
     active: true,
     script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
 })
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-F4-013_br_consulta_carteira_inscricao'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de inscrições na régua de quem só tem o papel de atendente traz só as da própria carteira (B5, RN-NOVO-F5-007; TASK-MOD-F4-013-02).',
+    table: 'x_2326104_cob_regua_inscricao',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})

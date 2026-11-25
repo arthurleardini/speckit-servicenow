@@ -90,9 +90,15 @@ Record({
 })
 
 Record({
+    $id: Now.ID["modulo_mod_ux_reguas_inscricoes"],
+    table: 'sys_app_module',
+    data: { title: "Inscrições", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_regua_inscricao", filter: "statusINativa,erro^ORDERBYDESCiniciada_em", order: 3200 },
+})
+
+Record({
     $id: Now.ID["modulo_mod_ux_reguas_disparos_com_falha"],
     table: 'sys_app_module',
-    data: { title: "Disparos com falha", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_comunicacao", filter: "status=falha^ORDERBYDESCenviada_em", order: 3200 },
+    data: { title: "Disparos com falha", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_comunicacao", filter: "status=falha^ORDERBYDESCenviada_em", order: 3300 },
 })
 
 Record({

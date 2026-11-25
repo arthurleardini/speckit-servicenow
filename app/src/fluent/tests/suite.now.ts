@@ -31,6 +31,11 @@ import {
 import {
     t_f4011_guardas_pos, t_f4011_guardas_neg, t_f4011_guardas_encerrada, t_f4011_envio, t_f4011_teto, t_f4011_idempotencia,
 } from './US-MOD-F4-011.now'
+import {
+    t_f4012_inscrever, t_f4012_br_publicar, t_f4012_reavaliar, t_f4012_escalonar_ativa, t_f4012_escalonar_qualificada,
+    t_f4012_pausa, t_f4012_ui_coordenador, t_f4012_ui_atendente,
+} from './US-MOD-F4-012.now'
+import { t_f4013_em_risco, t_f4013_sem_ciclo, t_f4013_acl_atendente, t_f4013_acl_coordenador } from './US-MOD-F4-013.now'
 
 export const suite_cob_regressao = TestSuite({
     $id: Now.ID['suite_cob_regressao'],
@@ -56,5 +61,8 @@ export const suite_cob_regressao = TestSuite({
         t_f4010_modelo, t_f4010_flows, t_f4010_etapa_pos, t_f4010_etapa_neg, t_f4010_controle, t_f4010_fumaca,
         t_f4010_acl_coord, t_f4010_acl_atendente,
         t_f4011_guardas_pos, t_f4011_guardas_neg, t_f4011_guardas_encerrada, t_f4011_envio, t_f4011_teto, t_f4011_idempotencia,
+        t_f4012_inscrever, t_f4012_br_publicar, t_f4012_reavaliar, t_f4012_escalonar_ativa, t_f4012_escalonar_qualificada,
+        t_f4012_pausa, t_f4012_ui_coordenador, t_f4012_ui_atendente,
+        t_f4013_em_risco, t_f4013_sem_ciclo, t_f4013_acl_atendente, t_f4013_acl_coordenador,
     ],
 })

@@ -12,7 +12,8 @@
         x_2326104_cob_parcelamento: ['contribuinte.atendente'],
         x_2326104_cob_comunicacao: ['contribuinte.atendente'],
         x_2326104_cob_consentimento: ['contribuinte.atendente'],
-        x_2326104_cob_score_sim: ['contribuinte.atendente']
+        x_2326104_cob_score_sim: ['contribuinte.atendente'],
+        x_2326104_cob_regua_inscricao: ['contribuinte.atendente']
     };
     var campos = DONO[current.getTableName()];
     if (campos) {

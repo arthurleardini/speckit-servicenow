@@ -132,13 +132,23 @@
       "order": 3000,
       "tables": [
         "x_2326104_cob_regua",
-        "x_2326104_cob_comunicacao"
+        "x_2326104_cob_comunicacao",
+        "x_2326104_cob_regua_inscricao"
       ],
       "items": [
         {
           "label": "Réguas",
           "type": "LIST",
           "table": "x_2326104_cob_regua",
+          "roles": [
+            "coordenador"
+          ]
+        },
+        {
+          "label": "Inscrições",
+          "type": "FILTER",
+          "table": "x_2326104_cob_regua_inscricao",
+          "filter": "statusINativa,erro^ORDERBYDESCiniciada_em",
           "roles": [
             "coordenador"
           ]
@@ -405,6 +415,13 @@
           "name": "comentarios",
           "label": "Comentários",
           "type": "journal_input"
+        },
+        {
+          "name": "encaminhado_qualificada_em",
+          "label": "Encaminhado à qualificada em",
+          "type": "glide_date_time",
+          "semSeed": true,
+          "description": "Gravado pela régua quando a última etapa encaminha à cobrança qualificada (ReguaMotor.escalonar); SegmentacaoScore.aplicar classifica o contribuinte como qualificada na publicação seguinte e ReguaMotor.inscrever limpa a marca (RN-NOVO-F4-008)."
         }
       ]
     },

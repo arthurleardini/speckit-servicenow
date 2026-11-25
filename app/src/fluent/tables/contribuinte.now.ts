@@ -1,6 +1,6 @@
 // gerado por sn-scaffold — regerar com scaffold.mjs; mudança à mão se perde
 import '@servicenow/sdk/global'
-import { BooleanColumn, ChoiceColumn, DecimalColumn, GenericColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
+import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, GenericColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 
 export const x_2326104_cob_contribuinte = Table({
     name: "x_2326104_cob_contribuinte",
@@ -36,5 +36,6 @@ export const x_2326104_cob_contribuinte = Table({
         }, dropdown: 'dropdown_with_none' }),
         ficticio: BooleanColumn({ label: "Fictício", mandatory: true }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
+        encaminhado_qualificada_em: DateTimeColumn({ label: "Encaminhado à qualificada em" }),
     },
 })

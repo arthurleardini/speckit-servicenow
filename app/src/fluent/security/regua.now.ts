@@ -94,3 +94,18 @@ Acl({
     roles: [role_admin],
     description: 'A ordem da etapa é estrutura (o Flow tem uma etapa por stage): só o admin do app grava.',
 })
+
+// RF-MOD-F4-013 — inscrição na régua: o atendente lê só as da própria carteira (deny-unless pelo atendente do
+// contribuinte); coordenador e admin do app leem todas (CarteiraAtendente.veTudo); o admin da plataforma passa por
+// adminOverrides. A BR de consulta (business-rules/carteira.now.ts) tira as linhas de outra carteira da lista e das
+// contagens. Sem ACL de create, write ou delete: nenhuma persona grava inscrição; o motor grava no servidor (B5).
+Acl({
+    $id: Now.ID['RF-MOD-F4-013_acl_inscricao_carteira'],
+    type: 'record',
+    table: 'x_2326104_cob_regua_inscricao',
+    operation: 'read',
+    decisionType: 'deny',
+    adminOverrides: true,
+    script: "answer = new CarteiraAtendente().podeVer(current, 'contribuinte.atendente');",
+    description: 'Nega ao atendente a inscrição na régua de contribuinte de outra carteira (B5, RN-NOVO-F5-007).',
+})

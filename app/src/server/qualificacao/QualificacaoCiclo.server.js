@@ -197,16 +197,7 @@ QualificacaoCiclo.prototype = {
                 p.update();
             }
             var valor = p.getValue('valor_em_aberto') || seg.getValue('valor_em_aberto') || 0;
-            var c = new GlideRecord(QualificacaoCiclo.TABELA_CONTATO);
-            c.initialize();
-            c.setValue('contribuinte', pid);
-            c.setValue('atendente', dono);
-            c.setValue('ciclo', cicloId);
-            c.setValue('status', 'a_ligar');
-            c.setValue('tentativas', 0);
-            c.setValue('prioridade', this.prioridadePorValor(valor));
-            c.setValue('valor_em_aberto', valor);
-            if (c.insert()) {
+            if (this._criarContato(pid, cicloId, dono, valor, 'distribuicao', '')) {
                 criados++;
                 porAtendente[dono] = (porAtendente[dono] || 0) + 1;
             }
@@ -220,6 +211,114 @@ QualificacaoCiclo.prototype = {
         ciclo.update();
         gs.info('RF-MOD-UX-004_ua_distribuir_lista: ciclo ' + cicloId + ' distribuído com ' + criados + ' contatos; usuário ' + gs.getUserID());
         return { ok: true, mensagem: this._mensagemDistribuicao(criados, porAtendente), porAtendente: porAtendente };
+    },
+
+    /**
+     * Grava um contato «A ligar» do contribuinte no ciclo (sem checagem de papel; quem chama confere). `origem` diz
+     * por onde o contato nasceu: distribuicao (Distribuir lista) ou regua (escalonamento da régua, D14).
+     * @returns {string} sys_id do contato ('' quando a gravação foi recusada)
+     */
+    _criarContato: function (contribuinteId, cicloId, dono, valor, origem, inscricaoId) {
+        var c = new GlideRecord(QualificacaoCiclo.TABELA_CONTATO);
+        c.initialize();
+        c.setValue('contribuinte', contribuinteId);
+        c.setValue('atendente', dono);
+        if (cicloId) {
+            c.setValue('ciclo', cicloId);
+        }
+        c.setValue('status', 'a_ligar');
+        c.setValue('tentativas', 0);
+        c.setValue('prioridade', this.prioridadePorValor(valor));
+        c.setValue('valor_em_aberto', valor);
+        c.setValue('origem', origem || 'distribuicao');
+        if (inscricaoId) {
+            c.setValue('inscricao', inscricaoId);
+        }
+        return c.insert() || '';
+    },
+
+    /**
+     * Escalonamento da régua à cobrança ativa (D14, P1 do dono). Sem checagem de papel: chamado pelo Flow (system).
+     * Se o contribuinte já tem contato aberto no ciclo (o da distribuição), não cria outro: grava a inscrição nele e
+     * antecipa «Próxima ação em» para hoje quando vazia ou futura. Senão cria o contato com o atendente do
+     * contribuinte; sem atendente, o atendente ativo com menos contatos abertos no ciclo (empate pelo login), gravado
+     * também no contribuinte.
+     * @param {string} contribuinteId
+     * @param {string} cicloId pode ser vazio (inscrição sem ciclo, régua de Parcelamentos)
+     * @param {string} origem 'regua' ou 'distribuicao'
+     * @param {string} inscricaoId
+     * @returns {{contato: string, criado: boolean}}
+     */
+    atribuirContato: function (contribuinteId, cicloId, origem, inscricaoId) {
+        var hoje = new GlideDateTime().getLocalDate().getValue();
+        var aberto = new GlideRecord(QualificacaoCiclo.TABELA_CONTATO);
+        aberto.addQuery('contribuinte', contribuinteId);
+        if (cicloId) {
+            aberto.addQuery('ciclo', cicloId);
+        } else {
+            aberto.addNullQuery('ciclo');
+        }
+        aberto.addQuery('status', '!=', 'encerrado');
+        aberto.orderBy('sys_created_on');
+        aberto.setLimit(1);
+        aberto.query();
+        if (aberto.next()) {
+            if (inscricaoId) {
+                aberto.setValue('inscricao', inscricaoId);
+            }
+            var quando = aberto.getValue('proxima_acao_em');
+            if (!quando || quando > hoje) {
+                aberto.setValue('proxima_acao_em', hoje);
+            }
+            aberto.update();
+            return { contato: aberto.getUniqueValue(), criado: false };
+        }
+        var p = new GlideRecord(QualificacaoCiclo.TABELA_CONTRIBUINTE);
+        if (!p.get(contribuinteId)) {
+            return { contato: '', criado: false };
+        }
+        var dono = p.getValue('atendente');
+        if (!dono) {
+            dono = this._atendenteMenosCarregado(cicloId);
+            if (!dono) {
+                gs.warn('RF-MOD-F4-012: sem atendente ativo para o contribuinte ' + contribuinteId);
+                return { contato: '', criado: false };
+            }
+            p.setValue('atendente', dono);
+            p.update();
+        }
+        var id = this._criarContato(contribuinteId, cicloId, dono, p.getValue('valor_em_aberto') || 0, origem, inscricaoId);
+        return { contato: id, criado: !!id };
+    },
+
+    /** Atendente ativo com menos contatos abertos no ciclo (empate: o primeiro login em ordem alfabética). */
+    _atendenteMenosCarregado: function (cicloId) {
+        var atendentes = this._atendentes();
+        if (!atendentes.length) {
+            return '';
+        }
+        var carga = {};
+        var agg = new GlideAggregate(QualificacaoCiclo.TABELA_CONTATO);
+        if (cicloId) {
+            agg.addQuery('ciclo', cicloId);
+        } else {
+            agg.addNullQuery('ciclo');
+        }
+        agg.addQuery('status', '!=', 'encerrado');
+        agg.addQuery('atendente', 'IN', atendentes.join(','));
+        agg.addAggregate('COUNT');
+        agg.groupBy('atendente');
+        agg.query();
+        while (agg.next()) {
+            carga[agg.getValue('atendente')] = parseInt(agg.getAggregate('COUNT'), 10) || 0;
+        }
+        var melhor = atendentes[0];
+        for (var i = 1; i < atendentes.length; i++) {
+            if ((carga[atendentes[i]] || 0) < (carga[melhor] || 0)) {
+                melhor = atendentes[i];
+            }
+        }
+        return melhor;
     },
 
     /** Prioridade 1 (menor) a 5 (maior) pelo valor em aberto do contribuinte (design UX v1, D1). */
