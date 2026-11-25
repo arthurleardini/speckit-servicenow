@@ -159,3 +159,50 @@ test('23 — os renderizadores leem o formato ServiceNow (visão boundedContexts
   assert.deepEqual(pedido.relationships.map((r) => r.targetEntity), ['x_0000000_exe_cliente']);
   assert.equal(v.boundedContexts[0].entities[0].relationships.length, 0);
 });
+
+// ——— Seções da UX v1 (design ux-cobranca-v1, F1): menu por área, trilha, seed manual, home ———
+
+function comUx(m) {
+  m.modules[0].roles = ['atendente'];
+  m.modules[0].items = [
+    { label: 'Meus clientes', type: 'FILTER', table: 'x_0000000_exe_cliente', filter: 'responsavel=javascript:gs.getUserID()', view: 'minha_lista', roles: ['atendente'] },
+    { label: 'Pedidos por estado', type: 'REPORT', report: 'TEL-003', roles: ['coordenador', 'admin'] },
+    { label: 'Ajuda', type: 'DIRECT', link: 'x_ajuda.do' },
+  ];
+  m.adminTables = true;
+  m.processFlows = [{ table: 'x_0000000_exe_pedido', field: 'estado', steps: [{ label: 'Aberto', condition: 'estado=aberto' }, { label: 'Fechado', value: 'fechado', order: 200 }] }];
+  m.seedManual = ['x_0000000_exe_pedido'];
+  m.homes = [{ role: 'atendente', module: 'Meus clientes' }, { role: 'coordenador', url: 'x_0000000_exe_pedido_list.do' }];
+  m.entities[0].display = 'nome';
+  return m;
+}
+
+test('UX v1 — modules com áreas, adminTables, processFlows, seedManual, homes e display passam', () => {
+  const r = validar(projeto(comUx(exemplo())));
+  assert.ok(valido(r), r.saida);
+});
+
+test('UX v1 — sem as seções novas o exemplo continua passando, sem aviso de menu por área', () => {
+  const r = validar(projeto(exemplo()));
+  assert.ok(valido(r), r.saida);
+  assert.doesNotMatch(r.saida, /menu por área/);
+});
+
+test('UX v1 — referências quebradas nas seções novas reprovam', () => {
+  const m = comUx(exemplo());
+  m.modules[0].items[0].table = 'x_0000000_exe_nada';
+  m.modules[0].items[1].report = 'TEL-001';
+  m.modules[0].items[2].link = 'https://dev.service-now.com/x.do';
+  m.modules[0].items.push({ label: 'X', type: 'KANBAN', table: 'x_0000000_exe_cliente' });
+  m.modules[0].roles = ['gerente'];
+  m.processFlows[0].field = 'situacao';
+  m.seedManual = ['x_0000000_exe_nada'];
+  m.homes = [{ role: 'atendente', module: 'Pedidos por estado' }, { role: 'coordenador', module: 'Nenhum' }];
+  const r = validar(projeto(m));
+  assert.equal(r.codigo, 1, r.saida);
+  for (const re of [
+    /items\/0\/table: "x_0000000_exe_nada"/, /items\/1\/report: "TEL-001" não é tela report/, /items\/2\/link: DIRECT precisa de link relativo/,
+    /items\/3\/type: must be equal to one of the allowed values/, /modules\/0\/roles: papel "gerente"/, /processFlows\/0\/field: campo "situacao"/, /seedManual\/0/,
+    /homes\/0\/module: "Pedidos por estado" é REPORT/, /homes\/1\/module: "Nenhum" não está/,
+  ]) assert.match(r.saida, re);
+});

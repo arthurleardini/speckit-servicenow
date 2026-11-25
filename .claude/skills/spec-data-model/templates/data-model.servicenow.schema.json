@@ -13,7 +13,7 @@
     "modules": {
       "type": "array",
       "minItems": 1,
-      "description": "Módulos do HLD funcional e as tabelas de cada um. Viram o menu do app.",
+      "description": "Módulos do HLD funcional e as tabelas de cada um. Viram o menu do app. Sem `items` em nenhum módulo: um separador por módulo (o label) e uma lista por tabela. Com `items` (menu por área de trabalho): cada módulo com `items` é uma área (separador) seguida dos módulos de menu dela; módulo sem `items` não aparece no menu, e as tabelas cruas ficam na área Administração (`adminTables`).",
       "items": {
         "type": "object",
         "required": ["id", "label", "tables"],
@@ -21,7 +21,85 @@
         "properties": {
           "id": { "type": "string", "pattern": "^MOD-[A-Z0-9-]+$" },
           "label": { "type": "string", "minLength": 1 },
-          "tables": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+          "tables": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "roles": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Papéis que veem o separador da área (sufixo do role do app, ou role da plataforma como admin). Sem o campo: a união dos papéis dos módulos da área."
+          },
+          "order": { "type": "number", "description": "Posição do separador no menu (menor = mais alto)." },
+          "items": {
+            "type": "array",
+            "description": "Módulos de menu da área, na ordem.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": { "type": "string", "minLength": 1, "description": "Título do módulo no menu (`title` também é aceito)." },
+                "title": { "type": "string", "minLength": 1 },
+                "type": { "type": "string", "enum": ["FILTER", "LIST", "DIRECT", "REPORT", "SEPARATOR"] },
+                "table": { "type": "string", "description": "Tabela do modelo (FILTER e LIST)." },
+                "filter": { "type": "string", "description": "Encoded query do módulo, com ORDERBY se precisar." },
+                "view": { "type": "string", "description": "Nome da view (sys_ui_view) da lista." },
+                "roles": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Papéis que veem o módulo. Sem o campo: os da área ou, sem eles, todos os do app." },
+                "order": { "type": "number" },
+                "report": { "type": "string", "pattern": "^TEL-", "description": "Tela report (screens[].type = report) que o módulo REPORT abre." },
+                "link": { "type": "string", "description": "URL relativa do módulo DIRECT (nunca URL fixa de instância)." }
+              }
+            }
+          }
+        }
+      }
+    },
+    "adminTables": {
+      "type": "boolean",
+      "description": "true: o menu ganha a área Administração, só para o papel admin, com uma lista por tabela do modelo."
+    },
+    "processFlows": {
+      "type": "array",
+      "description": "Trilha de etapas (process flow) no topo do form. Uma por tabela; cada etapa vira um sys_process_flow com a condição que a acende.",
+      "items": {
+        "type": "object",
+        "required": ["table", "steps"],
+        "additionalProperties": false,
+        "properties": {
+          "table": { "type": "string" },
+          "field": { "type": "string", "description": "Campo de estado. Com ele, a etapa pode usar `value` no lugar de `condition` (condition = <field>=<value>)." },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["label"],
+              "additionalProperties": false,
+              "properties": {
+                "label": { "type": "string", "minLength": 1 },
+                "condition": { "type": "string", "minLength": 1, "description": "Encoded query que marca a etapa como atual." },
+                "value": { "type": "string" },
+                "order": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "seedManual": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "Tabelas cujo seed é escrito à mão: o sn-seed não gera registro nem contagem para elas."
+    },
+    "homes": {
+      "type": "array",
+      "description": "Página inicial por papel: o sn-seed grava a preferência my_home_navigation_page de cada usuário demo do papel. Informar `module` (label de um módulo FILTER, LIST ou DIRECT em modules[].items) ou `url` (relativa).",
+      "items": {
+        "type": "object",
+        "required": ["role"],
+        "additionalProperties": false,
+        "properties": {
+          "role": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "module": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "minLength": 1 }
         }
       }
     },
@@ -41,6 +119,11 @@
             "description": "Nome físico da tabela: <escopo>_<sufixo>, até 30 caracteres (limite da plataforma)."
           },
           "label": { "type": "string", "minLength": 1 },
+          "pluralLabel": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Rótulo da tabela no plural (título da lista). Sem ele, a plataforma soma \"s\" ao rótulo (\"Contato da listas\")."
+          },
           "extends": {
             "type": "string",
             "description": "Tabela pai (ex.: task). Tabela OOTB extensível ou outra tabela deste modelo."

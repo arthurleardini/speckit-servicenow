@@ -139,6 +139,51 @@ padrão).
 | `screens[]` | `id` no padrão `TEL-`, `table` do modelo, `type` `form`, `list` ou `report`, `role` de `roles` |
 | `roles` | sufixos; viram `<escopo>.<sufixo>`. Sem o campo, `coordenador`, `atendente` e `admin` |
 | `demoUsers` | opcional. `[{ "user": "demo.atendente2", "role": "atendente", "label": "Atendente B" }]`: usuário demo a mais, além do `demo.<role>`. `user` começa com `demo.`; `role` está em `roles` |
+| `seedManual` | opcional. `["ciclo", "contato"]`: tabelas com seed escrito à mão. Ver "Seed manual" |
+| `homes` | opcional. Página inicial por papel. Ver "Home por papel" |
+
+## Seed manual
+
+Quando o seed precisa ser coerente entre tabelas (totais que batem, datas relativas a hoje), ele é
+escrito à mão. As tabelas em `seedManual` (sufixo ou nome completo) ficam de fora do gerador: sem
+arquivo `<sufixo>.now.ts`, sem linha em `_contagem.json` e sem journal do registro demo. Coluna de
+outra tabela que aponta para uma tabela manual fica vazia no seed gerado.
+
+Quem escreve o seed manual (em arquivo sem o cabeçalho `// gerado por sn-seed`, por exemplo em
+`app/src/fluent/seed-demo/`) cuida de:
+
+- gravar `Now.ID['<TEL>_registro_demo']` para cada tela de form da tabela (o manifesto de telas
+  depende dessa chave);
+- manter a contagem em `app/src/fluent/seed/_contagem.manual.json`
+  (`{ "tabelas": { "<tabela>": <n> }, "extras": [] }`); cada geração junta esse arquivo ao
+  `_contagem.json`, que o `sn-reinstall` confere;
+- se a tabela tem pessoa ou documento (`pessoa: true`, CPF/CNPJ), listar cada documento em
+  `app/src/fluent/seed/_documentos.manual.json` (`{ "documentos": [{ valor, tipo, tabela, coluna, id }] }`),
+  que também entra no `_documentos.json`. Documento fictício, com DV válido.
+
+## Home por papel
+
+`homes` define a página que cada papel vê ao entrar. Para cada usuário demo do papel (o
+`demo.<role>` e os de `demoUsers`), o seed grava em `_homes.now.ts` uma preferência de usuário
+(`sys_user_preference`) chamada `my_home_navigation_page`, como dado demo. É o nome que a release
+Brazil lê com o Next Experience ligado, e ele vale mais que a propriedade `glide.login.home`
+(conferido na instância e na documentação em 2026-11-24).
+
+```json
+"homes": [
+  { "role": "atendente", "module": "Minha lista" },
+  { "role": "coordenador", "url": "x_2326104_cob_caso_list.do?sysparm_view=qualificada" }
+]
+```
+
+- `module`: label de um módulo `FILTER`, `LIST` ou `DIRECT` em `modules[].items` (ver o
+  `sn-scaffold`). O valor da preferência é a URL relativa da lista:
+  `<tabela>_list.do?sysparm_query=<filtro>&sysparm_view=<view>` (sem codificar, como a
+  documentação pede; só `&` dentro do filtro vira `%26`), ou o `link` do DIRECT.
+- `url`: URL relativa, quando a home não é um módulo do menu.
+- Um papel tem uma home só. O `_contagem.json` ganha a conferência das preferências.
+- Usuário real (fora do demo) não recebe a preferência: o administrador a cria pela tela de
+  preferências de usuário, com o mesmo nome e valor.
 
 ## O que é gerado (`app/src/fluent/seed/`)
 
@@ -147,6 +192,7 @@ padrão).
 | `<sufixo>.now.ts` | N registros `seed_<sufixo>_<nnn>` + 1 registro `Now.ID['<TEL>_registro_demo']` por tela de form da tabela |
 | `_usuarios.now.ts` | `sys_user` `demo.<role>` e os de `demoUsers` (sem senha), e o `sys_user_has_role` de cada um |
 | `_journal.now.ts` | 2 ou 3 linhas em `sys_journal_field` por registro demo, na primeira coluna `journal_input` |
+| `_homes.now.ts` | preferência `my_home_navigation_page` por usuário demo dos papéis em `homes` (só com `homes`) |
 | `_documentos.json` | todo CPF e CNPJ gerado, com tabela, coluna e `$id` |
 | `_contagem.json` | contagem esperada por tabela e os extras (usuários demo; journal como mínimo) |
 

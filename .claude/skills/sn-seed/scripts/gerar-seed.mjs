@@ -157,7 +157,7 @@ export function normalizarModelo(modelo, escopo) {
     if (name.length > 30) erros.push(`tabela ${name} tem ${name.length} caracteres (máximo 30)`);
     if (!/^[a-z0-9_]*[a-z0-9]$/.test(name)) erros.push(`tabela ${name}: só minúsculas, números e _`);
     const ent = {
-      name, short, label: e.label ?? short, extends: e.extends, display: e.display,
+      name, short, label: e.label ?? short, pluralLabel: e.pluralLabel, extends: e.extends, display: e.display,
       simulation: Boolean(e.simulation), audit: e.audit, pessoa: Boolean(e.pessoa), columns: [],
     };
     porCurto.set(short, ent);
@@ -236,9 +236,154 @@ export function normalizarModelo(modelo, escopo) {
     }
   }
 
+  const navegacao = normalizarNavegacao(modelo, { escopo, porCurto, telas, roles, erros });
+
   if (erros.length) throw new Error(`modelo inválido:\n  - ${erros.join('\n  - ')}`);
-  const modules = Array.isArray(modelo.modules) ? modelo.modules : null;
-  return { escopo, entidades: entidades.map((x) => x.ent), telas, roles, usuarios, modules };
+  return { escopo, entidades: entidades.map((x) => x.ent), telas, roles, usuarios, ...navegacao };
+}
+
+// ——— Navegação, trilhas de etapas, seed manual e home (design ux-cobranca-v1, fase F1) ———
+
+export const TIPOS_MODULO = ['FILTER', 'LIST', 'DIRECT', 'REPORT', 'SEPARATOR'];
+/** Roles da plataforma aceitos pelo nome literal em `roles` de módulo (os do app usam o sufixo). */
+export const ROLES_OOTB = new Set(['admin', 'itil']);
+/** Preferência de usuário que a Core UI e o Next Experience leem como página inicial (Brazil). */
+export const PREFERENCIA_HOME = 'my_home_navigation_page';
+
+/** Rótulo do módulo ou da área: o modelo usa `label`; `title` (formato antigo do scaffold) também vale. */
+export const rotulo = (m) => m?.label ?? m?.title ?? null;
+
+/** URL relativa que abre o módulo (lista com filtro e view, ou o link do DIRECT). */
+export function urlDoModulo(it) {
+  if (it.type === 'DIRECT') return it.link;
+  const p = [];
+  if (it.filter) p.push(`sysparm_query=${it.filter.replace(/&/g, '%26')}`);
+  if (it.view) p.push(`sysparm_view=${it.view}`);
+  return `${it.table}_list.do${p.length ? `?${p.join('&')}` : ''}`;
+}
+
+const ehUrlAbsoluta = (u) => /^[a-z][a-z0-9+.-]*:\/\//i.test(u) || u.startsWith('//');
+
+/**
+ * Normaliza `modules` (com as áreas e os módulos de cada uma em `items`), `adminTables`,
+ * `processFlows`, `seedManual` e `homes`. Sem nenhuma dessas seções, devolve o que o modelo tinha
+ * antes: `modules` cru (ou null), e listas vazias.
+ */
+function normalizarNavegacao(modelo, { escopo, porCurto, telas, roles, erros }) {
+  const tabela = (nome) => porCurto.get(String(nome ?? ''))?.name ?? null;
+  const papel = (r, onde) => {
+    const s = String(r ?? '');
+    const achado = roles.find((x) => x.short === s || x.name === s || x.name === `${escopo}.${s}`);
+    if (achado) return achado.name;
+    if (ROLES_OOTB.has(s) || s.includes('.')) return s;
+    erros.push(`${onde}: role "${s}" não está em roles`);
+    return s;
+  };
+  const papeis = (lista, onde) => (Array.isArray(lista) && lista.length ? lista.map((r) => papel(r, onde)) : null);
+
+  // modules: cada item é uma área (vira separador). Área com `items` define os módulos dela.
+  let modules = null;
+  if (Array.isArray(modelo.modules)) {
+    modules = modelo.modules.map((m, i) => {
+      const onde = `modules[${i}]${m?.id ? ` (${m.id})` : ''}`;
+      const area = {
+        id: m?.id ?? null, title: rotulo(m), tables: m?.tables ?? [], screens: m?.screens ?? [],
+        roles: papeis(m?.roles, onde), order: m?.order ?? null, items: null,
+      };
+      if (m?.items !== undefined) {
+        if (!Array.isArray(m.items)) { erros.push(`${onde}: items precisa ser lista`); return area; }
+        if (!area.title) erros.push(`${onde}: área com items precisa de label`);
+        const vistos = new Set();
+        area.items = m.items.map((it, j) => {
+          const ondeIt = `${onde}.items[${j}]`;
+          const label = rotulo(it);
+          if (!label) erros.push(`${ondeIt}: módulo sem label`);
+          else if (vistos.has(label)) erros.push(`${ondeIt}: módulo "${label}" repetido na área`);
+          vistos.add(label);
+          const type = it?.type ?? (it?.report ? 'REPORT' : it?.link ? 'DIRECT' : it?.filter ? 'FILTER' : 'LIST');
+          if (!TIPOS_MODULO.includes(type)) erros.push(`${ondeIt}: type "${type}" inválido (${TIPOS_MODULO.join('|')})`);
+          const item = {
+            label, type, table: null, filter: it?.filter ?? null, view: it?.view ?? null,
+            roles: papeis(it?.roles, ondeIt), order: it?.order ?? null, report: null, link: null,
+          };
+          if (type === 'LIST' || type === 'FILTER') {
+            item.table = tabela(it?.table);
+            if (!item.table) erros.push(`${ondeIt}: tabela "${it?.table}" não está em entities`);
+          }
+          if (type === 'REPORT') {
+            const tel = telas.find((t) => t.id === it?.report);
+            if (!tel || tel.type !== 'report') erros.push(`${ondeIt}: report "${it?.report}" não é tela report em screens`);
+            item.report = it?.report ?? null;
+          }
+          if (type === 'DIRECT') {
+            if (!it?.link) erros.push(`${ondeIt}: DIRECT sem link`);
+            else if (ehUrlAbsoluta(it.link)) erros.push(`${ondeIt}: link "${it.link}" precisa ser relativo (sem URL fixa de instância)`);
+            item.link = it?.link ?? null;
+          }
+          return item;
+        });
+      }
+      return area;
+    });
+  }
+  const porAreas = Boolean(modules?.some((m) => m.items));
+  const adminTables = modelo.adminTables === true;
+
+  // processFlows: trilha de etapas por tabela.
+  const processFlows = [];
+  for (const [i, pf] of (Array.isArray(modelo.processFlows) ? modelo.processFlows : []).entries()) {
+    const onde = `processFlows[${i}]`;
+    const ent = porCurto.get(String(pf?.table ?? ''));
+    if (!ent) { erros.push(`${onde}: tabela "${pf?.table}" não está em entities`); continue; }
+    if (processFlows.some((x) => x.table === ent.name)) { erros.push(`${onde}: tabela ${ent.name} já tem trilha`); continue; }
+    if (pf.field && !ent.columns.some((c) => c.name === pf.field)) erros.push(`${onde}: campo "${pf.field}" não existe em ${ent.name}`);
+    const steps = Array.isArray(pf.steps) ? pf.steps : [];
+    if (!steps.length) erros.push(`${onde}: steps vazio`);
+    const labels = new Set();
+    const etapas = steps.map((s, j) => {
+      const label = s?.label;
+      if (!label) erros.push(`${onde}.steps[${j}]: etapa sem label`);
+      else if (labels.has(label)) erros.push(`${onde}.steps[${j}]: etapa "${label}" repetida`);
+      labels.add(label);
+      let condition = s?.condition;
+      if (!condition && pf.field && s?.value !== undefined) condition = `${pf.field}=${s.value}`;
+      if (!condition) erros.push(`${onde}.steps[${j}] (${label}): etapa sem condition`);
+      return { label, condition, order: s?.order ?? (j + 1) * 100 };
+    });
+    processFlows.push({ table: ent.name, short: ent.short, label: ent.label, field: pf.field ?? null, steps: etapas });
+  }
+
+  // seedManual: tabelas cujo seed é escrito à mão (o sn-seed não gera).
+  const seedManual = [];
+  for (const [i, t] of (Array.isArray(modelo.seedManual) ? modelo.seedManual : []).entries()) {
+    const nome = tabela(t);
+    if (!nome) erros.push(`seedManual[${i}]: tabela "${t}" não está em entities`);
+    else if (!seedManual.includes(nome)) seedManual.push(nome);
+  }
+
+  // homes: página inicial por papel (preferência de usuário dos usuários demo).
+  const homes = [];
+  const itens = (modules ?? []).flatMap((a) => a.items ?? []);
+  for (const [i, h] of (Array.isArray(modelo.homes) ? modelo.homes : []).entries()) {
+    const onde = `homes[${i}]`;
+    const role = roles.find((r) => r.short === h?.role || r.name === h?.role);
+    if (!role) { erros.push(`${onde}: role "${h?.role}" não está em roles`); continue; }
+    if (homes.some((x) => x.role === role.short)) { erros.push(`${onde}: role ${role.short} com mais de uma home`); continue; }
+    if (Boolean(h.module) === Boolean(h.url)) { erros.push(`${onde}: informe module ou url (um dos dois)`); continue; }
+    let url = h.url;
+    if (h.module) {
+      const achados = itens.filter((it) => it.label === h.module);
+      if (achados.length !== 1) { erros.push(`${onde}: módulo "${h.module}" ${achados.length ? 'ambíguo' : 'não está em modules[].items'}`); continue; }
+      const it = achados[0];
+      if (!['FILTER', 'LIST', 'DIRECT'].includes(it.type)) { erros.push(`${onde}: módulo "${h.module}" é ${it.type}; use FILTER, LIST, DIRECT ou url`); continue; }
+      url = urlDoModulo(it);
+    } else if (ehUrlAbsoluta(String(url))) {
+      erros.push(`${onde}: url "${url}" precisa ser relativa`); continue;
+    }
+    homes.push({ role: role.short, url: String(url).replace(/^\//, ''), module: h.module ?? null });
+  }
+
+  return { modules, porAreas, adminTables, processFlows, seedManual, homes };
 }
 
 // ——— Valores fictícios ———
@@ -381,15 +526,19 @@ export function gerarSeed(modeloNorm, { porTabela = POR_TABELA_PADRAO, semente =
   const arquivos = {};
 
   // Chaves de cada tabela, conhecidas antes de gerar valores (referências entre tabelas).
+  // Tabelas em `seedManual` têm seed escrito à mão: ficam fora daqui (arquivo, contagem e alvo de
+  // reference — a coluna que aponta para elas fica vazia no seed gerado).
+  const manual = new Set(modeloNorm.seedManual ?? []);
+  const geradas = entidades.filter((e) => !manual.has(e.name));
   const chavesPorTabela = new Map();
-  for (const ent of entidades) {
+  for (const ent of geradas) {
     const chaves = Array.from({ length: porTabela }, (_, i) => `seed_${ent.short}_${String(i + 1).padStart(3, '0')}`);
     for (const t of telas.filter((x) => x.type === 'form' && x.table === ent.name)) chaves.push(`${t.id}_registro_demo`);
     chavesPorTabela.set(ent.name, chaves);
   }
 
   const journal = [];
-  for (const ent of entidades) {
+  for (const ent of geradas) {
     const rng = criarPrng(hash32(`${semente}:${ent.name}`));
     const ctx = { rng, usados, documentos, chavesPorTabela, roles, usuarios: usuariosDemo, chaveAtual: null };
     const registros = [];
@@ -444,6 +593,32 @@ export function gerarSeed(modeloNorm, { porTabela = POR_TABELA_PADRAO, semente =
     esperado: usuariosDemo.length,
   });
 
+  // Home por papel: preferência `my_home_navigation_page` de cada usuário demo do papel.
+  const homes = modeloNorm.homes ?? [];
+  if (homes.length) {
+    const prefs = [];
+    const comHome = [];
+    for (const h of homes) {
+      for (const u of usuariosDemo.filter((x) => x.role === h.role)) {
+        comHome.push(u.user);
+        prefs.push({
+          chave: `home_${u.chave}`,
+          tabela: 'sys_user_preference',
+          dados: {
+            name: PREFERENCIA_HOME, value: h.url, user: ref('sys_user', u.chave), type: 'string',
+            description: `Página inicial do papel ${h.role}${h.module ? ` (módulo ${h.module})` : ''}`,
+          },
+        });
+      }
+    }
+    arquivos['_homes.now.ts'] = arquivoTs(prefs);
+    contagem.extras.push({
+      tabela: 'sys_user_preference',
+      query: `name=${PREFERENCIA_HOME}^user.user_nameIN${comHome.join(',')}`,
+      esperado: prefs.length,
+    });
+  }
+
   if (journal.length) {
     arquivos['_journal.now.ts'] = arquivoTs(journal);
     const porTabelaJ = {};
@@ -471,9 +646,29 @@ export function gravarSeed(resultado, appDir) {
     }
   }
   for (const [nome, conteudo] of Object.entries(resultado.arquivos)) writeFileSync(join(dir, nome), conteudo);
-  writeFileSync(join(dir, '_documentos.json'), JSON.stringify(resultado.documentos, null, 2) + '\n');
-  writeFileSync(join(dir, '_contagem.json'), JSON.stringify(resultado.contagem, null, 2) + '\n');
+  const { documentos, contagem } = juntarManual(resultado, dir);
+  writeFileSync(join(dir, '_documentos.json'), JSON.stringify(documentos, null, 2) + '\n');
+  writeFileSync(join(dir, '_contagem.json'), JSON.stringify(contagem, null, 2) + '\n');
   return dir;
+}
+
+/**
+ * Seed escrito à mão (`seedManual`): a contagem e os documentos dele ficam em
+ * `seed/_contagem.manual.json` ({ tabelas, extras }) e `seed/_documentos.manual.json`
+ * ({ documentos }), mantidos por quem escreve o seed. Cada geração junta os dois aos gerados, para o
+ * reinstall conferir tudo. Sem esses arquivos, o resultado é o gerado.
+ */
+export function juntarManual(resultado, dir) {
+  const ler = (nome) => (existsSync(join(dir, nome)) ? JSON.parse(readFileSync(join(dir, nome), 'utf8')) : null);
+  const cm = ler('_contagem.manual.json');
+  const dm = ler('_documentos.manual.json');
+  const contagem = cm
+    ? { ...resultado.contagem, tabelas: { ...resultado.contagem.tabelas, ...(cm.tabelas ?? {}) }, extras: [...resultado.contagem.extras, ...(cm.extras ?? [])] }
+    : resultado.contagem;
+  const documentos = dm
+    ? { ...resultado.documentos, documentos: [...resultado.documentos.documentos, ...(dm.documentos ?? [])] }
+    : resultado.documentos;
+  return { documentos, contagem };
 }
 
 // ——— CLI ———
