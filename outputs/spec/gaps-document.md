@@ -766,6 +766,34 @@ Cada inscrição ativa mantém um contexto de Flow em espera (`waitForADuration`
 1. Manter um Flow por inscrição e medir contextos em espera na instância de homologação.
 2. Lote agendado: um Scheduled Script diário marca as inscrições com `proxima_etapa_em` vencida e chama as mesmas ações do `ReguaMotor` (mesmo desenho do plano B de `relativeDatetime`: coluna `liberada` + job), sem contexto em espera por inscrição.
 
+### GAP-156 — Testes que faltam nas ações de lista e no Update (auditoria US-MOD-UX-009)
+
+**Área:** MOD-UX
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-009-01
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-UX-009.md, TEST-001 e OBS-001) registrou: sem ATF do admin vendo Update no ciclo publicado, do clique em Update gravando o ciclo em prévia e de «Avançar etapa» em «Ações nas linhas selecionadas» do caso na tela; o menu da linha não é montado no Client Test Runner e fica conferido por Playwright (screens/ux-v2). O log de CasoConducao e QualificacaoCiclo grava o nome da ação de form também quando a chamada vem da lista.
+
+**Opções identificadas:**
+1. Acrescentar os três testes na US-MOD-UX-009 e um parâmetro de origem no log.
+2. Manter a verificação por Playwright no roteiro da véspera.
+
+### GAP-157 — Aviso «Próximo passo», contagem de módulos e listas da v1 com mais de 6 colunas (auditoria US-MOD-UX-010)
+
+**Área:** MOD-UX
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-UX-010-01, TASK-MOD-UX-010-02
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-UX-010.md, CONF-001 e TEST-001) registrou: o aviso «Próximo passo» no form do contato e os 13 módulos do coordenador foram conferidos por Playwright e consulta à instância, fora da suíte ATF; TEL-034, TEL-023 e TEL-036 têm 6 colunas, e as listas da v1 que o delta não toca (TEL-005, TEL-007, TEL-015, TEL-029, TEL-032) têm de 7 a 9.
+
+**Opções identificadas:**
+1. ATF de form para o aviso e `moduleVisibility` com a lista completa dos módulos do coordenador.
+2. Reduzir as listas da v1 a 6 colunas numa story própria.
+
 ---
 
 ## Respostas
@@ -1095,6 +1123,18 @@ Cada inscrição ativa mantém um contexto de Flow em espera (`waitForADuration`
 **Impacto na task:** _(a preencher)_
 
 ### GAP-155
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-156
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-157
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_
