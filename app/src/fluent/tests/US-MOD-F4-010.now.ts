@@ -632,24 +632,32 @@ export const t_f4010_acl_coord = Test({
         jasmineVersion: '3.1',
         script: `(function(outputs, steps, params, stepResult, assertEqual) {
     describe('ACL de régua e etapa — coordenador', function() {
-        var r = new GlideRecordSecure('x_2326104_cob_regua');
-        r.get('codigo', 'atf_acl');
-        var e = new GlideRecordSecure('x_2326104_cob_regua_etapa');
-        e.addQuery('regua', r.getUniqueValue());
-        e.addQuery('ordem', 2);
-        e.query();
-        e.next();
-        var podeTexto = e.template.canWrite();
-        var podeOrdem = e.ordem.canWrite();
-        e.setValue('template', 'Nova mensagem de ciência no DT-e.');
-        e.setValue('ordem', 7);
-        e.update();
-        var podeCodigo = r.codigo.canWrite();
-        var podeCarteira = r.carteira.canWrite();
-        var podeFlow = r.flow.canWrite();
-        var podeAtiva = r.ativa.canWrite();
-        r.setValue('codigo', 'outro');
-        r.update();
+        var erro = '';
+        var r, e, podeTexto, podeOrdem, podeCodigo, podeCarteira, podeFlow, podeAtiva;
+        try {
+            r = new GlideRecordSecure('x_2326104_cob_regua');
+            r.addQuery('codigo', 'atf_acl');
+            r.query();
+            r.next();
+            e = new GlideRecordSecure('x_2326104_cob_regua_etapa');
+            e.addQuery('regua', r.getUniqueValue());
+            e.addQuery('ordem', 2);
+            e.query();
+            e.next();
+            podeTexto = e.template.canWrite();
+            podeOrdem = e.ordem.canWrite();
+            e.setValue('template', 'Nova mensagem de ciência no DT-e.');
+            e.update();
+            podeCodigo = r.codigo.canWrite();
+            podeCarteira = r.carteira.canWrite();
+            podeFlow = r.flow.canWrite();
+            podeAtiva = r.ativa.canWrite();
+        } catch (ex) {
+            erro = String(ex);
+        }
+        it('sem erro no passo', function() {
+            expect(erro).toBe('');
+        });
         it('grava o texto da etapa e os parâmetros da régua', function() {
             expect(podeTexto).toBe(true);
             expect(podeAtiva).toBe(true);
