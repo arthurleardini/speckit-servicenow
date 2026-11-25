@@ -7,7 +7,7 @@ import '@servicenow/sdk/global'
 import { Acl } from '@servicenow/sdk/core'
 import { role_coordenador, role_atendente, role_admin } from './roles.now'
 
-// Leitura: o dono é o campo «atendente» da própria linha.
+// Leitura: o dono é o campo de dono da própria linha (caso.coordenador, contribuinte.atendente).
 Acl({
     $id: Now.ID['RF-MOD-F5-007_acl_caso_carteira'],
     type: 'record',
@@ -16,7 +16,7 @@ Acl({
     decisionType: 'deny',
     adminOverrides: true,
     script: "answer = new CarteiraAtendente().podeVer(current, 'coordenador');",
-    description: 'Nega ao atendente o caso de outro atendente (RN-NOVO-F5-007).',
+    description: 'Nega o caso a quem não é o coordenador responsável nem vê tudo (RN-NOVO-F5-007, R6).',
 })
 
 Acl({
@@ -50,6 +50,29 @@ Acl({
     adminOverrides: true,
     script: "answer = new CarteiraAtendente().podeVer(current, ['atendente', 'caso.coordenador']);",
     description: 'Nega ao atendente a regularização de outra carteira (SEC-002).',
+})
+
+// Leitura: contato da lista — o dono é o atendente do contato (RF-MOD-UX-006, design UX v1 🔴4/R3).
+Acl({
+    $id: Now.ID['RF-MOD-UX-006_acl_contato_carteira'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    operation: 'read',
+    decisionType: 'deny',
+    adminOverrides: true,
+    script: "answer = new CarteiraAtendente().podeVer(current, 'atendente');",
+    description: 'Nega ao atendente o contato da lista de outro atendente (RN-NOVO-F5-007, RF-MOD-UX-006).',
+})
+
+Acl({
+    $id: Now.ID['RF-MOD-UX-006_acl_contato_write_carteira'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    operation: 'write',
+    decisionType: 'deny',
+    adminOverrides: true,
+    script: "answer = new CarteiraAtendente().podeVer(current, 'atendente');",
+    description: 'Nega ao atendente gravar contato da lista de outro atendente (RN-NOVO-F5-007, RF-MOD-UX-006).',
 })
 
 // Leitura: o dono é o atendente do contribuinte.
@@ -108,14 +131,14 @@ Acl({
     description: 'Nega ao atendente o score de contribuinte de outra carteira (SEC-002).',
 })
 
-// Gravação: caso (atendente encerra o próprio caso; coordenador e admin, qualquer um).
+// Gravação: caso (o caso qualificado é do coordenador; o atendente não tem acesso — design UX v1 R6, 🔴6).
 Acl({
     $id: Now.ID['RF-MOD-F5-007_acl_caso_write'],
     type: 'record',
     table: 'x_2326104_cob_caso',
     operation: 'write',
-    roles: [role_atendente, role_coordenador, role_admin],
-    description: 'Atendente, coordenador e admin do app gravam o caso; a linha é conferida pela ACL de carteira.',
+    roles: [role_coordenador, role_admin],
+    description: 'Coordenador e admin do app gravam o caso qualificado.',
 })
 
 Acl({
@@ -126,7 +149,7 @@ Acl({
     decisionType: 'deny',
     adminOverrides: true,
     script: "answer = new CarteiraAtendente().podeVer(current, 'coordenador');",
-    description: 'Nega ao atendente gravar caso de outro atendente (RN-NOVO-F5-007).',
+    description: 'Nega gravar caso a quem não é o coordenador responsável nem vê tudo (RN-NOVO-F5-007, R6).',
 })
 
 // Campos: sem ACL de campo, o curinga «*.*» da plataforma deixaria o form somente leitura.
@@ -136,8 +159,8 @@ Acl({
     table: 'x_2326104_cob_caso',
     field: '*',
     operation: 'write',
-    roles: [role_atendente, role_coordenador, role_admin],
-    description: 'Campos do caso gravam para atendente, coordenador e admin do app.',
+    roles: [role_coordenador, role_admin],
+    description: 'Campos do caso gravam para coordenador e admin do app.',
 })
 
 Acl({
@@ -146,18 +169,19 @@ Acl({
     table: 'x_2326104_cob_interacao',
     field: '*',
     operation: 'write',
-    roles: [role_atendente, role_admin],
-    description: 'Campos da interação gravam para atendente e admin do app.',
+    roles: [role_atendente, role_coordenador, role_admin],
+    description: 'Campos da interação gravam para atendente, coordenador e admin do app (design UX v1 R4).',
 })
 
-// Gravação: interação (atendente registra só nos próprios casos; coordenador só lê).
+// Gravação: interação (atendente registra só nos próprios contatos; o coordenador registra no caso que conduz —
+// design UX v1 R4).
 Acl({
     $id: Now.ID['RF-MOD-F5-007_acl_interacao_create'],
     type: 'record',
     table: 'x_2326104_cob_interacao',
     operation: 'create',
-    roles: [role_atendente, role_admin],
-    description: 'Atendente e admin do app registram interação.',
+    roles: [role_atendente, role_coordenador, role_admin],
+    description: 'Atendente, coordenador e admin do app registram interação (R4).',
 })
 
 Acl({
@@ -165,8 +189,8 @@ Acl({
     type: 'record',
     table: 'x_2326104_cob_interacao',
     operation: 'write',
-    roles: [role_atendente, role_admin],
-    description: 'Atendente e admin do app gravam interação; a linha é conferida pela ACL de carteira.',
+    roles: [role_atendente, role_coordenador, role_admin],
+    description: 'Atendente, coordenador e admin do app gravam interação; a linha é conferida pela ACL de carteira.',
 })
 
 Acl({

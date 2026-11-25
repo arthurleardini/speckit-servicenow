@@ -1,4 +1,4 @@
-// RF-MOD-F5-007 — atendente só altera (e encerra) caso que já é dele, e não troca o dono do caso
+// RF-MOD-F5-007 / RF-MOD-UX-006 — só o coordenador responsável (ou quem vê tudo) altera o caso, e não troca o dono do caso
 // (RN-NOVO-F5-007, SEC-002). Confere o dono como estava gravado: trocar o atendente não dá acesso.
 (function executeRule(current, previous) {
     var carteira = new CarteiraAtendente();

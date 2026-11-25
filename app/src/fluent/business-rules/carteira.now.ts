@@ -28,6 +28,30 @@ export const br_caso_carteira = BusinessRule({
     script: Now.include('../../server/carteira/recusarCasoForaDaCarteira.server.js'),
 })
 
+export const br_contato_carteira = BusinessRule({
+    $id: Now.ID['RF-MOD-UX-006_br_contato_carteira'],
+    name: 'Recusar alteração de contato fora da carteira do atendente',
+    description: 'Atendente só altera contato que já é dele e não troca o dono; contato só encerra com motivo (RN-NOVO-F5-007, RN-NOVO-UX-005).',
+    table: 'x_2326104_cob_contato',
+    when: 'before',
+    action: ['update'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/recusarContatoForaDaCarteira.server.js'),
+})
+
+BusinessRule({
+    $id: Now.ID['RF-MOD-UX-006_br_consulta_carteira_contato'],
+    name: 'Restringir consulta à carteira do atendente',
+    description: 'Consulta de quem só tem o papel de atendente traz só os próprios contatos da lista (RN-NOVO-F5-007, RF-MOD-UX-006).',
+    table: 'x_2326104_cob_contato',
+    when: 'before',
+    action: ['query'],
+    order: 100,
+    active: true,
+    script: Now.include('../../server/carteira/restringirConsultaCarteira.server.js'),
+})
+
 // Consulta: quem só tem o papel de atendente nem recebe nem conta linhas de outra carteira (o papel do
 // Data Filter com Deny do SEC-002). A ACL de linha continua como segunda barreira.
 
