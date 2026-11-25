@@ -1,0 +1,50 @@
+{
+  "alvo": "US-MOD-UX-004",
+  "tipo": "story",
+  "sys_id": [
+    "fbd33cc9898246b7ab4953ce61fdb39a",
+    "c3321ba9f27e4a6d855a9945dd27a9c4",
+    "1f6dc0c5254542599245b9cc0e2e860c"
+  ],
+  "resultId": [
+    "1836fd81933417107a57f7c4b503d6c4",
+    "9a3635c1933417107a57f7c4b503d61d",
+    "2c56fdc1933417107a57f7c4b503d671"
+  ],
+  "status": "success",
+  "horario": "2026-11-25T03:21:52.333Z",
+  "commit": "182fd1358aa31694068661ee4494defacbef0d8e",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-UX-004_atf_distribuir_positivo",
+      "sys_id": "fbd33cc9898246b7ab4953ce61fdb39a",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "1836fd81933417107a57f7c4b503d6c4",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=1836fd81933417107a57f7c4b503d6c4"
+    },
+    {
+      "chave": "US-MOD-UX-004_atf_distribuir_negativo",
+      "sys_id": "c3321ba9f27e4a6d855a9945dd27a9c4",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "9a3635c1933417107a57f7c4b503d61d",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=9a3635c1933417107a57f7c4b503d61d"
+    },
+    {
+      "chave": "US-MOD-UX-004_atf_ui_distribuir",
+      "sys_id": "1f6dc0c5254542599245b9cc0e2e860c",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "2c56fdc1933417107a57f7c4b503d671",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=2c56fdc1933417107a57f7c4b503d671"
+    }
+  ]
+}
