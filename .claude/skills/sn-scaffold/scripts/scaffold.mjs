@@ -55,7 +55,15 @@ export function gerarTabela(ent) {
   const linhas = cabecalho(imports);
   linhas.push(`export const ${ent.name} = Table({`);
   linhas.push(`    name: ${js(ent.name)},`);
-  linhas.push(`    label: ${js(ent.simulation && !/simulad/i.test(ent.label) ? `${ent.label} (Simulado)` : ent.label)},`);
+  const rotulo = ent.simulation && !/simulad/i.test(ent.label) ? `${ent.label} (Simulado)` : ent.label;
+  // Com pluralLabel, o rótulo vira Documentation[] (sys_documentation da tabela com o plural): título da lista
+  // e contagens usam o plural certo em vez do rótulo + "s" da plataforma.
+  if (ent.pluralLabel) {
+    const plural = ent.simulation && !/simulad/i.test(ent.pluralLabel) ? `${ent.pluralLabel} (Simulado)` : ent.pluralLabel;
+    linhas.push(`    label: [{ label: ${js(rotulo)}, plural: ${js(plural)}, language: 'en' }],`);
+  } else {
+    linhas.push(`    label: ${js(rotulo)},`);
+  }
   if (ent.extends) linhas.push(`    extends: ${js(ent.extends)},`);
   const display = ent.display ?? ent.columns.find((c) => c.type === 'string' && !c.format)?.name;
   if (display) linhas.push(`    display: ${js(display)},`);

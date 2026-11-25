@@ -119,6 +119,11 @@
             "description": "Nome físico da tabela: <escopo>_<sufixo>, até 30 caracteres (limite da plataforma)."
           },
           "label": { "type": "string", "minLength": 1 },
+          "pluralLabel": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Rótulo da tabela no plural (título da lista). Sem ele, a plataforma soma \"s\" ao rótulo (\"Contato da listas\")."
+          },
           "extends": {
             "type": "string",
             "description": "Tabela pai (ex.: task). Tabela OOTB extensível ou outra tabela deste modelo."

@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizarModelo } from '../../sn-seed/scripts/gerar-seed.mjs';
-import { executar, gerarScaffold, montarManifesto, planoDeViews, sysIdDaChave } from './scaffold.mjs';
+import { executar, gerarScaffold, gerarTabela, montarManifesto, planoDeViews, sysIdDaChave } from './scaffold.mjs';
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const APP_REAL = join(RAIZ, 'app');
@@ -265,4 +265,13 @@ test('menu por área, REPORT, trilha de etapas e home passam no now-sdk build de
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+test('pluralLabel: rótulo da tabela vira Documentation[] com o plural; sem ele, continua string', () => {
+  const com = gerarTabela({ name: 'tstcontato', label: 'Contato da lista', pluralLabel: 'Contatos da lista', columns: [{ name: 'nome', label: 'Nome', type: 'string' }] });
+  assert.match(com, /label: \[\{ label: "Contato da lista", plural: "Contatos da lista", language: 'en' \}\],/);
+  const sim = gerarTabela({ name: 'tstcanal', label: 'Canal', pluralLabel: 'Canais', simulation: true, columns: [{ name: 'nome', label: 'Nome', type: 'string' }] });
+  assert.match(sim, /label: \[\{ label: "Canal \(Simulado\)", plural: "Canais \(Simulado\)", language: 'en' \}\],/);
+  const sem = gerarTabela({ name: 'tstpessoa', label: 'Pessoa', columns: [{ name: 'nome', label: 'Nome', type: 'string' }] });
+  assert.match(sem, /^    label: "Pessoa",$/m);
 });

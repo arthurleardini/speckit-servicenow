@@ -157,7 +157,7 @@ export function normalizarModelo(modelo, escopo) {
     if (name.length > 30) erros.push(`tabela ${name} tem ${name.length} caracteres (máximo 30)`);
     if (!/^[a-z0-9_]*[a-z0-9]$/.test(name)) erros.push(`tabela ${name}: só minúsculas, números e _`);
     const ent = {
-      name, short, label: e.label ?? short, extends: e.extends, display: e.display,
+      name, short, label: e.label ?? short, pluralLabel: e.pluralLabel, extends: e.extends, display: e.display,
       simulation: Boolean(e.simulation), audit: e.audit, pessoa: Boolean(e.pessoa), columns: [],
     };
     porCurto.set(short, ent);
