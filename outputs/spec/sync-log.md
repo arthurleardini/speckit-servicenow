@@ -14,6 +14,7 @@ Ordem cronológica, mais recente no topo. Cada execução = uma linha.
 
 | # | Data/Hora | Skill | Modo / contexto | Inputs consumidos | Outputs gerados ou atualizados | Decisões-chave (1–3 bullets) | Decisor | Próximo passo recomendado |
 |--:|-----------|-------|-----------------|-------------------|-------------------------------|------------------------------|---------|---------------------------|
+| 63 | 2026-11-25 10:53 | now-sdk-install | dev493801 | x_2326104_cob | 3bbd2d4bb3c76b4f618aae80e0ef7f914dbd7e0e | ok; 1009 registros | — | sn-capture |
 | 62 | 2026-11-25 10:46 | now-sdk-install | dev493801 | x_2326104_cob | 0ff77f12d7492cef985c5d226f168b0dc180fcd5 | ok; 1009 registros | — | sn-capture |
 | 61 | 2026-11-25 10:38 | now-sdk-install | dev493801 | x_2326104_cob | 8f2a7f5fffb00b1d047034232b8a22d1a043da7b | ok; 1009 registros | — | sn-capture |
 | 60 | 2026-11-25 10:30 | now-sdk-install | dev493801 | x_2326104_cob | 8221b5a24d9ba3f69029386e36f53585cbd64cb8 | ok; 1009 registros | — | sn-capture |

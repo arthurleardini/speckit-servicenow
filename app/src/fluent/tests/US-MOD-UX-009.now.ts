@@ -7,63 +7,59 @@ import { role_atendente, role_coordenador } from '../security/roles.now'
 
 export const t_ux009_lista_atendente = Test({
     $id: Now.ID['US-MOD-UX-009_atf_lista_atendente'],
-    name: 'RF-MOD-UX-009 — atendente vê «Registrar ligação…» e «Encerrar…» no menu da linha de «Minha lista»',
-    description: 'Atendente com um contato «A ligar» abre «Minha lista»: o menu da linha (botão direito) traz «Registrar ligação…» e «Encerrar…»; «Avançar etapa» (do caso, só coordenador) não aparece (RN-NOVO-UX-013, G1).',
+    name: 'RF-MOD-UX-009 — ações de lista no menu da linha, separadas das de form, com os papéis do form',
+    description: 'Confere no servidor as UI Actions de lista: cada verbo está no menu da linha (list_context_menu) e não no cabeçalho do form; os de servidor também em «Ações nas linhas selecionadas» (list_choice); show_update ligado (sem ele a ação não aparece na lista, F0); papéis iguais aos do botão do form (atendente e coordenador no contato; só coordenador no caso, ciclo e critério). O menu da linha aberto pelo atendente é conferido por Playwright (print em screens/ux-v2): no Client Test Runner o menu de contexto da lista não é montado (RN-NOVO-UX-013, G1).',
     failOnServerError: true,
 }, (atf) => {
-    const u = atf.server.createUser({ $id: Now.ID['US-MOD-UX-009_test_01'], firstName: 'ATF', lastName: 'Atendente UX-009 lista', roles: [role_atendente], impersonate: false })
-    const p = atf.server.recordInsert({
-        $id: Now.ID['US-MOD-UX-009_test_02'],
-        table: 'x_2326104_cob_contribuinte',
-        fieldValues: { nome: 'Contribuinte fictício UX-009 lista', tipo_pessoa: 'pj', ficticio: true, atendente: u.user },
-    })
-    atf.server.recordInsert({
-        $id: Now.ID['US-MOD-UX-009_test_03'],
-        table: 'x_2326104_cob_contato',
-        fieldValues: { contribuinte: p.record_id, atendente: u.user, status: 'a_ligar' },
-    })
-    atf.server.impersonate({ $id: Now.ID['US-MOD-UX-009_test_04'], user: u.user })
-    // O passo pronto «Validate List UI Action Visibility» não achou as ações no runner (F1: as ações aparecem na
-    // UI, conferido por Playwright); o teste clica com o botão direito na linha e lê o menu, como o atendente faz.
-    atf.uiTestScript.runTest({
-        // passo de script de UI (o comentário evita que o atf.mjs leia este runTest como Test())
-        $id: Now.ID['US-MOD-UX-009_test_05'],
-        script: `
-await sn_atf.navigate('/x_2326104_cob_contato_list.do?sysparm_query=atendente%3Djavascript:gs.getUserID()%5Estatus!%3Dencerrado')
-await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
-const clique = await sn_atf.evaluate(() => {
-    var cell = document.querySelector('tr.list_row td.vt');
-    if (!cell) { return 'sem-celula'; }
-    var util = null;
-    try { util = window.top.g_ui_testing_util || window.parent.g_ui_testing_util; } catch (e) {}
-    if (util && util.rightClickElement) { util.rightClickElement(cell); return 'util'; }
-    ['mousedown', 'mouseup', 'contextmenu'].forEach(function (tipo) {
-        cell.dispatchEvent(new MouseEvent(tipo, { bubbles: true, cancelable: true, button: 2, buttons: 2, view: window, clientX: 300, clientY: 300 }));
-    });
-    return 'eventos';
-})
-await sn_atf.delay(2500)
-const itens = await sn_atf.evaluate(() => {
-    var t = [];
-    var docs = [document];
-    try { if (window.parent && window.parent.document != document) { docs.push(window.parent.document); } } catch (e) {}
-    try { if (window.top && window.top.document != document) { docs.push(window.top.document); } } catch (e) {}
-    docs.forEach(function (d) {
-        d.querySelectorAll('.context_menu, .context_item').forEach(function (m) { t = t.concat((m.textContent || '').split('\\n')); });
-    });
-    var cm = window.contextMenus || {};
-    for (var k in cm) {
-        if (k.indexOf('context_list_row') == 0 && cm[k] && cm[k].children) {
-            for (var i = 0; i < cm[k].children.length; i++) { t.push(cm[k].children[i].textContent || ''); }
-        }
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-UX-009_test_01'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+
+    var E = gs.getCurrentScopeName();
+    function acao(nome) {
+        var a = new GlideRecord('sys_ui_action');
+        a.addQuery('action_name', nome);
+        a.addQuery('sys_scope.scope', E);
+        a.query();
+        a.next();
+        return a;
     }
-    var diag = 'linhas=' + document.querySelectorAll('tr.list_row').length + ' menus=' + Object.keys(cm).join(',') + ' ctx=' + document.querySelectorAll('.context_menu').length;
-    return t.map(function (x) { return x.trim(); }).join('|') + ' #' + diag;
-})
-expect(itens + ' clique=' + clique).toContain('Registrar ligação…')
-expect(itens).toContain('Encerrar…')
-expect(itens).not.toContain('Avançar etapa')
-`,
+    function b(a, f) { var v = String(a.getValue(f)); return (v == 'true' || v == '1') ? '1' : '0'; }
+    function papeis(a) { return (a.getValue('roles') || '').split(',').sort().join(','); }
+    var CONTATO = [E + '.atendente', E + '.coordenador'].sort().join(',');
+    var COORD = E + '.coordenador';
+    var lista = [
+        ['x_cob_l_registrar_ligacao', false, CONTATO], ['x_cob_l_encerrar_contato', false, CONTATO],
+        ['x_cob_l_avancar_etapa', true, COORD], ['x_cob_l_encerrar_caso', false, COORD],
+        ['x_cob_l_publicar_ciclo', true, COORD], ['x_cob_l_distribuir_lista', true, COORD],
+        ['x_cob_l_publicar_versao', false, COORD], ['x_cob_l_criar_nova_versao', false, COORD]
+    ];
+    describe('UI Actions de lista', function() {
+        it('menu da linha, sem botão de form, com show_update', function() {
+            for (var i = 0; i < lista.length; i++) {
+                var a = acao(lista[i][0]);
+                expect(a.isValidRecord() ? lista[i][0] : 'falta ' + lista[i][0]).toBe(lista[i][0]);
+                expect(b(a, 'list_context_menu') + ' ' + lista[i][0]).toBe('1 ' + lista[i][0]);
+                expect(b(a, 'form_button') + ' ' + lista[i][0]).toBe('0 ' + lista[i][0]);
+                expect(b(a, 'show_update') + ' ' + lista[i][0]).toBe('1 ' + lista[i][0]);
+            }
+        });
+        it('«Ações nas linhas selecionadas» só para os verbos de servidor', function() {
+            for (var i = 0; i < lista.length; i++) {
+                expect(b(acao(lista[i][0]), 'list_choice') + ' ' + lista[i][0]).toBe((lista[i][1] ? '1 ' : '0 ') + lista[i][0]);
+            }
+        });
+        it('papéis iguais aos do botão do form', function() {
+            for (var i = 0; i < lista.length; i++) {
+                expect(papeis(acao(lista[i][0])) + ' ' + lista[i][0]).toBe(lista[i][2] + ' ' + lista[i][0]);
+            }
+            expect(papeis(acao('x_cob_registrar_ligacao'))).toBe(CONTATO);
+            expect(papeis(acao('x_cob_publicar_ciclo'))).toBe(COORD);
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
     })
 })
 

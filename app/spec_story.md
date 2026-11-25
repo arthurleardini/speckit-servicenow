@@ -54,6 +54,28 @@
 
 ## Histórico de tasks
 
+### US-MOD-UX-009 e US-MOD-UX-010 — ações na lista, Update/New por papel, «O que fazer agora» e «Lista da equipe» (design UX v2, F1)
+**Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-UX-009.json e US-MOD-UX-010.json; dependência STORY-SEC-TRANSVERSAL aberta — DEPENDENCY_PENDING, seguida por delegação do dono)
+
+**Implementado:**
+- `ui-actions/{contato,caso,ciclo,criterio}.now.ts` — `order` nos botões de form; UI Actions de lista próprias (`x_cob_l_*`, `UX-009_ual_*`): as que pedem dado (Registrar ligação…, Encerrar…, Encerrar caso…, Criar nova versão…) só fazem `action.setRedirectURL(current)`; as de servidor (Avançar etapa, Publicar ciclo, Distribuir lista, Publicar versão) chamam o mesmo método do form. Override de `sysverb_update`: contato só admin do app; ciclo coordenador na prévia e admin sempre.
+- `ui/list-controls.now.ts` — `sys_ui_list_control` com `new_roles: ['x_2326104_cob.admin']` em contato, régua, etapa e related list de etapas da régua.
+- `server/contato/ProximaAcao.server.js` + `script-includes/proxima-acao.now.ts` + `business-rules/proxima-acao.now.ts` (3 before insert/update + 1 display com «Próximo passo»); `security/contato.now.ts`: write de `proxima_acao` só admin e `query_range` em `atendente` para coordenador e admin.
+- `data-model.json` + scaffold: coluna `proxima_acao` (string 100) em contato, caso e ciclo; TEL-034/023 com a coluna; TEL-036 (view `x_2326104_cob_tel_036`, «Ciclo do mês»); TEL-035 reordenado; área «Equipe» (order 500) com «Lista da equipe» (`status!=encerrado^GROUPBYatendente^ORDERBYproxima_acao_em`). `gerar-seed-demo.mjs` grava `proxima_acao` no seed (mesmo quadro).
+
+**Testes:**
+- `tests/US-MOD-UX-009.now.ts` (6): menu da linha do atendente e «Ações nas linhas selecionadas» do coordenador por script de UI; condições das ações de lista por `GlideScopedEvaluator` + list controls; Update no form (contato atendente; ciclo prévia/publicado).
+- `tests/US-MOD-UX-010.now.ts` (4): quadro A3 (15 `it`), gravação e campo só leitura, módulo «Lista da equipe» visível ao coordenador e invisível ao atendente.
+
+**Decisões / pegadinhas:**
+- `atf.list.listUIActionVisibility` com `listType: 'list'` depois de `navigateToModule` acha a lista mas dá as ações como invisíveis (menu da linha e list choice), embora apareçam na UI; trocado por `atf.uiTestScript.runTest`.
+- `user.pointer` não existe no runner; o clique direito usa `g_ui_testing_util.rightClickElement` do runner.
+- O `atf.mjs` lê `runTest({ $id: ... })` como `Test(`: um comentário antes do `$id` evita.
+- `proxima_acao` com 100 caracteres (não 120) para ficar na coluna curta do form na ordem do design A5; `origem` e `inscricao` entram no form na F2 (colunas da F4-010).
+- Área «Equipe» com order 500 (não 150) para não cair entre o separador e os módulos de «Minha lista» no menu do admin de sistema.
+- «O que fazer agora» só leitura no form do contato por ACL; em caso e ciclo a BR sobrescreve qualquer valor (sem ACL nova, fora da allowlist).
+
+
 ### GAP-150 (US-MOD-UX-002) e GAP-152 (US-MOD-UX-005) — achados da auditoria fechados no servidor (UX v1, F6)
 **Data:** 2026-11-25 | **State:** DONE (isenção g3; recibos atf/US-MOD-UX-002.json 7/7 e US-MOD-UX-005.json 4/4)
 
