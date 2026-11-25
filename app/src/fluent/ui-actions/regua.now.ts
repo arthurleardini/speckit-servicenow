@@ -73,6 +73,55 @@ export const ual_pausar_regua = UiAction({
 })();`,
 })
 
+// RF-MOD-F4-014 — «Ver execuções» e «Abrir no Flow Designer» no form da régua (D12, D15; design ux-v2 A1 e B6).
+// Links do form, para coordenador e admin do app (o papel deles contém flow_designer e flow_operator,
+// security/coordenador-flow.now.ts). O endereço sai do ReguaMotor (urlExecucoes, urlDesigner), testado no ATF.
+export const ua_ver_execucoes = UiAction({
+    $id: Now.ID['F4-014_ua_ver_execucoes'],
+    name: 'Ver execuções',
+    actionName: 'x_cob_ver_execucoes',
+    table: 'x_2326104_cob_regua',
+    hint: 'Lista as execuções do Flow desta régua (uma por inscrição)',
+    roles: [role_coordenador, role_admin],
+    condition: '!current.isNewRecord()',
+    showInsert: false,
+    showUpdate: true,
+    order: 300,
+    form: { showButton: false, showLink: true, showContextMenu: false },
+    script: `(function () {
+    var url = new ReguaMotor().urlExecucoes(current);
+    if (url) {
+        action.setRedirectURL(url);
+    } else {
+        gs.addErrorMessage(ReguaMotor.MSG_REGUA_NAO_ACHADA);
+        action.setRedirectURL(current);
+    }
+})();`,
+})
+
+export const ua_abrir_designer = UiAction({
+    $id: Now.ID['F4-014_ua_abrir_designer'],
+    name: 'Abrir no Flow Designer',
+    actionName: 'x_cob_abrir_designer',
+    table: 'x_2326104_cob_regua',
+    hint: 'Abre o Flow desta régua no Flow Designer. Mudança feita lá vale até o próximo reinstall, salvo se levada à fonte',
+    roles: [role_coordenador, role_admin],
+    condition: '!current.isNewRecord() && !current.flow.nil()',
+    showInsert: false,
+    showUpdate: true,
+    order: 310,
+    form: { showButton: false, showLink: true, showContextMenu: false },
+    script: `(function () {
+    var url = new ReguaMotor().urlDesigner(current);
+    if (url) {
+        action.setRedirectURL(url);
+    } else {
+        gs.addErrorMessage(ReguaMotor.MSG_SEM_FLOW);
+        action.setRedirectURL(current);
+    }
+})();`,
+})
+
 export const ual_ativar_regua = UiAction({
     $id: Now.ID['F4-010_ual_ativar_regua'],
     name: 'Ativar',

@@ -129,6 +129,19 @@ Acl({
     description: '«O que fazer agora» é calculado pela business rule; à mão, só o admin do app.',
 })
 
+// RF-MOD-F4-012 — «Origem» (distribuição do ciclo ou régua) é gravada por quem cria o contato
+// (QualificacaoCiclo._criarContato); à mão, só o admin do app. Sem esta ACL, o curinga «*» deixava o atendente
+// trocar a origem no form (F5 do design ux-v2).
+Acl({
+    $id: Now.ID['F4-012_acl_contato_write_origem'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    field: 'origem',
+    operation: 'write',
+    roles: [role_admin],
+    description: '«Origem» do contato é gravada na criação (distribuição ou régua); à mão, só o admin do app.',
+})
+
 // RF-MOD-UX-010 — «Lista da equipe» agrupa os contatos por atendente (GROUPBYatendente). Sem query_range no
 // campo, o coordenador recebe «Security prevents reading Atendente» e a lista sai vazia (F0, ponto 9).
 Acl({

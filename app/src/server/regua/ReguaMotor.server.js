@@ -52,6 +52,8 @@ ReguaMotor.MSG_JA_PAUSADA = 'A régua já está pausada.';
 ReguaMotor.MSG_JA_ATIVA = 'A régua já está ativa.';
 ReguaMotor.MSG_PAUSADA = 'Régua pausada: {n} inscrição(ões) ativa(s) encerrada(s). Ao ativar de novo, só entra quem for inscrito depois.';
 ReguaMotor.MSG_ATIVADA = 'Régua ativada: as inscrições encerradas pela pausa não voltam; entra quem for inscrito daqui em diante.';
+ReguaMotor.MSG_SEM_EXECUCAO = 'Execução não encontrada.';
+ReguaMotor.MSG_SEM_FLOW = 'Esta régua não tem Flow.';
 ReguaMotor.MSG_SIGILO ='Operação recusada: texto de e-mail, SMS ou WhatsApp não pode trazer valor nem tributo (só ciência do DT-e).';
 
 /** sys_id de um GlideRecord ou de uma string. */
@@ -739,6 +741,59 @@ ReguaMotor.prototype = {
             return ReguaMotor.MSG_DIA;
         }
         return '';
+    },
+
+    /**
+     * sys_id do Flow da régua: o campo «Flow»; vazio, o sys_hub_flow com internal_name regua_<codigo> (plano B de B6).
+     * @returns {string} '' quando não há Flow
+     */
+    flowDaRegua: function (regua) {
+        var r = new GlideRecord(ReguaMotor.T_REGUA);
+        if (!r.get(ReguaMotor.idDe(regua))) {
+            return '';
+        }
+        if (r.getValue('flow')) {
+            return r.getValue('flow');
+        }
+        var f = new GlideRecord('sys_hub_flow');
+        f.addQuery('internal_name', 'regua_' + r.getValue('codigo'));
+        f.setLimit(1);
+        f.query();
+        return f.next() ? f.getUniqueValue() : '';
+    },
+
+    /** «Ver execuções» (D12): lista de sys_flow_context do Flow da régua, mais recentes primeiro. */
+    urlExecucoes: function (regua) {
+        var r = new GlideRecord(ReguaMotor.T_REGUA);
+        if (!r.get(ReguaMotor.idDe(regua))) {
+            return '';
+        }
+        var flow = this.flowDaRegua(r);
+        var filtro = (flow ? 'flow=' + flow : 'name=Régua: ' + r.getValue('nome')) + '^ORDERBYDESCsys_created_on';
+        return 'sys_flow_context_list.do?sysparm_query=' + encodeURIComponent(filtro);
+    },
+
+    /** «Abrir no Flow Designer» (D12, D15): o Flow da régua no Designer. '' quando a régua não tem Flow. */
+    urlDesigner: function (regua) {
+        var flow = this.flowDaRegua(regua);
+        return flow ? '$flow-designer.do#/flow-designer/' + flow : '';
+    },
+
+    /**
+     * «Ver execução» (D12): a execução mais recente cujo source_record é a inscrição (F0, ponto 6), nos detalhes
+     * de execução do Flow Designer. '' quando a inscrição não tem execução.
+     */
+    urlExecucao: function (inscricao) {
+        var id = ReguaMotor.idDe(inscricao);
+        if (!id) {
+            return '';
+        }
+        var c = new GlideRecord('sys_flow_context');
+        c.addQuery('source_record', id);
+        c.orderByDesc('sys_created_on');
+        c.setLimit(1);
+        c.query();
+        return c.next() ? '$flow-designer.do#/operations/context/' + c.getUniqueValue() : '';
     },
 
     type: 'ReguaMotor'
