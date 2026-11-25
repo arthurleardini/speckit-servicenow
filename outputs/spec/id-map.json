@@ -79,6 +79,10 @@
     "number": 17,
     "id": 6586971215
   },
+  "FEAT-F4-FLOW": {
+    "number": 105,
+    "id": 6614047648
+  },
   "FEAT-F4-REGUA": {
     "number": 18,
     "id": 6586971520
@@ -122,6 +126,10 @@
   "FEAT-T-VISAO": {
     "number": 23,
     "id": 6586972856
+  },
+  "FEAT-UX-ACOES": {
+    "number": 104,
+    "id": 6614047438
   },
   "FEAT-UX-CASO": {
     "number": 94,
@@ -275,6 +283,30 @@
     "number": 50,
     "id": 6586980066
   },
+  "STORY-MOD-F4-010": {
+    "number": 108,
+    "id": 6614073769
+  },
+  "STORY-MOD-F4-011": {
+    "number": 109,
+    "id": 6614074117
+  },
+  "STORY-MOD-F4-012": {
+    "number": 110,
+    "id": 6614074362
+  },
+  "STORY-MOD-F4-013": {
+    "number": 111,
+    "id": 6614074551
+  },
+  "STORY-MOD-F4-014": {
+    "number": 112,
+    "id": 6614074750
+  },
+  "STORY-MOD-F4-016": {
+    "number": 113,
+    "id": 6614075045
+  },
   "STORY-MOD-F5-001": {
     "number": 69,
     "id": 6586984902
@@ -378,6 +410,14 @@
   "STORY-MOD-UX-008": {
     "number": 103,
     "id": 6596954239
+  },
+  "STORY-MOD-UX-009": {
+    "number": 106,
+    "id": 6614073133
+  },
+  "STORY-MOD-UX-010": {
+    "number": 107,
+    "id": 6614073447
   },
   "STORY-SEC-TRANSVERSAL": {
     "number": 37,
