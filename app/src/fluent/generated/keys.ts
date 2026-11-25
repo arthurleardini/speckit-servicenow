@@ -823,9 +823,37 @@ declare global {
                         table: 'sys_security_acl'
                         id: '586e3d71c0dd4b729ec0fc2289507ef4'
                     }
+                    'RF-MOD-UX-002_acl_contato_write_atendente': {
+                        table: 'sys_security_acl'
+                        id: '0cf6880b800d4f60ac5313e3c36cd996'
+                    }
                     'RF-MOD-UX-002_acl_contato_write_campos': {
                         table: 'sys_security_acl'
                         id: 'c35a5d04f5e340e2b140c2c9686b263a'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_ciclo': {
+                        table: 'sys_security_acl'
+                        id: '481c458691df45e088f66ee7688e54b5'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_contribuinte': {
+                        table: 'sys_security_acl'
+                        id: 'c0cd9e3c47be46c6bbc39e82ecdd21dd'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_prioridade': {
+                        table: 'sys_security_acl'
+                        id: '8bcffd4a8e3441e7872a9214a722c5b6'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_status': {
+                        table: 'sys_security_acl'
+                        id: '24fd9557b99e4c08bd9a8ea75f349fee'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_tentativas': {
+                        table: 'sys_security_acl'
+                        id: '5768b030051c4af692c2c80e3cacfc9e'
+                    }
+                    'RF-MOD-UX-002_acl_contato_write_valor_em_aberto': {
+                        table: 'sys_security_acl'
+                        id: 'cb6a947b64ca4685a7a269b3417a072a'
                     }
                     'RF-MOD-UX-002_br_interacao_um_pai': {
                         table: 'sys_script'
@@ -6940,6 +6968,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '00c2db1698bd4c9a9d8998a9e9bff0b1'
+                        key: {
+                            sys_security_acl: 'cb6a947b64ca4685a7a269b3417a072a'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '00c369ea328d44e7902c60e87967608b'
                         key: {
@@ -10521,6 +10562,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '1f75bf5cc1864dd0bee4c6127fe81576'
+                        key: {
+                            sys_security_acl: '481c458691df45e088f66ee7688e54b5'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '1fb1c0b8b6be47069203bcf4b855677c'
                         key: {
@@ -12491,6 +12545,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '30e6600b157f4f679d59844949f8f417'
+                        key: {
+                            sys_security_acl: '8bcffd4a8e3441e7872a9214a722c5b6'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '3103e2896f70421da790eec76faf24a8'
                         key: {
@@ -12541,6 +12608,19 @@ declare global {
                             }
                             element: 'process_flow.xml'
                             position: '0'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '31923c955ae345edabaf607fc13e2f74'
+                        key: {
+                            sys_security_acl: '24fd9557b99e4c08bd9a8ea75f349fee'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
                         }
                     },
                     {
@@ -13152,6 +13232,19 @@ declare global {
                             }
                             element: 'motivo_encerramento'
                             position: '12'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '3699f99f7e7a49bbbe799060e967809d'
+                        key: {
+                            sys_security_acl: 'cb6a947b64ca4685a7a269b3417a072a'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
                         }
                     },
                     {
@@ -14706,6 +14799,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '43eefe98c1c5488faebcd9a12624e57d'
+                        key: {
+                            sys_security_acl: '5768b030051c4af692c2c80e3cacfc9e'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '43f463328dd54585ac32c0742dc0219d'
                         key: {
@@ -15323,6 +15429,19 @@ declare global {
                         key: {
                             test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
                             test: '33567c380e7347b6939ab643c290f999'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '488ab61799cf4aca8c5d83dc7498b200'
+                        key: {
+                            sys_security_acl: 'c0cd9e3c47be46c6bbc39e82ecdd21dd'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -16624,6 +16743,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '51f95019fd084e40b047328a7a2d0c9d'
+                        key: {
+                            sys_security_acl: '5768b030051c4af692c2c80e3cacfc9e'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '5215f692444e4d8b90a79bbb0776d480'
                         key: {
@@ -16889,6 +17021,19 @@ declare global {
                         key: {
                             document_key: 'e4e0a32cac6c41328d416c1c714be559'
                             variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '55fdddaf144b4f3987894b1660033757'
+                        key: {
+                            sys_security_acl: '8bcffd4a8e3441e7872a9214a722c5b6'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -19039,6 +19184,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '6898b4b2a60b47ea9c27dd73fef2c05b'
+                        key: {
+                            sys_security_acl: 'c0cd9e3c47be46c6bbc39e82ecdd21dd'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '68bd990437ac4b1d8068af558e0b735c'
                         key: {
@@ -19162,6 +19320,19 @@ declare global {
                         key: {
                             document_key: '91d55708fb844359a2b4eb1b92d71a93'
                             variable: '1778a7480f20101091d0f00c97767e03'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '69c29939f43b4fa0a480411f441b639c'
+                        key: {
+                            sys_security_acl: '0cf6880b800d4f60ac5313e3c36cd996'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -28954,6 +29125,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'bcdc951acbee4e4f9c95206c2b968cca'
+                        key: {
+                            sys_security_acl: '0cf6880b800d4f60ac5313e3c36cd996'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: 'bcdd937e221144809a95743724d3cec4'
                         key: {
@@ -30211,6 +30395,19 @@ declare global {
                                 id: '1d87043e2f924967adc38c202a76b0c2'
                                 key: {
                                     name: 'x_2326104_cob.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'c7211ad5861e46599f02ebfd5d4b67ef'
+                        key: {
+                            sys_security_acl: '481c458691df45e088f66ee7688e54b5'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
                                 }
                             }
                         }
@@ -34720,6 +34917,19 @@ declare global {
                             }
                             element: '.end_split'
                             position: '6'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'edc2d683114448d1a9b189d9d5fae7d1'
+                        key: {
+                            sys_security_acl: '24fd9557b99e4c08bd9a8ea75f349fee'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {

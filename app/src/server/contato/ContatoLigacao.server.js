@@ -85,14 +85,18 @@ ContatoLigacao.prototype = {
             return { ok: false, mensagem: ContatoLigacao.MSG_NAO_GRAVOU };
         }
 
-        contato.setValue('ultimo_resultado', resultado);
-        contato.setValue('tentativas', tentativas);
-        contato.setValue('status', decisao.status);
-        contato.setValue('proxima_acao_em', decisao.proxima);
+        // Grava num registro lido aqui (não no que veio do form ou do teste): status, tentativas e motivo são
+        // campos do sistema, que a ACL de campo não deixa o atendente gravar à mão. A anotação vai também para
+        // os comentários do contato (histórico no form).
+        gravado.setValue('ultimo_resultado', resultado);
+        gravado.setValue('tentativas', tentativas);
+        gravado.setValue('status', decisao.status);
+        gravado.setValue('proxima_acao_em', decisao.proxima);
         if (decisao.motivo) {
-            contato.setValue('motivo_encerramento', decisao.motivo);
+            gravado.setValue('motivo_encerramento', decisao.motivo);
         }
-        if (!contato.update()) {
+        gravado.setValue('comentarios', anotacao);
+        if (!gravado.update()) {
             // Sem o contato atualizado, a interação também sai: nada fica pela metade.
             var desfaz = new GlideRecord(ContatoLigacao.TABELA_INTERACAO);
             if (desfaz.get(interacaoId)) {
@@ -121,10 +125,12 @@ ContatoLigacao.prototype = {
         if (!ContatoLigacao.MOTIVOS.hasOwnProperty(motivo)) {
             return this._recusar(contato, ContatoLigacao.MSG_SEM_MOTIVO, 'RF-MOD-UX-003_ua_encerrar_contato');
         }
-        contato.setValue('status', 'encerrado');
-        contato.setValue('motivo_encerramento', motivo);
-        contato.setValue('proxima_acao_em', '');
-        if (!contato.update()) {
+        var gravado = new GlideRecord(ContatoLigacao.TABELA_CONTATO);
+        gravado.get(contato.getUniqueValue());
+        gravado.setValue('status', 'encerrado');
+        gravado.setValue('motivo_encerramento', motivo);
+        gravado.setValue('proxima_acao_em', '');
+        if (!gravado.update()) {
             gs.error('RF-MOD-UX-003_ua_encerrar_contato: contato não gravado; contato ' + contato.getUniqueValue());
             return { ok: false, mensagem: ContatoLigacao.MSG_NAO_ENCERROU };
         }
