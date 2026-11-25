@@ -48,7 +48,7 @@ jasmine.getEnv().execute();`,
 export const t_ux010_gravacao = Test({
     $id: Now.ID['US-MOD-UX-010_atf_proxima_acao_gravacao'],
     name: 'RF-MOD-UX-010 — «O que fazer agora» é gravado em toda gravação e não aceita valor à mão',
-    description: 'Contato, caso e ciclo fictícios inseridos por GlideRecord ganham o texto do estado; mudar o estado recalcula; gravar outro texto à mão em «O que fazer agora» é sobrescrito pelo texto do estado; o atendente não tem escrita no campo (RN-NOVO-UX-015, positivo e negativo).',
+    description: 'Contato, caso e ciclo fictícios inseridos por GlideRecord ganham o texto do estado; mudar o estado recalcula; gravar outro texto à mão em «O que fazer agora» é sobrescrito pelo texto do estado; demo.atendente, no próprio contato, não tem escrita no campo e tem em «Próxima ação em» (RN-NOVO-UX-015, positivo e negativo).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -91,7 +91,8 @@ export const t_ux010_gravacao = Test({
 })(outputs, steps, params, stepResult, assertEqual);
 jasmine.getEnv().execute();`,
     })
-    atf.server.createUser({ $id: Now.ID['US-MOD-UX-010_test_03'], firstName: 'ATF', lastName: 'Atendente UX-010 gravação', roles: [role_atendente] })
+    const demo = atf.server.recordQuery({ $id: Now.ID['US-MOD-UX-010_test_10'], table: 'sys_user', fieldValues: 'user_name=demo.atendente', assert: 'records_match_query' })
+    atf.server.impersonate({ $id: Now.ID['US-MOD-UX-010_test_03'], user: demo.first_record })
     atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-UX-010_test_04'],
         jasmineVersion: '3.1',
@@ -100,7 +101,10 @@ jasmine.getEnv().execute();`,
     describe('Campo só leitura para o atendente', function() {
         it('atendente não grava «O que fazer agora» e grava «Próxima ação em»', function() {
             var c = new GlideRecord(gs.getCurrentScopeName() + '_contato');
-            c.initialize();
+            c.addQuery('atendente', gs.getUserID());
+            c.addQuery('status', '!=', 'encerrado');
+            c.query();
+            expect(c.next()).toBe(true);
             expect(c.proxima_acao.canWrite()).toBe(false);
             expect(c.proxima_acao_em.canWrite()).toBe(true);
         });

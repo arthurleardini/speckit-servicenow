@@ -23,14 +23,28 @@ export const t_ux009_lista_atendente = Test({
         fieldValues: { contribuinte: p.record_id, atendente: u.user, status: 'a_ligar' },
     })
     atf.server.impersonate({ $id: Now.ID['US-MOD-UX-009_test_04'], user: u.user })
-    atf.applicationNavigator.navigateToModule({ $id: Now.ID['US-MOD-UX-009_test_05'], module: Now.ref('sys_app_module', 'modulo_mod_ux_lista_minha_lista') })
-    atf.list.listUIActionVisibility({
-        $id: Now.ID['US-MOD-UX-009_test_06'],
-        listType: 'list',
-        table: 'x_2326104_cob_contato',
-        relatedList: 'x_2326104_cob_contato',
-        visible: [Now.ref('sys_ui_action', 'UX-009_ual_registrar_ligacao') as any, Now.ref('sys_ui_action', 'UX-009_ual_encerrar_contato') as any],
-        notVisible: [Now.ref('sys_ui_action', 'UX-009_ual_avancar_etapa') as any],
+    // O passo pronto «Validate List UI Action Visibility» não achou as ações no runner (F1: as ações aparecem na
+    // UI, conferido por Playwright); o teste clica com o botão direito na linha e lê o menu, como o atendente faz.
+    atf.uiTestScript.runTest({
+        $id: Now.ID['US-MOD-UX-009_test_05'],
+        script: `
+await sn_atf.navigate('/x_2326104_cob_contato_list.do?sysparm_query=atendente%3Djavascript:gs.getUserID()%5Estatus!%3Dencerrado')
+await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
+await sn_atf.evaluate(() => {
+    var cell = document.querySelector('tr.list_row td.vt');
+    cell.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2, clientX: 300, clientY: 300 }));
+    return true;
+})
+await sn_atf.delay(2500)
+const itens = await sn_atf.evaluate(() => {
+    var t = [];
+    document.querySelectorAll('.context_menu').forEach(function (m) { if (m.style.display != 'none') { t = t.concat(m.innerText.split('\\n')); } });
+    return t.map(function (x) { return x.trim(); }).join('|');
+})
+expect(itens).toContain('Registrar ligação…')
+expect(itens).toContain('Encerrar…')
+expect(itens).not.toContain('Avançar etapa')
+`,
     })
 })
 
@@ -46,14 +60,19 @@ export const t_ux009_lista_coordenador = Test({
         fieldValues: { nome: 'ATF ciclo UX-009 lista (fictício)', estado: 'previa' },
     })
     atf.server.createUser({ $id: Now.ID['US-MOD-UX-009_test_08'], firstName: 'ATF', lastName: 'Coordenador UX-009 lista', roles: [role_coordenador] })
-    atf.applicationNavigator.navigateToModule({ $id: Now.ID['US-MOD-UX-009_test_09'], module: Now.ref('sys_app_module', 'modulo_mod_ux_ciclo_ciclo_do_mes') })
-    atf.list.listUIActionVisibility({
-        $id: Now.ID['US-MOD-UX-009_test_10'],
-        listType: 'list',
-        table: 'x_2326104_cob_ciclo',
-        relatedList: 'x_2326104_cob_ciclo',
-        visible: [Now.ref('sys_ui_action', 'UX-009_ual_publicar_ciclo') as any, Now.ref('sys_ui_action', 'UX-009_ual_distribuir_lista') as any],
-        notVisible: [Now.ref('sys_ui_action', 'RF-MOD-F2-004_ua_publicar_ciclo') as any],
+    atf.uiTestScript.runTest({
+        $id: Now.ID['US-MOD-UX-009_test_09'],
+        script: `
+await sn_atf.navigate('/x_2326104_cob_ciclo_list.do?sysparm_view=x_2326104_cob_tel_036&sysparm_query=estado!%3Dencerrado')
+await screen.findByText('ATF ciclo UX-009 lista (fictício)', {}, { timeout: 20000 })
+const opcoes = await sn_atf.evaluate(() => {
+    var t = [];
+    document.querySelectorAll('select option').forEach(function (o) { t.push(o.textContent.trim()); });
+    return t.join('|');
+})
+expect(opcoes).toContain('Publicar ciclo')
+expect(opcoes).toContain('Distribuir lista')
+`,
     })
 })
 

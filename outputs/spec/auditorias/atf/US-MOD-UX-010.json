@@ -1,0 +1,62 @@
+{
+  "alvo": "US-MOD-UX-010",
+  "tipo": "story",
+  "sys_id": [
+    "81a272eebc804d538eb33ac3dac6e71e",
+    "1c43996e6d754c7e9f26090f93e5ad7d",
+    "a7cbf9c7e5b74fe6bf1d951f5f4b126d",
+    "6952efdd10ba475a94425ecaa2fde030"
+  ],
+  "resultId": [
+    "7c7f3b0d93f857107a57f7c4b503d67a",
+    null,
+    "349fb74d93f857107a57f7c4b503d69c",
+    "f6affb4d93f857107a57f7c4b503d6a6"
+  ],
+  "status": "failure",
+  "horario": "2026-11-25T13:21:42.203Z",
+  "commit": "24239fa68a8a242fbed45883c7181574182f2c14",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-UX-010_atf_proxima_acao_quadro",
+      "sys_id": "81a272eebc804d538eb33ac3dac6e71e",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "7c7f3b0d93f857107a57f7c4b503d67a",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=7c7f3b0d93f857107a57f7c4b503d67a"
+    },
+    {
+      "chave": "US-MOD-UX-010_atf_proxima_acao_gravacao",
+      "sys_id": "1c43996e6d754c7e9f26090f93e5ad7d",
+      "ok": false,
+      "exit": 1,
+      "status": "failure",
+      "resultId": null,
+      "resumo": {},
+      "url": null
+    },
+    {
+      "chave": "US-MOD-UX-010_atf_lista_equipe_coordenador",
+      "sys_id": "a7cbf9c7e5b74fe6bf1d951f5f4b126d",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "349fb74d93f857107a57f7c4b503d69c",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=349fb74d93f857107a57f7c4b503d69c"
+    },
+    {
+      "chave": "US-MOD-UX-010_atf_lista_equipe_atendente",
+      "sys_id": "6952efdd10ba475a94425ecaa2fde030",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "f6affb4d93f857107a57f7c4b503d6a6",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=f6affb4d93f857107a57f7c4b503d6a6"
+    }
+  ]
+}

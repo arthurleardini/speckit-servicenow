@@ -1,0 +1,86 @@
+{
+  "alvo": "US-MOD-UX-009",
+  "tipo": "story",
+  "sys_id": [
+    "32fe8ec770064d86a4ea5390ebcf5433",
+    "78ab14798ccd42309744b89d25f8ec48",
+    "17e7ff29109644d18cc139c7a625e9cc",
+    "6d96781240554dc4b9df134819af4d99",
+    "44a47a3994684c23ba1852989e50f55e",
+    "9ee6a060fe33462391bc1af7cf6eeb99"
+  ],
+  "resultId": [
+    null,
+    null,
+    "3f204411933c57107a57f7c4b503d69e",
+    "34308411933c57107a57f7c4b503d6fd",
+    "b8508851933c57107a57f7c4b503d6ae",
+    "b760c891933c57107a57f7c4b503d628"
+  ],
+  "status": "failure",
+  "horario": "2026-11-25T13:25:20.040Z",
+  "commit": "24239fa68a8a242fbed45883c7181574182f2c14",
+  "runner": true,
+  "testes": [
+    {
+      "chave": "US-MOD-UX-009_atf_lista_atendente",
+      "sys_id": "32fe8ec770064d86a4ea5390ebcf5433",
+      "ok": false,
+      "exit": 1,
+      "status": "failure",
+      "resultId": null,
+      "resumo": {},
+      "url": null
+    },
+    {
+      "chave": "US-MOD-UX-009_atf_lista_coordenador",
+      "sys_id": "78ab14798ccd42309744b89d25f8ec48",
+      "ok": false,
+      "exit": 1,
+      "status": "failure",
+      "resultId": null,
+      "resumo": {},
+      "url": null
+    },
+    {
+      "chave": "US-MOD-UX-009_atf_condicoes_lista",
+      "sys_id": "17e7ff29109644d18cc139c7a625e9cc",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "3f204411933c57107a57f7c4b503d69e",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=3f204411933c57107a57f7c4b503d69e"
+    },
+    {
+      "chave": "US-MOD-UX-009_atf_update_contato",
+      "sys_id": "6d96781240554dc4b9df134819af4d99",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "34308411933c57107a57f7c4b503d6fd",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=34308411933c57107a57f7c4b503d6fd"
+    },
+    {
+      "chave": "US-MOD-UX-009_atf_update_ciclo_previa",
+      "sys_id": "44a47a3994684c23ba1852989e50f55e",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "b8508851933c57107a57f7c4b503d6ae",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=b8508851933c57107a57f7c4b503d6ae"
+    },
+    {
+      "chave": "US-MOD-UX-009_atf_update_ciclo_publicado",
+      "sys_id": "9ee6a060fe33462391bc1af7cf6eeb99",
+      "ok": true,
+      "exit": 0,
+      "status": "success",
+      "resultId": "b760c891933c57107a57f7c4b503d628",
+      "resumo": {},
+      "url": "https://dev493801.service-now.com/sys_atf_test_result.do?sys_id=b760c891933c57107a57f7c4b503d628"
+    }
+  ]
+}
