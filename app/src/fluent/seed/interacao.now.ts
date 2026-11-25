@@ -7,12 +7,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "telefone",
-        resultado: "promessa_pagamento",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-05-23 08:47:00",
+        tipo: "dte",
+        resultado: "contato_efetivo",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-12-22 12:02:00",
+        retorno_em: "2026-10-16",
     },
 })
 
@@ -21,12 +21,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_046"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
-        resultado: "promessa_pagamento",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-11-30 10:17:00",
+        tipo: "email",
+        resultado: "recusa",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-06-10 18:14:00",
+        retorno_em: "2026-04-17",
     },
 })
 
@@ -35,12 +35,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
-        resultado: "sem_contato",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-05-27 12:27:00",
+        tipo: "dte",
+        resultado: "promessa_pagamento",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-07-28 12:23:00",
+        retorno_em: "2026-06-15",
     },
 })
 
@@ -49,12 +49,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_017"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-09-03 12:14:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-12-26 15:23:00",
+        retorno_em: "2026-03-28",
     },
 })
 
@@ -63,12 +63,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "recusa",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-11-17 16:44:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-09-15 17:47:00",
+        retorno_em: "2026-09-26",
     },
 })
 
@@ -77,12 +77,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_023"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
-        resultado: "promessa_pagamento",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-02-20 15:28:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-08-04 09:38:00",
+        retorno_em: "2026-06-20",
     },
 })
 
@@ -91,12 +91,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_014"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-11-26 15:05:00",
+        tipo: "dte",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-05-20 17:40:00",
+        retorno_em: "2026-02-02",
     },
 })
 
@@ -105,12 +105,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_025"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
-        resultado: "sem_contato",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-02-14 17:34:00",
+        tipo: "presencial",
+        resultado: "recusa",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-09-26 09:49:00",
+        retorno_em: "2026-08-01",
     },
 })
 
@@ -119,12 +119,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_030"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
         resultado: "recusa",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-05-14 10:10:00",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-06-29 12:11:00",
+        retorno_em: "2026-03-07",
     },
 })
 
@@ -133,12 +133,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_044"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "presencial",
-        resultado: "contato_efetivo",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-01-14 13:09:00",
+        tipo: "email",
+        resultado: "promessa_pagamento",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-07-20 08:30:00",
+        retorno_em: "2026-02-26",
     },
 })
 
@@ -147,12 +147,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_040"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "promessa_pagamento",
+        tipo: "dte",
+        resultado: "sem_contato",
         descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-11-09 11:55:00",
+        ocorrida_em: "2026-09-12 17:18:00",
+        retorno_em: "2026-12-05",
     },
 })
 
@@ -161,12 +161,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_007"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "presencial",
+        tipo: "telefone",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-02-16 16:59:00",
+        ocorrida_em: "2026-06-23 09:48:00",
+        retorno_em: "2026-12-28",
     },
 })
 
@@ -175,12 +175,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_038"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
+        tipo: "dte",
         resultado: "promessa_pagamento",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-07-16 13:59:00",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-11-15 13:29:00",
+        retorno_em: "2026-12-26",
     },
 })
 
@@ -189,12 +189,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_035"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
+        tipo: "dte",
         resultado: "sem_contato",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-06-26 12:47:00",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-08-08 13:24:00",
+        retorno_em: "2026-10-17",
     },
 })
 
@@ -203,12 +203,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_018"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "telefone",
-        resultado: "recusa",
+        tipo: "dte",
+        resultado: "contato_efetivo",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-01-22 16:56:00",
+        ocorrida_em: "2026-11-14 08:48:00",
+        retorno_em: "2026-12-13",
     },
 })
 
@@ -217,12 +217,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_032"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "presencial",
-        resultado: "sem_contato",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-10-14 13:11:00",
+        resultado: "promessa_pagamento",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-10-16 16:31:00",
+        retorno_em: "2026-03-10",
     },
 })
 
@@ -231,12 +231,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_045"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "recusa",
-        descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-05-11 08:08:00",
+        tipo: "dte",
+        resultado: "sem_contato",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-02-26 11:04:00",
+        retorno_em: "2026-02-22",
     },
 })
 
@@ -245,12 +245,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_038"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
-        resultado: "promessa_pagamento",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-07-13 18:05:00",
+        resultado: "sem_contato",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-06-11 13:57:00",
+        retorno_em: "2026-02-02",
     },
 })
 
@@ -259,12 +259,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_019"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "telefone",
-        resultado: "recusa",
+        resultado: "contato_efetivo",
         descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-02-20 17:58:00",
+        ocorrida_em: "2026-10-20 09:51:00",
+        retorno_em: "2026-12-24",
     },
 })
 
@@ -273,12 +273,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_046"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "presencial",
-        resultado: "contato_efetivo",
+        tipo: "telefone",
+        resultado: "promessa_pagamento",
         descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-12-24 16:31:00",
+        ocorrida_em: "2026-01-03 18:45:00",
+        retorno_em: "2026-07-11",
     },
 })
 
@@ -287,12 +287,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_037"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
+        tipo: "telefone",
         resultado: "promessa_pagamento",
         descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-04-15 13:40:00",
+        ocorrida_em: "2026-07-23 11:30:00",
+        retorno_em: "2026-09-03",
     },
 })
 
@@ -301,12 +301,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_020"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "presencial",
+        tipo: "dte",
         resultado: "promessa_pagamento",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-12-07 11:19:00",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-08-05 18:17:00",
+        retorno_em: "2026-05-02",
     },
 })
 
@@ -315,12 +315,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_011"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
-        resultado: "promessa_pagamento",
+        resultado: "recusa",
         descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-11-03 16:44:00",
+        ocorrida_em: "2026-05-30 17:48:00",
+        retorno_em: "2026-10-01",
     },
 })
 
@@ -329,12 +329,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_013"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "telefone",
-        resultado: "sem_contato",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-03-23 13:23:00",
+        resultado: "contato_efetivo",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-05-05 10:27:00",
+        retorno_em: "2026-05-25",
     },
 })
 
@@ -343,12 +343,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_010"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "email",
         resultado: "sem_contato",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-12-31 14:06:00",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-10-09 18:34:00",
+        retorno_em: "2026-02-11",
     },
 })
 
@@ -357,12 +357,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_010"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "telefone",
-        resultado: "recusa",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-11-10 13:41:00",
+        tipo: "presencial",
+        resultado: "contato_efetivo",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-05-20 17:32:00",
+        retorno_em: "2026-09-10",
     },
 })
 
@@ -371,12 +371,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_049"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "promessa_pagamento",
+        tipo: "dte",
+        resultado: "sem_contato",
         descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-09-27 11:15:00",
+        ocorrida_em: "2026-06-01 16:16:00",
+        retorno_em: "2026-04-07",
     },
 })
 
@@ -385,12 +385,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_035"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
+        tipo: "telefone",
         resultado: "sem_contato",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-12-10 14:10:00",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-12-31 18:37:00",
+        retorno_em: "2026-03-08",
     },
 })
 
@@ -399,12 +399,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_025"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
-        resultado: "sem_contato",
+        tipo: "email",
+        resultado: "promessa_pagamento",
         descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-10-01 15:00:00",
+        ocorrida_em: "2026-05-02 16:39:00",
+        retorno_em: "2026-01-06",
     },
 })
 
@@ -413,12 +413,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_021"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
+        tipo: "telefone",
         resultado: "recusa",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-05-04 08:31:00",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-06-09 11:00:00",
+        retorno_em: "2026-07-10",
     },
 })
 
@@ -427,12 +427,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "dte",
-        resultado: "sem_contato",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-06-08 08:59:00",
+        tipo: "presencial",
+        resultado: "recusa",
+        descricao: "Pendência encaminhada para análise da coordenação.",
+        ocorrida_em: "2026-08-27 12:04:00",
+        retorno_em: "2026-12-30",
     },
 })
 
@@ -441,12 +441,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_017"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "telefone",
-        resultado: "promessa_pagamento",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-11-13 10:34:00",
+        tipo: "email",
+        resultado: "contato_efetivo",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-03-24 17:13:00",
+        retorno_em: "2026-07-27",
     },
 })
 
@@ -455,12 +455,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_031"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
-        resultado: "contato_efetivo",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-07-10 10:42:00",
+        tipo: "telefone",
+        resultado: "promessa_pagamento",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-08-30 13:13:00",
+        retorno_em: "2026-09-14",
     },
 })
 
@@ -469,12 +469,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_009"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
-        resultado: "sem_contato",
+        tipo: "telefone",
+        resultado: "recusa",
         descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-06-11 11:24:00",
+        ocorrida_em: "2026-03-28 12:17:00",
+        retorno_em: "2026-05-30",
     },
 })
 
@@ -483,12 +483,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-05-18 15:53:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-07-25 12:40:00",
+        retorno_em: "2026-11-24",
     },
 })
 
@@ -497,12 +497,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-03-11 16:32:00",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-12-25 10:46:00",
+        retorno_em: "2026-07-19",
     },
 })
 
@@ -511,12 +511,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_004"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "telefone",
-        resultado: "recusa",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-01-05 16:27:00",
+        tipo: "presencial",
+        resultado: "contato_efetivo",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-09-13 08:43:00",
+        retorno_em: "2026-06-14",
     },
 })
 
@@ -525,12 +525,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_027"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
+        tipo: "telefone",
         resultado: "recusa",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-06-28 17:34:00",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-06-25 13:49:00",
+        retorno_em: "2026-07-28",
     },
 })
 
@@ -539,12 +539,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_012"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "telefone",
-        resultado: "promessa_pagamento",
+        tipo: "presencial",
+        resultado: "contato_efetivo",
         descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-10-12 14:31:00",
+        ocorrida_em: "2026-09-17 16:33:00",
+        retorno_em: "2026-07-13",
     },
 })
 
@@ -553,12 +553,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_042"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "presencial",
+        tipo: "email",
         resultado: "promessa_pagamento",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-01-09 12:45:00",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-03-19 08:26:00",
+        retorno_em: "2026-10-02",
     },
 })
 
@@ -567,12 +567,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_005"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
-        resultado: "recusa",
-        descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-03-05 10:59:00",
+        tipo: "telefone",
+        resultado: "promessa_pagamento",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-03-11 09:15:00",
+        retorno_em: "2026-12-28",
     },
 })
 
@@ -581,12 +581,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
-        resultado: "recusa",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-03-31 18:09:00",
+        resultado: "sem_contato",
+        descricao: "Dados atualizados a partir do cadastro de demonstração.",
+        ocorrida_em: "2026-10-14 10:58:00",
+        retorno_em: "2026-03-01",
     },
 })
 
@@ -595,12 +595,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_048"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "dte",
-        resultado: "promessa_pagamento",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-07-28 15:57:00",
+        tipo: "email",
+        resultado: "recusa",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-11-09 14:42:00",
+        retorno_em: "2026-12-15",
     },
 })
 
@@ -609,12 +609,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_003"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Documentação conferida pela equipe de atendimento.",
-        ocorrida_em: "2026-08-31 17:56:00",
+        tipo: "dte",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-04-07 15:53:00",
+        retorno_em: "2026-12-13",
     },
 })
 
@@ -623,12 +623,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_035"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "presencial",
-        resultado: "sem_contato",
-        descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-03-08 08:59:00",
+        tipo: "email",
+        resultado: "promessa_pagamento",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-03-10 10:03:00",
+        retorno_em: "2026-12-28",
     },
 })
 
@@ -637,12 +637,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_021"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-05-05 11:10:00",
+        tipo: "presencial",
+        resultado: "sem_contato",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-02-13 11:18:00",
+        retorno_em: "2026-03-07",
     },
 })
 
@@ -651,12 +651,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_033"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Dados atualizados a partir do cadastro de demonstração.",
-        ocorrida_em: "2026-02-17 14:39:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-12-27 09:33:00",
+        retorno_em: "2026-09-01",
     },
 })
 
@@ -665,12 +665,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_047"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
         tipo: "email",
         resultado: "sem_contato",
-        descricao: "Pendência encaminhada para análise da coordenação.",
-        ocorrida_em: "2026-04-29 18:23:00",
+        descricao: "Documentação conferida pela equipe de atendimento.",
+        ocorrida_em: "2026-07-21 11:55:00",
+        retorno_em: "2026-05-21",
     },
 })
 
@@ -679,12 +679,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
-        tipo: "email",
-        resultado: "contato_efetivo",
-        descricao: "Retorno agendado para a próxima semana.",
-        ocorrida_em: "2026-02-24 13:21:00",
+        tipo: "telefone",
+        resultado: "sem_contato",
+        descricao: "Contato registrado com o contribuinte fictício.",
+        ocorrida_em: "2026-10-15 09:32:00",
+        retorno_em: "2026-05-14",
     },
 })
 
@@ -693,12 +693,12 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_043"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente2"),
-        tipo: "dte",
+        tipo: "presencial",
         resultado: "recusa",
-        descricao: "Contato registrado com o contribuinte fictício.",
-        ocorrida_em: "2026-06-15 14:06:00",
+        descricao: "Retorno agendado para a próxima semana.",
+        ocorrida_em: "2026-02-13 12:37:00",
+        retorno_em: "2026-02-08",
     },
 })
 
@@ -707,11 +707,11 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_interacao",
     data: {
-        caso: Now.ref("x_2326104_cob_caso", "seed_caso_009"),
         atendente: Now.ref("sys_user", "usuario_demo_atendente"),
         tipo: "dte",
-        resultado: "promessa_pagamento",
+        resultado: "recusa",
         descricao: "Registro demo TEL-025",
-        ocorrida_em: "2026-10-13 10:24:00",
+        ocorrida_em: "2026-06-09 16:12:00",
+        retorno_em: "2026-05-28",
     },
 })

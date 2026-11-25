@@ -17,7 +17,7 @@ export const x_2326104_cob_regularizacao = Table({
             "ipva": { label: "IPVA", sequence: 2 },
             "itcd": { label: "ITCD", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        valor: GenericColumn({ columnType: "currency", label: "Valor regularizado" }),
+        valor: GenericColumn({ columnType: "currency", label: "Valor regularizado (R$)" }),
         data: DateColumn({ label: "Data" }),
         origem: ChoiceColumn({ label: "Origem", mandatory: true, choices: {
             "espontanea": { label: "Espontânea", sequence: 0 },

@@ -15,7 +15,7 @@ export const x_2326104_cob_parcelamento = Table({
             "ipva": { label: "IPVA", sequence: 2 },
             "itcd": { label: "ITCD", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        valor_total: GenericColumn({ columnType: "currency", label: "Valor total" }),
+        valor_total: GenericColumn({ columnType: "currency", label: "Valor total (R$)" }),
         parcelas_total: IntegerColumn({ label: "Parcelas" }),
         parcelas_atraso: IntegerColumn({ label: "Parcelas em atraso" }),
         status: ChoiceColumn({ label: "Status", choices: {

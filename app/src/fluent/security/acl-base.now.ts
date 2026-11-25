@@ -294,6 +294,23 @@ Acl({
 })
 
 Acl({
+    $id: Now.ID["acl_contato_read"],
+    type: 'record',
+    table: "x_2326104_cob_contato",
+    operation: 'read',
+    roles: [role_coordenador, role_atendente, role_admin],
+})
+
+Acl({
+    $id: Now.ID["acl_contato_read_campos"],
+    type: 'record',
+    table: "x_2326104_cob_contato",
+    field: "*",
+    operation: 'read',
+    roles: [role_coordenador, role_atendente, role_admin],
+})
+
+Acl({
     $id: Now.ID["acl_caso_read"],
     type: 'record',
     table: "x_2326104_cob_caso",

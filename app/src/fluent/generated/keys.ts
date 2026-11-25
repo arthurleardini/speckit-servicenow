@@ -45,6 +45,14 @@ declare global {
                         table: 'sys_security_acl'
                         id: '4864046b3d45464ea2a77a9133d65149'
                     }
+                    acl_contato_read: {
+                        table: 'sys_security_acl'
+                        id: '1a256c251c77412fbbb85a7d61055b85'
+                    }
+                    acl_contato_read_campos: {
+                        table: 'sys_security_acl'
+                        id: 'd874c5d463ec45df8aa124b81d865311'
+                    }
                     acl_contribuinte_read: {
                         table: 'sys_security_acl'
                         id: 'ae6ee58b26364d7b9d1bb42db0611f06'
@@ -177,6 +185,18 @@ declare global {
                         table: 'sys_module'
                         id: '49180c4512fe4ba0ac8ac434d92e0370'
                     }
+                    home_usuario_demo_atendente: {
+                        table: 'sys_user_preference'
+                        id: '009bbb50951d41b1ba125dfb91f17289'
+                    }
+                    home_usuario_demo_atendente2: {
+                        table: 'sys_user_preference'
+                        id: 'ab9a810c5c8f439d9bde23d7d2bcbd1a'
+                    }
+                    home_usuario_demo_coordenador: {
+                        table: 'sys_user_preference'
+                        id: 'a042ea1420c74515848ccde440c1ca9a'
+                    }
                     menu_app: {
                         table: 'sys_app_application'
                         id: '3c9fac6604e64d1785ec90f5014f6a2c'
@@ -185,90 +205,355 @@ declare global {
                     modulo_1_contribuinte: {
                         table: 'sys_app_module'
                         id: '790bfbb02a664ad3a0a4d17a42d0f612'
+                        deleted: true
                     }
                     modulo_1_debito: {
                         table: 'sys_app_module'
                         id: '8ca64d37ee0545ef8335a7b29212cc2a'
+                        deleted: true
                     }
                     modulo_1_debito_stg: {
                         table: 'sys_app_module'
                         id: '212e93bc7cee408da75079377ff6b611'
+                        deleted: true
                     }
                     modulo_1_parcelamento: {
                         table: 'sys_app_module'
                         id: 'd42e07ba90944d5bbe2481ef4b700de3'
+                        deleted: true
                     }
                     modulo_1_rejeicao: {
                         table: 'sys_app_module'
                         id: '27c499c4c6bc4c12bbb1c2816943455e'
+                        deleted: true
                     }
                     modulo_1_sincronizacao: {
                         table: 'sys_app_module'
                         id: '3bdb34af60814e88b8380d600f08a74c'
+                        deleted: true
                     }
                     modulo_2_ciclo: {
                         table: 'sys_app_module'
                         id: '8582ea4cc0354849b9a81955fd13c9a1'
+                        deleted: true
                     }
                     modulo_2_criterio: {
                         table: 'sys_app_module'
                         id: '80dea23c809f46e58de70f58f6e5653c'
+                        deleted: true
                     }
                     modulo_2_segmentacao: {
                         table: 'sys_app_module'
                         id: 'bf659631064044509ad095f1ea53983e'
+                        deleted: true
                     }
                     modulo_3_score_sim: {
                         table: 'sys_app_module'
                         id: 'a827c4b392094494accaf9e3b3c7a7a8'
+                        deleted: true
                     }
                     modulo_4_canal_sim: {
                         table: 'sys_app_module'
                         id: '17376f3f4eff43c6bc5e379398adfb03'
+                        deleted: true
                     }
                     modulo_4_comunicacao: {
                         table: 'sys_app_module'
                         id: '674cca9c991849bf8ea1804ebc8c0d6f'
+                        deleted: true
                     }
                     modulo_4_consentimento: {
                         table: 'sys_app_module'
                         id: 'd0c090b636c449c0962d8a290ac4a3cc'
+                        deleted: true
                     }
                     modulo_4_envio_sim: {
                         table: 'sys_app_module'
                         id: 'aee5c853fb91456f9af1b15cfc8f504c'
+                        deleted: true
                     }
                     modulo_4_regua: {
                         table: 'sys_app_module'
                         id: '0f8a3e75f4594558aabb16ea5edc8b5e'
+                        deleted: true
                     }
                     modulo_4_regua_etapa: {
                         table: 'sys_app_module'
                         id: 'ac3425a9f753429daa869e33d211cf85'
+                        deleted: true
                     }
                     modulo_4_regularizacao: {
                         table: 'sys_app_module'
                         id: 'fdc5cb86f43847d180bf58e3c8b230e9'
+                        deleted: true
                     }
                     modulo_5_caso: {
                         table: 'sys_app_module'
                         id: '4c7fb8dde36c40428deeb44cda0f70b0'
+                        deleted: true
                     }
                     modulo_5_interacao: {
                         table: 'sys_app_module'
                         id: '04a6d711b19a4caa84663b093fbef188'
+                        deleted: true
                     }
                     modulo_6_meta: {
                         table: 'sys_app_module'
                         id: 'eeb651671b074b75b5b515a22b0f3360'
+                        deleted: true
                     }
                     modulo_7_exportacao: {
                         table: 'sys_app_module'
                         id: 'bb3dd1bb9b574bd6b51c37463c0f3e20'
+                        deleted: true
+                    }
+                    modulo_administracao: {
+                        table: 'sys_app_module'
+                        id: '52ad9f91626140f5aba9366d93a82059'
+                    }
+                    modulo_administracao_canal_sim: {
+                        table: 'sys_app_module'
+                        id: 'd8b05b77da914fa7aa6e547d246211b6'
+                    }
+                    modulo_administracao_caso: {
+                        table: 'sys_app_module'
+                        id: '6e96df25661e4b82a2fefb9a6717d42e'
+                    }
+                    modulo_administracao_ciclo: {
+                        table: 'sys_app_module'
+                        id: '8e5fe16ad85448039f89b36445bbd846'
+                    }
+                    modulo_administracao_comunicacao: {
+                        table: 'sys_app_module'
+                        id: '1dd01dcaac194392b8d37b9bebcc4e7f'
+                    }
+                    modulo_administracao_consentimento: {
+                        table: 'sys_app_module'
+                        id: '0cc530b26b3d4bcc813a59e9a5860b38'
+                    }
+                    modulo_administracao_contato: {
+                        table: 'sys_app_module'
+                        id: '8764f9e7a4a74416b5c2b77f52ec0ddd'
+                    }
+                    modulo_administracao_contribuinte: {
+                        table: 'sys_app_module'
+                        id: '896dc68335304006bfd632718019f07c'
+                    }
+                    modulo_administracao_criterio: {
+                        table: 'sys_app_module'
+                        id: '03a45ce698e9498ea199d696b01df37d'
+                    }
+                    modulo_administracao_debito: {
+                        table: 'sys_app_module'
+                        id: '41d48303f7a74e38bfdee7973a275d5f'
+                    }
+                    modulo_administracao_debito_stg: {
+                        table: 'sys_app_module'
+                        id: 'dda5d5b154124d4a9cc5010c78e4db42'
+                    }
+                    modulo_administracao_envio_sim: {
+                        table: 'sys_app_module'
+                        id: '562250b3ddca4ba68f5212dcce65a5d3'
+                    }
+                    modulo_administracao_exportacao: {
+                        table: 'sys_app_module'
+                        id: '37a1ab47989b4146a6582a06ee8a5e5f'
+                    }
+                    modulo_administracao_interacao: {
+                        table: 'sys_app_module'
+                        id: '10602ca2a296456bb0ba1dbd183d0157'
+                    }
+                    modulo_administracao_meta: {
+                        table: 'sys_app_module'
+                        id: '1c381ad265254b8fae360d28bf6f183b'
+                    }
+                    modulo_administracao_parcelamento: {
+                        table: 'sys_app_module'
+                        id: 'ef95940623a8465aa0f73eb16ab26e1b'
+                    }
+                    modulo_administracao_regua: {
+                        table: 'sys_app_module'
+                        id: '373b265155564f62ba010f9af7d57baa'
+                    }
+                    modulo_administracao_regua_etapa: {
+                        table: 'sys_app_module'
+                        id: 'd58dfe5840e04327a04a1c1292758d71'
+                    }
+                    modulo_administracao_regularizacao: {
+                        table: 'sys_app_module'
+                        id: '8d456ccf047a41dbb58f050c5043c1f4'
+                    }
+                    modulo_administracao_rejeicao: {
+                        table: 'sys_app_module'
+                        id: '2f10d8fa18dd47108fce764bf727b2b5'
+                    }
+                    modulo_administracao_score_sim: {
+                        table: 'sys_app_module'
+                        id: '11a25bedd2ff462988c1be8edbead46e'
+                    }
+                    modulo_administracao_segmentacao: {
+                        table: 'sys_app_module'
+                        id: '288389bb6c2543388db7f8c56f62ab0d'
+                    }
+                    modulo_administracao_sincronizacao: {
+                        table: 'sys_app_module'
+                        id: '537f1dff8e504010b9c5164acf75c4c5'
+                    }
+                    modulo_mod_ux_analytics: {
+                        table: 'sys_app_module'
+                        id: 'a575d4c140914af8a126769b48c41a41'
+                    }
+                    modulo_mod_ux_analytics_efeito_incremental_por_ciclo: {
+                        table: 'sys_app_module'
+                        id: '0fdbd6b96d3d446eb1a449efa974ac58'
+                    }
+                    modulo_mod_ux_analytics_funil_do_credito: {
+                        table: 'sys_app_module'
+                        id: 'b0d4da6a9f31428db808cf49a079f92c'
+                    }
+                    modulo_mod_ux_analytics_parcelamentos_em_risco: {
+                        table: 'sys_app_module'
+                        id: '5f5b9006d01640729e05c81f734c52b4'
+                    }
+                    modulo_mod_ux_analytics_regularizacoes_por_origem_e_canal: {
+                        table: 'sys_app_module'
+                        id: 'd3e11d4d4ad244cd812f0fc5441a0638'
+                    }
+                    modulo_mod_ux_analytics_regularizacoes_por_tributo: {
+                        table: 'sys_app_module'
+                        id: '58fd31059f4643be94e845c331484e14'
+                    }
+                    modulo_mod_ux_casos: {
+                        table: 'sys_app_module'
+                        id: '3eca024370764c249264eeff46121f10'
+                    }
+                    modulo_mod_ux_casos_casos_qualificados: {
+                        table: 'sys_app_module'
+                        id: 'c0bf938866a049a29bfb22db8fae184b'
+                    }
+                    modulo_mod_ux_ciclo: {
+                        table: 'sys_app_module'
+                        id: '2b49cec80a77408190a9ee7f449f25b5'
+                    }
+                    modulo_mod_ux_ciclo_carteira: {
+                        table: 'sys_app_module'
+                        id: 'd4399530ac7747438731a999abe13cd1'
+                    }
+                    modulo_mod_ux_ciclo_ciclo_do_mes: {
+                        table: 'sys_app_module'
+                        id: '7665783c049e4e85abbad471091764a5'
+                    }
+                    modulo_mod_ux_config: {
+                        table: 'sys_app_module'
+                        id: '8965ba288fe246ab9a69787ffe521961'
+                    }
+                    modulo_mod_ux_config_criterios: {
+                        table: 'sys_app_module'
+                        id: '19594915f5cd4ac6a419d150ef9944ec'
+                    }
+                    modulo_mod_ux_config_integracoes: {
+                        table: 'sys_app_module'
+                        id: 'aa43f9a623bc46059e75f9487301dcf6'
+                    }
+                    modulo_mod_ux_config_metas: {
+                        table: 'sys_app_module'
+                        id: 'a7dae65a4db34d5193ddd1848bf0457b'
+                    }
+                    modulo_mod_ux_lista: {
+                        table: 'sys_app_module'
+                        id: 'd05025810d8f4afaac9e6b9e08f34ef4'
+                    }
+                    modulo_mod_ux_lista_meus_contribuintes: {
+                        table: 'sys_app_module'
+                        id: '97bfda46a51a43049cabaf911a72dc1f'
+                    }
+                    modulo_mod_ux_lista_meus_indicadores: {
+                        table: 'sys_app_module'
+                        id: '9bd8a9a165a5474f9f44337ea36013ae'
+                    }
+                    modulo_mod_ux_lista_minha_lista: {
+                        table: 'sys_app_module'
+                        id: '0c14a29861aa443ea317b24bbfd9bfbe'
+                    }
+                    modulo_mod_ux_reguas: {
+                        table: 'sys_app_module'
+                        id: 'e9c5e606d8624c959ac2dd5bf33c2da8'
+                    }
+                    modulo_mod_ux_reguas_disparos_com_falha: {
+                        table: 'sys_app_module'
+                        id: '2db7d7d352e44d7d9296a97085985a04'
+                    }
+                    modulo_mod_ux_reguas_reguas: {
+                        table: 'sys_app_module'
+                        id: '2cbf996407e54bc4aa349e526ea9e607'
                     }
                     package_json: {
                         table: 'sys_module'
                         id: 'dabd29237bc149b2bfc61cadb229980a'
+                    }
+                    processflow_caso_conducao: {
+                        table: 'sys_process_flow'
+                        id: 'b5b966c637c44638a218d96e7d7d514f'
+                    }
+                    processflow_caso_dossie: {
+                        table: 'sys_process_flow'
+                        id: 'aabcc687cbc748e58ed3186f3ac257e3'
+                    }
+                    processflow_caso_em_selecao: {
+                        table: 'sys_process_flow'
+                        id: '08711e0081634d8f8663382a2fb74c21'
+                    }
+                    processflow_caso_encerrado: {
+                        table: 'sys_process_flow'
+                        id: '6677cbdf92cd4e9fb3711011eb181f91'
+                    }
+                    processflow_caso_formatter: {
+                        table: 'sys_ui_formatter'
+                        id: '500c01bb8fbf4ff5a34d99b0d75cbbb0'
+                    }
+                    processflow_caso_selecionado: {
+                        table: 'sys_process_flow'
+                        id: '3b967ddb67714e9995cd41034400c8a1'
+                    }
+                    processflow_ciclo_distribuido: {
+                        table: 'sys_process_flow'
+                        id: 'f9e2aa25b17d49bea69b295e6366ae5d'
+                    }
+                    processflow_ciclo_encerrado: {
+                        table: 'sys_process_flow'
+                        id: 'c28e4ae73a6b49449674d1edeb5e88dd'
+                    }
+                    processflow_ciclo_formatter: {
+                        table: 'sys_ui_formatter'
+                        id: 'ae4f9b9a32044541bc00b436110109ad'
+                    }
+                    processflow_ciclo_previa: {
+                        table: 'sys_process_flow'
+                        id: '492c4c896eee4d4cada171d45de775c0'
+                    }
+                    processflow_ciclo_publicado: {
+                        table: 'sys_process_flow'
+                        id: 'a8655cc449b7460cb190045650be37f7'
+                    }
+                    processflow_contato_a_ligar: {
+                        table: 'sys_process_flow'
+                        id: 'e7f984319c9c4a8faf741905875d9a05'
+                    }
+                    processflow_contato_encerrado: {
+                        table: 'sys_process_flow'
+                        id: '8fa39bba0ba84452bb798f82b381b456'
+                    }
+                    processflow_contato_formatter: {
+                        table: 'sys_ui_formatter'
+                        id: 'bc3e029e63c1456c9ed7c77a7dfb9c02'
+                    }
+                    processflow_contato_ligado: {
+                        table: 'sys_process_flow'
+                        id: 'e9b4780ab11a4accaa56e9bb7cb6e443'
+                    }
+                    processflow_contato_retornar: {
+                        table: 'sys_process_flow'
+                        id: '7c71e5f510dd4034ad721a2d33c6d03e'
                     }
                     'RF-MOD-F2-002_acl_criterio_create': {
                         table: 'sys_security_acl'
@@ -733,402 +1018,502 @@ declare global {
                     seed_caso_001: {
                         table: 'x_2326104_cob_caso'
                         id: '658c88ae87fe44ef9f74de0dcccbc2b8'
+                        deleted: true
                     }
                     seed_caso_002: {
                         table: 'x_2326104_cob_caso'
                         id: 'bd3070178d8a4268a35ef6bc32dfacd3'
+                        deleted: true
                     }
                     seed_caso_003: {
                         table: 'x_2326104_cob_caso'
                         id: '2e90de324aab4ebfbae30c386de8f97a'
+                        deleted: true
                     }
                     seed_caso_004: {
                         table: 'x_2326104_cob_caso'
                         id: 'cc479247631f4721ae890b45f17c86f3'
+                        deleted: true
                     }
                     seed_caso_005: {
                         table: 'x_2326104_cob_caso'
                         id: '6799a7db022b45eeb5590ca6e46e63de'
+                        deleted: true
                     }
                     seed_caso_006: {
                         table: 'x_2326104_cob_caso'
                         id: '3425111ae4b74a4dbf6b5aa6cb7fc767'
+                        deleted: true
                     }
                     seed_caso_007: {
                         table: 'x_2326104_cob_caso'
                         id: '43e1175172f5445c92e5d2d843e5c1d4'
+                        deleted: true
                     }
                     seed_caso_008: {
                         table: 'x_2326104_cob_caso'
                         id: '7a307b9a7a1640c1bb67ed3a16a947aa'
+                        deleted: true
                     }
                     seed_caso_009: {
                         table: 'x_2326104_cob_caso'
                         id: 'a16602bfcce34c34821574e07f2ec76b'
+                        deleted: true
                     }
                     seed_caso_010: {
                         table: 'x_2326104_cob_caso'
                         id: '0615646a727e4aacbb6bb4ec9da0904f'
+                        deleted: true
                     }
                     seed_caso_011: {
                         table: 'x_2326104_cob_caso'
                         id: '716f2b167115466cbcf1b73d45aeb53e'
+                        deleted: true
                     }
                     seed_caso_012: {
                         table: 'x_2326104_cob_caso'
                         id: '05731325c3464c08a14f6075ccf041a3'
+                        deleted: true
                     }
                     seed_caso_013: {
                         table: 'x_2326104_cob_caso'
                         id: 'fcec54a786954b9cbddbb67e32e3e9a0'
+                        deleted: true
                     }
                     seed_caso_014: {
                         table: 'x_2326104_cob_caso'
                         id: 'b7cafd9ee9974a76808a9c02ec5788d1'
+                        deleted: true
                     }
                     seed_caso_015: {
                         table: 'x_2326104_cob_caso'
                         id: 'e6d347545251496bb69e32c1867f13ff'
+                        deleted: true
                     }
                     seed_caso_016: {
                         table: 'x_2326104_cob_caso'
                         id: '6395d935f35e40daa613beca1044dff9'
+                        deleted: true
                     }
                     seed_caso_017: {
                         table: 'x_2326104_cob_caso'
                         id: 'a3164f0b376c4dc09755f1286e0beee0'
+                        deleted: true
                     }
                     seed_caso_018: {
                         table: 'x_2326104_cob_caso'
                         id: '0aa173d07b4b451680ddf7f8b1cac492'
+                        deleted: true
                     }
                     seed_caso_019: {
                         table: 'x_2326104_cob_caso'
                         id: '837666c631f84300988abaec66ddcd55'
+                        deleted: true
                     }
                     seed_caso_020: {
                         table: 'x_2326104_cob_caso'
                         id: '26a0cbdc67a543679a5aadd45493eb43'
+                        deleted: true
                     }
                     seed_caso_021: {
                         table: 'x_2326104_cob_caso'
                         id: '4e9f5141f7b545efb726b2379f96f9e2'
+                        deleted: true
                     }
                     seed_caso_022: {
                         table: 'x_2326104_cob_caso'
                         id: 'e731a13a98434963803222edf1c22111'
+                        deleted: true
                     }
                     seed_caso_023: {
                         table: 'x_2326104_cob_caso'
                         id: '9ce45e7c243e4e2fa4a4daee33133589'
+                        deleted: true
                     }
                     seed_caso_024: {
                         table: 'x_2326104_cob_caso'
                         id: '6ccb0851806a4f5bae69b4789baca002'
+                        deleted: true
                     }
                     seed_caso_025: {
                         table: 'x_2326104_cob_caso'
                         id: 'f6b4c73b156c444bae8cfaf76d63228f'
+                        deleted: true
                     }
                     seed_caso_026: {
                         table: 'x_2326104_cob_caso'
                         id: 'f8650562e9a04f67a043217fec7067ff'
+                        deleted: true
                     }
                     seed_caso_027: {
                         table: 'x_2326104_cob_caso'
                         id: '3316853aca6b4d40b140da1fff0dd6bc'
+                        deleted: true
                     }
                     seed_caso_028: {
                         table: 'x_2326104_cob_caso'
                         id: '47ff04cf5787446aad32e13dcc2db4b4'
+                        deleted: true
                     }
                     seed_caso_029: {
                         table: 'x_2326104_cob_caso'
                         id: '188679ff048d4235af68b380b1b99a4e'
+                        deleted: true
                     }
                     seed_caso_030: {
                         table: 'x_2326104_cob_caso'
                         id: '4db81025778040379355f75907fcca22'
+                        deleted: true
                     }
                     seed_caso_031: {
                         table: 'x_2326104_cob_caso'
                         id: '0df2ba2da27b4606a37b5c40f7a865d1'
+                        deleted: true
                     }
                     seed_caso_032: {
                         table: 'x_2326104_cob_caso'
                         id: '0cdffca090f34386a43aeaf2aa3f7e59'
+                        deleted: true
                     }
                     seed_caso_033: {
                         table: 'x_2326104_cob_caso'
                         id: 'fd9947ec3d9e4368b15971afb3826854'
+                        deleted: true
                     }
                     seed_caso_034: {
                         table: 'x_2326104_cob_caso'
                         id: 'a7815f33e5a44c9b85a5f169dfb10d8b'
+                        deleted: true
                     }
                     seed_caso_035: {
                         table: 'x_2326104_cob_caso'
                         id: '3457c64efab8468ea3e2d3597324bfa0'
+                        deleted: true
                     }
                     seed_caso_036: {
                         table: 'x_2326104_cob_caso'
                         id: '4756a18a7aa646ebb48fdbbca2232357'
+                        deleted: true
                     }
                     seed_caso_037: {
                         table: 'x_2326104_cob_caso'
                         id: 'a75e9bcce7e44ce6b3eac9993986ffdb'
+                        deleted: true
                     }
                     seed_caso_038: {
                         table: 'x_2326104_cob_caso'
                         id: '91d3bcbf880942dd9f715ae7fea41108'
+                        deleted: true
                     }
                     seed_caso_039: {
                         table: 'x_2326104_cob_caso'
                         id: 'ba04d67a376740b884d0406124dab532'
+                        deleted: true
                     }
                     seed_caso_040: {
                         table: 'x_2326104_cob_caso'
                         id: '29be846978704a58ac46aada390dfc95'
+                        deleted: true
                     }
                     seed_caso_041: {
                         table: 'x_2326104_cob_caso'
                         id: '34362f50fa844210b0900d90157e3224'
+                        deleted: true
                     }
                     seed_caso_042: {
                         table: 'x_2326104_cob_caso'
                         id: 'f6612cb6e9eb438e9aa571761233574c'
+                        deleted: true
                     }
                     seed_caso_043: {
                         table: 'x_2326104_cob_caso'
                         id: 'ef58a8725b8b470faaf1a3d325d84338'
+                        deleted: true
                     }
                     seed_caso_044: {
                         table: 'x_2326104_cob_caso'
                         id: '664da932fba74847bc758cb7264b8be2'
+                        deleted: true
                     }
                     seed_caso_045: {
                         table: 'x_2326104_cob_caso'
                         id: '2deed625b46948c8b840e24a22d18a36'
+                        deleted: true
                     }
                     seed_caso_046: {
                         table: 'x_2326104_cob_caso'
                         id: '94e8aded5a13461b9653c3aa679dae4b'
+                        deleted: true
                     }
                     seed_caso_047: {
                         table: 'x_2326104_cob_caso'
                         id: 'd655a0b5f9a74d078b4a965e06af66f7'
+                        deleted: true
                     }
                     seed_caso_048: {
                         table: 'x_2326104_cob_caso'
                         id: 'aa583c1ea3fd4e83a0eaee81381f5777'
+                        deleted: true
                     }
                     seed_caso_049: {
                         table: 'x_2326104_cob_caso'
                         id: 'a7531e06e6be409c83c26c331c8a0ca1'
+                        deleted: true
                     }
                     seed_caso_050: {
                         table: 'x_2326104_cob_caso'
                         id: '0e6ac53c013842feaa474e974510e2d4'
+                        deleted: true
                     }
                     seed_ciclo_001: {
                         table: 'x_2326104_cob_ciclo'
                         id: '0132e2ae1e9641618e29b3829834e0a0'
+                        deleted: true
                     }
                     seed_ciclo_002: {
                         table: 'x_2326104_cob_ciclo'
                         id: '759d26b56e0b40e9a879a4fd907f84fb'
+                        deleted: true
                     }
                     seed_ciclo_003: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'bf691a6d7dbe47c18a0b565a6bcb7052'
+                        deleted: true
                     }
                     seed_ciclo_004: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'ca74c712f8f64d44a946addc452164b6'
+                        deleted: true
                     }
                     seed_ciclo_005: {
                         table: 'x_2326104_cob_ciclo'
                         id: '0c024da012874256ba1baa9855acc02f'
+                        deleted: true
                     }
                     seed_ciclo_006: {
                         table: 'x_2326104_cob_ciclo'
                         id: '5329f6166c104819974bd3ef8474f14f'
+                        deleted: true
                     }
                     seed_ciclo_007: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'cf5256e2215e41e681f875f61b158588'
+                        deleted: true
                     }
                     seed_ciclo_008: {
                         table: 'x_2326104_cob_ciclo'
                         id: '2a3dbffdc473486cb86e1e55f6914d78'
+                        deleted: true
                     }
                     seed_ciclo_009: {
                         table: 'x_2326104_cob_ciclo'
                         id: '94ec50198477496ca7c6472a982f4aca'
+                        deleted: true
                     }
                     seed_ciclo_010: {
                         table: 'x_2326104_cob_ciclo'
                         id: '11fddb31d0ff49748e9eabf3c08bb52e'
+                        deleted: true
                     }
                     seed_ciclo_011: {
                         table: 'x_2326104_cob_ciclo'
                         id: '31480f54ca3e48f99278771b51717fa6'
+                        deleted: true
                     }
                     seed_ciclo_012: {
                         table: 'x_2326104_cob_ciclo'
                         id: '8bee3fd3b30340fabad87e3b41cb2a22'
+                        deleted: true
                     }
                     seed_ciclo_013: {
                         table: 'x_2326104_cob_ciclo'
                         id: '14abe71c5cdb4578b053ef065606351f'
+                        deleted: true
                     }
                     seed_ciclo_014: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'cb2c41e44e244aaaa14fb05c2d1fe441'
+                        deleted: true
                     }
                     seed_ciclo_015: {
                         table: 'x_2326104_cob_ciclo'
                         id: '146d0db4e0e142c4a5dbb4521645e5c2'
+                        deleted: true
                     }
                     seed_ciclo_016: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'afcffde23d394e5aa77add08c5c29efc'
+                        deleted: true
                     }
                     seed_ciclo_017: {
                         table: 'x_2326104_cob_ciclo'
                         id: '4df0502d019e4e5e9bde27b2680456bb'
+                        deleted: true
                     }
                     seed_ciclo_018: {
                         table: 'x_2326104_cob_ciclo'
                         id: '588fad2a4a4b4cecbf3989ace1392636'
+                        deleted: true
                     }
                     seed_ciclo_019: {
                         table: 'x_2326104_cob_ciclo'
                         id: '86f14cac574c4e4e9aba464d37b6c185'
+                        deleted: true
                     }
                     seed_ciclo_020: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'e0975e7cd2014875be8047e790431fb6'
+                        deleted: true
                     }
                     seed_ciclo_021: {
                         table: 'x_2326104_cob_ciclo'
                         id: '3c36020ad9b94d80a098150c2501d4b1'
+                        deleted: true
                     }
                     seed_ciclo_022: {
                         table: 'x_2326104_cob_ciclo'
                         id: '5fc12e7b24ef496d8c2f7531bb839dfa'
+                        deleted: true
                     }
                     seed_ciclo_023: {
                         table: 'x_2326104_cob_ciclo'
                         id: '5c868a10b3274e569abc26df742518de'
+                        deleted: true
                     }
                     seed_ciclo_024: {
                         table: 'x_2326104_cob_ciclo'
                         id: '6fb9ac16399c4591873dd41f21e7aabb'
+                        deleted: true
                     }
                     seed_ciclo_025: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'e217e967f7bb402e826bd835377e216b'
+                        deleted: true
                     }
                     seed_ciclo_026: {
                         table: 'x_2326104_cob_ciclo'
                         id: '413a2ba0847c47ddb9c2560e4aa1a8e0'
+                        deleted: true
                     }
                     seed_ciclo_027: {
                         table: 'x_2326104_cob_ciclo'
                         id: '1b2b3f34d1bf40f89eecf3dac88303c5'
+                        deleted: true
                     }
                     seed_ciclo_028: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'b80a0ae894484762b6ef79296a88f320'
+                        deleted: true
                     }
                     seed_ciclo_029: {
                         table: 'x_2326104_cob_ciclo'
                         id: '15ac38ae988249c7990c4d84e0270e68'
+                        deleted: true
                     }
                     seed_ciclo_030: {
                         table: 'x_2326104_cob_ciclo'
                         id: '798175ab78cb47279e8dc8bd16c4dcd6'
+                        deleted: true
                     }
                     seed_ciclo_031: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'd4c914f937ae4825913cf6e998ca9aa9'
+                        deleted: true
                     }
                     seed_ciclo_032: {
                         table: 'x_2326104_cob_ciclo'
                         id: '15810b410fc94f7a9cb45b8809d8215c'
+                        deleted: true
                     }
                     seed_ciclo_033: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'ebb098fb09e5461481fe57bcdff9ecb1'
+                        deleted: true
                     }
                     seed_ciclo_034: {
                         table: 'x_2326104_cob_ciclo'
                         id: '799921176e5d478fbcf080d44b94ac58'
+                        deleted: true
                     }
                     seed_ciclo_035: {
                         table: 'x_2326104_cob_ciclo'
                         id: '89afc3a808d747aa9ac14ecf9a1cd48f'
+                        deleted: true
                     }
                     seed_ciclo_036: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'e51ffb4b9d8d49bab730e7646f59ec9c'
+                        deleted: true
                     }
                     seed_ciclo_037: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'e4a6ea9661ac4a78801550d4beb4d84f'
+                        deleted: true
                     }
                     seed_ciclo_038: {
                         table: 'x_2326104_cob_ciclo'
                         id: '20fb9bd0b3ed4076915f3acb277f91e6'
+                        deleted: true
                     }
                     seed_ciclo_039: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'ac5cf944535d444582e7b442d45cd135'
+                        deleted: true
                     }
                     seed_ciclo_040: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'aa42b0bb214a4d5fab06d65102f6f0be'
+                        deleted: true
                     }
                     seed_ciclo_041: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'd15eff44b2644bdea612b559a263cb0a'
+                        deleted: true
                     }
                     seed_ciclo_042: {
                         table: 'x_2326104_cob_ciclo'
                         id: '004416a903114e60869f27021f900e13'
+                        deleted: true
                     }
                     seed_ciclo_043: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'fe0097d94e9947568764219a46f11386'
+                        deleted: true
                     }
                     seed_ciclo_044: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'f514400f45ff401facfd074a1a793a6b'
+                        deleted: true
                     }
                     seed_ciclo_045: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'f80bd48a119e40f986090f3a74b40c8d'
+                        deleted: true
                     }
                     seed_ciclo_046: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'f4d883d8d9ef43a4a52e3f0f34211444'
+                        deleted: true
                     }
                     seed_ciclo_047: {
                         table: 'x_2326104_cob_ciclo'
                         id: '13fa1933ce9c4d0aad599ec2241a2ba4'
+                        deleted: true
                     }
                     seed_ciclo_048: {
                         table: 'x_2326104_cob_ciclo'
                         id: '2a09b4cbb45845c6a342d89b0bff8782'
+                        deleted: true
                     }
                     seed_ciclo_049: {
                         table: 'x_2326104_cob_ciclo'
                         id: '62e0f4bfc2394c949179890bf5857df3'
+                        deleted: true
                     }
                     seed_ciclo_050: {
                         table: 'x_2326104_cob_ciclo'
                         id: 'f47ac21642c549c3a33c1a4a8549010d'
+                        deleted: true
                     }
                     seed_comunicacao_001: {
                         table: 'x_2326104_cob_comunicacao'
@@ -2329,6 +2714,414 @@ declare global {
                     seed_debito_stg_050: {
                         table: 'x_2326104_cob_debito_stg'
                         id: '0b2f8296e70f4bba88f7b51fe8f70051'
+                    }
+                    seed_demo_caso_001: {
+                        table: 'x_2326104_cob_caso'
+                        id: '29fd0c2d059d45ca9cddc3ba5ddec8d5'
+                    }
+                    seed_demo_caso_002: {
+                        table: 'x_2326104_cob_caso'
+                        id: '5353183dda1741d6ba217a28dc44fa18'
+                    }
+                    seed_demo_caso_003: {
+                        table: 'x_2326104_cob_caso'
+                        id: '9ed981b2db9b4449a72f1b319359372d'
+                    }
+                    seed_demo_caso_005: {
+                        table: 'x_2326104_cob_caso'
+                        id: '5371c0972264495390af49c2d8af5d9d'
+                    }
+                    seed_demo_caso_006: {
+                        table: 'x_2326104_cob_caso'
+                        id: '73e2c4f9dc8b4f0cb71ba9cc00343ce0'
+                    }
+                    seed_demo_ciclo_encerrado: {
+                        table: 'x_2326104_cob_ciclo'
+                        id: '1402941123ba4e41910b2d6925db63b5'
+                    }
+                    seed_demo_ciclo_previa: {
+                        table: 'x_2326104_cob_ciclo'
+                        id: '0b2ab0fcdec6433e9d5f09bdeab3dc43'
+                    }
+                    seed_demo_contato_002: {
+                        table: 'x_2326104_cob_contato'
+                        id: '9c87fc5556444e03bf8141f3343aaac2'
+                    }
+                    seed_demo_contato_003: {
+                        table: 'x_2326104_cob_contato'
+                        id: '3123742f96ad4cae836e5ce8c846b529'
+                    }
+                    seed_demo_contato_004: {
+                        table: 'x_2326104_cob_contato'
+                        id: '97f53e8919b74fb196b053d6381776cc'
+                    }
+                    seed_demo_contato_005: {
+                        table: 'x_2326104_cob_contato'
+                        id: '2fd8b1ba728e4e6babe20416a008a033'
+                    }
+                    seed_demo_contato_006: {
+                        table: 'x_2326104_cob_contato'
+                        id: '10d7d126fd50429e897b2ca0ea1af065'
+                    }
+                    seed_demo_contato_007: {
+                        table: 'x_2326104_cob_contato'
+                        id: '6af180a811034c65a42ec375b778b5c1'
+                    }
+                    seed_demo_contato_008: {
+                        table: 'x_2326104_cob_contato'
+                        id: '0907ba7e0e6241ae87f257bee8f9a410'
+                    }
+                    seed_demo_contato_009: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'b8984bce86e242b7b32fb77b986ade0a'
+                    }
+                    seed_demo_contato_010: {
+                        table: 'x_2326104_cob_contato'
+                        id: '3ba815c90c2741e389e72c65f27e675e'
+                    }
+                    seed_demo_contato_011: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'b0c6daa9dda14e688ee685ab8c699753'
+                    }
+                    seed_demo_contato_012: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'a6654bc3d50844a5805f4e7536164fd2'
+                    }
+                    seed_demo_contato_013: {
+                        table: 'x_2326104_cob_contato'
+                        id: '67b3d100bc4241b28d7e517ac1d4e196'
+                    }
+                    seed_demo_contato_014: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'f5236d20fa194f7f992ccb96012c2cfb'
+                    }
+                    seed_demo_contato_015: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'b4aad4147ced46f8a51a0ea5ae798928'
+                    }
+                    seed_demo_contato_016: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'a2fefc0d49f042029138ecede34aec85'
+                    }
+                    seed_demo_contato_017: {
+                        table: 'x_2326104_cob_contato'
+                        id: '915793839d5c420281387022e05041ca'
+                    }
+                    seed_demo_contato_018: {
+                        table: 'x_2326104_cob_contato'
+                        id: '4890ba38a7584490b0586f46ba9dc9db'
+                    }
+                    seed_demo_contato_019: {
+                        table: 'x_2326104_cob_contato'
+                        id: '14ea605a61ff48f59cfabf891f545037'
+                    }
+                    seed_demo_contato_020: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'f9bd2c074b644e0290ba998f7502d1ef'
+                    }
+                    seed_demo_contato_021: {
+                        table: 'x_2326104_cob_contato'
+                        id: '4b14b079eb1b426a91966ca45ae78a85'
+                    }
+                    seed_demo_contato_022: {
+                        table: 'x_2326104_cob_contato'
+                        id: '843553b8bf05495cbd67561b619ece73'
+                    }
+                    seed_demo_contato_023: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'f8300c591dab456d801ac7b98776af7a'
+                    }
+                    seed_demo_contato_024: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'ce45c556f0144af59ef23918cfa2091f'
+                    }
+                    seed_demo_contato_025: {
+                        table: 'x_2326104_cob_contato'
+                        id: '2e2a82d918864ff2aec096ab249e3466'
+                    }
+                    seed_demo_contato_026: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'f491bef5f03e4def96008491c9631b08'
+                    }
+                    seed_demo_contato_027: {
+                        table: 'x_2326104_cob_contato'
+                        id: '2a0c457ddac648fc98149870dbe2eb14'
+                    }
+                    seed_demo_contato_028: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'e248859e9be14c7f8499e18288ec8f17'
+                    }
+                    seed_demo_contato_029: {
+                        table: 'x_2326104_cob_contato'
+                        id: '3149350ad471454ebb8c891ce956a9fb'
+                    }
+                    seed_demo_contato_030: {
+                        table: 'x_2326104_cob_contato'
+                        id: '8008ac1f873d4edab6b673d6300d4b22'
+                    }
+                    seed_demo_contato_031: {
+                        table: 'x_2326104_cob_contato'
+                        id: '24fe9950e29446f3ae11312fd52c5348'
+                    }
+                    seed_demo_contato_032: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'ee4b66d62d62467880e9e7e63665d8f6'
+                    }
+                    seed_demo_contato_033: {
+                        table: 'x_2326104_cob_contato'
+                        id: '31b7e0ed072a40a9be6f0627d691b061'
+                    }
+                    seed_demo_contato_034: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'db3c7bc41d444f5c9d89e9b62d1084fd'
+                    }
+                    seed_demo_contato_035: {
+                        table: 'x_2326104_cob_contato'
+                        id: '167dc5cc365b4e16a7f995c343b24a73'
+                    }
+                    seed_demo_contato_036: {
+                        table: 'x_2326104_cob_contato'
+                        id: 'd865a51aef1942cdb3a016866e2c02fb'
+                    }
+                    seed_demo_contato_037: {
+                        table: 'x_2326104_cob_contato'
+                        id: '2a3b421417b64244807f6e94f5f701f9'
+                    }
+                    seed_demo_contato_038: {
+                        table: 'x_2326104_cob_contato'
+                        id: '4ea481a476fe48fc9448c49b16395a1a'
+                    }
+                    seed_demo_contato_039: {
+                        table: 'x_2326104_cob_contato'
+                        id: '0c66730b4edd40a4b418a959046b8b08'
+                    }
+                    seed_demo_contato_040: {
+                        table: 'x_2326104_cob_contato'
+                        id: '167aeb344f87453c81e4f67df59898fc'
+                    }
+                    seed_demo_segmentacao_001: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '0c0df4890a7e404784b6368cc33f2428'
+                    }
+                    seed_demo_segmentacao_002: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'e52649c88ad94eb391687b7c625cc814'
+                    }
+                    seed_demo_segmentacao_003: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'bc8ee828766a44e3852cf12ac437662a'
+                    }
+                    seed_demo_segmentacao_004: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd52f1d150500424dbc2d23db0111ea6e'
+                    }
+                    seed_demo_segmentacao_005: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '1582ab11d0f74df8b48cdaf924c4a135'
+                    }
+                    seed_demo_segmentacao_006: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '37b95a1b98c24f36abcb0306d074676c'
+                    }
+                    seed_demo_segmentacao_007: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd77787cf59df450d8826546af1e83f98'
+                    }
+                    seed_demo_segmentacao_008: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'b538d1a32b8e4afa85da82fe35a5766f'
+                    }
+                    seed_demo_segmentacao_009: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '14d2404c0c804fdebbac7b299afbc8a5'
+                    }
+                    seed_demo_segmentacao_010: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd0221b6a49c548b9aaff8fab0cb57205'
+                    }
+                    seed_demo_segmentacao_011: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'c49f401ef3664d789f1cc1927f21c3a6'
+                    }
+                    seed_demo_segmentacao_012: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '99480102d9c34c66bf811e7689672f99'
+                    }
+                    seed_demo_segmentacao_013: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '6ae52ec4833d4f4986c1722c806a5555'
+                    }
+                    seed_demo_segmentacao_014: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '63852081322245be97ddf7cce2d650e4'
+                    }
+                    seed_demo_segmentacao_015: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '550bab495b5844bdbc87e2f7821e8034'
+                    }
+                    seed_demo_segmentacao_016: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'a6a2c08a01e9470f928ec0569b3a6ba8'
+                    }
+                    seed_demo_segmentacao_017: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'ace650be090a42708ec41eae383c43fa'
+                    }
+                    seed_demo_segmentacao_018: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'e56a167d1ef145d4b2db6d183a276f95'
+                    }
+                    seed_demo_segmentacao_019: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '57e2a2b11fe147feb63fc9fdafb7d409'
+                    }
+                    seed_demo_segmentacao_020: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '1b88ba4642a549e0a62e34bab9113215'
+                    }
+                    seed_demo_segmentacao_021: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd6f275c936474f4c86baa394e5903d7f'
+                    }
+                    seed_demo_segmentacao_022: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '010952d2c518469692fb691fd0656310'
+                    }
+                    seed_demo_segmentacao_023: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '1fa25caf32e04b898a475d6731346949'
+                    }
+                    seed_demo_segmentacao_024: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '218319361cb141c895883711aec9f009'
+                    }
+                    seed_demo_segmentacao_025: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '99c99a68be594e009966e0107a908bcb'
+                    }
+                    seed_demo_segmentacao_026: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '415eb2e85e1c4cacbe84da2b3772a21f'
+                    }
+                    seed_demo_segmentacao_027: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'f8d4ca66313c48c39901feb48878f101'
+                    }
+                    seed_demo_segmentacao_028: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '5327042222aa45f6b8586f6029d64263'
+                    }
+                    seed_demo_segmentacao_029: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '6d8a9a4a410d46e38fc51059297ff23a'
+                    }
+                    seed_demo_segmentacao_030: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'aaafe8e5a3c649fabd12e740e18b0a51'
+                    }
+                    seed_demo_segmentacao_031: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '7a2ebfa47c0e4334b884e3fd11b92c33'
+                    }
+                    seed_demo_segmentacao_032: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '42654bb8ad814df19735c98aec4b48ec'
+                    }
+                    seed_demo_segmentacao_033: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '1980f1b6496342f0b78902a945e5bb75'
+                    }
+                    seed_demo_segmentacao_034: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'e99a056fc83745a9bca5d0babdc2ac68'
+                    }
+                    seed_demo_segmentacao_035: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '9fc270791d464fc4ad1ee5f1a01be7f0'
+                    }
+                    seed_demo_segmentacao_036: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '51b674193e9a488bad5f2c12fa98e254'
+                    }
+                    seed_demo_segmentacao_037: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd3efbba652e7435abe5cf52f5b76501f'
+                    }
+                    seed_demo_segmentacao_038: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '3a69ac2af54c4bb589c064a510131ce7'
+                    }
+                    seed_demo_segmentacao_039: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '1f91a2f5f412468c9c06072c3230fa16'
+                    }
+                    seed_demo_segmentacao_040: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '82ff25d91bfb4829992daded3390318a'
+                    }
+                    seed_demo_segmentacao_041: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '38bd9218487e4c8faa991fb7267e5e15'
+                    }
+                    seed_demo_segmentacao_042: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'd32f6a145dd04a84814b267c298e7c6b'
+                    }
+                    seed_demo_segmentacao_043: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '08544a4ec943415ba801cd12abb9d471'
+                    }
+                    seed_demo_segmentacao_044: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '117354f7459b4f679b46c6ea0cd27d06'
+                    }
+                    seed_demo_segmentacao_045: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '522304170ecb481eae1fb9a47ae97bed'
+                    }
+                    seed_demo_segmentacao_046: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '16ec443ad8804ad79f90f532049294c6'
+                    }
+                    seed_demo_segmentacao_047: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'f4ace2e399584ec48ef5a4d19ee298cf'
+                    }
+                    seed_demo_segmentacao_048: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '9f481be4ce1a433f9d87a0ce7aec20e7'
+                    }
+                    seed_demo_segmentacao_049: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '00f7f931971b4163a6650c44fa5f5601'
+                    }
+                    seed_demo_segmentacao_050: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'f616170973464fce8beff3faa5ea7e40'
+                    }
+                    seed_demo_segmentacao_051: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'c20a6c0fa6214669bd3f67f9ced8aac5'
+                    }
+                    seed_demo_segmentacao_052: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '9dd036ef4f9148ad8dee796266987333'
+                    }
+                    seed_demo_segmentacao_053: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'e1e62cdf885a4a98bff5361d81929bee'
+                    }
+                    seed_demo_segmentacao_054: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '79bae2b154e24d339702cf43a50f708b'
+                    }
+                    seed_demo_segmentacao_055: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: 'ec41734d8eb549438dca3d3110cf9301'
+                    }
+                    seed_demo_segmentacao_056: {
+                        table: 'x_2326104_cob_segmentacao'
+                        id: '7c8e2cc03f8642fe999e8c84f4ebacb3'
                     }
                     seed_envio_sim_001: {
                         table: 'x_2326104_cob_envio_sim'
@@ -4333,202 +5126,252 @@ declare global {
                     seed_segmentacao_001: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '0160cbd2d3744c9181bb86d197ede9d4'
+                        deleted: true
                     }
                     seed_segmentacao_002: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'a74965d418c648d3b39401268c5d31e0'
+                        deleted: true
                     }
                     seed_segmentacao_003: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'df1910abf1344372be07a0d28778db8a'
+                        deleted: true
                     }
                     seed_segmentacao_004: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '48a4fe29fb774ff4b4bdc4f046708ade'
+                        deleted: true
                     }
                     seed_segmentacao_005: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c8ba414c34b04cf98a62037c290bc162'
+                        deleted: true
                     }
                     seed_segmentacao_006: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '40bdcb4c732f4018963f38c8e36d574e'
+                        deleted: true
                     }
                     seed_segmentacao_007: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '333370a328f34e41b4355536f384f967'
+                        deleted: true
                     }
                     seed_segmentacao_008: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '00ea5523b1104c9a8a96b7f9b0e794d2'
+                        deleted: true
                     }
                     seed_segmentacao_009: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '89d152ae85c64b8099526eb72e929b1f'
+                        deleted: true
                     }
                     seed_segmentacao_010: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '61116ca5548a4bfeb5051d7163ea688c'
+                        deleted: true
                     }
                     seed_segmentacao_011: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '191f6154b0c9464395b78f1ccbe3194c'
+                        deleted: true
                     }
                     seed_segmentacao_012: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '03be7cb78ba54fdaa69c7278184804ff'
+                        deleted: true
                     }
                     seed_segmentacao_013: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c5d737b2dd7446ab94b89cd41437b51c'
+                        deleted: true
                     }
                     seed_segmentacao_014: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'e8b300f069af4e4bba11f056dc610edf'
+                        deleted: true
                     }
                     seed_segmentacao_015: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c3bc7c5f779f4a7f9a2c27b005dc54a9'
+                        deleted: true
                     }
                     seed_segmentacao_016: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'd0e8ee2acbdb447a8ad844ba12bdf2c6'
+                        deleted: true
                     }
                     seed_segmentacao_017: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c560401c21684e4fa105e263bd83f235'
+                        deleted: true
                     }
                     seed_segmentacao_018: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'e291c4124ef94011b938e380ce60206b'
+                        deleted: true
                     }
                     seed_segmentacao_019: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '58710a6ab45842ffb7085a76e50e4ddd'
+                        deleted: true
                     }
                     seed_segmentacao_020: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'f5e95f033ca647dc8070dd690d83baa8'
+                        deleted: true
                     }
                     seed_segmentacao_021: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '363cde12f96b45ef9205a3004f7a1d2c'
+                        deleted: true
                     }
                     seed_segmentacao_022: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'b72dc3076b9148be9a02af17f302fe87'
+                        deleted: true
                     }
                     seed_segmentacao_023: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '1634c5be131941af88630e0f90f12288'
+                        deleted: true
                     }
                     seed_segmentacao_024: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '15269bd36976445186b1922d4c6d6fa7'
+                        deleted: true
                     }
                     seed_segmentacao_025: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '73bbf0642cde4c29841bf12c9825827a'
+                        deleted: true
                     }
                     seed_segmentacao_026: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '18f18aeb79af4718a514b038cf82e864'
+                        deleted: true
                     }
                     seed_segmentacao_027: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '796cf4760d3a4f22b1a91d46854a5da3'
+                        deleted: true
                     }
                     seed_segmentacao_028: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'db90b17e7dc449bf965db9cef9396d4e'
+                        deleted: true
                     }
                     seed_segmentacao_029: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'cfe5c83101814c20b4567b4ccab2f71d'
+                        deleted: true
                     }
                     seed_segmentacao_030: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '070bcd83676b404e96c8541a16fe4d4c'
+                        deleted: true
                     }
                     seed_segmentacao_031: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '2ef10b5bcfa34540b9fa2011d491a097'
+                        deleted: true
                     }
                     seed_segmentacao_032: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'bd14e94f91d449b7aac13adac0326fff'
+                        deleted: true
                     }
                     seed_segmentacao_033: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'd9494dbf0e60468bb020d2370f23ce3f'
+                        deleted: true
                     }
                     seed_segmentacao_034: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '603cc65d8a1745fc9f0c0df6a44b30a8'
+                        deleted: true
                     }
                     seed_segmentacao_035: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'acab8ea3faa54c46ae1248dcec98a58d'
+                        deleted: true
                     }
                     seed_segmentacao_036: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c81f6ad5dcdf4637abfde6f2241b0171'
+                        deleted: true
                     }
                     seed_segmentacao_037: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '0d7b812859ea4784ab2e7f1f49955a8e'
+                        deleted: true
                     }
                     seed_segmentacao_038: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '8a1daaeeebcd4c068f084e0f281950f0'
+                        deleted: true
                     }
                     seed_segmentacao_039: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'c13a03fca55242bb9c25f1deb6ad013c'
+                        deleted: true
                     }
                     seed_segmentacao_040: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '80c190e3cca84e5ba394016857e45d2c'
+                        deleted: true
                     }
                     seed_segmentacao_041: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '0f13cc51dc8d49a98ae48b54b300895d'
+                        deleted: true
                     }
                     seed_segmentacao_042: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '288ae35786404057a29e28bee6f8d632'
+                        deleted: true
                     }
                     seed_segmentacao_043: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'f4374ed7733448e39a3cb4199318a32f'
+                        deleted: true
                     }
                     seed_segmentacao_044: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '58aa99087b3c4cf2bdb882dc973e7255'
+                        deleted: true
                     }
                     seed_segmentacao_045: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '9dd7078b4b5f472d9578d63147e74858'
+                        deleted: true
                     }
                     seed_segmentacao_046: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '05fa9d98fd3c45db8d49ae97d8b81c37'
+                        deleted: true
                     }
                     seed_segmentacao_047: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '9ed5432e18124394b28944f177167cd1'
+                        deleted: true
                     }
                     seed_segmentacao_048: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '32d04a9fecc84dee99d4687f53eee2ce'
+                        deleted: true
                     }
                     seed_segmentacao_049: {
                         table: 'x_2326104_cob_segmentacao'
                         id: '94f797e1d9c246d09749a6319a24ac47'
+                        deleted: true
                     }
                     seed_segmentacao_050: {
                         table: 'x_2326104_cob_segmentacao'
                         id: 'd90f0e13df3f4fa8a830de32642667b9'
+                        deleted: true
                     }
                     seed_sincronizacao_001: {
                         table: 'x_2326104_cob_sincronizacao'
@@ -4840,14 +5683,17 @@ declare global {
                     'TEL-009_journal_1': {
                         table: 'sys_journal_field'
                         id: 'd367c7baf3ce4157971250b51a353afd'
+                        deleted: true
                     }
                     'TEL-009_journal_2': {
                         table: 'sys_journal_field'
                         id: 'd4ac9e1ba4954fedb3344fad311aa304'
+                        deleted: true
                     }
                     'TEL-009_journal_3': {
                         table: 'sys_journal_field'
                         id: 'f1f150ee2cea496193613786a9ad139a'
+                        deleted: true
                     }
                     'TEL-009_registro_demo': {
                         table: 'x_2326104_cob_ciclo'
@@ -4884,10 +5730,12 @@ declare global {
                     'TEL-024_journal_1': {
                         table: 'sys_journal_field'
                         id: '2b9190c54ab745a3b7db77b30478a3e6'
+                        deleted: true
                     }
                     'TEL-024_journal_2': {
                         table: 'sys_journal_field'
                         id: '0d994fe28cd54119a0d66daacb53c9aa'
+                        deleted: true
                     }
                     'TEL-024_registro_demo': {
                         table: 'x_2326104_cob_caso'
@@ -4920,6 +5768,10 @@ declare global {
                     'TEL-031_report': {
                         table: 'sys_report'
                         id: 'f40880cae4d8479b8758361ce063a033'
+                    }
+                    'TEL-035_registro_demo': {
+                        table: 'x_2326104_cob_contato'
+                        id: '8ca2d0136d084cabb0b53bd4748fc574'
                     }
                     'US-MOD-F2-002_atf_ciclo_guarda_versao_negativo': {
                         table: 'sys_atf_test'
@@ -5605,6 +6457,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '00a7b718e95140339f38cb18317efbaf'
+                        key: {
+                            name: 'x_2326104_cob_interacao'
+                            element: 'retorno_em'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '00c369ea328d44e7902c60e87967608b'
                         key: {
@@ -5666,6 +6527,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '017f05eb7338462793915a0b259f1209'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -5875,6 +6737,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '02c85f18fd0d49b0b1d097d2ea812d58'
+                        key: {
+                            name: 'x_2326104_cob_interacao'
+                            element: 'retorno_em'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '02d698fcc1354045b96fdcf1a2e02fa5'
                         deleted: true
@@ -5907,6 +6777,28 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '02ee3218fa5a4658afbb34ad134baa8f'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '16'
                         }
                     },
                     {
@@ -6198,6 +7090,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '0588d320de9b429492f3a4f9ab0ec15e'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'comentarios'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '058bab33460844e4a5a5381bd47b69cc'
                         key: {
@@ -6361,6 +7261,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '06f4bd640cf84293922838c66c40cf0f'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'score'
+                            position: '7'
+                        }
+                    },
+                    {
                         table: 'sys_element_mapping'
                         id: '07287039e46048fc92c89089c35469fd'
                         key: {
@@ -6445,6 +7367,28 @@ declare global {
                             name: 'x_2326104_cob_caso'
                             element: 'sem_score'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '07a0fdb7f3054a8e8458168ca6cc5476'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '13'
                         }
                     },
                     {
@@ -6652,6 +7596,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '09b3c00b624b4ea1ad429a8c19205187'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -6755,6 +7700,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '0a51c053af7b437188f894c6d3d38756'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -6837,6 +7783,28 @@ declare global {
                                 }
                             }
                             element: 'tributo'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '0af7652f7dbd4c4e86ef06a9e3306ce6'
+                        key: {
+                            sys_ui_section: {
+                                id: '3defd9b80c7a440ea5915c7cb185fbaa'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Atividades'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'activity.xml'
+                            position: '0'
                         }
                     },
                     {
@@ -6938,6 +7906,14 @@ declare global {
                         key: {
                             test_suite: '9d8bc780685745d0aa3a04ec2cc92d33'
                             test: 'bff55d802d0c4ee291ae4d59eb116ed3'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '0c2a09b88dca45429deef03ee8510811'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'prioridade'
                         }
                     },
                     {
@@ -7098,6 +8074,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '0dd69ac81b6c468484c226c17e02cf4b'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'tentativas'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '0e1b227689674c72afa05e85ee1c86cf'
                         key: {
@@ -7120,6 +8105,14 @@ declare global {
                         key: {
                             document_key: '4bd89d791a6945029f4c34a7197476dd'
                             variable: 'e6e3c7535320220002c6435723dc3496'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '0e2edb7b684b467aa0ea3f15d9c6b859'
+                        key: {
+                            name: 'x_2326104_cob_interacao'
+                            element: 'contato'
                         }
                     },
                     {
@@ -7226,6 +8219,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '0f42ac7ddb544b19ad30d1bd5fa06f89'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -7390,6 +8384,7 @@ declare global {
                     {
                         table: 'sys_ui_list_element'
                         id: '1141a27e6a8a4f3fb88614a355122441'
+                        deleted: true
                         key: {
                             list_id: {
                                 id: '3f2e87dc4e984fccbde2213fdfefabac'
@@ -7461,6 +8456,24 @@ declare global {
                                 }
                             }
                             element: 'referencia'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '11a0b5884403463f9d2abce77dab9967'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '11dcf710a0cf47438c3ddf60a5178e94'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'distribuido_em'
+                            language: 'en'
                         }
                     },
                     {
@@ -7573,6 +8586,17 @@ declare global {
                                 }
                             }
                             element: 'contribuinte'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '1348bb9a5421477a82b2fa5c66a23a7b'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                            value: 'contato_efetivo'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -7760,6 +8784,14 @@ declare global {
                     },
                     {
                         table: 'sys_dictionary'
+                        id: '15059c6de86540b0955e2e32f9085eb3'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'qtd_contatos'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
                         id: '151341596fba401dacad3587f2173f0d'
                         key: {
                             name: 'x_2326104_cob_score_sim'
@@ -7814,6 +8846,29 @@ declare global {
                         key: {
                             document_key: '30ad75473a6549ff9493b0a3ec5f90e5'
                             variable: '8c07aba5ff6033008d3f5d9ad53bf13b'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '15a29a334c184f608d64513dfba3cb3e'
+                        key: {
+                            list_id: {
+                                id: '3f2e87dc4e984fccbde2213fdfefabac'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'coordenador'
                         }
                     },
                     {
@@ -7966,6 +9021,29 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list_element'
+                        id: '174c8eab95b84ae38a7af87773431a6f'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'valor_em_aberto'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '1780bc043b65433cac96d4bbdab48abf'
                         key: {
@@ -7993,6 +9071,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '17f5797d796d4da38f6453afa95dcc2e'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '1'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '182cc36917eb4fc284f4e82e727e6fe3'
                         key: {
@@ -8006,6 +9106,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '184063fc87784b71b548d46a8e42241d'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -8140,6 +9241,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '1a93cf311c7947f594688aa9e1c72a38'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'coordenador'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '1a9475df67f94fffa175967890565a3c'
                         key: {
@@ -8166,6 +9289,17 @@ declare global {
                         key: {
                             document_key: '133b57751ada42ee8338718aa9eb78cc'
                             variable: '42f2564b73031300440211d8faf6a777'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '1b34d56feb2d4ce79615bdd8ce6b6c91'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            value: 'outro'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -8328,6 +9462,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '1c6938f12e0b42bdb140c6af36fa6df8'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -8498,6 +9633,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '1dc0f71ac25541208bc817f73b3c7e3b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -8674,6 +9810,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '20140f7243cd42fab67fcbd3b8896b32'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -8691,6 +9828,14 @@ declare global {
                             }
                             element: 'valor_em_aberto'
                             position: '9'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '201525ddc90541bf9952f34826010342'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
                         }
                     },
                     {
@@ -8805,6 +9950,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_regularizacao'
                             element: 'canal'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '21de3ff2b46245dd8f883abd2e8e6baf'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '14'
                         }
                     },
                     {
@@ -9014,6 +10181,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '23a7ed2238bc47f99d772a16c4ac76b7'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_qualificada'
+                            position: '9'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '23aacd8d2b264277b2e6a7f43decc192'
                         key: {
@@ -9143,6 +10332,36 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '255442a9d5b04aff901456a75d560472'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_contatos'
+                            position: '19'
+                        }
+                    },
+                    {
+                        table: 'sys_choice_set'
+                        id: '25a01a6553da4b83bf2430f745f275f3'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '25be6dc4a35047c18f325ca1c39e5c4e'
                         key: {
@@ -9179,6 +10398,39 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form_section'
+                        id: '26097c57620b477b8a427a1b3d9ceae2'
+                        key: {
+                            sys_ui_form: {
+                                id: '4dafccbb4a2e41d5bf73dfb531066a39'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '260f68a80978496e9ebe268b59203793'
                         key: {
@@ -9201,6 +10453,28 @@ declare global {
                             name: 'x_2326104_cob_contribuinte'
                             element: 'email'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '267dfb07b1184019ae1f402fe21d3546'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '1'
                         }
                     },
                     {
@@ -9351,6 +10625,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '2740ab92765b406e8c1daeca9fcd1650'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'valor_em_aberto'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '276173924b7a44d9bf6aa315826df6a0'
                         key: {
@@ -9479,6 +10762,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '281ea8440c5743fdad6083203a98444a'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ultimo_resultado'
+                            position: '8'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '283d6106469d4f559474a9b198d16cf8'
                         key: {
@@ -9488,7 +10793,30 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '2845e8e0595b4e258891b7a612106afe'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'proxima_acao_em'
+                            position: '6'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '2858c54bc9c749718950d73fa148ad99'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -9514,6 +10842,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_debito'
                             element: 'contribuinte'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '28bc29083f7947f6b7254a9a074529a3'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'semente_sorteio'
+                            position: '7'
                         }
                     },
                     {
@@ -9708,6 +11058,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '2b4397588cf74392950ff0efe40606d6'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '2b6792c4bbad4d488526c5d40e83c219'
                         key: {
@@ -9755,6 +11114,15 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_regularizacao'
                             element: 'origem'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '2c32887f47504fb7a7bae7f1b66aa596'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ciclo'
+                            language: 'en'
                         }
                     },
                     {
@@ -10283,6 +11651,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '318e59a9e81940b1af1cc894826bc107'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'process_flow.xml'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_element_mapping'
                         id: '3193455e939f490d98f8901b8c164ee4'
                         key: {
@@ -10298,6 +11688,17 @@ declare global {
                             name: 'x_2326104_cob_comunicacao'
                             element: 'status'
                             value: 'enviada'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '31a9c2463c6949ad887f454b53093597'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                            value: 'recusa'
                             language: 'en'
                             dependent_value: 'NULL'
                         }
@@ -10456,6 +11857,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '336902488bf44291b80945cc14ba5b70'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -10481,6 +11883,28 @@ declare global {
                         key: {
                             document_key: '346fd00bbc544ac5886e6a79778bd987'
                             variable: 'b27b2b29ff6033008d3f5d9ad53bf164'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '338f41ebdcad46688dbcae600e77048a'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'status'
+                            position: '5'
                         }
                     },
                     {
@@ -10772,6 +12196,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '3697c97d58b94c208f003b1d86019394'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'motivo_encerramento'
+                            position: '12'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '36b9e32d9a844adb8c0f48b55701f024'
                         key: {
                             sys_ui_section: {
@@ -10826,6 +12272,28 @@ declare global {
                             value: 'massificada'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '374300f38f9b435a992172808bc16b5f'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sem_score'
+                            position: '9'
                         }
                     },
                     {
@@ -11060,6 +12528,20 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form'
+                        id: '3a0d15c2a7f04bafaeae5200714bbc6f'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_atf_test_suite_test'
                         id: '3a5d19da43ae46e29e21f99aab9e5473'
                         key: {
@@ -11205,6 +12687,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3bd9d0707f2b44558ddf25fc7ff5e98e'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -11311,6 +12794,19 @@ declare global {
                         id: '3c7d4634fe544fe9b25f2c47b509c05b'
                         key: {
                             name: 'x_2326104_cob_debito'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '3c7eb1f4026442e89d1f6f54b8b8a0ba'
+                        key: {
+                            sys_security_acl: 'd874c5d463ec45df8aa124b81d865311'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -11527,6 +13023,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3de24c484e6741ccb942f6b98a810473'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -11544,6 +13041,21 @@ declare global {
                             }
                             element: 'estagio'
                             position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_section'
+                        id: '3defd9b80c7a440ea5915c7cb185fbaa'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            caption: 'Atividades'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
                         }
                     },
                     {
@@ -11577,6 +13089,28 @@ declare global {
                             }
                             element: 'status'
                             position: '7'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '3e4726334f364e18bfd6a83f5d422e6e'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'contribuinte'
+                            position: '2'
                         }
                     },
                     {
@@ -11644,6 +13178,14 @@ declare global {
                         key: {
                             document_key: 'c91f536887434fbcbc88de1f2bbfe336'
                             variable: '90144b535320220002c6435723dc3488'
+                        }
+                    },
+                    {
+                        table: 'sys_choice_set'
+                        id: '3eb164f012ed47e88dacac96e83b71c3'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
                         }
                     },
                     {
@@ -11961,6 +13503,28 @@ declare global {
                         key: {
                             document_key: 'e6ffd97f8e1b42f4b9f1dc0188a2be0c'
                             variable: 'e81ad3535320220002c6435723dc340c'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '428c5d168f2d407ca93d610ed0262ce6'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '7'
                         }
                     },
                     {
@@ -12490,6 +14054,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '469f53e36b19452bb0b40ffa98074bbc'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '14'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '46ac3e14438343ae8b54025c0b10a36d'
                         key: {
@@ -12738,6 +14324,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '4895216eefae41e39c4225627eafd612'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '5'
+                        }
+                    },
+                    {
                         table: 'sys_db_object'
                         id: '48d7554c9cf3497fa432b000aa23eece'
                         key: {
@@ -12753,12 +14361,56 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '490bbb793a944a4aba53ca165c486373'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '11'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '490c36a7455b4c98b2876de6adb7da2d'
                         key: {
                             name: 'x_2326104_cob_interacao'
                             element: 'resultado'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '4922edd6ea0841829d21bace60ada5d0'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ciclo'
+                            position: '4'
                         }
                     },
                     {
@@ -12783,6 +14435,28 @@ declare global {
                             name: 'x_2326104_cob_contribuinte'
                             element: 'valor_em_aberto'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '49417104ce2f4d07a8e7e2766c61c329'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'taxa_controle'
+                            position: '14'
                         }
                     },
                     {
@@ -12866,6 +14540,19 @@ declare global {
                         key: {
                             document_key: 'ef9512d2a3eb4bcbb91a334db6e37635'
                             variable: 'b86c0427531000109e02ddeeff7b1227'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '4a98e14f86a541eda01d6907c959a750'
+                        key: {
+                            sys_security_acl: '1a256c251c77412fbbb85a7d61055b85'
+                            sys_user_role: {
+                                id: '1d87043e2f924967adc38c202a76b0c2'
+                                key: {
+                                    name: 'x_2326104_cob.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -13120,6 +14807,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '4d76a9e7c59f4281820f97c4ab3774ff'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -13462,6 +15150,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '4fab4608be6540ed82c0e03cc569109e'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_sem_score'
+                            position: '12'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '4fb7cc5f68cc42309759316d8dcf31ba'
                         key: {
                             sys_ui_section: {
@@ -13550,6 +15260,29 @@ declare global {
                             id: 'db1b2337c5aa4623a7ef9dfe1a26a0cb'
                             table: 'var__m_atf_input_variable_41de4a935332120028bc29cac2dc349a'
                             field: 'script'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '50b939b1b64c4a2c9fbc241589d81086'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'proxima_acao_em'
                         }
                     },
                     {
@@ -13746,6 +15479,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '51f4de34e4c3471981d39f37df065379'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'process_flow.xml'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '5215f692444e4d8b90a79bbb0776d480'
                         key: {
@@ -13832,6 +15587,28 @@ declare global {
                             value: 'ipva'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '531b5acc0c6e426b89b5ae9bdb36426f'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '11'
                         }
                     },
                     {
@@ -13975,12 +15752,57 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '561c0ddcc28742d596ef26ccc8a94935'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'contribuinte'
+                            position: '2'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '566d5e999bde41c8b1ccb7f38a694d9e'
                         key: {
                             name: 'x_2326104_cob_ciclo'
                             element: 'referencia'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '56c2ad6e9a3f4b6caa783ed9bc3cdebd'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'contribuinte.telefone'
                         }
                     },
                     {
@@ -13997,6 +15819,15 @@ declare global {
                         key: {
                             document_key: 'ab4e574b0f53493faebf7439dcf40ed6'
                             variable: 'b124164e53a0220002c6435723dc34c5'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '573c74800acc47e49a310a73abd138ff'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'qtd_contatos'
+                            language: 'en'
                         }
                     },
                     {
@@ -14366,6 +16197,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '5ab5fa59bfde4028894dbfa0265bfb17'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -14560,6 +16392,37 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '5cb13bd79642453280fb7ea7ee0f0181'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicado_por'
+                            position: '17'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '5cdffe37391f4cbd85e96366bf6ef94f'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'NULL'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '5ce76082650440d78c5f3c0e2355ee48'
                         key: {
@@ -14571,6 +16434,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '5ce9311d88a34c479ae8f481fdedf1b3'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -14656,6 +16520,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: '5ddb7ed9ef7c482e9bf90e42b90afd5b'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            value: 'sem_contato'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '5df9cdfbb1ed4aa1a59d372b42d94a17'
                         key: {
@@ -14719,6 +16594,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '5e3f7dd4bdeb4d40937baac905bd29f0'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '5e42a489b81c4c9ea0f6f40fe3db03f9'
                         key: {
@@ -14746,6 +16630,7 @@ declare global {
                     {
                         table: 'sys_ui_list_element'
                         id: '5e6b85122b574d1bbbe87749de92d9b8'
+                        deleted: true
                         key: {
                             list_id: {
                                 id: 'e8ef4ab1a5724e3180f0c2347e95eaec'
@@ -14792,6 +16677,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '5eadfc0c083d48d9ad68db534457e471'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -14809,6 +16695,28 @@ declare global {
                             }
                             element: 'taxa_cobrada'
                             position: '12'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '5ec35c7b0f7e40ac896183cfe2874f8d'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sinal_coercitivo_desc'
+                            position: '15'
                         }
                     },
                     {
@@ -14854,6 +16762,28 @@ declare global {
                             }
                             element: '.split'
                             position: '4'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '5f1b357e63e148cf99c6e0a5f387901a'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'atendente'
+                            position: '3'
                         }
                     },
                     {
@@ -14911,6 +16841,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '5fa434e82f274884b9b5516786fb4207'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '9'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '5fa5aac7e9f947a1b28d3a14983ba31f'
                         key: {
@@ -14949,6 +16901,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_db_object'
+                        id: '60020f60e33a4cefb9b87c03c63c11b6'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '6006ccd4714d4f7494390c4596aa78ff'
                         key: {
@@ -14959,6 +16918,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '6056146193fa478d9ca2cdd192092fbc'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -15101,6 +17061,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '612e0f2f28844336bd1b8a3c929506e6'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            element: 'distribuido_em'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '6131cce553c54585a33ff6c3a78b6101'
                         key: {
@@ -15121,6 +17089,28 @@ declare global {
                                 }
                             }
                             element: 'fim'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '61493a8c076e4934a35f84c2eac3e2bf'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'contato'
+                            position: '2'
                         }
                     },
                     {
@@ -15596,6 +17586,21 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_section'
+                        id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                        key: {
+                            name: 'x_2326104_cob_ciclo'
+                            caption: 'Ciclo do mês'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '67d23dcf3ff2428fad565c61072bbbdb'
                         deleted: true
@@ -15751,6 +17756,28 @@ declare global {
                             value: 'quitado'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '690106daf41a42a9b4492b02df083c4b'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sinal_coercitivo'
+                            position: '11'
                         }
                     },
                     {
@@ -15976,6 +18003,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: '6a7daefa19b945f28aa14e67e372b589'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
+                            value: 'a_ligar'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '6a876962ca2d4229896aaee62d228acd'
                         key: {
@@ -16125,6 +18163,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '6bc0af1ef8af4644aa19035d1ede3bad'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'process_flow.xml'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '6be170e929784fa18601cd283db1d360'
                         key: {
@@ -16212,6 +18272,51 @@ declare global {
                             value: 'ipva'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '6cb769e36a304266a61ff715ba656284'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ciclo'
+                            position: '4'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '6cedfefdd74548b98df9c403872a040e'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'prioridade'
                         }
                     },
                     {
@@ -16487,6 +18592,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '6f7c24fa37bf4461a44065b5253f7ef2'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -16614,6 +18720,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '704ae0e7d3af4714936f2ca1a20b3fff'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -16706,6 +18813,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '7154b73e571a46fbb29c764c78ad9174'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_massificada'
+                            position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '716d23e9fc2943e7a702be96aa23dbfd'
                         key: {
                             sys_ui_section: {
@@ -16729,6 +18858,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '717a3be728d249fea5482315cfa872ce'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -16758,6 +18888,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '71898914057743b8b0f87a3aafd1e8eb'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'coordenador'
+                            position: '3'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '718e989689644437bb077dc86dc7e890'
                         key: {
                             sys_ui_section: {
@@ -16779,11 +18931,42 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '71a40dead83d4fe0a33f8c02c5d0bbe6'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '9'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '71d42b1371e14793acb6da557685d573'
                         key: {
                             name: 'x_2326104_cob_exportacao'
                             element: 'exportado_em'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '71dfb4ed9a4d4072a807125342342866'
+                        key: {
+                            name: 'x_2326104_cob_interacao'
+                            element: 'contato'
                             language: 'en'
                         }
                     },
@@ -17003,6 +19186,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '739715c5485543928a6afff3f0e95b5f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -17075,6 +19259,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '74753e5b25d4490b906fb899db18b50c'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '1'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '749b89f79db847719b290b93d461b7ab'
                         key: {
@@ -17138,6 +19344,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '74bc81b9ac6f4ca68c2a1d433a2078a9'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -17201,6 +19408,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '7580449105df42719e137f2fb6707346'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -17669,6 +19877,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '7a465497e4ba4b7d835144c69f5054da'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_controle'
+                            position: '10'
+                        }
+                    },
+                    {
                         table: 'sys_ui_form'
                         id: '7a623c8ce7a4492d8d60afd0b4ce3f05'
                         key: {
@@ -17768,6 +19998,17 @@ declare global {
                                 }
                             }
                             element: 'status'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '7add028d939f40f7a4f9ee6838345cfe'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            value: 'recusa'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -17966,6 +20207,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '7cb9636345554b0188ee93feb88d8295'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'efeito_incremental'
+                            position: '15'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '7d0057c79aa44b7d934145d17e879595'
                         key: {
@@ -17986,6 +20249,14 @@ declare global {
                                 }
                             }
                             element: 'tentativas'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '7d5fdc29a1634cde9c7ef1ac5e69f112'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
                         }
                     },
                     {
@@ -18132,6 +20403,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '7f352cd1e744451e8448c9673dd34a24'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -18564,6 +20836,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '84606cd7638d42c1a90ac712e1c652cc'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -18775,6 +21048,7 @@ declare global {
                     {
                         table: 'sys_ui_section'
                         id: '862e50358817424cbe1b033aadea8c1e'
+                        deleted: true
                         key: {
                             name: 'x_2326104_cob_ciclo'
                             caption: 'Ciclo de qualificação (prévia)'
@@ -18838,6 +21112,14 @@ declare global {
                         key: {
                             document_key: '346fd00bbc544ac5886e6a79778bd987'
                             variable: 'ff06ab840f20101091d0f00c97767e6d'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '86fbf9adebf840d8b806a223b0efadc7'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'atendente'
                         }
                     },
                     {
@@ -19283,6 +21565,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '8b047f098b3f4af28ba667cdc178d416'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -19305,6 +21588,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '8b2fb8a7f9984e84ae0ac33c2652f1d2'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -19349,6 +21633,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '8c11b8c62a3a4a769cf24aff6bb4e925'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -19454,6 +21739,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '8c95f857bda94567b87fe5e9e7d66db3'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -19627,6 +21913,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice_set'
+                        id: '8e7ec01779564183a3a85beb6573fcfd'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '8e817c9f1afe417a8bda32003db46fdf'
                         key: {
@@ -19641,6 +21935,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_regua'
                             element: 'carteira'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '8e961282cb294c67abe8b3da3d1a063c'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ocorrida_em'
+                            position: '7'
                         }
                     },
                     {
@@ -19796,6 +22112,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '8fa5b0018a9b45d293cad708b5ecc01c'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'atendente'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '8fd134ea295647f88342b33b1b5a01b5'
                         key: {
@@ -19849,6 +22187,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '9056a9ae48b4411ca7856e077dfae18e'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -19927,6 +22266,28 @@ declare global {
                         key: {
                             document_key: '91d55708fb844359a2b4eb1b92d71a93'
                             variable: 'b27b2b29ff6033008d3f5d9ad53bf164'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '90e95b296e334a7bb9692cd59cb45ea9'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'criterio'
+                            position: '4'
                         }
                     },
                     {
@@ -20041,6 +22402,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '9215febcec4844cfa2306adc402fd739'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'prioridade'
+                            position: '10'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '92165273f8ed41d9a4a39469bdcd2f18'
                         deleted: true
                         key: {
@@ -20145,6 +22528,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '93c749e8173a4a80b1b6dcc936149c99'
+                        key: {
+                            sys_security_acl: '1a256c251c77412fbbb85a7d61055b85'
+                            sys_user_role: {
+                                id: '8f9564b315df4b25b5716b753d5c2616'
+                                key: {
+                                    name: 'x_2326104_cob.atendente'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '93fbdb866d29480194ecc9cfb38a888a'
                         key: {
@@ -20246,6 +22642,28 @@ declare global {
                                 }
                             }
                             element: 'canal'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '956163ccd03f4438bdeb2b025d463114'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'valor_em_aberto'
+                            position: '11'
                         }
                     },
                     {
@@ -20379,6 +22797,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '9653b59929eb4becbaa19103e949dbd7'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'comentarios'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '9656cb8d27104f5890f1347438cfa068'
                         key: {
@@ -20503,6 +22930,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '97f6e7cd40f842359c13e358bb6a0367'
+                        key: {
+                            sys_security_acl: '1a256c251c77412fbbb85a7d61055b85'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '98d63e9b9f87446fa3f1a3c495da27ad'
                         key: {
@@ -20534,6 +22974,39 @@ declare global {
                             name: 'x_2326104_cob_parcelamento'
                             element: 'NULL'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '99a8e386201846469100f03f50d8dc88'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'estagio'
+                            position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '99b6455a47e4427199c211c562ba458e'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                            value: 'promessa_pagamento'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -20628,6 +23101,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '9ae2d33bd73b41dd9b811d772e5e637d'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'valor_em_aberto'
+                            position: '8'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '9b02780c55d54bdf97d2b6fad867df94'
                         key: {
@@ -20697,6 +23192,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '9bd6fa2cf2a74b02845f58f472e91a96'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '9be70dfdeb4a495c889cd595725ca563'
                         key: {
                             sys_ui_section: {
@@ -20718,11 +23235,42 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '9be8b88454c1463eb88310a6862fb631'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'retorno_em'
+                            position: '8'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: '9c2fe719ae2b448882d7129dba73a876'
                         key: {
                             document_key: '1741b4bd8b7148788d819baea1b4802f'
                             variable: '989d9e235324220002c6435723dc3484'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '9c42cc61952f4b5fb7b729df1764abdd'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            element: 'coordenador'
+                            language: 'en'
                         }
                     },
                     {
@@ -20766,6 +23314,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '9c85c229e3ed4c329809fd45bb09943f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -20879,6 +23428,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '9dd89ad1cce9435c88f485f4294bf073'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'taxa_cobrada'
+                            position: '13'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '9df1d16ae5a04992af27928e20aa427c'
                         key: {
                             sys_ui_section: {
@@ -20945,6 +23516,15 @@ declare global {
                                     name: 'x_2326104_cob.admin'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '9f1d66d2f95547e18080aa97c4b74a91'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'contribuinte'
+                            language: 'en'
                         }
                     },
                     {
@@ -21064,6 +23644,28 @@ declare global {
                             }
                             element: 'regua'
                             position: '1'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '9ff5f86c75bc4c60afcc22c4fe40c09d'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'process_flow.xml'
+                            position: '0'
                         }
                     },
                     {
@@ -21188,6 +23790,7 @@ declare global {
                     {
                         table: 'sys_documentation'
                         id: 'a241cab638224d4cafa214fd259c6b46'
+                        deleted: true
                         key: {
                             name: 'x_2326104_cob_caso'
                             element: 'atendente'
@@ -21313,6 +23916,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'a2e6828b9033489b8b937af7f7f56c34'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '20'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'a2f13d474a594fe68f3a3cf18dbb876a'
                         key: {
@@ -21348,6 +23973,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'a315ce959e3047ea80daaa7aa4c8d680'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -21394,6 +24020,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'a35343c864f94afba5e4cc269a286cc9'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -21548,6 +24175,17 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'a47a656f1baf4497ba3e055bd8772efc'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
+                            value: 'encerrado'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -21826,6 +24464,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'a6f0b946ac3d4827ab104582648d26c8'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'atendente'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: 'a7070dd5f3834b94a0e422060b0832e3'
                         key: {
@@ -21922,6 +24569,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'a8abf9a99bb0435992e4c2dd3cf13dcb'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'proxima_acao_em'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'a8b4474cf982431980b4570f1343745f'
                         key: {
@@ -21969,6 +24625,29 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_criterio'
                             element: 'versao_anterior'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: 'a9ffc50cb8f7454dbc979a6fe6395922'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'status'
                         }
                     },
                     {
@@ -22036,6 +24715,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'aa9628aa68bd4da783ebffede2a9236b'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '1'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'aa97dd4280d840a4854d88cefe285ad9'
                         key: {
@@ -22051,6 +24752,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'aa98a9f8fe4f4ef88c08ed5ba0de422d'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -22100,6 +24802,28 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_caso'
                             element: 'sinal_coercitivo'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ab273f0276f74a9fa45d809005ba48f7'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tentativas'
+                            position: '9'
                         }
                     },
                     {
@@ -22190,6 +24914,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'abbc1c7f79dd44479d872840c82fcbd4'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'valor_em_aberto'
+                            position: '10'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'abcf1305c9a64e84bf5ba7bce5a3bb6b'
                         key: {
@@ -22214,8 +24960,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'ac22bd56c56d41c0ab8cfd212064a40e'
+                        key: {
+                            name: 'x_2326104_cob_caso'
+                            element: 'coordenador'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'ac817ea1d6de491fb7f56a8d698db4c9'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -22269,6 +25024,39 @@ declare global {
                         key: {
                             name: 'x_2326104_cob_criterio'
                             element: 'tributo'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_form_section'
+                        id: 'adad8054b5c046e28d89508edbbef309'
+                        key: {
+                            sys_ui_form: {
+                                id: '3a0d15c2a7f04bafaeae5200714bbc6f'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: '3defd9b80c7a440ea5915c7cb185fbaa'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Atividades'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
                         }
                     },
                     {
@@ -22422,6 +25210,21 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_section'
+                        id: 'af337dace7684bb1b257c3305aebfebe'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            caption: 'Contato da lista'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'af345901254f412fba7c0b2b2953c541'
                         key: {
@@ -22532,6 +25335,7 @@ declare global {
                     {
                         table: 'sys_ui_form_section'
                         id: 'b009e2247a394648a8ef5f8ecb2b3e24'
+                        deleted: true
                         key: {
                             sys_ui_form: {
                                 id: '4dafccbb4a2e41d5bf73dfb531066a39'
@@ -22692,6 +25496,14 @@ declare global {
                     },
                     {
                         table: 'sys_dictionary'
+                        id: 'b0d32c7020f64393b7e2bf0e3ad3852b'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'proxima_acao_em'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
                         id: 'b11cf069cbf8416eae215428b00eeb49'
                         key: {
                             name: 'x_2326104_cob_debito'
@@ -22730,6 +25542,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'b16f935e1917442f9d7644cf783997c9'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'contribuinte'
+                            position: '2'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'b24185737f7547b5ab41b32b9565277d'
                         key: {
@@ -22747,6 +25581,25 @@ declare global {
                         id: 'b26a26260ff94dc59092ef23278feb0b'
                         key: {
                             name: 'x_2326104_cob_score_sim'
+                            element: 'contribuinte'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'b271593afcf541b2a31782c98428f496'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            value: 'regularizado'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'b279ebd7679f4a0580bf568909df499c'
+                        key: {
+                            name: 'x_2326104_cob_contato'
                             element: 'contribuinte'
                         }
                     },
@@ -22945,6 +25798,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'b442df001dae4267abf4ed570c74d709'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'resultado'
+                            position: '6'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'b45e95d18ac647ba881bbbe38bd54dc4'
                         key: {
@@ -23112,6 +25987,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'b56d025d6cc847b2954e451f7e9820a1'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'prioridade'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_section'
                         id: 'b5c4c6895dc74151b954c2710e17f38d'
                         key: {
@@ -23222,6 +26106,28 @@ declare global {
                                     name: 'x_2326104_cob.admin'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'b68d04be3e8d4560934ad7863121c0e9'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'prioridade'
+                            position: '7'
                         }
                     },
                     {
@@ -23574,6 +26480,13 @@ declare global {
                             }
                             element: '.split'
                             position: '4'
+                        }
+                    },
+                    {
+                        table: 'ua_table_licensing_config'
+                        id: 'b97d50afdb024b8bb23a7ea0af6aa084'
+                        key: {
+                            name: 'x_2326104_cob_contato'
                         }
                     },
                     {
@@ -24079,6 +26992,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'be52da5e62074cb6a17fba37e224a85e'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -24219,6 +27133,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'bf2e083090624ab1920496a4db818c9b'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'motivo_encerramento'
+                            position: '12'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'bf41c1a346d14b3497f88c41dc30bb7b'
                         key: {
@@ -24312,6 +27248,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'c0b20b05d391464fb8a1732fb54cc437'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -24383,6 +27320,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: 'c197a9c77f4f4edf830fc05797e57d7f'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
+                            value: 'retornar'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'c1cb4cbbeb5d45acbe45d7eb3ab997cd'
                         key: {
@@ -24405,6 +27353,14 @@ declare global {
                         id: 'c247efe050ad42d8b68614696bebf39b'
                         key: {
                             name: 'x_2326104_cob_canal_sim'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'c26cae6c90c446d082e2254ba5443a02'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'valor_em_aberto'
                         }
                     },
                     {
@@ -24718,6 +27674,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'c564eba377474826bb7e332c2dc96732'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -24812,6 +27769,28 @@ declare global {
                             name: 'x_2326104_cob_regularizacao'
                             element: 'debito'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'c5ed15aac530401295913dc2870f4012'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'nome'
+                            position: '2'
                         }
                     },
                     {
@@ -25105,6 +28084,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'c8c4bfd69c0d46bcbd4ef7ceb109f00f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -25142,6 +28122,29 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list_element'
+                        id: 'c92071c718a0467bbe208cedfa694f29'
+                        key: {
+                            list_id: {
+                                id: 'dd436d65974b467a9b634ccded9da7c5'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'contribuinte'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: 'c9834c625a1b476d91aaa2518ec6f2a5'
                         key: {
@@ -25152,6 +28155,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'ca005d2da8f94f49a6d52338c9cc9be9'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -25327,6 +28331,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'cbed8f78aba44ae292ec53ab0cd43010'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -25530,6 +28535,28 @@ declare global {
                                 }
                             }
                             element: 'parcelas_total'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ce114ea050504c4cacdd59781bd1bd2c'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'comentarios'
+                            position: '21'
                         }
                     },
                     {
@@ -25850,6 +28877,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: 'd05e8e3f20b6449a9b972110070ab8e4'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'qtd_elegiveis'
+                            position: '6'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: 'd06147d08f294f419d1f0e2e8e77cb8c'
                         key: {
                             sys_ui_section: {
@@ -25906,6 +28955,28 @@ declare global {
                             }
                             element: 'nome'
                             position: '1'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd154ed4131cc43edbc1100a0d12f9fba'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'estagio'
+                            position: '6'
                         }
                     },
                     {
@@ -25976,6 +29047,28 @@ declare global {
                             name: 'x_2326104_cob_meta'
                             element: 'periodo'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd25c0e0a328c4bb09cdc37164c4eff9e'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'descricao'
+                            position: '10'
                         }
                     },
                     {
@@ -26103,6 +29196,19 @@ declare global {
                                 }
                             }
                             element: 'detalhe'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'd3c4170b21a441fc8b0bf7eb68e03470'
+                        key: {
+                            sys_security_acl: 'd874c5d463ec45df8aa124b81d865311'
+                            sys_user_role: {
+                                id: 'f5f61890af5a43769616de8586ec6188'
+                                key: {
+                                    name: 'x_2326104_cob.coordenador'
+                                }
+                            }
                         }
                     },
                     {
@@ -26266,6 +29372,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'd5988d61e7594469838688a715808724'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: 'd5b38cefe9824ea0aa3578501bc3f64a'
                         key: {
@@ -26303,6 +29417,17 @@ declare global {
                             name: 'x_2326104_cob_envio_sim'
                             element: 'comunicacao'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'd5ea9812ab9544dc97884e91782c24be'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                            value: 'contato_realizado'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -26409,6 +29534,7 @@ declare global {
                     {
                         table: 'sys_ui_list_element'
                         id: 'd6829b3bfc524d9abb75acb6cb72043e'
+                        deleted: true
                         key: {
                             list_id: {
                                 id: 'e8ef4ab1a5724e3180f0c2347e95eaec'
@@ -26448,6 +29574,17 @@ declare global {
                         key: {
                             document_key: '868e4654032d4b5091d5fb59ccae162e'
                             variable: 'b27b2b29ff6033008d3f5d9ad53bf164'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'd6f28cc913a64540bd6a0fb33cda1530'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'status'
+                            value: 'ligado'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -26818,6 +29955,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: 'da2f082780554d5baa33d959e7b397f1'
+                        deleted: true
                         key: {
                             name: 'x_2326104_cob_caso'
                             element: 'atendente'
@@ -27134,6 +30272,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'dc930d87174a404c933225e5dc657756'
+                        key: {
+                            sys_ui_section: {
+                                id: '82b9db10d0f9469e93119129532c40c4'
+                                key: {
+                                    name: 'x_2326104_cob_interacao'
+                                    caption: 'Registro de interação'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tipo'
+                            position: '4'
+                        }
+                    },
+                    {
                         table: 'ua_table_licensing_config'
                         id: 'dc9c34c9386f46db94b8e70a86fc15a7'
                         key: {
@@ -27154,8 +30314,32 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list_element'
+                        id: 'dd0079438c684afe9e436d15dd592e69'
+                        key: {
+                            list_id: {
+                                id: 'e8ef4ab1a5724e3180f0c2347e95eaec'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    view: {
+                                        id: 'f69da0011bf74d24bce62f5c88da63bb'
+                                        key: {
+                                            name: 'x_2326104_cob_tel_023'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'ciclo'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'dd02e11c9a6d4863983b2ee99616d463'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -27186,6 +30370,31 @@ declare global {
                                     name: 'x_2326104_cob.coordenador'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'dd3a4bac263540ac86d895701b201a4d'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'tentativas'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list'
+                        id: 'dd436d65974b467a9b634ccded9da7c5'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                            element: 'NULL'
+                            relationship: 'NULL'
+                            parent: 'NULL'
                         }
                     },
                     {
@@ -27263,6 +30472,28 @@ declare global {
                             }
                             element: '.end_split'
                             position: '14'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'dd8a3aa153024a47b9b860028cba6b50'
+                        key: {
+                            sys_ui_section: {
+                                id: '4f6a1334704d48f782aa2f3a59c4089c'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Caso'
+                                    view: {
+                                        id: 'd42aa48d068e4a738c5b683457329f4a'
+                                        key: {
+                                            name: 'x_2326104_cob_dossie'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '5'
                         }
                     },
                     {
@@ -27425,6 +30656,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'df756ed7d3aa48eb8f30392f1027870e'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -27553,6 +30785,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'e112ac99a64948e6a713aae47518d3b8'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'publicado_em'
+                            position: '16'
+                        }
+                    },
+                    {
                         table: 'sys_variable_value'
                         id: 'e11ec55ed7204e3f875c4fbdcdee0af0'
                         key: {
@@ -27582,6 +30836,28 @@ declare global {
                         key: {
                             document_key: 'ef9512d2a3eb4bcbb91a334db6e37635'
                             variable: '78b8d86b531000109e02ddeeff7b12f3'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'e16f47c49c25490bbf5ec3af36834160'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'encerrado_em'
+                            position: '13'
                         }
                     },
                     {
@@ -27835,6 +31111,14 @@ declare global {
                                 }
                             }
                             element: 'nome'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'e3c3e157a2af4d329f47205c26f321ab'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ciclo'
                         }
                     },
                     {
@@ -28315,6 +31599,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'e8d7f7920099405f9e0937ea894de91f'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'referencia'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list'
                         id: 'e8ef4ab1a5724e3180f0c2347e95eaec'
                         key: {
@@ -28357,6 +31663,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'e94f84d22609456c95348d7da0d2cfe7'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -28404,6 +31711,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'e9be863e18684adfb818f8301c622459'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'
@@ -28468,6 +31776,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'ea66cd482ac348ab8a24ba920719708e'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'motivo_encerramento'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: 'eab5522bcf96436bad7c17e973ffcfb5'
                         key: {
@@ -28524,12 +31840,69 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'eb2215a8713442d8ae67d0c93e290712'
+                        key: {
+                            sys_security_acl: 'd874c5d463ec45df8aa124b81d865311'
+                            sys_user_role: {
+                                id: '8f9564b315df4b25b5716b753d5c2616'
+                                key: {
+                                    name: 'x_2326104_cob.atendente'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'eb323659a6304c6995f06d5a5f843ae2'
+                        key: {
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'ciclo'
+                            position: '4'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'ebb924d367134e578968b346251775df'
                         key: {
                             name: 'x_2326104_cob_ciclo'
                             element: 'publicado_por'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ebeaf9ae20bc48bab725d75d0a16061b'
+                        key: {
+                            sys_ui_section: {
+                                id: '1d359f2a2f594a9087e3e1c2b293c961'
+                                key: {
+                                    name: 'x_2326104_cob_caso'
+                                    caption: 'Dossiê do caso'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'prioridade'
+                            position: '6'
                         }
                     },
                     {
@@ -29061,6 +32434,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f237cc113af547daafd05b1afff7095f'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -29106,6 +32480,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f2d87024241d46cdb4fd4710117076cc'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -29230,6 +32605,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f3f506e365744eeb9ff6e2726d0cc617'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -29455,6 +32831,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f67b0c8124ec47ec8d024123a790b51c'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '82b9db10d0f9469e93119129532c40c4'
@@ -29527,6 +32904,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'f77caafa888e402cacee2bf15056ca74'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '4f6a1334704d48f782aa2f3a59c4089c'
@@ -29745,6 +33123,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'f9a009aafad146049962d547cbcf63ef'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'estado'
+                            position: '5'
+                        }
+                    },
+                    {
                         table: 'ua_table_licensing_config'
                         id: 'f9e09593aed041fc824132ed8da92b0b'
                         key: {
@@ -29810,6 +33210,28 @@ declare global {
                                 }
                             }
                             element: 'id_registro'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'fa6c5ea21bb34bd6bd457137cc143514'
+                        key: {
+                            sys_ui_section: {
+                                id: '67c320dcbf7a4c8f962b2ea0307d6d91'
+                                key: {
+                                    name: 'x_2326104_cob_ciclo'
+                                    caption: 'Ciclo do mês'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'distribuido_em'
+                            position: '18'
                         }
                     },
                     {
@@ -30298,6 +33720,39 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_form_section'
+                        id: 'fd92e7042ced4a8cbbd0989e484f2c21'
+                        key: {
+                            sys_ui_form: {
+                                id: '3a0d15c2a7f04bafaeae5200714bbc6f'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: 'af337dace7684bb1b257c3305aebfebe'
+                                key: {
+                                    name: 'x_2326104_cob_contato'
+                                    caption: 'Contato da lista'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_form'
                         id: 'fd96d57113e441a8b4295de490c5baa6'
                         key: {
@@ -30350,6 +33805,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'fddaf1b12558463e97e974db0f5d849b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '862e50358817424cbe1b033aadea8c1e'
@@ -30423,6 +33879,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: 'fe59950000f943a9b0e8691c9acddbd7'
+                        key: {
+                            name: 'x_2326104_cob_contato'
+                            element: 'ultimo_resultado'
+                            value: 'sem_contato'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: 'fe6f286352dd4875b8c9d1f2133e2bcb'
                         key: {
@@ -30454,6 +33921,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'ff1c8cabe70440b68970f08cad7ac65b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '1d359f2a2f594a9087e3e1c2b293c961'

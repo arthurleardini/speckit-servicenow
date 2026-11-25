@@ -5,6 +5,8 @@
 // carteira (RN-NOVO-F5-007): o atendente só vê linhas do próprio contribuinte.
 import '@servicenow/sdk/global'
 import { Form, Formatter, Record, UiPolicy } from '@servicenow/sdk/core'
+// Trilha de etapas do caso (gerada pelo sn-scaffold a partir de processFlows): topo do dossiê (design UX v1, M4).
+import { processFlow_caso } from './_processflow_caso.now'
 
 export const view_dossie = Record({
     $id: Now.ID['RF-MOD-F5-003_view_dossie'],
@@ -20,7 +22,8 @@ export const form_dossie = Form({
         {
             caption: 'Caso',
             content: [
-                { layout: 'two-column', leftElements: [{ field: 'contribuinte', type: 'table_field' }, { field: 'atendente', type: 'table_field' }, { field: 'ciclo', type: 'table_field' }], rightElements: [{ field: 'estagio', type: 'table_field' }, { field: 'prioridade', type: 'table_field' }, { field: 'valor_em_aberto', type: 'table_field' }] },
+                { layout: 'one-column', elements: [{ type: 'formatter', formatterRef: processFlow_caso, formatterName: 'process_flow.xml' }] },
+                { layout: 'two-column', leftElements: [{ field: 'contribuinte', type: 'table_field' }, { field: 'coordenador', type: 'table_field' }, { field: 'ciclo', type: 'table_field' }], rightElements: [{ field: 'estagio', type: 'table_field' }, { field: 'prioridade', type: 'table_field' }, { field: 'valor_em_aberto', type: 'table_field' }] },
             ],
         },
         {

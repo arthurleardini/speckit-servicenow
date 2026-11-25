@@ -28,6 +28,8 @@ export const x_2326104_cob_ciclo = Table({
         efeito_incremental: DecimalColumn({ label: "Efeito incremental (p.p.)" }),
         publicado_em: DateTimeColumn({ label: "Publicado em" }),
         publicado_por: ReferenceColumn({ label: "Publicado por", referenceTable: "sys_user" }),
+        distribuido_em: DateTimeColumn({ label: "Distribuído em" }),
+        qtd_contatos: IntegerColumn({ label: "Contatos distribuídos" }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

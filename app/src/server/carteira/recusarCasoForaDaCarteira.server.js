@@ -2,8 +2,8 @@
 // (RN-NOVO-F5-007, SEC-002). Confere o dono como estava gravado: trocar o atendente não dá acesso.
 (function executeRule(current, previous) {
     var carteira = new CarteiraAtendente();
-    var msg = carteira.motivoRecusa(previous, 'atendente');
-    if (!msg && !carteira.veTudo() && current.atendente.changes()) {
+    var msg = carteira.motivoRecusa(previous, 'coordenador');
+    if (!msg && !carteira.veTudo() && current.coordenador.changes()) {
         msg = CarteiraAtendente.MSG_RECUSA;
     }
     if (msg) {

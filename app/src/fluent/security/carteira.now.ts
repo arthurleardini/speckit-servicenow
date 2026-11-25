@@ -15,7 +15,7 @@ Acl({
     operation: 'read',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'atendente');",
+    script: "answer = new CarteiraAtendente().podeVer(current, 'coordenador');",
     description: 'Nega ao atendente o caso de outro atendente (RN-NOVO-F5-007).',
 })
 
@@ -37,7 +37,7 @@ Acl({
     operation: 'read',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.atendente');",
+    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
     description: 'Nega ao atendente a interação de caso de outro atendente (RN-NOVO-F5-007).',
 })
 
@@ -48,7 +48,7 @@ Acl({
     operation: 'read',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, ['atendente', 'caso.atendente']);",
+    script: "answer = new CarteiraAtendente().podeVer(current, ['atendente', 'caso.coordenador']);",
     description: 'Nega ao atendente a regularização de outra carteira (SEC-002).',
 })
 
@@ -125,7 +125,7 @@ Acl({
     operation: 'write',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'atendente');",
+    script: "answer = new CarteiraAtendente().podeVer(current, 'coordenador');",
     description: 'Nega ao atendente gravar caso de outro atendente (RN-NOVO-F5-007).',
 })
 
@@ -176,7 +176,7 @@ Acl({
     operation: 'create',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.atendente');",
+    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
     description: 'Nega ao atendente registrar interação em caso de outro atendente (RN-NOVO-F5-007).',
 })
 
@@ -187,6 +187,6 @@ Acl({
     operation: 'write',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.atendente');",
+    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
     description: 'Nega ao atendente gravar interação de caso de outro atendente (RN-NOVO-F5-007).',
 })

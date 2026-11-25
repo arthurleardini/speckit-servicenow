@@ -9,6 +9,8 @@ export const t_f5003_dossie_pos = Test({
     name: 'RF-MOD-F5-003 — dossiê do caso reúne os 3 níveis para o atendente responsável',
     description: 'Cria um caso fictício em condução de demo.atendente com 2 débitos, nenhum parcelamento, 1 comunicação, 3 interações, 1 regularização, score 72 e sinalização coercitiva ativa; impersonado como demo.atendente, CasoDossie.montar devolve o nível 1 (2 débitos, 0 parcelamentos — lista vazia), o nível 2 (1, 3 e 1) e o nível 3 (score 72 e a sinalização com a descrição); um caso sem contribuinte é recusado com «Operação recusada: visão única do contribuinte por documento.» (RN-NOVO-F5-003, RN-NOVO-F1-001, lado positivo e bordas).',
     failOnServerError: true,
+    // migrar na F4: o caso passou ao coordenador (caso.atendente → caso.coordenador, design UX v1 R6); a premissa deste teste se inverteu
+    active: false,
 }, (atf) => {
     atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-F5-003_test_01'],
@@ -108,6 +110,8 @@ export const t_f5003_dossie_neg = Test({
     name: 'RF-MOD-F5-003 — caso de outro atendente não aparece no dossiê por nenhum caminho',
     description: 'Cria um caso fictício de demo.atendente; impersonado como demo.atendente2, CasoDossie.montar recusa com «Operação recusada: atendente vê só a própria carteira.» (e sem caso, com «Operação recusada: dossiê em 3 níveis (premissa).»), o caso não é lido, a interação não é gravada e o caso não pode ser encerrado (gravação negada pela ACL de carteira) (RN-NOVO-F5-007 no dossiê, lado negativo).',
     failOnServerError: true,
+    // migrar na F4: o caso passou ao coordenador (caso.atendente → caso.coordenador, design UX v1 R6); a premissa deste teste se inverteu
+    active: false,
 }, (atf) => {
     atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-F5-003_test_05'],
@@ -169,6 +173,8 @@ export const t_f5003_ui = Test({
     name: 'RF-MOD-F5-003 — o form do caso abre no dossiê com seções e listas relacionadas',
     description: 'Cria um caso fictício de demo.atendente e o abre no form como demo.atendente: a View Rule abre a view «Dossiê do caso», os campos de score, sinalização e encerramento aparecem, a sinalização fica somente leitura (sinaliza, não executa — RN-NOVO-F5-004) e a lista de Interações aparece (RN-NOVO-F5-003, lado positivo da tela).',
     failOnServerError: true,
+    // migrar na F4: o caso passou ao coordenador (caso.atendente → caso.coordenador, design UX v1 R6); a premissa deste teste se inverteu
+    active: false,
 }, (atf) => {
     atf.server.runServerSideScript({
         $id: Now.ID['US-MOD-F5-003_test_09'],

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "sn-scaffold",
-  "generatedAt": "2026-11-24T16:33:09.043Z",
+  "generatedAt": "2026-11-25T02:21:19.480Z",
   "screens": [
     {
       "id": "TEL-001",
@@ -85,7 +85,7 @@
     },
     {
       "id": "TEL-009",
-      "title": "Ciclo de qualificação (prévia)",
+      "title": "Ciclo do mês",
       "route": "/x_2326104_cob_ciclo.do?sys_id=67fc0380efcd42fe9d3da42308b5384d",
       "type": "form",
       "role": "coordenador",
@@ -215,7 +215,7 @@
     },
     {
       "id": "TEL-022",
-      "title": "Carga por atendente",
+      "title": "Carga por responsável",
       "route": "/sys_report_template.do?jvar_report_id=ff58b093be4d42db947a1cfcc7ddd9df",
       "type": "report",
       "role": "coordenador",
@@ -225,10 +225,10 @@
     },
     {
       "id": "TEL-023",
-      "title": "Minha fila",
+      "title": "Casos qualificados",
       "route": "/x_2326104_cob_caso_list.do?sysparm_view=x_2326104_cob_tel_023",
       "type": "list",
-      "role": "atendente",
+      "role": "coordenador",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-023.png",
       "capturedAt": "2026-11-24T16:37:39.780Z"
@@ -238,7 +238,7 @@
       "title": "Dossiê do caso",
       "route": "/x_2326104_cob_caso.do?sys_id=541104d723384cd0bd1aaa40e178ae60",
       "type": "form",
-      "role": "atendente",
+      "role": "coordenador",
       "table": "x_2326104_cob_caso",
       "screenshot": "screens/TEL-024.png",
       "capturedAt": "2026-11-24T16:37:42.722Z"
@@ -248,7 +248,7 @@
       "title": "Registro de interação",
       "route": "/x_2326104_cob_interacao.do?sys_id=385ad7c968ff4f8c93f0d9f1e64350e0",
       "type": "form",
-      "role": "atendente",
+      "role": "coordenador",
       "table": "x_2326104_cob_interacao",
       "screenshot": "screens/TEL-025.png",
       "capturedAt": "2026-11-24T16:37:45.362Z"
@@ -332,6 +332,26 @@
       "table": "x_2326104_cob_exportacao",
       "screenshot": "screens/TEL-033.png",
       "capturedAt": "2026-11-24T16:38:12.843Z"
+    },
+    {
+      "id": "TEL-034",
+      "title": "Minha lista",
+      "route": "/x_2326104_cob_contato_list.do",
+      "type": "list",
+      "role": "atendente",
+      "table": "x_2326104_cob_contato",
+      "screenshot": null,
+      "capturedAt": null
+    },
+    {
+      "id": "TEL-035",
+      "title": "Contato da lista",
+      "route": "/x_2326104_cob_contato.do?sys_id=8ca2d0136d084cabb0b53bd4748fc574",
+      "type": "form",
+      "role": "atendente",
+      "table": "x_2326104_cob_contato",
+      "screenshot": null,
+      "capturedAt": null
     }
   ]
 }

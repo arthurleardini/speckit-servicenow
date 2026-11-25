@@ -23,7 +23,7 @@ export const x_2326104_cob_debito = Table({
             "ipva": { label: "IPVA", sequence: 2 },
             "itcd": { label: "ITCD", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        valor: GenericColumn({ columnType: "currency", label: "Valor" }),
+        valor: GenericColumn({ columnType: "currency", label: "Valor (R$)" }),
         vencimento: DateColumn({ label: "Vencimento" }),
         dias_atraso: IntegerColumn({ label: "Dias de atraso" }),
         status: ChoiceColumn({ label: "Status", choices: {

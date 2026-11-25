@@ -17,7 +17,7 @@ export const x_2326104_cob_segmentacao = Table({
             "qualificada": { label: "Qualificada", sequence: 1 },
             "controle": { label: "Grupo de controle", sequence: 2 },
         }, dropdown: 'dropdown_with_none' }),
-        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto" }),
+        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto (R$)" }),
         score_usado: DecimalColumn({ label: "Score usado" }),
         sem_score: BooleanColumn({ label: "Sem score" }),
         estagio_funil: ChoiceColumn({ label: "Estágio do funil", choices: {

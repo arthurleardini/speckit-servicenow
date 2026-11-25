@@ -5,7 +5,7 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, GenericColu
 export const x_2326104_cob_criterio = Table({
     name: "x_2326104_cob_criterio",
     label: "Critério de qualificação",
-    display: "nome",
+    display: "codigo",
     audit: true,
     allowWebServiceAccess: true,
     schema: {
@@ -24,7 +24,7 @@ export const x_2326104_cob_criterio = Table({
             "ipva": { label: "IPVA", sequence: 3 },
             "itcd": { label: "ITCD", sequence: 4 },
         }, dropdown: 'dropdown_with_none' }),
-        valor_minimo: GenericColumn({ columnType: "currency", label: "Valor mínimo" }),
+        valor_minimo: GenericColumn({ columnType: "currency", label: "Valor mínimo (R$)" }),
         atraso_minimo_dias: IntegerColumn({ label: "Atraso mínimo (dias)" }),
         instrumento: StringColumn({ label: "Instrumento", maxLength: 80 }),
         excluir_contumaz: BooleanColumn({ label: "Excluir contumazes" }),

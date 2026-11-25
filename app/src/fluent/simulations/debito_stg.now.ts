@@ -28,7 +28,7 @@ export const x_2326104_cob_debito_stg = Table({
             "ipva": { label: "IPVA", sequence: 2 },
             "itcd": { label: "ITCD", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        valor: GenericColumn({ columnType: "currency", label: "Valor" }),
+        valor: GenericColumn({ columnType: "currency", label: "Valor (R$)" }),
         vencimento: DateColumn({ label: "Vencimento" }),
         id_fonte: StringColumn({ label: "ID na fonte", maxLength: 40 }),
         processado: BooleanColumn({ label: "Processado" }),

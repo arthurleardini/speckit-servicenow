@@ -1,6 +1,6 @@
 // gerado por sn-scaffold — regerar com scaffold.mjs; mudança à mão se perde
 import '@servicenow/sdk/global'
-import { ChoiceColumn, DateTimeColumn, GenericColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
+import { ChoiceColumn, DateColumn, DateTimeColumn, GenericColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 
 export const x_2326104_cob_interacao = Table({
     name: "x_2326104_cob_interacao",
@@ -9,7 +9,8 @@ export const x_2326104_cob_interacao = Table({
     audit: true,
     allowWebServiceAccess: true,
     schema: {
-        caso: ReferenceColumn({ label: "Caso", mandatory: true, referenceTable: "x_2326104_cob_caso" }),
+        contato: ReferenceColumn({ label: "Contato da lista", referenceTable: "x_2326104_cob_contato" }),
+        caso: ReferenceColumn({ label: "Caso qualificado", referenceTable: "x_2326104_cob_caso" }),
         atendente: ReferenceColumn({ label: "Atendente", referenceTable: "sys_user" }),
         tipo: ChoiceColumn({ label: "Tipo", choices: {
             "telefone": { label: "Telefone", sequence: 0 },
@@ -23,8 +24,9 @@ export const x_2326104_cob_interacao = Table({
             "promessa_pagamento": { label: "Promessa de pagamento", sequence: 2 },
             "recusa": { label: "Recusa", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
-        descricao: StringColumn({ label: "Descrição", maxLength: 4000 }),
+        descricao: StringColumn({ label: "Anotação", maxLength: 4000 }),
         ocorrida_em: DateTimeColumn({ label: "Ocorrida em" }),
+        retorno_em: DateColumn({ label: "Retorno em" }),
         comentarios: GenericColumn({ columnType: "journal_input", label: "Comentários" }),
     },
 })

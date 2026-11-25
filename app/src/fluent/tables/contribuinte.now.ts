@@ -28,7 +28,7 @@ export const x_2326104_cob_contribuinte = Table({
         }, dropdown: 'dropdown_with_none' }),
         score: DecimalColumn({ label: "Score de liquidez" }),
         sem_score: BooleanColumn({ label: "Sem score" }),
-        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto" }),
+        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto (R$)" }),
         situacao: ChoiceColumn({ label: "Situação", choices: {
             "em_cobranca": { label: "Em cobrança", sequence: 0 },
             "parcelado": { label: "Em parcelamento", sequence: 1 },

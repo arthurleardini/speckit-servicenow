@@ -3,10 +3,10 @@
 // outro atendente. Os campos de dono de cada tabela vêm do mapa abaixo.
 (function executeRule(current, previous) {
     var DONO = {
-        x_2326104_cob_caso: ['atendente'],
+        x_2326104_cob_caso: ['coordenador'],
         x_2326104_cob_contribuinte: ['atendente'],
-        x_2326104_cob_interacao: ['caso.atendente'],
-        x_2326104_cob_regularizacao: ['atendente', 'caso.atendente'],
+        x_2326104_cob_interacao: ['caso.coordenador'],
+        x_2326104_cob_regularizacao: ['atendente', 'caso.coordenador'],
         x_2326104_cob_debito: ['contribuinte.atendente'],
         x_2326104_cob_parcelamento: ['contribuinte.atendente'],
         x_2326104_cob_comunicacao: ['contribuinte.atendente'],

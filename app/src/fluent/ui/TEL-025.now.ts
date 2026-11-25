@@ -9,7 +9,7 @@ Form({
         {
             caption: "Registro de interação",
             content: [
-                { layout: 'two-column', leftElements: [{ field: "caso", type: 'table_field' }, { field: "atendente", type: 'table_field' }, { field: "tipo", type: 'table_field' }], rightElements: [{ field: "resultado", type: 'table_field' }, { field: "ocorrida_em", type: 'table_field' }] },
+                { layout: 'two-column', leftElements: [{ field: "caso", type: 'table_field' }, { field: "contato", type: 'table_field' }, { field: "atendente", type: 'table_field' }, { field: "tipo", type: 'table_field' }], rightElements: [{ field: "resultado", type: 'table_field' }, { field: "ocorrida_em", type: 'table_field' }, { field: "retorno_em", type: 'table_field' }] },
                 { layout: 'one-column', elements: [{ field: "descricao", type: 'table_field' }, { field: "comentarios", type: 'table_field' }] },
             ],
         },

@@ -5,12 +5,12 @@ import { BooleanColumn, ChoiceColumn, DateTimeColumn, DecimalColumn, GenericColu
 export const x_2326104_cob_caso = Table({
     name: "x_2326104_cob_caso",
     label: "Caso de cobrança qualificada",
-    display: "sinal_coercitivo_desc",
+    display: "contribuinte",
     audit: true,
     allowWebServiceAccess: true,
     schema: {
         contribuinte: ReferenceColumn({ label: "Contribuinte", mandatory: true, referenceTable: "x_2326104_cob_contribuinte" }),
-        atendente: ReferenceColumn({ label: "Atendente", referenceTable: "sys_user" }),
+        coordenador: ReferenceColumn({ label: "Responsável", referenceTable: "sys_user" }),
         ciclo: ReferenceColumn({ label: "Ciclo", referenceTable: "x_2326104_cob_ciclo" }),
         estagio: ChoiceColumn({ label: "Estágio", choices: {
             "em_selecao": { label: "Em seleção", sequence: 0 },
@@ -22,7 +22,7 @@ export const x_2326104_cob_caso = Table({
         prioridade: IntegerColumn({ label: "Prioridade" }),
         score: DecimalColumn({ label: "Score de liquidez" }),
         sem_score: BooleanColumn({ label: "Sem score" }),
-        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto" }),
+        valor_em_aberto: GenericColumn({ columnType: "currency", label: "Valor em aberto (R$)" }),
         sinal_coercitivo: BooleanColumn({ label: "Sinalização coercitiva ativa" }),
         sinal_coercitivo_desc: StringColumn({ label: "Sinalização coercitiva (descrição)", maxLength: 255 }),
         motivo_encerramento: ChoiceColumn({ label: "Motivo de encerramento", choices: {

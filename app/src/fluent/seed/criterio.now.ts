@@ -1257,8 +1257,8 @@ Record({
     $meta: { installMethod: 'demo' },
     table: "x_2326104_cob_criterio",
     data: {
-        nome: "Registro demo TEL-008",
-        codigo: "Código do critério 051",
+        nome: "Gabriela Esteves Nogueira",
+        codigo: "Registro demo TEL-008",
         versao: 687,
         estado: "publicada",
         tributo: "icms_st",
