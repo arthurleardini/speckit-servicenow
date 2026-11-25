@@ -5,7 +5,7 @@
     var DONO = {
         x_2326104_cob_caso: ['coordenador'],
         x_2326104_cob_contribuinte: ['atendente'],
-        x_2326104_cob_interacao: ['caso.coordenador'],
+        x_2326104_cob_interacao: ['contato.atendente', 'caso.coordenador'],
         x_2326104_cob_regularizacao: ['atendente', 'caso.coordenador'],
         x_2326104_cob_debito: ['contribuinte.atendente'],
         x_2326104_cob_parcelamento: ['contribuinte.atendente'],

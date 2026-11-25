@@ -37,8 +37,8 @@ Acl({
     operation: 'read',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
-    description: 'Nega ao atendente a interação de caso de outro atendente (RN-NOVO-F5-007).',
+    script: "answer = new CarteiraAtendente().podeVer(current, ['contato.atendente', 'caso.coordenador']);",
+    description: 'Nega ao atendente a interação de contato de outro atendente e a de caso qualificado (RN-NOVO-F5-007, design UX v1 🔴4).',
 })
 
 Acl({
@@ -176,8 +176,8 @@ Acl({
     operation: 'create',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
-    description: 'Nega ao atendente registrar interação em caso de outro atendente (RN-NOVO-F5-007).',
+    script: "answer = new CarteiraAtendente().podeVer(current, ['contato.atendente', 'caso.coordenador']);",
+    description: 'Nega ao atendente registrar interação em contato de outro atendente ou em caso qualificado (RN-NOVO-F5-007).',
 })
 
 Acl({
@@ -187,6 +187,6 @@ Acl({
     operation: 'write',
     decisionType: 'deny',
     adminOverrides: true,
-    script: "answer = new CarteiraAtendente().podeVer(current, 'caso.coordenador');",
-    description: 'Nega ao atendente gravar interação de caso de outro atendente (RN-NOVO-F5-007).',
+    script: "answer = new CarteiraAtendente().podeVer(current, ['contato.atendente', 'caso.coordenador']);",
+    description: 'Nega ao atendente gravar interação de contato de outro atendente ou de caso qualificado (RN-NOVO-F5-007).',
 })
