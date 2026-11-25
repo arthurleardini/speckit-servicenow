@@ -102,7 +102,10 @@ const ciclos = [
     nome: `Ciclo ${mes(0).slice(0, 7)}`, referencia: mes(0), criterio: raw(ref(`${S}criterio`, criterios[0])),
     estado: 'publicado', qtd_elegiveis: elegMes, semente_sorteio: Number(mes(0).replace(/-/g, '')),
     qtd_massificada: massa.length, qtd_qualificada: qualificados.length, qtd_controle: controleMes, qtd_sem_score: 3,
-    // Ciclo em andamento: as taxas e o efeito incremental são apurados no encerramento.
+    // Ciclo em andamento: taxas parciais do mês (1 regularização entre 34 cobrados; 0 de 4 no
+    // controle). Todos os campos vão explícitos: o registro demo já existia e o install só
+    // atualiza o que a fonte traz.
+    taxa_cobrada: 2.9, taxa_controle: 0, efeito_incremental: 2.9,
     publicado_em: `${mes(0)} 12:00:00`, publicado_por: raw(refUser(COORD)),
     distribuido_em: `${mes(0)} 13:00:00`, qtd_contatos: massa.length,
   }),
@@ -195,6 +198,8 @@ const casos = qualificados.map((c, i) => {
     contribuinte: raw(ref(`${S}contribuinte`, c.id)), coordenador: raw(refUser(COORD)),
     ciclo: raw(ref(`${S}ciclo`, CICLO_MES)), estagio: e.estagio, prioridade: 5 - (i % 5),
     score: e.semScore ? undefined : e.score, sem_score: Boolean(e.semScore), valor_em_aberto: c.valor,
+    // Campo ausente não é limpo pelo install num registro demo que já existia (TEL-024): na
+    // instância de 2026-11-24 o motivo e a data de encerramento antigos foram limpos pela REST API.
     sinal_coercitivo: Boolean(e.sinal), sinal_coercitivo_desc: e.sinal,
     motivo_encerramento: e.motivo, encerrado_em: e.encerrado ? `${e.encerrado} 15:00:00` : undefined,
   });
