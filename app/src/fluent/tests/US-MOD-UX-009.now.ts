@@ -30,8 +30,18 @@ export const t_ux009_lista_atendente = Test({
         $id: Now.ID['US-MOD-UX-009_test_05'],
         script: `
 await sn_atf.navigate('/x_2326104_cob_contato_list.do?sysparm_query=atendente%3Djavascript:gs.getUserID()%5Estatus!%3Dencerrado')
-const nome = await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
-await user.pointer({ keys: '[MouseRight]', target: nome.closest('td') || nome })
+await screen.findByText('Contribuinte fictício UX-009 lista', {}, { timeout: 20000 })
+const clique = await sn_atf.evaluate(() => {
+    var cell = document.querySelector('tr.list_row td.vt');
+    if (!cell) { return 'sem-celula'; }
+    var util = null;
+    try { util = window.top.g_ui_testing_util || window.parent.g_ui_testing_util; } catch (e) {}
+    if (util && util.rightClickElement) { util.rightClickElement(cell); return 'util'; }
+    ['mousedown', 'mouseup', 'contextmenu'].forEach(function (tipo) {
+        cell.dispatchEvent(new MouseEvent(tipo, { bubbles: true, cancelable: true, button: 2, buttons: 2, view: window, clientX: 300, clientY: 300 }));
+    });
+    return 'eventos';
+})
 await sn_atf.delay(2500)
 const itens = await sn_atf.evaluate(() => {
     var t = [];
@@ -50,7 +60,7 @@ const itens = await sn_atf.evaluate(() => {
     var diag = 'linhas=' + document.querySelectorAll('tr.list_row').length + ' menus=' + Object.keys(cm).join(',') + ' ctx=' + document.querySelectorAll('.context_menu').length;
     return t.map(function (x) { return x.trim(); }).join('|') + ' #' + diag;
 })
-expect(itens).toContain('Registrar ligação…')
+expect(itens + ' clique=' + clique).toContain('Registrar ligação…')
 expect(itens).toContain('Encerrar…')
 expect(itens).not.toContain('Avançar etapa')
 `,
