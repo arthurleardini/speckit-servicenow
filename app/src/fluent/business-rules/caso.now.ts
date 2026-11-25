@@ -14,3 +14,16 @@ export const br_caso_ordem_etapa = BusinessRule({
     active: true,
     script: Now.include('../../server/atendimento/preencherOrdemEtapa.server.js'),
 })
+
+// GAP-152 — o estágio só anda pelas regras dos botões, também por form, lista e API.
+export const br_caso_estagio = BusinessRule({
+    $id: Now.ID['RF-MOD-UX-005_br_caso_estagio'],
+    name: 'Recusar mudança de estágio fora das regras do caso',
+    description: 'Por qualquer caminho, o estágio do caso anda uma etapa por vez, só vai a «Encerrado» com motivo e caso encerrado não volta (RN-NOVO-UX-008, GAP-152).',
+    table: 'x_2326104_cob_caso',
+    when: 'before',
+    action: ['update'],
+    order: 80,
+    active: true,
+    script: Now.include('../../server/atendimento/recusarEstagioForaDosVerbos.server.js'),
+})

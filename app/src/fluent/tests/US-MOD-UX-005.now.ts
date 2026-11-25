@@ -240,3 +240,108 @@ export const t_ux005_ui = Test({
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-UX-005_test_16'], table: 'x_2326104_cob_caso', recordId: aberto.first_record })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-UX-005_test_17'], table: 'x_2326104_cob_caso', visible: [Now.ref('sys_ui_action', 'RF-MOD-UX-005_ua_avancar_etapa'), Now.ref('sys_ui_action', 'RF-MOD-UX-005_ua_encerrar_caso')] })
 })
+
+export const t_ux005_so_verbos = Test({
+    $id: Now.ID['US-MOD-UX-005_atf_estagio_so_pelos_verbos'],
+    name: 'RF-MOD-UX-005 — estágio do caso anda uma etapa por vez e só encerra com motivo, por qualquer caminho (GAP-152)',
+    description: 'Como demo.coordenador, gravando o caso direto (form, lista ou API, fora dos botões): pular de «Em seleção» para «Condução» é recusado com «Operação recusada: o caso anda uma etapa por vez; use «Avançar etapa».»; ir a «Encerrado» sem motivo é recusado com «Operação recusada: informe o motivo de encerramento.»; caso encerrado não volta («Operação recusada: caso encerrado não reabre.»). Andar uma etapa e encerrar com motivo passam (lado positivo). O coordenador não grava «Estágio» nem «Encerrado em» à mão (ACL de campo); grava o motivo, que o botão «Encerrar caso» pede.',
+    failOnServerError: true,
+}, (atf) => {
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-UX-005_test_18'],
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    var u = new GlideRecord('sys_user');
+    u.get('user_name', 'demo.coordenador');
+    var p = new GlideRecord('x_2326104_cob_contribuinte');
+    p.initialize();
+    p.setValue('nome', 'Contribuinte fictício UX-005 estágio');
+    p.setValue('tipo_pessoa', 'pj');
+    p.setValue('ficticio', true);
+    var pid = p.insert();
+    var lista = [{estagio: 'em_selecao', prioridade: 9961}, {estagio: 'conducao', prioridade: 9962}, {estagio: 'encerrado', motivo: 'regularizado', prioridade: 9963}, {estagio: 'dossie_gerado', prioridade: 9964}];
+    for (var k = 0; k < lista.length; k++) {
+        var c = new GlideRecord('x_2326104_cob_caso');
+        c.initialize();
+        c.setValue('contribuinte', pid);
+        c.setValue('coordenador', u.getUniqueValue());
+        c.setValue('estagio', lista[k].estagio);
+        if (lista[k].motivo) {
+            c.setValue('motivo_encerramento', lista[k].motivo);
+        }
+        c.setValue('prioridade', lista[k].prioridade);
+        c.insert();
+    }
+    return !!pid;
+})(outputs, steps, params, stepResult, assertEqual);`,
+    })
+    const u_US_MOD_UX_005_test_19 = atf.server.recordQuery({ $id: Now.ID['US-MOD-UX-005_test_19'], table: 'sys_user', fieldValues: 'user_name=demo.coordenador', assert: 'records_match_query' })
+    atf.server.impersonate({ $id: Now.ID['US-MOD-UX-005_test_20'], user: u_US_MOD_UX_005_test_19.first_record })
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-UX-005_test_21'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+
+    function caso(marca) {
+        var c = new GlideRecord('x_2326104_cob_caso');
+        c.addQuery('prioridade', marca);
+        c.addQuery('contribuinte.nome', 'Contribuinte fictício UX-005 estágio');
+        c.query();
+        c.next();
+        return c;
+    }
+    function estagio(c) {
+        var g = new GlideRecord('x_2326104_cob_caso');
+        g.get(c.getUniqueValue());
+        return g.getValue('estagio');
+    }
+    describe('Estágio do caso fora dos botões', function() {
+        it('pular etapa é recusado', function() {
+            expect(new CasoConducao().motivoRecusaEstagio('em_selecao', 'conducao', '')).toBe('Operação recusada: o caso anda uma etapa por vez; use «Avançar etapa».');
+            var c = caso(9961);
+            c.setValue('estagio', 'conducao');
+            c.update();
+            expect(estagio(c)).toBe('em_selecao');
+        });
+        it('encerrar sem motivo é recusado', function() {
+            expect(new CasoConducao().motivoRecusaEstagio('conducao', 'encerrado', '')).toBe('Operação recusada: informe o motivo de encerramento.');
+            var c = caso(9962);
+            c.setValue('estagio', 'encerrado');
+            c.update();
+            expect(estagio(c)).toBe('conducao');
+        });
+        it('caso encerrado não reabre', function() {
+            expect(new CasoConducao().motivoRecusaEstagio('encerrado', 'conducao', 'regularizado')).toBe('Operação recusada: caso encerrado não reabre.');
+            var c = caso(9963);
+            c.setValue('estagio', 'conducao');
+            c.update();
+            expect(estagio(c)).toBe('encerrado');
+        });
+        it('uma etapa e encerrar com motivo passam', function() {
+            var a = caso(9964);
+            a.setValue('estagio', 'conducao');
+            a.update();
+            expect(estagio(a)).toBe('conducao');
+            var b = caso(9962);
+            b.setValue('estagio', 'encerrado');
+            b.setValue('motivo_encerramento', 'esgotado');
+            b.update();
+            expect(estagio(b)).toBe('encerrado');
+        });
+        it('coordenador não grava o estágio à mão; grava o motivo', function() {
+            var s = new GlideRecordSecure('x_2326104_cob_caso');
+            s.addQuery('prioridade', 9961);
+            s.addQuery('contribuinte.nome', 'Contribuinte fictício UX-005 estágio');
+            s.query();
+            expect(s.next()).toBe(true);
+            expect(s.estagio.canWrite()).toBe(false);
+            expect(s.encerrado_em.canWrite()).toBe(false);
+            expect(s.motivo_encerramento.canWrite()).toBe(true);
+            s.setValue('estagio', 'selecionado');
+            s.update();
+            expect(estagio(s)).toBe('em_selecao');
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
+    })
+})

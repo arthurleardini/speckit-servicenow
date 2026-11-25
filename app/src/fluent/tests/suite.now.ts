@@ -14,10 +14,10 @@ import {
 import { t_f2005_score, t_f2005_fallback, t_f2005_fallback_neg, t_f2005_autorizacao } from './US-MOD-F2-005.now'
 import { t_f5007_propria_pos, t_f5007_outro_neg, t_f5007_coord_pos } from './US-MOD-F5-007.now'
 import { t_f5003_dossie_pos, t_f5003_dossie_neg, t_f5003_ui } from './US-MOD-F5-003.now'
-import { t_ux002_promessa, t_ux002_sem_contato, t_ux002_recusa_efetivo, t_ux002_neg, t_ux002_um_pai, t_ux002_ui } from './US-MOD-UX-002.now'
+import { t_ux002_promessa, t_ux002_sem_contato, t_ux002_recusa_efetivo, t_ux002_neg, t_ux002_um_pai, t_ux002_ui, t_ux002_entrada } from './US-MOD-UX-002.now'
 import { t_ux003_pos, t_ux003_neg } from './US-MOD-UX-003.now'
 import { t_ux004_pos, t_ux004_neg, t_ux004_ui } from './US-MOD-UX-004.now'
-import { t_ux005_pos, t_ux005_neg, t_ux005_ui } from './US-MOD-UX-005.now'
+import { t_ux005_pos, t_ux005_neg, t_ux005_ui, t_ux005_so_verbos } from './US-MOD-UX-005.now'
 import { t_ux006_pos, t_ux006_neg } from './US-MOD-UX-006.now'
 
 export const suite_cob_regressao = TestSuite({
@@ -33,10 +33,10 @@ export const suite_cob_regressao = TestSuite({
         t_f2005_score, t_f2005_fallback, t_f2005_fallback_neg, t_f2005_autorizacao,
         t_f5007_propria_pos, t_f5007_outro_neg, t_f5007_coord_pos,
         t_f5003_dossie_pos, t_f5003_dossie_neg, t_f5003_ui,
-        t_ux002_promessa, t_ux002_sem_contato, t_ux002_recusa_efetivo, t_ux002_neg, t_ux002_um_pai, t_ux002_ui,
+        t_ux002_promessa, t_ux002_sem_contato, t_ux002_recusa_efetivo, t_ux002_neg, t_ux002_um_pai, t_ux002_ui, t_ux002_entrada,
         t_ux003_pos, t_ux003_neg,
         t_ux004_pos, t_ux004_neg, t_ux004_ui,
-        t_ux005_pos, t_ux005_neg, t_ux005_ui,
+        t_ux005_pos, t_ux005_neg, t_ux005_ui, t_ux005_so_verbos,
         t_ux006_pos, t_ux006_neg,
     ],
 })

@@ -10,7 +10,7 @@ export const ua_registrar_ligacao = UiAction({
     name: 'Registrar ligação',
     actionName: 'x_cob_registrar_ligacao',
     table: 'x_2326104_cob_contato',
-    hint: 'Escolha o resultado, escreva a anotação em Comentários e, se combinou retorno, informe a próxima ação',
+    hint: 'Escolha o «Resultado desta ligação», escreva a anotação em Comentários e, se combinou retorno, informe a próxima ação',
     roles: [role_atendente, role_coordenador],
     condition: "current.status != 'encerrado' && !current.isNewRecord()",
     showInsert: false,
@@ -19,7 +19,7 @@ export const ua_registrar_ligacao = UiAction({
     client: { isClient: true, onClick: 'cobRegistrarLigacao()' },
     script: `function cobRegistrarLigacao() {
     g_form.setMandatory('motivo_encerramento', false);
-    g_form.setMandatory('ultimo_resultado', true);
+    g_form.setMandatory('resultado_ligacao', true);
     g_form.setMandatory('comentarios', true);
     gsftSubmit(null, g_form.getFormElement(), 'x_cob_registrar_ligacao');
 }
@@ -30,7 +30,7 @@ if (typeof window == 'undefined') {
 
 function cobRegistrarLigacaoServidor() {
     var r = new ContatoLigacao().registrar(current, {
-        resultado: current.getValue('ultimo_resultado'),
+        resultado: current.getValue('resultado_ligacao'), // campo de entrada: nunca gravado, vem só desta ação (GAP-150)
         anotacao: current.getValue('comentarios'),
         retorno: current.proxima_acao_em.changes() ? current.getValue('proxima_acao_em') : ''
     });
@@ -57,7 +57,7 @@ export const ua_encerrar_contato = UiAction({
     form: { showButton: true, showLink: false, showContextMenu: false, style: 'unstyled' },
     client: { isClient: true, onClick: 'cobEncerrarContato()' },
     script: `function cobEncerrarContato() {
-    g_form.setMandatory('ultimo_resultado', false);
+    g_form.setMandatory('resultado_ligacao', false);
     g_form.setMandatory('comentarios', false);
     g_form.setMandatory('motivo_encerramento', true);
     gsftSubmit(null, g_form.getFormElement(), 'x_cob_encerrar_contato');

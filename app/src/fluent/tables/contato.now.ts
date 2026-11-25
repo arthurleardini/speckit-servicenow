@@ -19,6 +19,12 @@ export const x_2326104_cob_contato = Table({
             "encerrado": { label: "Encerrado", sequence: 3 },
         }, dropdown: 'dropdown_with_none' }),
         proxima_acao_em: DateColumn({ label: "Próxima ação em" }),
+        resultado_ligacao: ChoiceColumn({ label: "Resultado desta ligação", choices: {
+            "contato_efetivo": { label: "Contato efetivo", sequence: 0 },
+            "sem_contato": { label: "Sem contato", sequence: 1 },
+            "promessa_pagamento": { label: "Promessa de pagamento", sequence: 2 },
+            "recusa": { label: "Recusa", sequence: 3 },
+        }, dropdown: 'dropdown_with_none' }),
         ultimo_resultado: ChoiceColumn({ label: "Último resultado", choices: {
             "contato_efetivo": { label: "Contato efetivo", sequence: 0 },
             "sem_contato": { label: "Sem contato", sequence: 1 },

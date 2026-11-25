@@ -17,6 +17,8 @@ CasoConducao.MSG_SEM_MOTIVO = 'Operação recusada: informe o motivo de encerram
 CasoConducao.MSG_ULTIMA_ETAPA = 'Operação recusada: o caso já está em condução; use «Encerrar caso».';
 CasoConducao.MSG_SO_COORDENADOR = 'Operação recusada: só o coordenador conduz o caso qualificado.';
 CasoConducao.MSG_NAO_GRAVOU = 'O caso não foi gravado. Confira a mensagem acima e tente de novo.';
+CasoConducao.MSG_PULAR_ETAPA = 'Operação recusada: o caso anda uma etapa por vez; use «Avançar etapa».';
+CasoConducao.MSG_REABRIR = 'Operação recusada: caso encerrado não reabre.';
 
 CasoConducao.prototype = {
     initialize: function () {},
@@ -80,6 +82,30 @@ CasoConducao.prototype = {
         var ordem = CasoConducao.ORDEM.indexOf(caso.getValue('estagio'));
         var valor = caso.getValue('estagio') == 'encerrado' ? CasoConducao.ORDEM.length + 1 : ordem + 1;
         caso.setValue('etapa_ordem', valor > 0 ? valor : '');
+    },
+
+    /**
+     * Mudança de estágio por qualquer caminho (form, lista, API, script) segue as mesmas regras dos botões
+     * (GAP-152): anda uma etapa por vez na ordem, «Encerrado» exige motivo e caso encerrado não volta.
+     * Chamada pela business rule before update do caso. '' quando segue.
+     * @param {string} anterior estágio gravado
+     * @param {string} novo estágio pedido
+     * @param {string} motivo motivo de encerramento do registro sendo gravado
+     */
+    motivoRecusaEstagio: function (anterior, novo, motivo) {
+        anterior = String(anterior || CasoConducao.ORDEM[0]);
+        novo = String(novo || '');
+        if (anterior == novo) {
+            return '';
+        }
+        if (anterior == 'encerrado') {
+            return CasoConducao.MSG_REABRIR;
+        }
+        if (novo == 'encerrado') {
+            return CasoConducao.MOTIVOS.hasOwnProperty(String(motivo || '')) ? '' : CasoConducao.MSG_SEM_MOTIVO;
+        }
+        var i = CasoConducao.ORDEM.indexOf(anterior);
+        return i >= 0 && CasoConducao.ORDEM[i + 1] == novo ? '' : CasoConducao.MSG_PULAR_ETAPA;
     },
 
     /** Caso como está gravado (o estágio e o dono não vêm do form). */

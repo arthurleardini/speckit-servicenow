@@ -63,7 +63,7 @@ try {
   await abrir(page, `/x_2326104_cob_contato.do?sys_id=${contatoId}`);
   await page.screenshot({ path: join(OUT, 'contato-antes-registrar.png') });
   await page.evaluate(() => {
-    window.g_form.setValue('ultimo_resultado', 'promessa_pagamento');
+    window.g_form.setValue('resultado_ligacao', 'promessa_pagamento');
     window.g_form.setValue('comentarios', 'Prometeu pagar a 1ª parcela na sexta (fictício).');
   });
   await page.screenshot({ path: join(OUT, 'contato-preenchido-registrar.png') });

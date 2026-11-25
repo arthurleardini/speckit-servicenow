@@ -14,6 +14,8 @@
  *   sem_contato          —         ≥ 3            encerrado  vazio                 sem_contato
  *   recusa               —         —              encerrado  vazio                 recusa
  *
+ * O resultado vem de «Resultado desta ligação», campo de entrada que nunca fica gravado (business rule limpa;
+ * GAP-150): sem escolha nesta ação, recusa — o «Último resultado» gravado nunca é reaproveitado.
  * A anotação (descrição da interação) é obrigatória aqui e no form. Quem pode: o atendente dono do
  * contato, o coordenador e o admin do app (o mesmo critério da carteira, CarteiraAtendente).
  * Devolve sempre {ok, mensagem}; a UI Action mostra a mensagem e nada é gravado pela metade.

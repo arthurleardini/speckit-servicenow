@@ -48,6 +48,16 @@ Acl({
 })
 
 Acl({
+    $id: Now.ID['RF-MOD-UX-002_acl_contato_write_ultimo_resultado'],
+    type: 'record',
+    table: 'x_2326104_cob_contato',
+    field: 'ultimo_resultado',
+    operation: 'write',
+    roles: [role_coordenador, role_admin],
+    description: 'O campo «ultimo_resultado» do contato muda pelo verbo «Registrar ligação»; o atendente escolhe em «Resultado desta ligação» (GAP-150). À mão, só coordenador e admin do app.',
+})
+
+Acl({
     $id: Now.ID['RF-MOD-UX-002_acl_contato_write_tentativas'],
     type: 'record',
     table: 'x_2326104_cob_contato',

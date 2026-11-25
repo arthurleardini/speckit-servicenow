@@ -2125,6 +2125,30 @@
           "type": "glide_date"
         },
         {
+          "name": "resultado_ligacao",
+          "label": "Resultado desta ligação",
+          "type": "choice",
+          "description": "Campo de entrada do verbo «Registrar ligação»: abre vazio e nunca fica gravado (business rule limpa); o resultado registrado vai para «Último resultado» (GAP-150).",
+          "choices": {
+            "contato_efetivo": {
+              "label": "Contato efetivo",
+              "sequence": 10
+            },
+            "sem_contato": {
+              "label": "Sem contato",
+              "sequence": 20
+            },
+            "promessa_pagamento": {
+              "label": "Promessa de pagamento",
+              "sequence": 30
+            },
+            "recusa": {
+              "label": "Recusa",
+              "sequence": 40
+            }
+          }
+        },
+        {
           "name": "ultimo_resultado",
           "label": "Último resultado",
           "type": "choice",
@@ -3416,6 +3440,7 @@
         "prioridade",
         "valor_em_aberto",
         "motivo_encerramento",
+        "resultado_ligacao",
         "comentarios"
       ],
       "relatedLists": [

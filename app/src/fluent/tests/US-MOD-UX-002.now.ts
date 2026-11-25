@@ -443,8 +443,8 @@ jasmine.getEnv().execute();`,
 
 export const t_ux002_ui = Test({
     $id: Now.ID['US-MOD-UX-002_atf_ui_registrar_ligacao'],
-    name: 'RF-MOD-UX-002 — «Registrar ligação» aparece para o atendente no contato aberto',
-    description: 'Abre no form (TEL-035) um contato «A ligar» de demo.atendente como demo.atendente: o botão «Registrar ligação» aparece (UI Action com condition e roles, lado positivo da tela).',
+    name: 'RF-MOD-UX-002 — «Registrar ligação» aparece para o atendente e «Resultado desta ligação» abre vazio',
+    description: 'Abre no form (TEL-035) um contato «Retornar» de demo.atendente, com último resultado «Sem contato», como demo.atendente: o botão «Registrar ligação» aparece (UI Action com condition e roles) e o campo «Resultado desta ligação» abre vazio, enquanto «Último resultado» mostra o resultado anterior (GAP-150).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -459,7 +459,7 @@ export const t_ux002_ui = Test({
     p.setValue('ficticio', true);
     p.setValue('atendente', u.getUniqueValue());
     var pid = p.insert();
-    var lista = [{status: 'a_ligar', tentativas: 0, prioridade: 9501}];
+    var lista = [{status: 'retornar', tentativas: 1, prioridade: 9501}];
     for (var k = 0; k < lista.length; k++) {
         var c = new GlideRecord('x_2326104_cob_contato');
         c.initialize();
@@ -469,6 +469,8 @@ export const t_ux002_ui = Test({
         c.setValue('tentativas', lista[k].tentativas);
         c.setValue('prioridade', lista[k].prioridade);
         c.setValue('valor_em_aberto', 18450);
+        c.setValue('ultimo_resultado', 'sem_contato');
+        c.setValue('resultado_ligacao', 'sem_contato'); // a business rule limpa: o campo de entrada nunca fica gravado
         c.insert();
     }
     return !!pid;
@@ -479,4 +481,98 @@ export const t_ux002_ui = Test({
     atf.server.impersonate({ $id: Now.ID['US-MOD-UX-002_test_21'], user: u_US_MOD_UX_002_test_20.first_record })
     atf.form.openExistingRecord({ $id: Now.ID['US-MOD-UX-002_test_22'], table: 'x_2326104_cob_contato', recordId: aberto.first_record })
     atf.form.uiActionVisibility({ $id: Now.ID['US-MOD-UX-002_test_23'], table: 'x_2326104_cob_contato', visible: [Now.ref('sys_ui_action', 'RF-MOD-UX-002_ua_registrar_ligacao')] })
+    atf.form.fieldValueValidation({ $id: Now.ID['US-MOD-UX-002_test_24'], table: 'x_2326104_cob_contato', conditions: 'resultado_ligacaoISEMPTY^ultimo_resultado=sem_contato' })
+})
+
+export const t_ux002_entrada = Test({
+    $id: Now.ID['US-MOD-UX-002_atf_resultado_desta_ligacao'],
+    name: 'RF-MOD-UX-002 — o resultado vem só do que o atendente escolhe nesta ligação (GAP-150)',
+    description: 'Como demo.atendente, num contato fictício com último resultado «Sem contato»: repetir «Sem contato» nesta ligação registra (2ª tentativa, retornar amanhã) e «Resultado desta ligação» volta vazio; sem escolher, o sistema recusa com «Operação recusada: informe o resultado da ligação.» mesmo com o último resultado preenchido; gravar «Resultado desta ligação» por script não fica gravado; o atendente não grava «Último resultado» à mão (ACL de campo), só pelo verbo.',
+    failOnServerError: true,
+}, (atf) => {
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-UX-002_test_25'],
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+    var u = new GlideRecord('sys_user');
+    u.get('user_name', 'demo.atendente');
+    var p = new GlideRecord('x_2326104_cob_contribuinte');
+    p.initialize();
+    p.setValue('nome', 'Contribuinte fictício UX-002 entrada');
+    p.setValue('tipo_pessoa', 'pj');
+    p.setValue('ficticio', true);
+    p.setValue('atendente', u.getUniqueValue());
+    var pid = p.insert();
+    var lista = [{prioridade: 9601}, {prioridade: 9602}, {prioridade: 9603}];
+    for (var k = 0; k < lista.length; k++) {
+        var c = new GlideRecord('x_2326104_cob_contato');
+        c.initialize();
+        c.setValue('contribuinte', pid);
+        c.setValue('atendente', u.getUniqueValue());
+        c.setValue('status', 'retornar');
+        c.setValue('tentativas', 1);
+        c.setValue('ultimo_resultado', 'sem_contato');
+        c.setValue('prioridade', lista[k].prioridade);
+        c.setValue('valor_em_aberto', 18450);
+        c.insert();
+    }
+    return !!pid;
+})(outputs, steps, params, stepResult, assertEqual);`,
+    })
+    const u_US_MOD_UX_002_test_26 = atf.server.recordQuery({ $id: Now.ID['US-MOD-UX-002_test_26'], table: 'sys_user', fieldValues: 'user_name=demo.atendente', assert: 'records_match_query' })
+    atf.server.impersonate({ $id: Now.ID['US-MOD-UX-002_test_27'], user: u_US_MOD_UX_002_test_26.first_record })
+    atf.server.runServerSideScript({
+        $id: Now.ID['US-MOD-UX-002_test_28'],
+        jasmineVersion: '3.1',
+        script: `(function(outputs, steps, params, stepResult, assertEqual) {
+
+    function contato(marca) {
+        var c = new GlideRecordSecure('x_2326104_cob_contato');
+        c.addQuery('prioridade', marca);
+        c.addQuery('contribuinte.nome', 'Contribuinte fictício UX-002 entrada');
+        c.query();
+        c.next();
+        return c;
+    }
+    function relido(c) {
+        var g = new GlideRecord('x_2326104_cob_contato');
+        g.get(c.getUniqueValue());
+        return g;
+    }
+    describe('Resultado desta ligação', function() {
+        it('repetir o mesmo resultado registra e o campo de entrada volta vazio', function() {
+            var c = contato(9601);
+            c.setValue('resultado_ligacao', 'sem_contato');
+            var r = new ContatoLigacao().registrar(c, { resultado: c.getValue('resultado_ligacao'), anotacao: 'Caixa postal de novo', retorno: '' });
+            expect(r.ok).toBe(true);
+            var g = relido(c);
+            expect(g.getValue('tentativas')).toBe('2');
+            expect(g.getValue('ultimo_resultado')).toBe('sem_contato');
+            expect(g.getValue('resultado_ligacao')).toBe(null);
+        });
+        it('sem escolher nesta ligação, recusa mesmo com o último resultado preenchido', function() {
+            var c = contato(9602);
+            expect(c.getValue('ultimo_resultado')).toBe('sem_contato');
+            var r = new ContatoLigacao().registrar(c, { resultado: c.getValue('resultado_ligacao'), anotacao: 'Ligação', retorno: '' });
+            expect(r.ok).toBe(false);
+            expect(r.mensagem).toBe('Operação recusada: informe o resultado da ligação.');
+            expect(relido(c).getValue('tentativas')).toBe('1');
+        });
+        it('gravar o campo de entrada por script não fica gravado', function() {
+            var c = contato(9603);
+            c.setValue('resultado_ligacao', 'recusa');
+            c.update();
+            expect(relido(c).getValue('resultado_ligacao')).toBe(null);
+        });
+        it('atendente não grava «Último resultado» à mão; grava o campo de entrada', function() {
+            var c = contato(9603);
+            expect(c.ultimo_resultado.canWrite()).toBe(false);
+            expect(c.resultado_ligacao.canWrite()).toBe(true);
+            c.setValue('ultimo_resultado', 'recusa');
+            c.update();
+            expect(relido(c).getValue('ultimo_resultado')).toBe('sem_contato');
+        });
+    });
+})(outputs, steps, params, stepResult, assertEqual);
+jasmine.getEnv().execute();`,
+    })
 })
