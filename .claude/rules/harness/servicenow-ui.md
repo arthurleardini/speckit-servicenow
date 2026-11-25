@@ -56,7 +56,14 @@ Antes de escrever cada tipo de objeto, consulte o SDK: `now-sdk explain <tópico
 
 ## Navegação
 
-- Menu do app em `app/src/fluent/navigation/menu.now.ts`, um módulo por funcionalidade (F1…Fn).
+- Menu do app em `app/src/fluent/navigation/menu.now.ts`, gerado pelo `sn-scaffold`, **por área
+  de trabalho**: `modules` do modelo com áreas (`items`), cada área um separador com os módulos
+  daquele trabalho (lista filtrada com view e ordenação, report, link), com `roles` por papel.
+- **Tabelas cruas só em "Administração"** (`adminTables: true`), visível só para o admin; o papel de
+  negócio não navega por tabela.
+- Cada papel entra direto no próprio trabalho: home por papel (`homes`, preferência
+  `my_home_navigation_page` gravada pelo `sn-seed`) ou, sem ela, o primeiro módulo do menu do papel.
+- Estado do registro visível no topo do form pela trilha de etapas (`processFlows`).
 - Módulo aponta para list ou report com filtro; nunca para URL fixa de instância.
 
 ## Identificadores

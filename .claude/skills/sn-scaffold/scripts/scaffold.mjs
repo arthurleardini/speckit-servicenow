@@ -78,7 +78,7 @@ function elementos(campos) {
 }
 
 /** Conteúdo de Form() seguindo a heurística do form-layout-guide. */
-function corpoForm(ent, tela, viewExpr, chaveBase) {
+function corpoForm(ent, tela, viewExpr, chaveBase, pf = null) {
   const nomes = tela?.fields ?? ent.columns.map((c) => c.name);
   const cols = nomes.map((n) => ent.columns.find((c) => c.name === n)).filter(Boolean);
   const curtos = cols.filter((c) => c.type !== 'journal_input' && c.type !== 'journal' && curtoCampo(c));
@@ -92,6 +92,8 @@ function corpoForm(ent, tela, viewExpr, chaveBase) {
     blocos.push(`{ layout: 'one-column', elements: [${elementos(curtos).join(', ')}] }`);
   }
   if (longos.length || journal.length) blocos.push(`{ layout: 'one-column', elements: [${elementos([...longos, ...journal]).join(', ')}] }`);
+  // Trilha de etapas: primeiro elemento da primeira seção, em bloco de uma coluna (form-formatters-guide).
+  if (pf) blocos.unshift(`{ layout: 'one-column', elements: [{ type: 'formatter', formatterRef: processFlow_${ident(pf.short)}, formatterName: 'process_flow.xml' }] }`);
   const secoes = [
     `        {\n            caption: ${js(tela?.title ?? ent.label)},\n            content: [\n                ${blocos.join(',\n                ')},\n            ],\n        }`,
   ];
@@ -135,10 +137,13 @@ function arquivoView(nomeView, tela, linhas) {
   return `view_${ident(tela.id)}`;
 }
 
+const importProcessFlow = (pf) => `import { processFlow_${ident(pf.short)} } from './_processflow_${pf.short}.now'`;
+
 export function gerarUi(norm) {
   const arquivos = {};
   const plano = planoDeViews(norm);
   const porTabela = new Map(norm.entidades.map((e) => [e.name, e]));
+  const pfPorTabela = new Map((norm.processFlows ?? []).map((pf) => [pf.table, pf]));
   for (const t of norm.telas) {
     const ent = porTabela.get(t.table);
     const { view } = plano.get(t.id);
@@ -161,9 +166,11 @@ export function gerarUi(norm) {
     if (view) imports.push('Record');
     if (t.type === 'form' && ent.columns.some((c) => c.type === 'journal_input')) imports.push('Formatter');
     const linhas = cabecalho(imports);
+    const pf = t.type === 'form' ? pfPorTabela.get(ent.name) : null;
+    if (pf) linhas.push(importProcessFlow(pf), '');
     const viewExpr = view ? arquivoView(view, t, linhas) : 'default_view';
     if (t.type === 'form') {
-      linhas.push(corpoForm(ent, t, viewExpr, t.id), '');
+      linhas.push(corpoForm(ent, t, viewExpr, t.id, pf), '');
     } else {
       const cols = (t.fields ?? ent.columns.filter((c) => c.type !== 'journal_input' && c.type !== 'journal').slice(0, 6).map((c) => c.name));
       linhas.push('List({', `    table: ${js(ent.name)},`, `    view: ${viewExpr},`, `    columns: ${js(cols)},`, '})', '');
@@ -177,7 +184,9 @@ export function gerarUi(norm) {
     const imports = ['Form', 'default_view'];
     if (ent.columns.some((c) => c.type === 'journal_input')) imports.push('Formatter');
     const linhas = cabecalho(imports);
-    linhas.push(corpoForm(ent, null, 'default_view', `form_${ent.short}`), '');
+    const pf = pfPorTabela.get(ent.name);
+    if (pf) linhas.push(importProcessFlow(pf), '');
+    linhas.push(corpoForm(ent, null, 'default_view', `form_${ent.short}`, pf), '');
     arquivos[`_form_${ent.short}.now.ts`] = linhas.join('\n');
   }
   return arquivos;
@@ -214,6 +223,38 @@ export function gerarAcl(norm) {
   return linhas.join('\n');
 }
 
+const slug = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+
+/** Papel da área "Administração": o `admin` do app, se existir; senão o `admin` da plataforma. */
+function papelAdmin(norm) {
+  return norm.roles.find((r) => r.short === 'admin')?.name ?? 'admin';
+}
+
+/** Marcador do `application: menu` (identificador, não string). */
+const MENU = { codigo: 'menu' };
+
+function moduloRecord(linhas, chave, dados) {
+  const campos = Object.entries(dados)
+    .filter(([, v]) => v !== undefined && v !== null)
+    .map(([k, v]) => {
+      if (v && typeof v === 'object' && 'codigo' in v) return `${k}: ${v.codigo}`;
+      return `${k}: ${k === 'link_type' ? `'${v}'` : js(v)}`;
+    });
+  linhas.push('Record({', `    $id: Now.ID[${js(chave)}],`, "    table: 'sys_app_module',");
+  linhas.push(`    data: { ${campos.join(', ')} },`);
+  linhas.push('})', '');
+}
+
+/**
+ * Menu do app, em uma de três formas:
+ * - `modules` com áreas (alguma área tem `items`): cada área com `items` vira um separador seguido
+ *   dos módulos dela (FILTER, LIST, DIRECT, REPORT ou SEPARATOR), com filtro, view, roles e ordem.
+ *   Área sem `items` não entra no menu: as tabelas cruas ficam em "Administração" (`adminTables`).
+ * - `modules` sem áreas: um separador por módulo (o `label`) e um módulo LIST por tabela dele.
+ * - sem `modules`: um módulo LIST por tabela.
+ * `adminTables: true` acrescenta a área "Administração", só para o papel admin, com uma LIST por tabela.
+ */
 export function gerarMenu(norm, nomeApp) {
   const linhas = cabecalho(['ApplicationMenu', 'Record']);
   const papeis = norm.roles.map((r) => r.name);
@@ -226,30 +267,97 @@ export function gerarMenu(norm, nomeApp) {
   linhas.push('})', '');
   const porTabela = new Map(norm.entidades.map((e) => [e.name, e]));
   const telaPorId = new Map(norm.telas.map((t) => [t.id, t]));
-  const grupos = norm.modules?.length
-    ? norm.modules.map((m) => ({
-      title: m.title,
-      tabelas: [...new Set([
-        ...(m.screens ?? []).map((id) => telaPorId.get(id)?.table).filter(Boolean),
-        ...(m.tables ?? []).map((t) => porTabela.get(t)?.name ?? porTabela.get(`${norm.escopo}_${t}`)?.name).filter(Boolean),
-      ])],
-    }))
-    : [{ title: null, tabelas: norm.entidades.map((e) => e.name) }];
   let ordem = 100;
-  for (const [g, grupo] of grupos.entries()) {
-    if (grupo.title) {
-      linhas.push('Record({', `    $id: Now.ID[${js(`modulo_grupo_${g + 1}`)}],`, "    table: 'sys_app_module',");
-      linhas.push(`    data: { title: ${js(grupo.title)}, application: menu, link_type: 'SEPARATOR', roles: ${js(papeis)}, active: true, order: ${ordem} },`);
-      linhas.push('})', '');
-      ordem += 100;
+  const proxima = (explicita) => {
+    const o = explicita ?? ordem;
+    ordem = Math.max(ordem, o) + 100;
+    return o;
+  };
+
+  if (norm.porAreas) {
+    for (const [g, area] of norm.modules.entries()) {
+      if (!area.items) continue;
+      const base = `modulo_${slug(area.id ?? `area_${g + 1}`)}`;
+      const rolesArea = area.roles ?? [...new Set(area.items.flatMap((it) => it.roles ?? papeis))];
+      moduloRecord(linhas, base, {
+        title: area.title, application: MENU, link_type: 'SEPARATOR', roles: rolesArea, active: true, order: proxima(area.order),
+      });
+      for (const it of area.items) {
+        const dados = {
+          title: it.label, application: MENU, link_type: it.type, roles: it.roles ?? area.roles ?? papeis, active: true,
+        };
+        if (it.type === 'LIST' || it.type === 'FILTER') {
+          dados.name = it.table;
+          if (it.filter) dados.filter = it.filter;
+          if (it.view) dados.view_name = it.view;
+        } else if (it.type === 'DIRECT') {
+          dados.query = it.link;
+        } else if (it.type === 'REPORT') {
+          // sys_id do report pela chave Now.ID['<TEL>_report'] (resolvida pelo build via keys.ts).
+          dados.report = { codigo: `Now.ref('sys_report', ${js(`${it.report}_report`)})` };
+        }
+        dados.order = proxima(it.order);
+        moduloRecord(linhas, `${base}_${slug(it.label)}`, dados);
+      }
     }
-    for (const tab of grupo.tabelas) {
-      const ent = porTabela.get(tab);
-      linhas.push('Record({', `    $id: Now.ID[${js(`modulo_${g + 1}_${ent.short}`)}],`, "    table: 'sys_app_module',");
-      linhas.push(`    data: { title: ${js(ent.label)}, application: menu, link_type: 'LIST', name: ${js(ent.name)}, roles: ${js(papeis)}, active: true, order: ${ordem} },`);
-      linhas.push('})', '');
-      ordem += 100;
+  } else {
+    const grupos = norm.modules?.length
+      ? norm.modules.map((m) => ({
+        title: m.title,
+        tabelas: [...new Set([
+          ...(m.screens ?? []).map((id) => telaPorId.get(id)?.table).filter(Boolean),
+          ...(m.tables ?? []).map((t) => porTabela.get(t)?.name ?? porTabela.get(`${norm.escopo}_${t}`)?.name).filter(Boolean),
+        ])],
+      }))
+      : [{ title: null, tabelas: norm.entidades.map((e) => e.name) }];
+    for (const [g, grupo] of grupos.entries()) {
+      if (grupo.title) {
+        moduloRecord(linhas, `modulo_grupo_${g + 1}`, {
+          title: grupo.title, application: MENU, link_type: 'SEPARATOR', roles: papeis, active: true, order: proxima(),
+        });
+      }
+      for (const tab of grupo.tabelas) {
+        const ent = porTabela.get(tab);
+        moduloRecord(linhas, `modulo_${g + 1}_${ent.short}`, {
+          title: ent.label, application: MENU, link_type: 'LIST', name: ent.name, roles: papeis, active: true, order: proxima(),
+        });
+      }
     }
+  }
+
+  if (norm.adminTables) {
+    const admin = [papelAdmin(norm)];
+    moduloRecord(linhas, 'modulo_administracao', {
+      title: 'Administração', application: MENU, link_type: 'SEPARATOR', roles: admin, active: true, order: proxima(),
+    });
+    for (const ent of norm.entidades) {
+      moduloRecord(linhas, `modulo_administracao_${ent.short}`, {
+        title: ent.label, application: MENU, link_type: 'LIST', name: ent.name, roles: admin, active: true, order: proxima(),
+      });
+    }
+  }
+  return linhas.join('\n');
+}
+
+/**
+ * Trilha de etapas (process flow) de uma tabela: o `sys_ui_formatter` do macro OOTB
+ * `process_flow.xml` para a tabela (na instância o formatter só existe por tabela OOTB, como problem
+ * e change_request; não há um global) e um `sys_process_flow` por etapa. O formatter é exportado
+ * para os `Form()` da tabela porem a trilha no topo.
+ */
+export function gerarProcessFlow(pf) {
+  const linhas = cabecalho(['Record']);
+  linhas.push(`export const processFlow_${ident(pf.short)} = Record({`);
+  linhas.push(`    $id: Now.ID[${js(`processflow_${pf.short}_formatter`)}],`);
+  linhas.push("    table: 'sys_ui_formatter',");
+  linhas.push(`    data: { name: 'Process Flow', type: 'formatter', formatter: 'process_flow.xml', table: ${js(pf.table)}, active: true },`);
+  linhas.push('})', '');
+  for (const st of pf.steps) {
+    linhas.push('Record({');
+    linhas.push(`    $id: Now.ID[${js(`processflow_${pf.short}_${slug(st.label)}`)}],`);
+    linhas.push("    table: 'sys_process_flow',");
+    linhas.push(`    data: { name: ${js(`${pf.label} - ${st.label}`)}, label: ${js(st.label)}, table: ${js(pf.table)}, condition: ${js(st.condition)}, order: ${js(String(st.order))}, active: true },`);
+    linhas.push('})', '');
   }
   return linhas.join('\n');
 }
@@ -259,6 +367,7 @@ export function gerarScaffold(norm, nomeApp) {
   const saida = {};
   for (const e of norm.entidades) saida[`${e.simulation ? 'simulations' : 'tables'}/${e.short}.now.ts`] = gerarTabela(e);
   for (const [nome, c] of Object.entries(gerarUi(norm))) saida[`ui/${nome}`] = c;
+  for (const pf of norm.processFlows ?? []) saida[`ui/_processflow_${pf.short}.now.ts`] = gerarProcessFlow(pf);
   saida['security/roles.now.ts'] = gerarRoles(norm);
   saida['security/acl-base.now.ts'] = gerarAcl(norm);
   saida['navigation/menu.now.ts'] = gerarMenu(norm, nomeApp);

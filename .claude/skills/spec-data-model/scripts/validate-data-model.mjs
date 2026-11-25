@@ -692,7 +692,77 @@ function checarServiceNow(m, { escopo, final }) {
       }
     }
   });
+  checarNavegacao(m, { tabelas, papeis, erros, avisos });
   return { erros, avisos };
+}
+
+/**
+ * Menu por área (`modules[].items`), `adminTables`, `processFlows`, `seedManual` e `homes`: o que o
+ * schema não alcança (tabela, tela report, papel e módulo existentes; link relativo). As mesmas
+ * regras valem no sn-scaffold/sn-seed, que recusam o modelo na geração.
+ */
+function checarNavegacao(m, { tabelas, papeis, erros, avisos }) {
+  const lista = (v) => (Array.isArray(v) ? v : []);
+  const absoluta = (u) => /^[a-z][a-z0-9+.-]*:\/\//i.test(u) || String(u).startsWith('//');
+  const telaReport = new Set(lista(m.screens).filter((s) => s?.type === 'report').map((s) => s.id));
+  const papelOk = (r) => !papeis.size || papeis.has(r) || r === 'admin' || String(r).includes('.');
+  const rotulos = new Map();
+  const porAreas = lista(m.modules).some((mod) => Array.isArray(mod?.items));
+  lista(m.modules).forEach((mod, i) => {
+    for (const r of lista(mod?.roles)) if (!papelOk(r)) erros.push(`[servicenow] /modules/${i}/roles: papel "${r}" não está em roles[]`);
+    const vistos = new Set();
+    lista(mod?.items).forEach((it, j) => {
+      const p = `/modules/${i}/items/${j}`;
+      const label = it?.label ?? it?.title;
+      if (!label) erros.push(`[servicenow] ${p}: módulo sem label`);
+      else if (vistos.has(label)) erros.push(`[servicenow] ${p}: módulo "${label}" repetido na área`);
+      vistos.add(label);
+      if (label) rotulos.set(label, [...(rotulos.get(label) ?? []), it]);
+      const tipo = it?.type ?? (it?.report ? 'REPORT' : it?.link ? 'DIRECT' : it?.filter ? 'FILTER' : 'LIST');
+      if ((tipo === 'LIST' || tipo === 'FILTER') && !tabelas.has(it?.table)) {
+        erros.push(`[servicenow] ${p}/table: "${it?.table}" não está em entities[]`);
+      }
+      if (tipo === 'REPORT' && !telaReport.has(it?.report)) erros.push(`[servicenow] ${p}/report: "${it?.report}" não é tela report em screens[]`);
+      if (tipo === 'DIRECT' && (!it?.link || absoluta(it.link))) erros.push(`[servicenow] ${p}/link: DIRECT precisa de link relativo`);
+      for (const r of lista(it?.roles)) if (!papelOk(r)) erros.push(`[servicenow] ${p}/roles: papel "${r}" não está em roles[]`);
+    });
+  });
+  if (porAreas && m.adminTables !== true) {
+    avisos.push('menu por área sem adminTables: as tabelas sem módulo de área não aparecem para o admin');
+  }
+  const comTrilha = new Set();
+  lista(m.processFlows).forEach((pf, i) => {
+    const p = `/processFlows/${i}`;
+    const alvo = tabelas.get(pf?.table);
+    if (!alvo) { erros.push(`[servicenow] ${p}: tabela "${pf?.table}" não está em entities[]`); return; }
+    if (comTrilha.has(pf.table)) erros.push(`[servicenow] ${p}: tabela "${pf.table}" já tem trilha`);
+    comTrilha.add(pf.table);
+    const cols = new Set(lista(alvo.e.columns).map((c) => c?.name));
+    if (pf.field !== undefined && !cols.has(pf.field)) erros.push(`[servicenow] ${p}/field: campo "${pf.field}" não existe em ${pf.table}`);
+    lista(pf.steps).forEach((s, j) => {
+      if (!s?.condition && !(pf.field && s?.value !== undefined)) {
+        erros.push(`[servicenow] ${p}/steps/${j}: etapa "${s?.label}" sem condition (ou value com field)`);
+      }
+    });
+  });
+  lista(m.seedManual).forEach((t, i) => {
+    if (!tabelas.has(t)) erros.push(`[servicenow] /seedManual/${i}: "${t}" não está em entities[]`);
+  });
+  const comHome = new Set();
+  lista(m.homes).forEach((h, i) => {
+    const p = `/homes/${i}`;
+    if (papeis.size && !papeis.has(h?.role)) erros.push(`[servicenow] ${p}/role: papel "${h?.role}" não está em roles[]`);
+    if (comHome.has(h?.role)) erros.push(`[servicenow] ${p}: papel "${h?.role}" com mais de uma home`);
+    comHome.add(h?.role);
+    if (Boolean(h?.module) === Boolean(h?.url)) { erros.push(`[servicenow] ${p}: informe module ou url (um dos dois)`); return; }
+    if (h.url && absoluta(h.url)) erros.push(`[servicenow] ${p}/url: precisa ser relativa`);
+    if (h.module) {
+      const achados = rotulos.get(h.module) ?? [];
+      const tipo = (it) => it?.type ?? (it?.report ? 'REPORT' : it?.link ? 'DIRECT' : it?.filter ? 'FILTER' : 'LIST');
+      if (achados.length !== 1) erros.push(`[servicenow] ${p}/module: "${h.module}" ${achados.length ? 'é ambíguo' : 'não está em modules[].items'}`);
+      else if (!['FILTER', 'LIST', 'DIRECT'].includes(tipo(achados[0]))) erros.push(`[servicenow] ${p}/module: "${h.module}" é ${tipo(achados[0])}; use FILTER, LIST, DIRECT ou url`);
+    }
+  });
 }
 
 let escopoDoApp = null;

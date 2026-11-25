@@ -140,3 +140,75 @@ test('demoUsers inválido: role desconhecido, nome fora do padrão ou repetido',
   assert.throws(() => normalizarModelo(com([{ user: 'fulano', role: 'atendente' }]), ESCOPO), /fora do padrão/);
   assert.throws(() => normalizarModelo(com([{ user: 'demo.atendente', role: 'atendente' }]), ESCOPO), /repetido/);
 });
+
+// ——— seedManual e homes (design ux-cobranca-v1, F1) ———
+
+test('seedManual: a tabela fica sem arquivo e sem contagem, a reference para ela fica vazia, e as outras não mudam', () => {
+  const sem = gerarSeed(normalizarModelo(MODELO, ESCOPO), { porTabela: 5 });
+  const com = gerarSeed(normalizarModelo({ ...MODELO, seedManual: ['pessoa'] }, ESCOPO), { porTabela: 5 });
+  assert.ok(!('pessoa.now.ts' in com.arquivos));
+  assert.ok(!(`${ESCOPO}_pessoa` in com.contagem.tabelas));
+  assert.equal(com.contagem.tabelas[`${ESCOPO}_empresa`], 6);
+  assert.doesNotMatch(com.arquivos['empresa.now.ts'], /responsavel:/);
+  assert.doesNotMatch(com.arquivos['_journal.now.ts'], /x_9999999_tst_pessoa/);
+  // Sem seedManual: igual ao comportamento de antes (a tabela tem arquivo e contagem).
+  assert.ok('pessoa.now.ts' in sem.arquivos);
+  assert.equal(sem.contagem.tabelas[`${ESCOPO}_pessoa`], 6);
+  assert.ok(!('_homes.now.ts' in sem.arquivos));
+  assert.ok(!sem.contagem.extras.some((e) => e.tabela === 'sys_user_preference'));
+  // Nome completo também vale; tabela fora do modelo é erro.
+  assert.deepEqual(normalizarModelo({ ...MODELO, seedManual: [`${ESCOPO}_pessoa`] }, ESCOPO).seedManual, [`${ESCOPO}_pessoa`]);
+  assert.throws(() => normalizarModelo({ ...MODELO, seedManual: ['nada'] }, ESCOPO), /seedManual\[0\]: tabela "nada"/);
+});
+
+test('seed manual: _contagem.manual.json e _documentos.manual.json entram no _contagem e no _documentos gravados', () => {
+  const app = mkdtempSync(join(tmpdir(), 'sn-seed-manual-'));
+  const r = gerarSeed(normalizarModelo({ ...MODELO, seedManual: ['pessoa'] }, ESCOPO), { porTabela: 2 });
+  const dir = gravarSeed(r, app);
+  writeFileSync(join(dir, '_contagem.manual.json'), JSON.stringify({ tabelas: { [`${ESCOPO}_pessoa`]: 7 }, extras: [{ tabela: 'x', query: 'a=1', esperado: 1 }] }));
+  writeFileSync(join(dir, '_documentos.manual.json'), JSON.stringify({ documentos: [{ valor: '529.982.247-25', tipo: 'cpf', tabela: `${ESCOPO}_pessoa`, coluna: 'cpf', id: 'manual_1' }] }));
+  gravarSeed(r, app);
+  const contagem = JSON.parse(readFileSync(join(dir, '_contagem.json'), 'utf8'));
+  assert.equal(contagem.tabelas[`${ESCOPO}_pessoa`], 7);
+  assert.equal(contagem.tabelas[`${ESCOPO}_empresa`], 3);
+  assert.ok(contagem.extras.some((e) => e.tabela === 'x'));
+  const docs = JSON.parse(readFileSync(join(dir, '_documentos.json'), 'utf8'));
+  assert.ok(docs.documentos.some((d) => d.id === 'manual_1'));
+});
+
+test('homes: preferência my_home_navigation_page para cada usuário demo do papel, inclusive demoUsers', () => {
+  const modelo = {
+    ...MODELO,
+    demoUsers: [{ user: 'demo.atendente2', role: 'atendente' }],
+    modules: [{
+      id: 'MOD-UX', label: 'Minha lista', tables: ['empresa'],
+      items: [{ label: 'Minha lista', type: 'FILTER', table: 'empresa', filter: 'atendente=javascript:gs.getUserID()^ORDERBYrazao_social', view: 'minha_lista' }],
+    }],
+    homes: [{ role: 'atendente', module: 'Minha lista' }, { role: 'coordenador', url: '/x_9999999_tst_empresa_list.do' }],
+  };
+  const r = gerarSeed(normalizarModelo(modelo, ESCOPO), { porTabela: 2 });
+  const h = r.arquivos['_homes.now.ts'];
+  assert.equal((h.match(/table: "sys_user_preference"/g) ?? []).length, 3);
+  assert.match(h, /installMethod: 'demo'/);
+  assert.match(h, /name: "my_home_navigation_page",\n {8}value: "x_9999999_tst_empresa_list\.do\?sysparm_query=atendente=javascript:gs\.getUserID\(\)\^ORDERBYrazao_social&sysparm_view=minha_lista",\n {8}user: Now\.ref\("sys_user", "usuario_demo_atendente"\)/);
+  assert.match(h, /user: Now\.ref\("sys_user", "usuario_demo_atendente2"\)/);
+  assert.match(h, /value: "x_9999999_tst_empresa_list\.do",\n {8}user: Now\.ref\("sys_user", "usuario_demo_coordenador"\)/);
+  const extra = r.contagem.extras.find((e) => e.tabela === 'sys_user_preference');
+  assert.equal(extra.esperado, 3);
+  assert.equal(extra.query, 'name=my_home_navigation_page^user.user_nameINdemo.atendente,demo.atendente2,demo.coordenador');
+});
+
+test('homes inválido: role, módulo ausente ou REPORT, module e url juntos, url absoluta, papel repetido', () => {
+  const base = {
+    ...MODELO,
+    screens: [...MODELO.screens, { id: 'TEL-04', table: 'empresa', type: 'report', role: 'coordenador' }],
+    modules: [{ id: 'MOD-UX', label: 'A', tables: [], items: [{ label: 'Painel', type: 'REPORT', report: 'TEL-04' }, { label: 'Lista', table: 'empresa' }] }],
+  };
+  const erro = (homes, re) => assert.throws(() => normalizarModelo({ ...base, homes }, ESCOPO), re);
+  erro([{ role: 'gerente', url: 'x.do' }], /role "gerente" não está em roles/);
+  erro([{ role: 'atendente', module: 'Outro' }], /não está em modules\[\]\.items/);
+  erro([{ role: 'atendente', module: 'Painel' }], /é REPORT/);
+  erro([{ role: 'atendente', module: 'Lista', url: 'x.do' }], /module ou url/);
+  erro([{ role: 'atendente', url: 'https://dev.service-now.com/x.do' }], /precisa ser relativa/);
+  erro([{ role: 'atendente', url: 'a.do' }, { role: 'atendente', url: 'b.do' }], /mais de uma home/);
+});

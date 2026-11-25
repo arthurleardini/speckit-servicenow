@@ -104,8 +104,73 @@ O modelo é o mesmo do `sn-seed` (formato em `.claude/skills/sn-seed/SKILL.md`),
 | Campo | Regra |
 |---|---|
 | `entities[].simulation` | `true` para integração simulada (`SIM-`): o arquivo vai para `simulations/`, o rótulo ganha "(Simulado)" e a tabela ganha a coluna `falhar` (interruptor de falha) |
-| `modules` | opcional. `[{ "title": "F1 Cadastro", "screens": ["TEL-01"], "tables": ["devedor"] }]`. Cada item vira um separador no menu, seguido de um módulo de lista por tabela. Sem o campo, um módulo por tabela |
+| `modules` | opcional. `[{ "id": "MOD-F1", "label": "F1 Cadastro", "screens": ["TEL-01"], "tables": ["devedor"] }]`. Sem `items`: cada módulo vira um separador no menu (o `label`; `title` também vale), seguido de um módulo de lista por tabela. Sem o campo, um módulo de lista por tabela. Com `items`: menu por área de trabalho (abaixo) |
+| `modules[].items` | opcional. Módulos de menu da área. Ver "Menu por área de trabalho" |
+| `adminTables` | opcional. `true` acrescenta a área "Administração", visível só para o papel admin, com uma lista por tabela do modelo |
+| `processFlows` | opcional. Trilha de etapas no topo do form. Ver "Trilha de etapas" |
 | `screens[].fields` | opcional. Campos da tela, na ordem. Sem o campo: form com todas as colunas, lista com as 6 primeiras |
+
+## Menu por área de trabalho
+
+O menu se organiza pelo trabalho de cada papel, não por tabela. Quando algum módulo do modelo
+tem `items`, o menu entra nesse modo: cada módulo com `items` é uma área (um separador no menu)
+seguida dos módulos dela. Módulo sem `items` não aparece no menu; as tabelas cruas ficam só na
+área "Administração" (`adminTables: true`), para o admin.
+
+O exemplo abaixo monta a área "Minha lista", com a fila do atendente e um report para o coordenador:
+
+```json
+"modules": [
+  { "id": "MOD-UX-LISTA", "label": "Minha lista", "tables": ["x_2326104_cob_contato"], "order": 100,
+    "items": [
+      { "label": "Minha lista", "type": "FILTER", "table": "x_2326104_cob_contato",
+        "filter": "atendente=javascript:gs.getUserID()^status!=encerrado^ORDERBYproxima_acao_em",
+        "view": "minha_lista", "roles": ["atendente"] },
+      { "label": "Funil do crédito", "type": "REPORT", "report": "TEL-026", "roles": ["coordenador"] },
+      { "label": "Outros", "type": "SEPARATOR" },
+      { "label": "Ajuda", "type": "DIRECT", "link": "x_2326104_cob_ajuda.do" }
+    ] }
+],
+"adminTables": true
+```
+
+| Campo do módulo | Regra |
+|---|---|
+| `label` (ou `title`) | título no menu; único dentro da área |
+| `type` | `FILTER` (lista filtrada), `LIST`, `DIRECT` (URL relativa), `REPORT` ou `SEPARATOR` (subgrupo). Sem o campo: `REPORT` se tem `report`, `DIRECT` se tem `link`, `FILTER` se tem `filter`, senão `LIST` |
+| `table` | tabela do modelo (FILTER e LIST) |
+| `filter` | encoded query (a consulta no formato da plataforma), com `ORDERBY` se precisar |
+| `view` | nome da view da lista (`view_name` do módulo) |
+| `roles` | sufixos dos papéis do app (viram `<escopo>.<papel>`) ou papel da plataforma (`admin`). Sem o campo: os da área; sem eles, todos os do app |
+| `order` | posição; sem o campo, segue a sequência de 100 em 100 |
+| `report` | id da tela report (`TEL-`); o módulo aponta para o `sys_report` dela por `Now.ref('sys_report', '<TEL>_report')`, que o build resolve pelo `keys.ts` |
+| `link` | URL relativa do DIRECT; URL com host é recusada |
+
+A área aceita `roles` (quem vê o separador; sem o campo, a união dos papéis dos módulos dela) e
+`order`. A área "Administração" usa o papel `admin` do app; se o app não tiver esse papel, usa o
+`admin` da plataforma.
+
+## Trilha de etapas
+
+`processFlows` põe a trilha de etapas (o process flow da Core UI) no topo do form da tabela. Cada
+etapa acende quando a `condition` (encoded query) vale para o registro:
+
+```json
+"processFlows": [
+  { "table": "x_2326104_cob_contato", "field": "status",
+    "steps": [
+      { "label": "A ligar", "condition": "status=a_ligar", "order": 100 },
+      { "label": "Retornar", "value": "retornar" },
+      { "label": "Encerrado", "condition": "status=encerrado" }
+    ] }
+]
+```
+
+Com `field`, a etapa pode trazer `value` no lugar de `condition` (vira `<field>=<value>`). Sem
+`order`, as etapas seguem de 100 em 100. É gerado `ui/_processflow_<sufixo>.now.ts` com o
+`sys_ui_formatter` do macro `process_flow.xml` para a tabela (a instância não tem esse formatter
+global, só por tabela da plataforma) e um `sys_process_flow` por etapa. Todo `Form()` gerado da
+tabela, em qualquer view, ganha a trilha como primeiro elemento da primeira seção.
 
 ## O que é gerado (`app/src/fluent/`)
 
@@ -115,7 +180,8 @@ O modelo é o mesmo do `sn-seed` (formato em `.claude/skills/sn-seed/SKILL.md`),
 | `simulations/<sufixo>.now.ts` | o mesmo, para `simulation: true` |
 | `ui/<TEL>.now.ts` | `Form()` (form-layout-guide: duas colunas a partir de 4 campos curtos, texto longo e journal em uma coluna, seção "Atividades" com o activity stream) ou `List()`; tela `report` vira `sys_report` de barras agrupado pela primeira coluna choice |
 | `ui/_form_<sufixo>.now.ts` | form na view padrão para tabela sem tela de form (regra 6 do table-guide) |
-| `navigation/menu.now.ts` | `ApplicationMenu` + módulos `sys_app_module` |
+| `ui/_processflow_<sufixo>.now.ts` | formatter e etapas da trilha (só com `processFlows`) |
+| `navigation/menu.now.ts` | `ApplicationMenu` + módulos `sys_app_module` (separadores, listas, filtros, reports e links) |
 | `security/roles.now.ts` | `Role()` `<escopo>.<role>` |
 | `security/acl-base.now.ts` | `Acl()` de leitura (tabela e `*`) por tabela, para todas as roles do app |
 | `seed/` | ver `sn-seed` |
@@ -141,6 +207,9 @@ rota não muda, `screenshot` e `capturedAt` anteriores são mantidos; quando mud
 - tabela com até 30 caracteres, só minúsculas, números e `_`;
 - coluna sem prefixo `sys_` e sem repetição; tipo da lista do `sn-seed`;
 - tela com tabela do modelo, tipo `form`/`list`/`report` e role existente;
+- módulo de área com tipo válido, tabela do modelo, tela report existente, link relativo, papel
+  existente e label único na área;
+- trilha com tabela e campo existentes, etapas com label único e condição;
 - depois do build, toda chave de registro demo e de report presente no `keys.ts`.
 
 ## Regerar
