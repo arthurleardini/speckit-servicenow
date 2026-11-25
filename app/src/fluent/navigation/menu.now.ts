@@ -92,7 +92,7 @@ Record({
 Record({
     $id: Now.ID["modulo_mod_ux_reguas_inscricoes"],
     table: 'sys_app_module',
-    data: { title: "Inscrições", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_regua_inscricao", filter: "statusINativa,erro^ORDERBYDESCiniciada_em", order: 3200 },
+    data: { title: "Inscrições", application: menu, link_type: 'FILTER', roles: ["x_2326104_cob.coordenador"], active: true, name: "x_2326104_cob_regua_inscricao", filter: "statusINativa,erro^ORDERBYDESCstatus^ORDERBYproxima_etapa_em", order: 3200 },
 })
 
 Record({

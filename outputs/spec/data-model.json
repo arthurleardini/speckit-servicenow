@@ -148,7 +148,7 @@
           "label": "Inscrições",
           "type": "FILTER",
           "table": "x_2326104_cob_regua_inscricao",
-          "filter": "statusINativa,erro^ORDERBYDESCiniciada_em",
+          "filter": "statusINativa,erro^ORDERBYDESCstatus^ORDERBYproxima_etapa_em",
           "roles": [
             "coordenador"
           ]

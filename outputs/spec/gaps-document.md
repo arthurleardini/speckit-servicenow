@@ -822,6 +822,36 @@ A auditoria (outputs/spec/auditorias/US-MOD-F4-011.md, TEST-001, BUG-001, BUG-00
 1. Acrescentar os dois casos ao ATF de envio, recusar ou parar a inscrição de Parcelamentos sem parcelamento na F4-013, aceitar o teto não atômico na demo e criar o arquivo de execução (ou tirar a referência das isenções).
 2. Serializar o envio por contribuinte (lote agendado do GAP-155, opção 2).
 
+### GAP-160 — Marca da qualificada limpa antes de valer, falha da inscrição só no log, publicação síncrona, ordenação do módulo «Inscrições», mensagem de pausa e evidência citada (auditoria US-MOD-F4-012)
+
+**Área:** MOD-F4
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-012-01, TASK-MOD-F4-012-02, TASK-MOD-F4-012-03
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-012.md, BUG-001, BUG-002, PERF-001, CONF-001, CONF-002 e CONF-003) registrou: (1) `ReguaMotor.inscrever` limpa `encaminhado_qualificada_em` de todos os segmentados do ciclo; se a marca foi gravada depois que a segmentação do ciclo em prévia já existia, `SegmentacaoScore.aplicar` não a leu, o contribuinte fica massificada, é inscrito de novo na régua e a marca some sem ter valido (RN-NOVO-F4-008); o ATF grava a marca antes de segmentar e não pega o caso; (2) erro em `inscrever` na publicação só vai ao log (`gs.error`): o ciclo fica publicado, parte da massificada sem inscrição, o coordenador não é avisado e a BR não roda de novo; o mesmo vale para `reavaliar`, onde a guarda do Flow cobre; (3) a publicação grava todas as inscrições na transação do clique, o que com a carteira real pode estourar o tempo da transação (o GAP-155 trata o volume de contextos de Flow, não este ponto); (4) o módulo «Inscrições» ordena por `ORDERBYDESCiniciada_em`, e o design (A4) e a TASK-MOD-F4-012-03 pedem `ORDERBYDESCstatus^ORDERBYproxima_etapa_em`; (5) a mensagem de pausa não traz o número de inscrições encerradas que a TASK-MOD-F4-012-03 pede; (6) o `app/spec_story.md` cita `auditorias/F4-012-execucao-demo.md`, que ainda não existe no repositório.
+
+**Opções identificadas:**
+1. Limpar só a marca dos contribuintes cuja segmentação no ciclo tem o motivo «Esgotou a régua (RN-NOVO-F4-008)», com ATF do caso; avisar o coordenador da falha na publicação; alinhar a ordenação do módulo e a mensagem de pausa à task; gravar o arquivo de execução ao fim da execução em andamento; deixar a publicação síncrona na demo.
+2. Além da opção 1, mover `inscrever` para evento ou job assíncrono, com reprocessamento seguro (a chamada repetida não duplica).
+
+**Corrigido depois da auditoria (25/11, mesma F4):** itens (1), (4), (5) e (6). `inscrever` limpa só a marca de quem foi à qualificada pela régua neste ciclo (motivo «Esgotou a régua»), com ATF da marca gravada depois da segmentação; o módulo «Inscrições» usa `statusINativa,erro^ORDERBYDESCstatus^ORDERBYproxima_etapa_em`; a mensagem de pausa diz quantas inscrições encerrou (ATF confere); `auditorias/F4-012-execucao-demo.md` gravado. Ficam abertos (2) e (3).
+
+### GAP-161 — Parcelamento em risco sem régua em dois casos, falha da inscrição só no log e ATF de alterar e apagar inscrição (auditoria US-MOD-F4-013)
+
+**Área:** MOD-F4
+**Impacto:** Baixa
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-013-01, TASK-MOD-F4-013-02
+
+**Descrição:**
+A auditoria (outputs/spec/auditorias/US-MOD-F4-013.md, BUG-001, BUG-002 e TEST-001) registrou: (1) com dois parcelamentos em risco do mesmo contribuinte, só o primeiro gera inscrição; quando ele volta a em dia, a inscrição encerra e o segundo fica sem régua até mudar de status; parcelamento gravado já como «em risco» (insert) não inscreve, porque a BR só olha update; os dois casos seguem o texto da RN-NOVO-F4-014 e não ocorrem no seed; (2) erro em `inscreverParcelamento` só vai ao log (`gs.error`), sem aviso a quem gravou e sem nova tentativa; (3) os ATF não conferem `canDelete` de nenhuma persona nem `canWrite` do atendente na inscrição da própria carteira (o código cumpre: não há ACL de write nem de delete).
+
+**Opções identificadas:**
+1. Acrescentar os ATF de alterar e apagar; deixar os dois casos de parcelamento como estão na demo.
+2. Além da opção 1, reinscrever pelo outro parcelamento em risco ao encerrar como regularizado, incluir insert na BR de «em risco» e avisar quem gravou quando a inscrição falha.
+
 ---
 
 ## Respostas
@@ -1175,6 +1205,18 @@ A auditoria (outputs/spec/auditorias/US-MOD-F4-011.md, TEST-001, BUG-001, BUG-00
 **Impacto na task:** _(a preencher)_
 
 ### GAP-159
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-160
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-161
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

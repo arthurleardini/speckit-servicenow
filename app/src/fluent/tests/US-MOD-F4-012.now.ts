@@ -969,7 +969,7 @@ jasmine.getEnv().execute();`,
 export const t_f4012_escalonar_qualificada = Test({
     $id: Now.ID['US-MOD-F4-012_atf_escalonar_qualificada'],
     name: 'RF-MOD-F4-012 — escalonar à qualificada: a marca leva o contribuinte à qualificada no ciclo seguinte e a publicação limpa a marca',
-    description: 'Régua atf_itcd (última etapa encaminhar_qualificada): escalonar grava encaminhado_qualificada_em em A, encerra a inscrição como encaminhada_qualificada e não cria contato. No ciclo seguinte (critério fictício de valor mínimo alto), a segmentação de A sai qualificada com motivo «Esgotou a régua (RN-NOVO-F4-008)» e a de B, sem a marca, massificada; inscrever nesse ciclo limpa a marca de A (RN-NOVO-F4-008; AS-TASK-MOD-F4-012-02-04).',
+    description: 'Régua atf_itcd (última etapa encaminhar_qualificada): escalonar grava encaminhado_qualificada_em em A, encerra a inscrição como encaminhada_qualificada e não cria contato. No ciclo seguinte (critério fictício de valor mínimo alto), a segmentação de A sai qualificada com motivo «Esgotou a régua (RN-NOVO-F4-008)» e a de B, sem a marca, massificada; inscrever nesse ciclo limpa a marca de A e mantém a de quem foi marcado depois da segmentação da prévia (RN-NOVO-F4-008; AS-TASK-MOD-F4-012-02-04).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -1130,6 +1130,10 @@ export const t_f4012_escalonar_qualificada = Test({
         var ci = ciclo('ATF ciclo F4-012 seguinte (fictício)', 'previa', crit);
         var sA = segmentar(ci, a, '');
         var sB = segmentar(ci, b, '');
+        var tarde = contribuinte('F4-012 qualificada marca tardia');
+        debito(tarde, 'itcd', 'aberto', 500);
+        segmentar(ci, tarde, '');
+        mudar('x_2326104_cob_contribuinte', tarde, 'encaminhado_qualificada_em', new GlideDateTime().getValue());
         motor.inscrever(ci);
         it('marca gravada, inscrição encerrada como encaminhada_qualificada, sem contato', function() {
             expect(res.destino).toBe('qualificada');
@@ -1148,6 +1152,9 @@ export const t_f4012_escalonar_qualificada = Test({
         it('inscrever no ciclo seguinte limpa a marca', function() {
             expect(ler('x_2326104_cob_contribuinte', a).getValue('encaminhado_qualificada_em')).toBeFalsy();
         });
+        it('marca gravada depois da segmentação da prévia não é limpa (vale no ciclo seguinte)', function() {
+            expect(ler('x_2326104_cob_contribuinte', tarde).getValue('encaminhado_qualificada_em')).toBeTruthy();
+        });
     });
 })(outputs, steps, params, stepResult, assertEqual);
 jasmine.getEnv().execute();`,
@@ -1157,7 +1164,7 @@ jasmine.getEnv().execute();`,
 export const t_f4012_pausa = Test({
     $id: Now.ID['US-MOD-F4-012_atf_pausa'],
     name: 'RF-MOD-F4-012 — Pausar encerra as inscrições ativas com régua pausada; Ativar não retoma',
-    description: 'Régua atf_pausa com 2 inscrições ativas e régua atf_pausa_outra com 1: pausar grava «Ativa» = falso e encerra as 2 como regua_pausada, sem mexer na outra régua; pausar de novo é recusado; ativar grava «Ativa» = verdadeiro e as inscrições continuam encerradas (B4, A1; AS-TASK-MOD-F4-012-03-01..02).',
+    description: 'Régua atf_pausa com 2 inscrições ativas e régua atf_pausa_outra com 1: pausar grava «Ativa» = falso, encerra as 2 como regua_pausada e diz quantas na mensagem, sem mexer na outra régua; pausar de novo é recusado; ativar grava «Ativa» = verdadeiro e as inscrições continuam encerradas (B4, A1; AS-TASK-MOD-F4-012-03-01..02).',
     failOnServerError: true,
 }, (atf) => {
     atf.server.runServerSideScript({
@@ -1315,6 +1322,8 @@ export const t_f4012_pausa = Test({
         var a1 = motor.ativar(r);
         it('pausar grava ativa = falso e encerra as 2 inscrições com regua_pausada', function() {
             expect(p1.ok).toBe(true);
+            expect(p1.encerradas).toBe(2);
+            expect(p1.mensagem).toBe('Régua pausada: 2 inscrição(ões) ativa(s) encerrada(s). Ao ativar de novo, só entra quem for inscrito depois.');
             expect(ativaDepoisPausa).toBe('0');
             expect(ler('x_2326104_cob_regua_inscricao', i1).getValue('motivo_encerramento')).toBe('regua_pausada');
             expect(ler('x_2326104_cob_regua_inscricao', i2).getValue('motivo_encerramento')).toBe('regua_pausada');

@@ -50,7 +50,7 @@ ReguaMotor.MSG_PARCELAMENTO = 'Operação recusada: inscrição na régua de Par
 ReguaMotor.MSG_REGUA_NAO_ACHADA = 'Régua não encontrada.';
 ReguaMotor.MSG_JA_PAUSADA = 'A régua já está pausada.';
 ReguaMotor.MSG_JA_ATIVA = 'A régua já está ativa.';
-ReguaMotor.MSG_PAUSADA = 'Régua pausada: as inscrições ativas foram encerradas. Ao ativar de novo, só entra quem for inscrito depois.';
+ReguaMotor.MSG_PAUSADA = 'Régua pausada: {n} inscrição(ões) ativa(s) encerrada(s). Ao ativar de novo, só entra quem for inscrito depois.';
 ReguaMotor.MSG_ATIVADA = 'Régua ativada: as inscrições encerradas pela pausa não voltam; entra quem for inscrito daqui em diante.';
 ReguaMotor.MSG_SIGILO ='Operação recusada: texto de e-mail, SMS ou WhatsApp não pode trazer valor nem tributo (só ciência do DT-e).';
 
@@ -423,20 +423,23 @@ ReguaMotor.prototype = {
      * Publicação do ciclo (BR after update prévia → publicado, D7): inscreve cada contribuinte da massificada na régua
      * ativa da carteira do maior débito em aberto (tributo com a maior soma de valor). Sem débito em aberto, sem régua
      * ativa da carteira ou já com inscrição ativa nessa régua: pula. O grupo de controle fica de fora (segmento
-     * controle, e a BR da inscrição recusa). Depois limpa a marca encaminhado_qualificada_em dos contribuintes
-     * segmentados no ciclo (a marca já valeu na segmentação). Consultas agregadas, sem consulta por contribuinte.
+     * controle, e a BR da inscrição recusa). Depois limpa a marca encaminhado_qualificada_em de quem a marca levou à
+     * qualificada neste ciclo (motivo «Esgotou a régua»); a marca gravada depois da segmentação da prévia continua
+     * para o ciclo seguinte. Consultas agregadas, sem consulta por contribuinte.
      * @param {GlideRecord|string} ciclo
      * @returns {number} inscrições criadas
      */
     inscrever: function (ciclo) {
         var cicloId = ReguaMotor.idDe(ciclo);
         var massificada = [];
-        var segmentados = [];
+        var consumidos = [];
         var seg = new GlideRecord(ReguaMotor.T_SEGMENTACAO);
         seg.addQuery('ciclo', cicloId);
         seg.query();
         while (seg.next()) {
-            segmentados.push(seg.getValue('contribuinte'));
+            if (seg.getValue('motivo') === SegmentacaoScore.MOTIVO_REGUA) {
+                consumidos.push(seg.getValue('contribuinte'));
+            }
             if (seg.getValue('segmento') === 'massificada') {
                 massificada.push(seg.getValue('contribuinte'));
             }
@@ -473,9 +476,9 @@ ReguaMotor.prototype = {
                 }
             }
         }
-        if (segmentados.length) {
+        if (consumidos.length) {
             var marca = new GlideRecord(ReguaMotor.T_CONTRIBUINTE);
-            marca.addQuery('sys_id', 'IN', segmentados.join(','));
+            marca.addQuery('sys_id', 'IN', consumidos.join(','));
             marca.addNotNullQuery('encaminhado_qualificada_em');
             marca.setValue('encaminhado_qualificada_em', '');
             marca.updateMultiple();
@@ -572,9 +575,18 @@ ReguaMotor.prototype = {
         if ((r.getValue('ativa') === '1') === ativa) {
             return { ok: false, mensagem: ativa ? ReguaMotor.MSG_JA_ATIVA : ReguaMotor.MSG_JA_PAUSADA };
         }
+        var antes = 0;
+        if (!ativa) {
+            var agg = new GlideAggregate(ReguaMotor.T_INSCRICAO);
+            agg.addQuery('regua', r.getUniqueValue());
+            agg.addQuery('status', 'ativa');
+            agg.addAggregate('COUNT');
+            agg.query();
+            antes = agg.next() ? parseInt(agg.getAggregate('COUNT'), 10) : 0;
+        }
         r.setValue('ativa', ativa);
         r.update();
-        return { ok: true, mensagem: ativa ? ReguaMotor.MSG_ATIVADA : ReguaMotor.MSG_PAUSADA };
+        return { ok: true, mensagem: ativa ? ReguaMotor.MSG_ATIVADA : ReguaMotor.MSG_PAUSADA.replace('{n}', antes), encerradas: antes };
     },
 
     /** Régua ativa por carteira: { carteira: sys_id } (a mais antiga, quando há mais de uma). Uma consulta. */
