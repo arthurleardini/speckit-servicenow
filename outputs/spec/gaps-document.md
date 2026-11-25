@@ -738,6 +738,34 @@ Itens baixos registrados nos relatórios `outputs/spec/auditorias/US-MOD-UX-00{2
 **Opções identificadas:**
 1. Tratar em lote numa story de endurecimento antes da demo.
 
+### GAP-154 — Regularização não encerra os contatos abertos (RN-09 fora da v2)
+
+**Área:** MOD-UX / MOD-F4
+**Impacto:** Média
+**Tipo:** NEGÓCIO
+**Tasks afetadas:** TASK-MOD-F4-012-01, TASK-MOD-UX-003-01
+
+**Descrição:**
+Na v2, quando o débito vira regularizado ou parcelado, a inscrição na régua encerra na mesma transação (`ReguaMotor.reavaliar`) e nenhuma etapa seguinte envia. O contato aberto na lista do atendente continua aberto: só sai por «Registrar ligação» ou «Encerrar» com motivo «regularizado». O design v2.1 (25/11/2026, CHG-038) deixou a RN-09 fora, como no ux-v1 (GAP-021 do registro do pré-projeto). Falta decidir momento da regra, o que conta como «aberto» e se o motor encerra contato como sistema (hoje `recusarContatoForaDaCarteira` é só de update e nenhuma BR de carteira tem exceção de sistema).
+
+**Opções identificadas:**
+1. Manter fora: o atendente encerra à mão; «O que fazer agora» não muda.
+2. `ReguaMotor.reavaliar` encerra também o contato aberto do contribuinte no ciclo, com motivo «regularizado», gravando como sistema.
+
+### GAP-155 — Um contexto de Flow esperando por inscrição: volume em produção
+
+**Área:** MOD-F4
+**Impacto:** Média
+**Tipo:** TÉCNICO
+**Tasks afetadas:** TASK-MOD-F4-010-03, TASK-MOD-F4-012-01
+
+**Descrição:**
+Cada inscrição ativa mantém um contexto de Flow em espera (`waitForADuration` relativo) até a etapa seguinte. No seed da demo são 5 réguas e 51 contribuintes; uma publicação inscreve a massificada com débito em aberto (40 segmentações massificadas no seed, 28 contatos no Ciclo 2026-11), ou seja, dezenas de contextos. Em produção, a carteira real da SEFAZ-MT gera um contexto por contribuinte inscrito, cada um esperando até `prazo_final_dias` depois da última etapa (≈35 dias na régua IPVA com 86400 s por dia). O design v2.1 (CHG-039) deixa o volume fora da demo.
+
+**Opções identificadas:**
+1. Manter um Flow por inscrição e medir contextos em espera na instância de homologação.
+2. Lote agendado: um Scheduled Script diário marca as inscrições com `proxima_etapa_em` vencida e chama as mesmas ações do `ReguaMotor` (mesmo desenho do plano B de `relativeDatetime`: coluna `liberada` + job), sem contexto em espera por inscrição.
+
 ---
 
 ## Respostas
@@ -1055,6 +1083,18 @@ Itens baixos registrados nos relatórios `outputs/spec/auditorias/US-MOD-UX-00{2
 **Impacto na task:** TASK-MOD-UX-005-02 — BR `RF-MOD-UX-005_br_caso_estagio` e ACLs `RF-MOD-UX-005_acl_caso_write_{estagio,encerrado_em,etapa_ordem}`. ATF: teste novo «estágio do caso anda uma etapa por vez e só encerra com motivo, por qualquer caminho» (pular etapa, encerrar sem motivo e reabrir recusados; uma etapa e encerrar com motivo passam; coordenador sem gravação à mão do estágio). Recibo `outputs/spec/auditorias/atf/US-MOD-UX-005.json` (4/4).
 
 ### GAP-153
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-154
+**Decisão:** _(a preencher)_
+**Decidido por:** _(a preencher)_
+**Data:** _(a preencher)_
+**Impacto na task:** _(a preencher)_
+
+### GAP-155
 **Decisão:** _(a preencher)_
 **Decidido por:** _(a preencher)_
 **Data:** _(a preencher)_

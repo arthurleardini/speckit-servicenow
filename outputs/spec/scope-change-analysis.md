@@ -8,6 +8,7 @@ global-risk: "🟡 MÉDIO"
 delta-size: "GRANDE"
 total-chgs: 18
 regressions-identified: 4
+changes: "ux-v1 (CHG-001..018, abaixo); ux-v2 (CHG-019..041, docs/designs/ux-cobranca-v2-regua-flow.md v2.1, seção no fim; 23 CHGs, risco 🟡 MÉDIO, delta GRANDE, 5 regressões de risco alto)"
 ---
 # Análise de Alteração de Escopo — Cobrança MT (change ux-v1)
 
@@ -199,3 +200,216 @@ Todos os CHGs foram decididos na Etapa B. Pode avançar: F2 (modelo, scaffold, s
 ---
 
 *Documento gerado por spec-scope-change v1.2 — ver scope-change-gaps.md para os CHGs detalhados.*
+
+---
+---
+
+# Análise de Alteração de Escopo — Cobrança MT (change ux-v2)
+
+| Campo | Valor |
+|---|---|
+| Documentos de alteração | `docs/designs/ux-cobranca-v2-regua-flow.md` (v2.1, aprovado pelo dono em 25/11/2026) + `docs/designs/review-ux/regua-flow_review_report.md` |
+| Data de análise | 2026-11-25 |
+| Projeto | Cobrança MT — piloto 2.6 Cobrança (app x_2326104_cob, dev493801) |
+| Estado do desenvolvimento | Em desenvolvimento (v0 + UX v1 entregues: STORY-MOD-UX-001..008 DONE, suíte cob-regressao 50/50) |
+| Risco global | 🔴 ALTO na Etapa A → 🟡 MÉDIO depois da Etapa B (7 CHGs críticos decididos pelo design; restam a F0 em curso e o DELETE do seed aleatório da régua) |
+| Tamanho estimado do delta | GRANDE (19 tasks novas, 1 tabela nova, 5 Flows gerados, 4 custom actions, 5 camadas) |
+| CHGs identificados | 23 (7 críticos · 5 altos · 8 médios · 3 baixos), todos decididos |
+| Regressões potenciais | 5 grupos de tasks com risco alto, 6 com risco médio |
+| Sigla do change | ux-v2 |
+| Destino das stories | **Desvio autorizado (mesmo do ux-v1):** FEAT-UX-ACOES (EPIC-008), FEAT-F4-FLOW (EPIC-004) e STORY-MOD-UX-009, UX-010, STORY-MOD-F4-010..014 e F4-016 (opcional) entram direto em `outputs/spec/tasks.json` |
+
+---
+
+## Resumo executivo
+
+Duas mudanças pedidas pelo dono do produto. Primeira: as ações de negócio passam a aparecer onde a pessoa já está, na lista (menu da linha e «Ações nas linhas selecionadas»), com uma coluna «O que fazer agora» em contato, caso e ciclo; o Update sai do form do contato e do ciclo fora da prévia, e o New sai das listas de contato, régua e etapa para quem não é admin. O coordenador e o admin ganham a «Lista da equipe». Segunda: cada régua de cobrança vira um Flow do Flow Designer, que começa quando um contribuinte é inscrito, espera o prazo de cada etapa, confere as guardas (regularização, grupo de controle, régua pausada), envia pelo canal simulado respeitando opt-in, opt-out, teto e fallback e, no fim, encaminha à cobrança ativa ou à qualificada.
+
+O que já foi entregue e muda: a distribuição da lista (UX-004) passa a usar um helper que a régua também chama; o mapa de carteira ganha a tabela de inscrição; o seed aleatório de régua, etapa, canal, comunicação, retorno de envio e consentimento (≈300 registros) sai e vira DELETE no install da F2; o menu do coordenador passa de 12 para 14 módulos (revoga o limite do ux-v1); as listas de contato e caso trocam uma coluna. Os testes da UX-004 não mudam (conferido no design).
+
+Decisões: as 23 questões nascem decididas pelas decisões D1–D20 e P1/P2/P3 do design v2.1, aprovado pelo dono. Os pontos técnicos ainda abertos estão na F0 (spike na instância), com plano B escrito no design; os já respondidos entram nas stories.
+
+Próximo passo: terminar a F0 e registrar sim/não de cada ponto no `sync-log.md`; depois F1 (UX-009 e UX-010), F2 (F4-010, com confirmação do DELETE do seed antes do install), F3 a F5.
+
+---
+
+## Alterações por documento
+
+### docs/designs/ux-cobranca-v2-regua-flow.md (v2.1)
+
+**Data do documento:** 2026-11-25
+**Origem:** pedido do dono do produto, rascunho do agente, revisão EGM (8🔴, 24🟡, 12🟢) e decisões do dono P1, P2, P3
+
+#### Regras definidas
+
+| # | Regra | Tipo | Camadas afetadas |
+|---|---|---|---|
+| 1 | Toda ação de negócio alcançável pela lista em até 2 cliques (UI Actions de lista próprias, D1) | ADIÇÃO | Tela / Testes |
+| 2 | Update só para admin no contato; no ciclo, coordenador só na prévia; New de contato, régua e etapa só admin (D2) | ALTERAÇÃO | Tela / Testes |
+| 3 | «O que fazer agora» gravado por BR em contato, caso e ciclo; aviso no form do contato (D3) | ADIÇÃO | Negócio / Dados / Tela / Testes |
+| 4 | «Lista da equipe» para coordenador e admin; coordenador com 14 módulos (D4, D5, D20) | ALTERAÇÃO | Tela / Testes |
+| 5 | Inscrição na régua como tabela própria; nasce na publicação do ciclo por BR after (D6, D7) | ADIÇÃO | Negócio / Dados / Testes |
+| 6 | Uma régua = um Flow gerado por script a partir de `outputs/spec/reguas.json`; o motor lê a etapa em tempo de execução (D8, D9, D10) | ADIÇÃO | Negócio / Dados / Testes |
+| 7 | Espera configurável por `segundos_por_dia` (60 na demo; 86400 em produção) (D11) | ADIÇÃO | Dados / Testes |
+| 8 | Escalonamento só no fecho, depois de `prazo_final_dias` (D13) | COMPORTAMENTO_CONDICIONAL | Negócio / Testes |
+| 9 | Encaminhamento à cobrança ativa cria ou reaproveita contato (P1 = ambos, D14) | RESPONSABILIDADE | Negócio / Dados / Testes |
+| 10 | Coordenador edita a etapa no form e o Flow no Designer (P2 = ambos, D15) | RESPONSABILIDADE | Negócio / Tela |
+| 11 | Régua Parcelamentos dispara com parcelamento «em risco»; guarda por carteira (P3, D16) | ADIÇÃO | Negócio / Testes |
+| 12 | Etapa recusa postura fora de sequência, dia fora de ordem, encaminhar fora da última e valor em canal informal (D17) | COMPORTAMENTO_CONDICIONAL | Negócio / Testes |
+| 13 | Teto de 1 tentativa por contribuinte e canal na janela de `segundos_por_dia`; fallback SNE → e-mail → SMS (D18, D19) | COMPORTAMENTO_CONDICIONAL | Negócio / Testes |
+| 14 | Regularizou, a régua para na mesma transação (G8) | COMPORTAMENTO_CONDICIONAL | Negócio / Testes |
+| 15 | Seed de régua, etapa, canal e consentimento escrito à mão; seed aleatório dessas tabelas sai | ALTERAÇÃO | Dados |
+| 16 | RN-09 (regularização encerra contato) continua fora; volume de contextos de Flow em produção vira GAP | REMOÇÃO | Negócio |
+
+#### Impacto por camada
+
+**Negócio:** regras novas RN-NOVO-UX-013 (ação na lista), RN-NOVO-UX-014 (Update e New por papel), RN-NOVO-UX-015 («O que fazer agora»), RN-NOVO-UX-016 (Lista da equipe) e RN-NOVO-F4-009 a 014 (inscrição, sequência da etapa, guardas, teto por janela, encaminhamento, parcelamento em risco). Ganham implementação as RN-NOVO-F4-001 a 008, RN-NOVO-F1-002 (regularização encerra a abordagem) e RN-NOVO-F2-005 (grupo de controle fora das ações). RN-NOVO-F4-004 (fallback) e RN-38 (teto) passam a constantes do motor.
+
+**Contrato de API:** sem impacto. O app não expõe API própria; as 4 custom actions e o `ReguaMotor` são internos da instância. `oasdiff` não se aplica (sem `api-contracts.yaml`).
+
+**Modelo de Dados:** tabela nova `x_2326104_cob_regua_inscricao`; `regua` + `codigo`, `flow`, `prazo_final_dias` (`ordem_fallback` sai de lista e form, a coluna fica); `regua_etapa` + `postura`, `acao_sem_resposta` + `encaminhar_ativa`; `comunicacao` e `envio_sim` + `inscricao`; `contato` + `inscricao`, `origem`, `proxima_acao`; `caso` e `ciclo` + `proxima_acao`; `contribuinte` + `encaminhado_qualificada_em`; propriedade `x_2326104_cob.regua.segundos_por_dia`. `seedManual` += regua, regua_etapa, canal_sim, consentimento, comunicacao, envio_sim.
+
+**Tela / UX:** TEL-034 e TEL-023 trocam uma coluna por `proxima_acao`; TEL-013 tira `janela_atribuicao_dias` e `ordem_fallback`; TEL-014 (régua) ganha «Ver execuções» e «Abrir no Flow Designer»; TEL-035 reordena os campos; novas TEL-036 (lista do ciclo para «Ciclo do mês»), TEL-037 (lista de inscrições) e TEL-038 (form da inscrição com comunicações e retornos). Menu: separador «Equipe» com «Lista da equipe» e módulo «Inscrições» em Réguas. Telas derivadas por leitura do design, sem amarração de endpoint `[impacto-llm]`.
+
+**Testes / Homologação:** um arquivo ATF por story nova (B9), com régua de teste `codigo = atf_<caso>` que nenhum Flow casa. Ponta a ponta do Flow (com espera) conferido na instância (CUJ-4 a CUJ-7), porque não há passo ATF de Flow. UX-004 continua verde sem mudança. Teste do gerador por `node --test`.
+
+**Arquitetura (HLD):** `outputs/spec/hld.md` não existe neste projeto (HLD_MISSING, como no ux-v1).
+
+#### Fora do escopo desta alteração
+
+Copiado literalmente da seção Non-Goals do design:
+
+*   Editor visual de régua próprio, UI Page, GlideModal, Workspace e UI Builder.
+*   Etapa preventiva (D−5, D−2 do vencimento). D0 = inscrição.
+*   A/B de régua, versões de régua e comparação (RN-52). Sem campos de versão.
+*   Canal real. Envio continua em `canal_sim` e `envio_sim`.
+*   Origem da regularização (RF-MOD-F4-007) e efetividade (RF-MOD-F4-008): ficam como estão.
+*   **Encerrar contatos abertos na regularização (RN-09)**: fora da v2, registrado como GAP em `outputs/spec/gaps-document.md`.
+*   Ação em massa para "Registrar ligação" e "Encerrar": pedem anotação ou motivo, que não cabem numa ação de lista sem modal.
+*   Form do contato em seções novas: o `sn-scaffold` gera uma seção por tela e o gerador é zona imutável. A v2 só reordena os campos.
+*   Um Flow genérico que lê as etapas e serve a todas as réguas (descartado pelo dono).
+*   Cancelar o contexto do Flow ao encerrar a inscrição: o contexto acorda, vê a inscrição encerrada e termina sem enviar.
+
+#### Critérios de aceite de negócio
+
+- Toda ação de negócio alcançável pela lista em no máximo 2 cliques, para atendente e coordenador (G1).
+- No form de contato e de ciclo, só os verbos do estado atual, no máximo 3 botões, sem Update (salvo ciclo em prévia) e sem Delete (G2).
+- «O que fazer agora» preenchido em 100% dos contatos, casos e ciclos (G3).
+- Coordenador e admin abrem «Lista da equipe» e veem todos os contatos abertos, agrupados por atendente (G4).
+- 5 Flows ativos «Régua: <nome>», com um stage por etapa e «Encaminhamento» (G5).
+- Com `segundos_por_dia = 60`, a régua IPVA encaminha em até 40 minutos, com 1 comunicação por etapa executada (G6).
+- Nenhuma comunicação para grupo de controle, opt-out, sem opt-in, acima do teto ou já regularizado (G7).
+- Regularizou, a inscrição fica «Encerrada» na mesma transação e nenhuma etapa seguinte envia (G8).
+
+#### Resultados da F0 já incorporados às stories
+
+| Ponto | Resultado | Onde entra |
+|---|---|---|
+| `ordem` nas entradas das custom actions | só número; string `'2'` não compila (TS2322) | TASK-MOD-F4-010-03 |
+| `relativeDatetime` | pill direto e template literal compilam e serializam igual (`{{<uuid>.executar_em}}`); execução da espera em conferência | TASK-MOD-F4-010-03 |
+| Chamada por `sn_fd.FlowAPI…action('x_2326104_cob.<internalName>')` | entrada reference exige GlideRecord (sys_id dá «Invalid GlideRecord input format found»); no script, `inputs.<ref>` chega como GlideRecord e `inputs.ordem` como string vinda do Flow: o script faz `parseInt` | TASK-MOD-F4-010-03 |
+| `values: TemplateValue({...})` no `updateRecord` do catch; stage dentro do `try`; `sys_flow_context.source_record` = registro do gatilho | sim | TASK-MOD-F4-010-03, TASK-MOD-F4-014-01 |
+| `new_roles` do `sys_ui_list_control` | array (`['x_2326104_cob.admin']`); string solta não compila | TASK-MOD-UX-009-02 |
+| Papel do coordenador no Flow Designer | `sys_user_role_contains` com `Now.ref('sys_user_role', { name: ... })` por nome | TASK-MOD-F4-014-02 |
+| `regua.flow` no seed | `Now.ref('sys_hub_flow', 'flow_regua_<codigo>')` | TASK-MOD-F4-010-02 |
+| `GROUPBY`, `showListChoice`, edição no Designer, transform | em teste; stories seguem o design | UX-009, UX-010, F4-014 |
+
+---
+
+## Análise de regressão
+
+### Código já entregue que a mudança toca
+
+*(Fontes: `app/spec_story.md` (memória do módulo) · estado das tasks no `tasks.json` · tabela «Arquivos (allowlist)» do design.)*
+
+| Task ID | Estado | Arquivo e símbolo | Teste que prende o comportamento atual | O que muda |
+|---|---|---|---|---|
+| TASK-MOD-UX-004-01 | DONE | `src/server/qualificacao/QualificacaoCiclo.server.js` — `distribuir` (insert do contato dentro do laço) | `tests/US-MOD-UX-004.now.ts` (4 `it()` + `t_ux004_ui`) | insert vira `_criarContato(..., 'distribuicao', '')`; `atribuirContato` novo; nenhum `it()` muda |
+| TASK-MOD-UX-004-01, TASK-MOD-F2-004-02 | DONE | `app/src/fluent/ui-actions/ciclo.now.ts` | `t_ux004_ui`, `tests/US-MOD-F2-004.now.ts` | ganha `order`, actions de lista e override de Update no mesmo arquivo |
+| TASK-MOD-UX-002-01, UX-003-01, UX-005-01..02 | DONE | `ui-actions/contato.now.ts`, `caso.now.ts`, `criterio.now.ts` | `tests/US-MOD-UX-002/003/005.now.ts` | ganham `order` e actions de lista; as de form não mudam |
+| TASK-MOD-UX-001-02, UX-007-02 | DONE | `app/src/fluent/navigation/menu.now.ts` (gerado) | Playwright do ux-v1 (12 módulos do coordenador) | separador «Equipe», «Inscrições», «Ciclo do mês» com view `tel_036`; 14 módulos |
+| TASK-MOD-UX-001-01 | DONE | `tables/contato.now.ts`, `ui/TEL-034.now.ts`, `TEL-035.now.ts` (gerados) | `tests/US-MOD-UX-001.now.ts` | + `inscricao`, `origem`, `proxima_acao`; lista troca `status` por `proxima_acao`; form reordenado |
+| TASK-MOD-UX-006-01, TASK-MOD-F5-007-03 | DONE | `src/server/carteira/restringirConsultaCarteira.server.js` — mapa `DONO`; `business-rules/carteira.now.ts` | `tests/US-MOD-F5-007.now.ts`, `US-MOD-UX-006.now.ts` | + `x_2326104_cob_regua_inscricao: ['contribuinte.atendente']` |
+| TASK-MOD-F2-005-01 | DONE | `src/server/qualificacao/SegmentacaoScore.server.js` — `aplicar` | `tests/US-MOD-F2-005.now.ts` | lê `encaminhado_qualificada_em` → segmento qualificada |
+| TASK-MOD-UX-008-01 | DONE | `app/scripts/gerar-seed-demo.mjs`, `seed-demo/ciclo|contato|caso.now.ts` | contagem do reinstall | grava `proxima_acao` e `origem`; gera canal_sim e consentimento |
+| TASK-F4-ESTRUTURA-01..06, 08, 09 | DONE | `tables/regua*.now.ts`, `comunicacao.now.ts`, `simulations/envio_sim.now.ts`, `ui/TEL-013/014.now.ts`, `security/acl-base.now.ts:177-209`, `seed/regua|regua_etapa|canal_sim|comunicacao|envio_sim|consentimento.now.ts` | contagem do reinstall | colunas novas pelo scaffold; seed aleatório apagado (DELETE ≈300 registros); regularizacao perde a reference para comunicação |
+
+### Tasks com risco 🔴 ALTO de regressão
+
+| Task ID | Título | Motivo | Ação necessária |
+|---|---|---|---|
+| TASK-F4-ESTRUTURA-01..06 + seed gerado | Estrutura gerada MOD-F4 | 6 seeds aleatórios saem (≈300 registros viram DELETE); `comunicacao`, `envio_sim` e `consentimento` apontam para réguas sorteadas | Confirmar o DELETE com o usuário antes do install da F2; seed à mão (CHG-029) |
+| TASK-MOD-UX-004-01 | Distribuir lista | `distribuir` passa a usar `_criarContato`; a régua cria contato pelo mesmo helper | Extrair sem mudar papel, dedupe, rodízio e mensagem; UX-004 verde sem mudança (CHG-019) |
+| TASK-MOD-UX-001-02, UX-007-02 | Menu por área | Limite de 12 módulos do coordenador revogado; 2 módulos novos | Playwright passa a esperar 14 (CHG-033) |
+| TASK-MOD-UX-006-01 + SEC-002 | Carteira do atendente | Tabela nova com dado do contribuinte precisa de ACL e BR de query por carteira | Deny por `contribuinte.atendente` + mapa `DONO` (CHG-024) |
+| TASK-MOD-F2-005-01 | Segmentação | `aplicar` ganha a regra «esgotou a régua» | ATF novo em F4-012; F2-005 verde |
+
+### Tasks com risco 🟡 MÉDIO de regressão
+
+| Task ID | Título | Motivo | Ação necessária |
+|---|---|---|---|
+| TASK-MOD-F2-004-01..02 + SEC-010 | Grupo de controle | Inscrição de contribuinte em controle recusada pela mesma BR (`recusarAcaoControle`) | Reutilizar o script; ATF em F4-010 |
+| TASK-MOD-F2-002-01..03 + SEC-009 | Ciclo imutável | `proxima_acao` gravado em ciclo publicado | Conferir que não está em `CAMPOS_CICLO_PROTEGIDOS` (não está) |
+| TASK-MOD-UX-002-01, UX-003-01 | Verbos do contato | Update some do form; New some da lista | ATF de visibilidade em UX-009 |
+| TASK-MOD-UX-005-01..02 | Caso | Coluna `ciclo` sai da lista TEL-023; ação de lista «Avançar etapa» | ATF de lista em UX-009 |
+| STORY-MOD-F4-001..006, 009 (PENDING) | Régua, disparo, fallback, opt-in, reenvio, encaminhamento | Os artefatos previstos (flow `comunicacao-disparar-regua`, SI de escalonar e fallback, BR de opt-in) são substituídos por Flow por régua + `ReguaMotor` | Implementar pelas STORY-MOD-F4-010..016 (CHG-040) |
+| TASK-MOD-UX-008-02 | Trilha de etapas | Form do contato reordenado | Conferir o formatter como 1º elemento |
+
+### Tasks que precisam de novos cenários de teste
+
+| Task ID | Título | Cenário novo necessário |
+|---|---|---|
+| TASK-MOD-UX-004-01 | Distribuir lista | `atribuirContato` com e sem contato aberto (em F4-012); `distribuir` intacto |
+| TASK-MOD-UX-006-01 | Carteira | Atendente não lê inscrição de outra carteira; coordenador lê todas |
+| TASK-MOD-F2-004-01 | Grupo de controle | Inscrição recusada para contribuinte em controle |
+| TASK-MOD-F2-005-01 | Segmentação | Contribuinte com `encaminhado_qualificada_em` vira qualificada no ciclo seguinte |
+
+### Tasks sem impacto confirmado 🟢
+
+Auditadas contra o delta: STORY-SEC-TRANSVERSAL (exceto SEC-002, acima); MOD-F1 (STORY-MOD-F1-001..007 e F1-ESTRUTURA: débito e parcelamento só ganham BR after nova em arquivo à parte, sem coluna nova); MOD-F3; MOD-F5 (STORY-MOD-F5-001..006); MOD-F6; MOD-T; STORY-MOD-F2-001, 003, 006; STORY-MOD-F4-007 e 008 (fora, Non-Goals); TASK-MOD-UX-007-01 (home por papel). Cenários de aceite dessas tasks não citam régua, inscrição, `proxima_acao` nem Update/New.
+
+Cenários com `testData` desatualizado: nenhum confirmado. Os cenários de TASK-MOD-F4-002..006 e 009 (PENDING) descrevem disparo e fallback sem inscrição; ficam como estão e a cobertura passa às stories novas (CHG-040).
+
+---
+
+## O que pode avançar sem aguardar CHGs
+
+Todos os CHGs foram decididos na Etapa B. Pode avançar: fim da F0 (pontos em teste), F1 (UX-009, UX-010), F2 (F4-010, depois de confirmar o DELETE do seed com o usuário), F3 a F5.
+
+## O que está bloqueado por CHGs
+
+| CHG ID | Severidade | O que bloqueia |
+|---|---|---|
+| — | — | Nenhum bloqueio: 23/23 decididos em 2026-11-25. O install da F2 espera a confirmação do DELETE do seed (CHG-029), regra do `CLAUDE.md` |
+
+## Status dos CHGs (Etapa B)
+
+| CHG | Severidade | Tema | Status | Decisão × sugestão |
+|---|---|---|---|---|
+| CHG-019 | CRÍTICA | Contato da régua × distribuição (P1) | fechado | divergiu: dono escolheu «ambos»; a sugestão era só pela régua |
+| CHG-020 | ALTA | Edição da régua: form × Flow Designer (P2) | fechado | divergiu: dono escolheu «ambos»; a sugestão era só o form |
+| CHG-021 | ALTA | Régua de parcelamento em risco (P3) | fechado | seguiu sugestão |
+| CHG-022 | CRÍTICA | Teto por dia × demo em minutos | fechado | seguiu sugestão |
+| CHG-023 | CRÍTICA | Coordenador só lê régua e etapa | fechado | seguiu sugestão |
+| CHG-024 | CRÍTICA | Segurança da inscrição | fechado | seguiu sugestão |
+| CHG-025 | CRÍTICA | Inscrição só pelo botão Publicar | fechado | seguiu sugestão |
+| CHG-026 | CRÍTICA | Idempotência do envio e do escalonamento | fechado | seguiu sugestão |
+| CHG-027 | CRÍTICA | Contrato das custom actions e build da F2 | fechado | seguiu sugestão |
+| CHG-028 | ALTA | Limites da API Fluent para o Flow | fechado | seguiu sugestão; F0 confirmou `ordem` numérica e reference por GlideRecord |
+| CHG-029 | ALTA | Seed aleatório da régua vira DELETE | fechado | seguiu sugestão |
+| CHG-030 | ALTA | Fecho e janela de resposta | fechado | seguiu sugestão |
+| CHG-031 | MÉDIA | Update, Delete e New por papel | fechado | seguiu sugestão; F0: `new_roles` como array |
+| CHG-032 | MÉDIA | Ações de form `isClient` não rodam na lista | fechado | seguiu sugestão |
+| CHG-033 | MÉDIA | Limite de 12 módulos do coordenador | fechado | seguiu sugestão (revoga o limite do ux-v1, CHG-013) |
+| CHG-034 | MÉDIA | Lista da equipe e admin do app | fechado | seguiu sugestão |
+| CHG-035 | MÉDIA | «O que fazer agora» | fechado | seguiu sugestão |
+| CHG-036 | MÉDIA | Estrutura da etapa validada só no gerador | fechado | seguiu sugestão |
+| CHG-037 | MÉDIA | Consentimento vigente, falha simulada e ordem de fallback | fechado | seguiu sugestão |
+| CHG-038 | BAIXA | Regularização encerra contatos (RN-09) | fechado | seguiu sugestão (fora, GAP-154) |
+| CHG-039 | BAIXA | Volume de contextos de Flow em produção | fechado | seguiu sugestão (GAP-155) |
+| CHG-040 | MÉDIA | Stories F4 pendentes × régua como Flow | fechado | seguiu sugestão |
+| CHG-041 | BAIXA | Edição no Designer perdida no reinstall | fechado | seguiu sugestão |
+
+---
+
+*Seção ux-v2 gerada por spec-scope-change v1.3 — ver scope-change-gaps.md (seção ux-v2) para os CHGs detalhados.*
